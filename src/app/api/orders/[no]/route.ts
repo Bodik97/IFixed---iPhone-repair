@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { clientIp, rateLimit } from "@/lib/rateLimit";
 
 export type Order = {
   no: string;
@@ -27,7 +28,13 @@ function stubOrder(no: string): Order {
   };
 }
 
-export async function GET(_request: Request, { params }: { params: Promise<{ no: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ no: string }> }) {
+  // Перебір номерів замовлень — теж форма атаки
+  const limit = rateLimit(`order:${clientIp(request)}`, 20, 10 * 60_000);
+  if (!limit.ok) {
+    return NextResponse.json({ error: "Забагато запитів. Спробуйте пізніше." }, { status: 429 });
+  }
+
   const { no } = await params;
   const clean = no.trim();
 

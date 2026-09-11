@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { clientIp, rateLimit } from "@/lib/rateLimit";
 import { getDb } from "@/db";
 import { leads } from "@/db/schema";
 
@@ -55,6 +56,15 @@ const clean = (v: unknown) => {
 };
 
 export async function POST(request: Request) {
+  // Не більше 5 заявок за 10 хвилин з однієї адреси
+  const limit = rateLimit(`lead:${clientIp(request)}`, 5, 10 * 60_000);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { error: "Забагато заявок поспіль. Спробуйте за кілька хвилин або зателефонуйте нам." },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfter) } },
+    );
+  }
+
   let lead: Lead;
   try {
     lead = await request.json();

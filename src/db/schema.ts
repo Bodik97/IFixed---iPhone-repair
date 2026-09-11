@@ -79,6 +79,9 @@ export const reviews = pgTable(
     rating: integer("rating").notNull(),
     text: text("text").notNull(),
 
+    /** Автор увійшов поштою Gmail — показуємо значок «підтверджено Google» */
+    viaGoogle: boolean("via_google").notNull().default(false),
+
     /** Показувати на сайті. Нові відгуки чекають на схвалення. */
     published: boolean("published").notNull().default(false),
 

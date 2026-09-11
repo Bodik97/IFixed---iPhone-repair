@@ -31,12 +31,22 @@ export async function submitReview(_prev: ReviewResult | null, formData: FormDat
     return { ok: false, error: "Ви вже лишали відгук. Дякуємо!" };
   }
 
+  const email = user.primaryEmailAddress;
+  const verified = email?.verification?.status === "verified";
+  const isGmail = /@(gmail\.com|googlemail\.com)$/i.test(email?.emailAddress ?? "");
+
+  // Відгук лишають лише з підтвердженою поштою — інакше це не «живий» клієнт
+  if (!verified) {
+    return { ok: false, error: "Спершу підтвердіть пошту — це захищає відгуки від накруток." };
+  }
+
   await getDb().insert(reviews).values({
     clerkUserId: user.id,
     authorName: user.firstName?.trim() || "Клієнт",
     device: device ? device.slice(0, 60) : null,
     rating,
     text: text.slice(0, 1000),
+    viaGoogle: isGmail,
   });
 
   revalidatePath("/");
