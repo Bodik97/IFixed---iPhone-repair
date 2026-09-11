@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 import { getDb } from "@/db";
-import { leads } from "@/db/schema";
+import { leads, reviews } from "@/db/schema";
 import { STATUS_OPTIONS } from "@/db/leads";
 import { checkCredentials, createSession, destroySession, isAdmin } from "@/lib/admin";
 
@@ -71,4 +71,31 @@ export async function setTtn(formData: FormData): Promise<void> {
 
   revalidatePath("/admin");
   revalidatePath("/kabinet");
+}
+
+/** Схвалити або сховати відгук */
+export async function setReviewPublished(formData: FormData): Promise<void> {
+  if (!(await isAdmin())) redirect("/admin/vhid");
+
+  const id = String(formData.get("id") ?? "");
+  const publish = String(formData.get("publish") ?? "") === "1";
+  if (!id) return;
+
+  await getDb().update(reviews).set({ published: publish }).where(eq(reviews.id, id));
+
+  revalidatePath("/admin");
+  revalidatePath("/");
+}
+
+/** Видалити відгук назовсім */
+export async function deleteReview(formData: FormData): Promise<void> {
+  if (!(await isAdmin())) redirect("/admin/vhid");
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  await getDb().delete(reviews).where(eq(reviews.id, id));
+
+  revalidatePath("/admin");
+  revalidatePath("/");
 }

@@ -5,56 +5,110 @@ import { useRouter } from "next/navigation";
 import { useSignIn, useSignUp } from "@clerk/nextjs";
 import styles from "./page.module.css";
 
-type Step = "email" | "code";
+/** credentials — пошта+пароль; code — підтвердження пошти при реєстрації; codeLogin — вхід без пароля */
+type Step = "credentials" | "code" | "codeLogin";
 
-/** Clerk не знає наперед, чи клієнт уже реєструвався — тому пробуємо вхід,
- *  а на «такого користувача немає» перемикаємось на реєстрацію. */
+const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/;
+const MIN_PASSWORD = 8;
+
 export default function SignInForm() {
   const { signIn } = useSignIn();
   const { signUp } = useSignUp();
   const router = useRouter();
 
-  const [step, setStep] = useState<Step>("email");
+  const [step, setStep] = useState<Step>("credentials");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const [isNew, setIsNew] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const sendCode = async (e: React.FormEvent) => {
+  const goToCabinet = () => router.push("/kabinet");
+
+  /** Вхід паролем; якщо акаунта немає — реєструємо з цим же паролем */
+  const submitCredentials = async (e: React.FormEvent) => {
     e.preventDefault();
-    const value = email.trim();
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(value)) {
+    const mail = email.trim();
+
+    if (!EMAIL_RE.test(mail)) {
       setError("Перевірте адресу пошти — здається, у ній помилка.");
+      return;
+    }
+    if (password.length < MIN_PASSWORD) {
+      setError(`Пароль має бути щонайменше ${MIN_PASSWORD} символів.`);
       return;
     }
 
     setBusy(true);
     setError("");
     try {
-      const { error: signInError } = await signIn.emailCode.sendCode({ emailAddress: value });
+      const { error: signInError } = await signIn.password({ identifier: mail, password });
 
-      if (signInError) {
-        // Немає такого користувача — реєструємо
-        await signUp.create({ emailAddress: value, ...(name.trim() ? { firstName: name.trim() } : {}) });
-        const { error: signUpError } = await signUp.verifications.sendEmailCode();
-        if (signUpError) throw signUpError;
-        setIsNew(true);
+      if (!signInError) {
+        if (signIn.status === "complete") {
+          await signIn.finalize({ navigate: goToCabinet });
+          return;
+        }
+        setError("Не вдалося завершити вхід. Спробуйте увійти кодом на пошту.");
+        return;
       }
 
+      // Акаунта немає — створюємо разом із паролем і підтверджуємо пошту кодом
+      const created = await signUp.create({
+        emailAddress: mail,
+        password,
+        ...(name.trim() ? { firstName: name.trim() } : {}),
+      });
+
+      if (created?.error) {
+        setError(
+          "Пароль не підійшов. Якщо ви вже реєструвались — спробуйте ще раз або увійдіть кодом на пошту.",
+        );
+        return;
+      }
+
+      const { error: sendError } = await signUp.verifications.sendEmailCode();
+      if (sendError) throw sendError;
+
+      setIsNew(true);
       setStep("code");
     } catch {
-      setError("Не вдалося надіслати код. Спробуйте ще раз або зателефонуйте нам.");
+      setError("Не вдалося увійти. Спробуйте ще раз або зателефонуйте нам.");
     } finally {
       setBusy(false);
     }
   };
 
-  const verify = async (e: React.FormEvent) => {
+  /** Запасний шлях: разовий код замість пароля */
+  const sendLoginCode = async () => {
+    const mail = email.trim();
+    if (!EMAIL_RE.test(mail)) {
+      setError("Спершу впишіть пошту — надішлемо на неї код.");
+      return;
+    }
+
+    setBusy(true);
+    setError("");
+    try {
+      const { error: sendError } = await signIn.emailCode.sendCode({ emailAddress: mail });
+      if (sendError) {
+        setError("Такої пошти в нас немає. Впишіть пароль — і створимо вам акаунт.");
+        return;
+      }
+      setIsNew(false);
+      setStep("codeLogin");
+    } catch {
+      setError("Не вдалося надіслати код. Спробуйте ще раз.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const verifyCode = async (e: React.FormEvent) => {
     e.preventDefault();
-    const value = code.trim();
-    if (value.length < 6) {
+    if (code.trim().length < 6) {
       setError("Код складається з 6 цифр.");
       return;
     }
@@ -63,13 +117,13 @@ export default function SignInForm() {
     setError("");
     try {
       if (isNew) {
-        await signUp.verifications.verifyEmailCode({ code: value });
+        await signUp.verifications.verifyEmailCode({ code: code.trim() });
         if (signUp.status !== "complete") throw new Error("incomplete");
-        await signUp.finalize({ navigate: () => router.push("/kabinet") });
+        await signUp.finalize({ navigate: goToCabinet });
       } else {
-        await signIn.emailCode.verifyCode({ code: value });
+        await signIn.emailCode.verifyCode({ code: code.trim() });
         if (signIn.status !== "complete") throw new Error("incomplete");
-        await signIn.finalize({ navigate: () => router.push("/kabinet") });
+        await signIn.finalize({ navigate: goToCabinet });
       }
     } catch {
       setError("Код не підійшов. Перевірте останній лист або надішліть код ще раз.");
@@ -78,18 +132,19 @@ export default function SignInForm() {
   };
 
   const restart = () => {
-    setStep("email");
+    setStep("credentials");
     setCode("");
     setError("");
     setIsNew(false);
   };
 
-  if (step === "code") {
+  if (step === "code" || step === "codeLogin") {
     return (
       <div className={styles.card}>
-        <form onSubmit={verify} className={styles.form} noValidate>
+        <form onSubmit={verifyCode} className={styles.form} noValidate>
           <p className={styles.sentTo}>
-            Надіслали код на <strong>{email}</strong>
+            {isNew ? "Підтвердіть пошту — надіслали код на " : "Надіслали код на "}
+            <strong>{email}</strong>
           </p>
 
           <div className={styles.row}>
@@ -119,12 +174,12 @@ export default function SignInForm() {
           )}
 
           <button type="submit" className="btn btn-accent btn-lg" disabled={busy}>
-            {busy ? "Перевіряємо…" : "Увійти"}
+            {busy ? "Перевіряємо…" : isNew ? "Завершити реєстрацію" : "Увійти"}
           </button>
 
           <div className={styles.actions}>
             <button type="button" className={styles.linkBtn} onClick={restart} disabled={busy}>
-              Змінити пошту
+              Назад
             </button>
           </div>
         </form>
@@ -134,7 +189,7 @@ export default function SignInForm() {
 
   return (
     <div className={styles.card}>
-      <form onSubmit={sendCode} className={styles.form} noValidate>
+      <form onSubmit={submitCredentials} className={styles.form} noValidate>
         <div className={styles.row}>
           <label htmlFor="v-email">Пошта</label>
           <input
@@ -149,6 +204,25 @@ export default function SignInForm() {
               setError("");
             }}
           />
+        </div>
+
+        <div className={styles.row}>
+          <label htmlFor="v-password">Пароль</label>
+          <input
+            id="v-password"
+            className="field"
+            type="password"
+            autoComplete="current-password"
+            placeholder="Щонайменше 8 символів"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError("");
+            }}
+          />
+          <span className={styles.hint}>
+            Заходите вперше? Впишіть пароль, який хочете — створимо акаунт.
+          </span>
         </div>
 
         <div className={styles.row}>
@@ -174,12 +248,16 @@ export default function SignInForm() {
         <div id="clerk-captcha" />
 
         <button type="submit" className="btn btn-accent btn-lg" disabled={busy}>
-          {busy ? "Надсилаємо…" : "Надіслати код"}
+          {busy ? "Заходимо…" : "Увійти"}
         </button>
 
-        <p className={styles.note}>
-          Пароль не потрібен — надішлемо код на пошту. Адресу використовуємо лише для входу.
-        </p>
+        <div className={styles.actions}>
+          <button type="button" className={styles.linkBtn} onClick={sendLoginCode} disabled={busy}>
+            Забули пароль? Увійти кодом на пошту
+          </button>
+        </div>
+
+        <p className={styles.note}>Адресу використовуємо лише для входу й сповіщень про ремонт.</p>
       </form>
     </div>
   );

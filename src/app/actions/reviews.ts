@@ -1,0 +1,46 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { currentUser } from "@clerk/nextjs/server";
+import { getDb } from "@/db";
+import { reviews } from "@/db/schema";
+import { getReviewByUser } from "@/db/reviews";
+
+export type ReviewResult = { ok: true } | { ok: false; error: string };
+
+/** Відгук лишає лише авторизований клієнт і лише один раз */
+export async function submitReview(_prev: ReviewResult | null, formData: FormData): Promise<ReviewResult> {
+  const user = await currentUser();
+  if (!user) {
+    return { ok: false, error: "Щоб лишити відгук, увійдіть у кабінет." };
+  }
+
+  const text = String(formData.get("text") ?? "").trim();
+  const device = String(formData.get("device") ?? "").trim();
+  const rating = Number(formData.get("rating") ?? 0);
+
+  if (text.length < 20) {
+    return { ok: false, error: "Напишіть хоча б кілька слів — так відгук буде корисним іншим." };
+  }
+  if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+    return { ok: false, error: "Оберіть оцінку від 1 до 5." };
+  }
+
+  const existing = await getReviewByUser(user.id);
+  if (existing) {
+    return { ok: false, error: "Ви вже лишали відгук. Дякуємо!" };
+  }
+
+  await getDb().insert(reviews).values({
+    clerkUserId: user.id,
+    authorName: user.firstName?.trim() || "Клієнт",
+    device: device ? device.slice(0, 60) : null,
+    rating,
+    text: text.slice(0, 1000),
+  });
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+
+  return { ok: true };
+}

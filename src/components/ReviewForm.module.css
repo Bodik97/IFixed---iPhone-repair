@@ -1,0 +1,107 @@
+.box {
+  border-radius: var(--r-block);
+  border: 1px solid rgba(255, 255, 255, .1);
+  background: var(--surface);
+  padding: clamp(24px, 3.2vw, 36px);
+  align-self: start;
+}
+
+/* Стан для неавторизованих і подяка після відправки */
+.gate,
+.thanks {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+
+.gateTitle {
+  font-size: 21px;
+}
+
+.gateText {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-2);
+  max-width: 44ch;
+}
+
+.gate :global(.btn),
+.thanks :global(.btn) {
+  margin-top: 8px;
+}
+
+/* ---------- Форма ---------- */
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.row {
+  display: grid;
+  gap: 8px;
+}
+
+.label {
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.ratingRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star,
+.starOn {
+  background: none;
+  border: none;
+  padding: 6px;
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .15s, color .15s;
+}
+
+.star {
+  color: rgba(255, 255, 255, .18);
+}
+
+.starOn {
+  color: var(--accent);
+}
+
+.star:hover,
+.starOn:hover {
+  transform: scale(1.12);
+}
+
+.error {
+  font-size: 13.5px;
+  color: #EDFFA6;
+}
+
+.note {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-3);
+}
+
+.form button[disabled] {
+  opacity: .6;
+  cursor: progress;
+}

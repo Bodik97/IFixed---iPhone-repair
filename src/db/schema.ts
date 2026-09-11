@@ -1,4 +1,4 @@
-import { boolean, index, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, index, integer, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 /** Звідки прийшла заявка — відповідає полю `source` у формах */
 export const leadSource = pgEnum("lead_source", ["landing", "model", "services", "mail-in"]);
@@ -63,3 +63,31 @@ export const leads = pgTable(
 
 export type Lead = typeof leads.$inferSelect;
 export type NewLead = typeof leads.$inferInsert;
+
+/** Відгук клієнта про роботу майстерні. Публікується лише після схвалення майстром. */
+export const reviews = pgTable(
+  "reviews",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    /** Автор — лише зареєстрований клієнт, тож акаунт обовʼязковий */
+    clerkUserId: text("clerk_user_id").notNull(),
+    authorName: text("author_name").notNull(),
+    /** Модель пристрою, якщо клієнт вказав — «iPhone 13» під відгуком */
+    device: text("device"),
+
+    rating: integer("rating").notNull(),
+    text: text("text").notNull(),
+
+    /** Показувати на сайті. Нові відгуки чекають на схвалення. */
+    published: boolean("published").notNull().default(false),
+
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index("reviews_published_idx").on(t.published),
+    index("reviews_created_at_idx").on(t.createdAt),
+  ],
+);
+
+export type Review = typeof reviews.$inferSelect;

@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
 import BookingForm from "@/components/BookingForm";
+import ReviewForm from "@/components/ReviewForm";
 import StatusCheck from "@/components/StatusCheck";
+import { getPublishedReviews, getReviewByUser } from "@/db/reviews";
 import { site } from "@/data/site";
 import {
   bookingModels,
@@ -10,7 +13,7 @@ import {
   howItWorks,
   mailInSteps,
   modelGroups,
-  reviews,
+  reviews as fallbackReviews,
   topServices,
   works,
 } from "@/data/landing";
@@ -33,7 +36,19 @@ const faqSchema = {
   })),
 };
 
-export default function Home() {
+export default async function Home() {
+  // Справжні відгуки клієнтів; поки їх немає — показуємо початкові з макета
+  const published = await getPublishedReviews(6);
+  const shownReviews = published.length
+    ? published.map((r) => ({
+        text: r.text,
+        author: [r.authorName, r.device].filter(Boolean).join(" · "),
+      }))
+    : fallbackReviews;
+
+  const { userId } = await auth();
+  const alreadyLeft = userId ? Boolean(await getReviewByUser(userId)) : false;
+
   return (
     <>
       {/* Герой */}
@@ -213,12 +228,23 @@ export default function Home() {
           <h2 className={`${styles.h2} ${styles.worksTitle}`}>Що кажуть клієнти</h2>
 
           <div className={styles.reviewGrid}>
-            {reviews.map((r) => (
+            {shownReviews.map((r) => (
               <blockquote key={r.author} className={`card ${styles.review}`}>
                 <p className={styles.reviewText}>«{r.text}»</p>
                 <div className={styles.reviewAuthor}>{r.author}</div>
               </blockquote>
             ))}
+          </div>
+
+          <div className={styles.reviewFormWrap}>
+            <div>
+              <h3 className={styles.reviewFormTitle}>Розкажіть, як усе пройшло</h3>
+              <p className={styles.reviewFormText}>
+                Відгуки лишають клієнти, які входили в кабінет. Це найчесніший спосіб показати
+                новим людям, чого чекати від сервісу.
+              </p>
+            </div>
+            <ReviewForm signedIn={Boolean(userId)} alreadyLeft={alreadyLeft} />
           </div>
         </div>
       </section>

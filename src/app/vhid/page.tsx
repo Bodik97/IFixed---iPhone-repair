@@ -4,7 +4,7 @@ import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Вхід у кабінет",
-  description: "Вхід у кабінет клієнта iFix — статус ремонту, історія замовлень і гарантія.",
+  description: "Вхід у кабінет клієнта iFix — статус ремонту та історія заявок.",
   robots: { index: false, follow: false },
 };
 
@@ -47,7 +47,7 @@ export default function SignInPage() {
           <div className="kicker">Кабінет</div>
           <h1 className={styles.title}>Вхід для клієнтів</h1>
           <p className={styles.lead}>
-            Введіть пошту — надішлемо код. Пароль вигадувати не треба.
+            Пошта й пароль. Заходите вперше — акаунт створимо автоматично.
           </p>
 
           <div className={styles.perks}>

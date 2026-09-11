@@ -4,8 +4,10 @@ import { desc } from "drizzle-orm";
 import { getDb } from "@/db";
 import { leads } from "@/db/schema";
 import { describeStatus } from "@/db/leads";
+import { getAllReviews } from "@/db/reviews";
 import { isAdmin } from "@/lib/admin";
 import { signOut } from "./actions";
+import ReviewList from "./ReviewList";
 import StatusSelect from "./StatusSelect";
 import TtnField from "./TtnField";
 import styles from "./page.module.css";
@@ -35,7 +37,12 @@ const dateFormat = new Intl.DateTimeFormat("uk-UA", {
 export default async function AdminPage() {
   if (!(await isAdmin())) redirect("/admin/vhid");
 
-  const rows = await getDb().select().from(leads).orderBy(desc(leads.createdAt));
+  const [rows, allReviews] = await Promise.all([
+    getDb().select().from(leads).orderBy(desc(leads.createdAt)),
+    getAllReviews(),
+  ]);
+
+  const pendingReviews = allReviews.filter((r) => !r.published).length;
 
   const fresh = rows.filter((r) => r.status === "new").length;
   // Готові пристрої, на які клієнт попросив доставку, але ТТН ще немає
@@ -68,6 +75,10 @@ export default async function AdminPage() {
         <div className={toShip > 0 ? styles.statHot : styles.stat}>
           <span className={styles.statValue}>{toShip}</span>
           <span className={styles.statLabel}>чекають відправки</span>
+        </div>
+        <div className={pendingReviews > 0 ? styles.statHot : styles.stat}>
+          <span className={styles.statValue}>{pendingReviews}</span>
+          <span className={styles.statLabel}>відгуки на перевірці</span>
         </div>
       </div>
 
@@ -150,6 +161,15 @@ export default async function AdminPage() {
           })}
         </div>
       )}
+
+      <div className={styles.reviewsHead}>
+        <h2 className={styles.sectionTitle}>Відгуки</h2>
+        <p className={styles.sectionNote}>
+          Опубліковані показуються на головній. Нові чекають вашого схвалення.
+        </p>
+      </div>
+
+      <ReviewList reviews={allReviews} />
     </section>
   );
 }
