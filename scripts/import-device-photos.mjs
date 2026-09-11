@@ -1,6 +1,6 @@
 // Фото планшетів і годинників → public/models.
 // Запуск: node scripts/import-device-photos.mjs [шлях]
-import { copyFileSync, existsSync, statSync } from "node:fs";
+import { copyFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
 const SRC = process.argv[2] ?? "/Users/bohdanvoitsikhovskyi/Downloads/iphone";
