@@ -1,0 +1,80 @@
+.offer {
+  margin-top: 24px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(218, 255, 61, .28);
+  background: rgba(218, 255, 61, .06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.offerText {
+  font-size: 15px;
+  color: rgba(241, 243, 239, .88);
+  max-width: 42ch;
+}
+
+.form {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(218, 255, 61, .28);
+  background: rgba(218, 255, 61, .06);
+  display: grid;
+  gap: 10px;
+  animation: nUp .4s var(--ease) both;
+}
+
+.label {
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.row :global(.field) {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+.cancel {
+  justify-self: start;
+  background: none;
+  border: none;
+  padding: 0;
+  min-height: 44px;
+  color: var(--text-3);
+  font-size: 13.5px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cancel:hover {
+  color: var(--text-2);
+}
+
+.done {
+  margin-top: 24px;
+  padding: 16px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(218, 255, 61, .3);
+  background: rgba(218, 255, 61, .1);
+  color: var(--info-text);
+  font-size: 14.5px;
+  line-height: 1.55;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.done svg {
+  flex: none;
+  margin-top: 2px;
+}

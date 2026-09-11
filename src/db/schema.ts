@@ -1,10 +1,20 @@
-import { index, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, index, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 /** Звідки прийшла заявка — відповідає полю `source` у формах */
 export const leadSource = pgEnum("lead_source", ["landing", "model", "services", "mail-in"]);
 
-/** Стадії обробки заявки майстром */
-export const leadStatus = pgEnum("lead_status", ["new", "in_progress", "done", "rejected"]);
+/**
+ * Стадії обробки заявки майстром.
+ * Порядок = шлях ремонту: прийняли → робимо → готово → (за потреби) відправили → закрили.
+ */
+export const leadStatus = pgEnum("lead_status", [
+  "new",
+  "in_progress",
+  "ready",
+  "shipped",
+  "done",
+  "rejected",
+]);
 
 export const leads = pgTable(
   "leads",
@@ -27,6 +37,13 @@ export const leads = pgTable(
 
     /** ID клієнта в Clerk, якщо заявку лишив залогінений. NULL = анонімна заявка. */
     clerkUserId: text("clerk_user_id"),
+
+    /** Клієнт попросив надіслати готовий пристрій Новою Поштою */
+    deliveryRequested: boolean("delivery_requested").notNull().default(false),
+    /** Куди слати — місто й відділення, які вказав клієнт */
+    deliveryAddress: text("delivery_address"),
+    /** Накладна Нової Пошти, коли майстер відправив */
+    ttn: text("ttn"),
 
     source: leadSource("source").notNull(),
     status: leadStatus("status").notNull().default("new"),

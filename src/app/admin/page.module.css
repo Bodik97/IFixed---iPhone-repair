@@ -8,7 +8,7 @@
   justify-content: space-between;
   gap: 20px;
   flex-wrap: wrap;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .head .kicker {
@@ -17,21 +17,45 @@
 
 .title {
   font-size: clamp(26px, 3.2vw, 40px);
+}
+
+/* ---------- Зведення ---------- */
+.summary {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.stat,
+.statHot {
   display: flex;
   align-items: baseline;
-  gap: 12px;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--surface);
 }
 
-.count {
-  font-size: 18px;
-  color: var(--text-3);
-  font-family: var(--font-manrope), sans-serif;
+.statHot {
+  border-color: rgba(218, 255, 61, .45);
+  background: rgba(218, 255, 61, .08);
 }
 
-.fresh {
-  margin-top: 8px;
-  font-size: 14px;
+.statValue {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 22px;
+  letter-spacing: -.02em;
+}
+
+.statHot .statValue {
   color: var(--accent);
+}
+
+.statLabel {
+  font-size: 13px;
+  color: var(--text-3);
 }
 
 .empty {
@@ -42,109 +66,76 @@
   color: var(--text-2);
 }
 
-/* Таблиця скролиться всередині себе, сторінка — ні */
-.tableWrap {
-  overflow-x: auto;
+/* ---------- Картки заявок ---------- */
+.cards {
+  display: grid;
+  gap: 12px;
+}
+
+.card {
   border-radius: var(--r-card);
   border: 1px solid var(--border);
   background: var(--surface);
+  padding: 22px 24px;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  transition: border-color .2s, background .2s;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-  min-width: 860px;
+.card:hover {
+  border-color: rgba(255, 255, 255, .16);
 }
 
-.table th {
-  text-align: left;
-  font-size: 12px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--text-3);
-  font-weight: 500;
-  padding: 16px 18px;
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-}
-
-.table td {
-  padding: 16px 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, .05);
-  vertical-align: top;
-}
-
-.table tr:last-child td {
-  border-bottom: none;
-}
-
-.rowNew td {
+.cardNew {
+  border-color: rgba(218, 255, 61, .3);
   background: rgba(218, 255, 61, .04);
 }
 
-.nowrap {
-  white-space: nowrap;
-  color: var(--text-2);
+.cardShip {
+  border-color: rgba(218, 255, 61, .45);
 }
 
-.contact {
+.cardMain {
+  min-width: 0;
+  flex: 1 1 420px;
+}
+
+.cardTop {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
 }
 
-.link {
-  color: var(--text);
-  text-decoration: none;
-  white-space: nowrap;
+.name {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 17px;
+  letter-spacing: -.02em;
 }
 
-.link:hover {
-  color: var(--accent);
-}
-
-.muted {
+.when,
+.source {
+  font-size: 12.5px;
   color: var(--text-3);
-  font-size: 13px;
 }
 
-.problem {
-  max-width: 30ch;
-  color: var(--text-2);
-  line-height: 1.5;
+.source::before {
+  content: "·";
+  margin-right: 8px;
 }
 
-.status {
-  min-height: 40px;
-  padding: 8px 12px;
-  border-radius: 12px;
-  background: var(--field-bg);
-  border: 1px solid var(--field-border);
-  color: var(--text);
-  font-size: 13.5px;
-}
-
-.status:disabled {
-  opacity: .5;
-}
-
-.status option {
-  color: #0B0C0E;
-}
-
-/* Позначка: чи бачить клієнт статус у себе в кабінеті */
 .tagAccount,
 .tagAnon {
-  display: inline-block;
-  margin-left: 8px;
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: var(--r-pill);
   font-size: 11px;
   letter-spacing: .04em;
   text-transform: uppercase;
   white-space: nowrap;
-  vertical-align: middle;
 }
 
 .tagAccount {
@@ -155,4 +146,175 @@
 .tagAnon {
   background: rgba(255, 255, 255, .06);
   color: var(--text-3);
+}
+
+.contacts {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.link {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14.5px;
+  white-space: nowrap;
+}
+
+.link:hover {
+  color: var(--accent);
+}
+
+.what {
+  font-size: 14.5px;
+  color: var(--text-2);
+  margin-bottom: 6px;
+}
+
+.problem {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: rgba(241, 243, 239, .7);
+  max-width: 60ch;
+}
+
+.city {
+  margin-top: 8px;
+  font-size: 13.5px;
+  color: var(--text-3);
+}
+
+/* ---------- Блок доставки ---------- */
+.shipBox,
+.shipBoxHot {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.shipBox {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, .02);
+}
+
+.shipBoxHot {
+  border: 1px solid rgba(218, 255, 61, .4);
+  background: rgba(218, 255, 61, .08);
+}
+
+.shipHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.shipBox .shipHead {
+  color: var(--text-3);
+}
+
+.shipAddress {
+  font-size: 14.5px;
+  color: var(--text);
+}
+
+.ttnForm {
+  display: flex;
+}
+
+.ttnInput {
+  width: 100%;
+  max-width: 260px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  color: var(--text);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .02em;
+}
+
+.ttnInput:focus {
+  border-color: var(--border-active);
+}
+
+.ttnInput:disabled {
+  opacity: .5;
+}
+
+/* ---------- Права колонка: статус ---------- */
+.cardSide {
+  display: grid;
+  gap: 8px;
+  justify-items: stretch;
+  flex: 0 1 220px;
+  min-width: 180px;
+}
+
+.status {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.status:disabled {
+  opacity: .5;
+}
+
+.status option {
+  color: #0B0C0E;
+  font-weight: 400;
+}
+
+/* Колір рамки підказує стан, не відкриваючи список */
+.st_new {
+  border-color: rgba(218, 255, 61, .5);
+  color: var(--accent);
+}
+
+.st_in_progress {
+  border-color: rgba(255, 255, 255, .3);
+}
+
+.st_ready,
+.st_shipped {
+  border-color: var(--accent);
+  background: rgba(218, 255, 61, .12);
+  color: var(--accent);
+}
+
+.st_done {
+  border-color: rgba(255, 255, 255, .14);
+  color: var(--text-2);
+}
+
+.st_rejected {
+  border-color: rgba(255, 255, 255, .1);
+  color: var(--text-3);
+}
+
+.hint {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--text-3);
+}
+
+@media (max-width: 720px) {
+  .cardSide {
+    flex: 1 1 100%;
+  }
 }

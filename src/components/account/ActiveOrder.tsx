@@ -1,6 +1,7 @@
 import { describeStatus, STAGES } from "@/db/leads";
 import type { Lead } from "@/db/schema";
 import { site } from "@/data/site";
+import DeliveryRequest from "./DeliveryRequest";
 import styles from "./ActiveOrder.module.css";
 
 const dateTime = new Intl.DateTimeFormat("uk-UA", {
@@ -11,17 +12,61 @@ const dateTime = new Intl.DateTimeFormat("uk-UA", {
 });
 
 export default function ActiveOrder({ lead }: { lead: Lead }) {
-  const progress = describeStatus(lead.status);
+  const s = describeStatus(lead.status);
   const what = lead.model ?? lead.service ?? "Ремонт";
   const shortId = lead.id.slice(0, 8);
 
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${styles[s.tone]}`}>
+      {/* Головна новина зверху — те, заради чого клієнт відкрив кабінет */}
+      {s.finished && (
+        <div className={styles.banner}>
+          <span className={styles.bannerIcon} aria-hidden="true">
+            {lead.status === "shipped" ? (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 7l9-4 9 4v10l-9 4-9-4z" />
+                <path d="M3 7l9 4 9-4" />
+                <path d="M12 11v10" />
+              </svg>
+            ) : (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M8 12.5l2.5 2.5L16 9.5" />
+              </svg>
+            )}
+          </span>
+
+          <div>
+            <div className={styles.bannerTitle}>
+              {lead.status === "shipped"
+                ? "Пристрій відправлено"
+                : lead.status === "done"
+                  ? "Ремонт завершено"
+                  : "Пристрій готовий"}
+            </div>
+            <p className={styles.bannerText}>{s.hint}</p>
+
+            {lead.ttn && (
+              <p className={styles.ttn}>
+                Накладна <strong>{lead.ttn}</strong> ·{" "}
+                <a
+                  href={`https://novaposhta.ua/tracking/?cargo_number=${encodeURIComponent(lead.ttn)}`}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  відстежити
+                </a>
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className={styles.head}>
         <div>
-          <span className={styles.status}>
-            {progress.active && <span className="pulse" />}
-            {progress.label}
+          <span className={`${styles.status} ${styles[`tone_${s.tone}`]}`}>
+            {s.active && s.tone === "progress" && <span className="pulse" />}
+            {s.label}
           </span>
 
           <h2 className={styles.title}>{what}</h2>
@@ -39,38 +84,43 @@ export default function ActiveOrder({ lead }: { lead: Lead }) {
         </div>
       </div>
 
-      {progress.stage >= 0 ? (
+      {s.stage >= 0 ? (
         <>
           <div className={styles.bar}>
-            <div className={styles.barFill} style={{ width: `${progress.percent}%` }} />
+            <div className={styles.barFill} style={{ width: `${s.percent}%` }} />
           </div>
 
-          <div className={styles.stages}>
+          <ol className={styles.stages}>
             {STAGES.map((title, i) => {
-              const done = i <= progress.stage;
+              const done = i <= s.stage;
               return (
-                <div key={title} className={styles.stage}>
-                  <div className={styles.stageTop}>
-                    <span className={done ? styles.dotDone : styles.dot}>
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0B0C0E" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: done ? 1 : 0 }} aria-hidden="true">
-                        <path d="M5 12.5l4.5 4.5L19 7" />
-                      </svg>
-                    </span>
-                    <span className={done ? styles.stageTitleDone : styles.stageTitle}>{title}</span>
-                  </div>
-                </div>
+                <li key={title} className={styles.stage}>
+                  <span className={done ? styles.dotDone : styles.dot}>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0B0C0E" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: done ? 1 : 0 }} aria-hidden="true">
+                      <path d="M5 12.5l4.5 4.5L19 7" />
+                    </svg>
+                  </span>
+                  <span className={done ? styles.stageTitleDone : styles.stageTitle}>{title}</span>
+                </li>
               );
             })}
-          </div>
+          </ol>
         </>
       ) : (
-        <p className={styles.closed}>
-          Заявку закрито. Якщо це помилка — зателефонуйте, розберемось.
-        </p>
+        <p className={styles.closedText}>{s.hint}</p>
+      )}
+
+      {/* Доставка: пропонуємо, щойно пристрій готовий */}
+      {lead.status === "ready" && (
+        <DeliveryRequest
+          id={lead.id}
+          requested={lead.deliveryRequested}
+          address={lead.deliveryAddress}
+        />
       )}
 
       <div className={styles.actions}>
-        <a href={site.phones[0].href} className="btn btn-accent btn-hero">
+        <a href={site.phones[0].href} className="btn btn-ghost">
           Подзвонити майстру
         </a>
       </div>

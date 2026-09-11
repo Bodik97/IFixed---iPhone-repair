@@ -22,11 +22,17 @@
 }
 
 .tabs :global(.chip) {
-  padding: 9px 17px;
+  gap: 8px;
 }
 
 .tabs :global(.chip):hover {
   transform: translateY(-2px);
+}
+
+.count {
+  font-size: 12px;
+  opacity: .6;
+  font-variant-numeric: tabular-nums;
 }
 
 .list {
@@ -39,10 +45,11 @@
   border: 1px solid var(--border);
   background: var(--surface);
   padding: 18px 22px;
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.4fr) auto auto;
-  gap: 16px;
-  align-items: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
   animation: nUp .6s ease both;
   transition: border-color .2s, background .2s, transform .2s;
 }
@@ -53,41 +60,73 @@
   transform: translateX(4px);
 }
 
+.main {
+  min-width: 0;
+  flex: 1 1 260px;
+}
+
 .device {
   font-family: var(--font-unbounded), sans-serif;
   font-size: 16.5px;
   letter-spacing: -.02em;
+  margin-bottom: 6px;
 }
 
 .work {
   font-size: 14.5px;
+  line-height: 1.5;
   color: rgba(241, 243, 239, .68);
 }
 
-.date {
+.ttn {
+  margin-top: 8px;
   font-size: 13.5px;
   color: var(--text-3);
-  white-space: nowrap;
 }
 
-.badgeActive,
-.badgeDone {
+.side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex: none;
+}
+
+.badge {
   font-size: 12px;
   letter-spacing: .06em;
   text-transform: uppercase;
+  font-weight: 600;
   padding: 6px 12px;
   border-radius: var(--r-pill);
   white-space: nowrap;
 }
 
-.badgeActive {
-  border: 1px solid rgba(218, 255, 61, .45);
-  color: var(--accent);
+.tone_progress {
+  border: 1px solid rgba(255, 255, 255, .2);
+  color: rgba(241, 243, 239, .82);
 }
 
-.badgeDone {
+.tone_ready,
+.tone_shipped {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.tone_done {
   border: 1px solid rgba(255, 255, 255, .18);
-  color: rgba(241, 243, 239, .6);
+  color: var(--text-2);
+}
+
+.tone_closed {
+  border: 1px solid rgba(255, 255, 255, .12);
+  color: var(--text-3);
+}
+
+.date {
+  font-size: 13px;
+  color: var(--text-3);
+  white-space: nowrap;
 }
 
 .empty {
@@ -99,13 +138,10 @@
   font-size: 15px;
 }
 
-@media (max-width: 760px) {
-  .row {
-    grid-template-columns: 1fr auto;
-    gap: 8px 16px;
-  }
-
-  .work {
-    grid-column: 1 / -1;
+@media (max-width: 560px) {
+  .side {
+    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
   }
 }

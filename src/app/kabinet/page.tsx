@@ -30,15 +30,17 @@ export default async function AccountPage() {
   const done = leads.filter((l) => !describeStatus(l.status).active).length;
 
   const rows = leads.map((l) => {
-    const p = describeStatus(l.status);
+    const s = describeStatus(l.status);
     return {
       id: l.id,
       what: l.model ?? l.service ?? "Ремонт",
       problem: l.problem,
       date: dateShort.format(l.createdAt),
-      status: l.status,
-      label: p.label,
-      active: p.active,
+      label: s.label,
+      hint: s.hint,
+      tone: s.tone,
+      active: s.active,
+      ttn: l.ttn,
     };
   });
 
@@ -59,7 +61,7 @@ export default async function AccountPage() {
 
           <p className={`${styles.heroLead} nUp nUp-1`}>
             {active
-              ? "Один ремонт у роботі. Статус оновлюємо щоразу, коли щось змінюється."
+              ? describeStatus(active.status).hint
               : leads.length > 0
                 ? "Активних ремонтів немає. Нижче — ваші попередні заявки."
                 : "Заявок поки немає. Залиште — і стежте за статусом тут."}

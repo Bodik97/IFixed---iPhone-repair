@@ -2,16 +2,11 @@
 
 import { useRef, useTransition } from "react";
 import { setStatus } from "./actions";
+import { STATUS_OPTIONS } from "@/db/leads";
+import type { Lead } from "@/db/schema";
 import styles from "./page.module.css";
 
-const options = [
-  { value: "new", label: "Нова" },
-  { value: "in_progress", label: "У роботі" },
-  { value: "done", label: "Готово" },
-  { value: "rejected", label: "Відмова" },
-];
-
-export default function StatusSelect({ id, status }: { id: string; status: string }) {
+export default function StatusSelect({ id, status }: { id: string; status: Lead["status"] }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [pending, startTransition] = useTransition();
 
@@ -26,10 +21,10 @@ export default function StatusSelect({ id, status }: { id: string; status: strin
         name="status"
         defaultValue={status}
         disabled={pending}
-        className={styles.status}
+        className={`${styles.status} ${styles[`st_${status}`]}`}
         onChange={() => startTransition(() => formRef.current?.requestSubmit())}
       >
-        {options.map((o) => (
+        {STATUS_OPTIONS.map((o) => (
           <option key={o.value} value={o.value}>
             {o.label}
           </option>

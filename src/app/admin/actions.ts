@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 import { getDb } from "@/db";
 import { leads } from "@/db/schema";
+import { STATUS_OPTIONS } from "@/db/leads";
 import { checkCredentials, createSession, destroySession, isAdmin } from "@/lib/admin";
 
 export async function signIn(_prev: string | null, formData: FormData): Promise<string | null> {
@@ -39,7 +40,7 @@ export async function setStatus(formData: FormData): Promise<void> {
   const id = String(formData.get("id") ?? "");
   const status = String(formData.get("status") ?? "");
 
-  const allowed = ["new", "in_progress", "done", "rejected"] as const;
+  const allowed = STATUS_OPTIONS.map((o) => o.value);
   if (!allowed.includes(status as (typeof allowed)[number])) return;
 
   await getDb()
@@ -48,4 +49,26 @@ export async function setStatus(formData: FormData): Promise<void> {
     .where(eq(leads.id, id));
 
   revalidatePath("/admin");
+  revalidatePath("/kabinet");
+}
+
+/** Майстер вписує накладну — статус одразу стає «Відправлено» */
+export async function setTtn(formData: FormData): Promise<void> {
+  if (!(await isAdmin())) redirect("/admin/vhid");
+
+  const id = String(formData.get("id") ?? "");
+  const ttn = String(formData.get("ttn") ?? "").trim();
+  if (!id) return;
+
+  await getDb()
+    .update(leads)
+    .set({
+      ttn: ttn ? ttn.slice(0, 40) : null,
+      ...(ttn ? { status: "shipped" as const } : {}),
+      updatedAt: new Date(),
+    })
+    .where(eq(leads.id, id));
+
+  revalidatePath("/admin");
+  revalidatePath("/kabinet");
 }

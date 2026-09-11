@@ -5,26 +5,95 @@ import { leads, type Lead } from "./schema";
 /** Стадії, як їх бачить клієнт. Порядок важливий — з нього рахується прогрес. */
 export const STAGES = ["Прийнято", "Діагностика", "Ремонт", "Готово"] as const;
 
-type Progress = {
+export type StatusInfo = {
+  /** Як стадія називається для клієнта */
   label: string;
-  /** Індекс поточної стадії у STAGES; -1 для відмови */
+  /** Коротке пояснення — що це означає на практиці */
+  hint: string;
+  /** Індекс у STAGES; -1 коли шкала не застосовна (відмова) */
   stage: number;
   percent: number;
+  /** Ремонт ще триває — заявка вважається активною */
   active: boolean;
+  /** Пристрій готовий: телефон полагоджено */
+  finished: boolean;
+  tone: "progress" | "ready" | "shipped" | "done" | "closed";
 };
 
-export function describeStatus(status: Lead["status"]): Progress {
+export function describeStatus(status: Lead["status"]): StatusInfo {
   switch (status) {
     case "new":
-      return { label: "Прийнято", stage: 0, percent: 25, active: true };
+      return {
+        label: "Прийнято",
+        hint: "Заявку отримали, скоро візьмемо в роботу.",
+        stage: 0,
+        percent: 20,
+        active: true,
+        finished: false,
+        tone: "progress",
+      };
     case "in_progress":
-      return { label: "У роботі", stage: 2, percent: 65, active: true };
+      return {
+        label: "У роботі",
+        hint: "Майстер працює над пристроєм.",
+        stage: 2,
+        percent: 60,
+        active: true,
+        finished: false,
+        tone: "progress",
+      };
+    case "ready":
+      return {
+        label: "Готово",
+        hint: "Пристрій полагоджено — можна забирати або надішлемо поштою.",
+        stage: 3,
+        percent: 100,
+        active: true,
+        finished: true,
+        tone: "ready",
+      };
+    case "shipped":
+      return {
+        label: "Відправлено",
+        hint: "Посилка вже їде до вас Новою Поштою.",
+        stage: 3,
+        percent: 100,
+        active: true,
+        finished: true,
+        tone: "shipped",
+      };
     case "done":
-      return { label: "Готово", stage: 3, percent: 100, active: false };
+      return {
+        label: "Завершено",
+        hint: "Пристрій у вас. Гарантія 30 днів від дати видачі.",
+        stage: 3,
+        percent: 100,
+        active: false,
+        finished: true,
+        tone: "done",
+      };
     case "rejected":
-      return { label: "Закрито", stage: -1, percent: 0, active: false };
+      return {
+        label: "Закрито",
+        hint: "Заявку закрито. Якщо це помилка — зателефонуйте нам.",
+        stage: -1,
+        percent: 0,
+        active: false,
+        finished: false,
+        tone: "closed",
+      };
   }
 }
+
+/** Підписи статусів для випадного списку в адмінці */
+export const STATUS_OPTIONS: { value: Lead["status"]; label: string }[] = [
+  { value: "new", label: "Нова" },
+  { value: "in_progress", label: "У роботі" },
+  { value: "ready", label: "Готово" },
+  { value: "shipped", label: "Відправлено" },
+  { value: "done", label: "Завершено" },
+  { value: "rejected", label: "Відмова" },
+];
 
 /**
  * Заявки клієнта. Шукаємо і за акаунтом, і за поштою — щоб людина побачила

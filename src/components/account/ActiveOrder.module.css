@@ -1,38 +1,141 @@
 .card {
   border-radius: 30px;
-  border: 1px solid rgba(218, 255, 61, .28);
-  background: linear-gradient(150deg, rgba(218, 255, 61, .1), rgba(255, 255, 255, .02));
+  border: 1px solid rgba(255, 255, 255, .1);
+  background: linear-gradient(150deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .02));
   padding: clamp(24px, 3.2vw, 40px);
   animation: nUp .8s var(--ease) .12s both;
+  transition: border-color .3s;
 }
 
+/* Тональність картки залежить від стадії — щоб стан читався з першого погляду */
+.progress {
+  border-color: rgba(255, 255, 255, .12);
+}
+
+.ready,
+.shipped {
+  border-color: rgba(218, 255, 61, .32);
+  background: linear-gradient(150deg, rgba(218, 255, 61, .1), rgba(255, 255, 255, .02));
+}
+
+.done {
+  border-color: rgba(255, 255, 255, .12);
+}
+
+.closed {
+  border-color: rgba(255, 255, 255, .1);
+  opacity: .8;
+}
+
+/* ---------- Банер «готово / відправлено» ---------- */
+.banner {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 18px 20px;
+  margin-bottom: 26px;
+  border-radius: 20px;
+  background: rgba(218, 255, 61, .14);
+  border: 1px solid rgba(218, 255, 61, .34);
+  animation: nUp .5s var(--ease) both;
+}
+
+.bannerIcon {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.bannerTitle {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 18px;
+  letter-spacing: -.02em;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.bannerText {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--info-text);
+}
+
+.ttn {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--info-text);
+}
+
+.ttn strong {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .02em;
+}
+
+/* ---------- Шапка картки ---------- */
 .head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 20px;
   flex-wrap: wrap;
-  margin-bottom: 28px;
+  margin-bottom: 26px;
 }
 
 .status {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  font-size: 12.5px;
-  letter-spacing: .06em;
+  padding: 5px 13px;
+  border-radius: var(--r-pill);
+  font-size: 12px;
+  letter-spacing: .08em;
   text-transform: uppercase;
-  color: var(--accent);
+  font-weight: 600;
+}
+
+.tone_progress {
+  background: rgba(255, 255, 255, .07);
+  color: rgba(241, 243, 239, .82);
+}
+
+.tone_ready,
+.tone_shipped {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.tone_done {
+  background: rgba(255, 255, 255, .07);
+  color: var(--text-2);
+}
+
+.tone_closed {
+  background: rgba(255, 255, 255, .05);
+  color: var(--text-3);
 }
 
 .title {
-  font-size: clamp(24px, 2.8vw, 36px);
+  font-size: clamp(24px, 2.8vw, 34px);
   margin: 14px 0 8px;
 }
 
 .meta {
-  font-size: 14.5px;
+  font-size: 14px;
   color: rgba(241, 243, 239, .6);
+}
+
+.problem {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-2);
+  max-width: 46ch;
 }
 
 .eta {
@@ -47,10 +150,11 @@
 
 .etaValue {
   font-family: var(--font-unbounded), sans-serif;
-  font-size: clamp(20px, 2.2vw, 28px);
+  font-size: clamp(16px, 1.6vw, 20px);
   letter-spacing: -.02em;
 }
 
+/* ---------- Шкала стадій ---------- */
 .bar {
   height: 6px;
   border-radius: var(--r-pill);
@@ -62,23 +166,21 @@
 .barFill {
   height: 100%;
   background: var(--accent);
+  border-radius: var(--r-pill);
   transform-origin: left;
-  animation: nGrow 1.6s var(--ease) .3s both;
+  animation: nGrow 1.4s var(--ease) .2s both;
 }
 
 .stages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
 }
 
 .stage {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.stageTop {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -107,70 +209,38 @@
 
 .stageTitle,
 .stageTitleDone {
-  font-family: var(--font-unbounded), sans-serif;
-  font-size: 15px;
+  font-size: 14.5px;
   letter-spacing: -.01em;
 }
 
 .stageTitle {
-  color: rgba(241, 243, 239, .6);
+  color: rgba(241, 243, 239, .55);
 }
 
 .stageTitleDone {
   color: var(--text);
 }
 
-.stageTime {
-  font-size: 13px;
-  color: var(--text-3);
-  padding-left: 30px;
+.closedText {
+  font-size: 15px;
+  color: var(--text-2);
+  padding: 4px 0 8px;
 }
 
 .actions {
-  margin-top: 28px;
+  margin-top: 26px;
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
 }
 
-
-
-
-.logRow {
-  display: grid;
-  grid-template-columns: 92px 1fr;
-  gap: 16px;
-  padding: 14px 0;
-  border-top: 1px solid rgba(255, 255, 255, .1);
-}
-
-.logTime {
-  font-size: 13px;
-  color: var(--text-3);
-}
-
-.logText {
-  font-size: 14.5px;
-  color: rgba(241, 243, 239, .82);
-}
-
 @media (max-width: 560px) {
-  .logRow {
-    grid-template-columns: 1fr;
-    gap: 6px;
+  .head {
+    flex-direction: column;
+    gap: 12px;
   }
-}
 
-.problem {
-  margin-top: 12px;
-  font-size: 15px;
-  line-height: 1.55;
-  color: var(--text-2);
-  max-width: 46ch;
-}
-
-.closed {
-  font-size: 15px;
-  color: var(--text-2);
-  padding: 4px 0 8px;
+  .eta {
+    text-align: left;
+  }
 }

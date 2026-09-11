@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import type { Lead } from "@/db/schema";
 import styles from "./History.module.css";
 
-type Row = {
+export type HistoryRow = {
   id: string;
   what: string;
   problem: string | null;
   date: string;
-  status: Lead["status"];
   label: string;
+  hint: string;
+  tone: "progress" | "ready" | "shipped" | "done" | "closed";
   active: boolean;
+  ttn: string | null;
 };
 
 const tabs = [
@@ -20,11 +21,14 @@ const tabs = [
   { id: "done", label: "Завершені" },
 ] as const;
 
-export default function History({ rows }: { rows: Row[] }) {
+export default function History({ rows }: { rows: HistoryRow[] }) {
   const [tab, setTab] = useState<(typeof tabs)[number]["id"]>("all");
 
   const shown =
     tab === "all" ? rows : tab === "active" ? rows.filter((r) => r.active) : rows.filter((r) => !r.active);
+
+  const count = (id: (typeof tabs)[number]["id"]) =>
+    id === "all" ? rows.length : id === "active" ? rows.filter((r) => r.active).length : rows.filter((r) => !r.active).length;
 
   return (
     <section className={`container ${styles.section}`}>
@@ -41,6 +45,7 @@ export default function History({ rows }: { rows: Row[] }) {
               onClick={() => setTab(t.id)}
             >
               {t.label}
+              <span className={styles.count}>{count(t.id)}</span>
             </button>
           ))}
         </div>
@@ -49,12 +54,29 @@ export default function History({ rows }: { rows: Row[] }) {
       {shown.length > 0 ? (
         <div className={styles.list}>
           {shown.map((r) => (
-            <div key={r.id} className={styles.row}>
-              <div className={styles.device}>{r.what}</div>
-              <div className={styles.work}>{r.problem ?? "—"}</div>
-              <div className={styles.date}>{r.date}</div>
-              <span className={r.active ? styles.badgeActive : styles.badgeDone}>{r.label}</span>
-            </div>
+            <article key={r.id} className={styles.row}>
+              <div className={styles.main}>
+                <div className={styles.device}>{r.what}</div>
+                {r.problem && <div className={styles.work}>{r.problem}</div>}
+                {r.ttn && (
+                  <div className={styles.ttn}>
+                    Накладна{" "}
+                    <a
+                      href={`https://novaposhta.ua/tracking/?cargo_number=${encodeURIComponent(r.ttn)}`}
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      {r.ttn}
+                    </a>
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.side}>
+                <span className={`${styles.badge} ${styles[`tone_${r.tone}`]}`}>{r.label}</span>
+                <time className={styles.date}>{r.date}</time>
+              </div>
+            </article>
           ))}
         </div>
       ) : (

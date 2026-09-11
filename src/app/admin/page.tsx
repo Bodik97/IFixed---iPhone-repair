@@ -3,9 +3,11 @@ import { redirect } from "next/navigation";
 import { desc } from "drizzle-orm";
 import { getDb } from "@/db";
 import { leads } from "@/db/schema";
+import { describeStatus } from "@/db/leads";
 import { isAdmin } from "@/lib/admin";
 import { signOut } from "./actions";
 import StatusSelect from "./StatusSelect";
+import TtnField from "./TtnField";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -34,17 +36,17 @@ export default async function AdminPage() {
   if (!(await isAdmin())) redirect("/admin/vhid");
 
   const rows = await getDb().select().from(leads).orderBy(desc(leads.createdAt));
+
   const fresh = rows.filter((r) => r.status === "new").length;
+  // Готові пристрої, на які клієнт попросив доставку, але ТТН ще немає
+  const toShip = rows.filter((r) => r.deliveryRequested && !r.ttn && r.status !== "done").length;
 
   return (
     <section className={`container ${styles.wrap}`}>
       <div className={styles.head}>
         <div>
           <div className="kicker">Адміністрування</div>
-          <h1 className={styles.title}>
-            Заявки <span className={styles.count}>{rows.length}</span>
-          </h1>
-          {fresh > 0 && <p className={styles.fresh}>Нових: {fresh}</p>}
+          <h1 className={styles.title}>Заявки</h1>
         </div>
 
         <form action={signOut}>
@@ -54,39 +56,51 @@ export default async function AdminPage() {
         </form>
       </div>
 
+      <div className={styles.summary}>
+        <div className={styles.stat}>
+          <span className={styles.statValue}>{rows.length}</span>
+          <span className={styles.statLabel}>усього</span>
+        </div>
+        <div className={fresh > 0 ? styles.statHot : styles.stat}>
+          <span className={styles.statValue}>{fresh}</span>
+          <span className={styles.statLabel}>нових</span>
+        </div>
+        <div className={toShip > 0 ? styles.statHot : styles.stat}>
+          <span className={styles.statValue}>{toShip}</span>
+          <span className={styles.statLabel}>чекають відправки</span>
+        </div>
+      </div>
+
       {rows.length === 0 ? (
         <div className={styles.empty}>Заявок ще немає.</div>
       ) : (
-        <div className={styles.tableWrap}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Коли</th>
-                <th>Клієнт</th>
-                <th>Контакт</th>
-                <th>Що треба</th>
-                <th>Проблема</th>
-                <th>Звідки</th>
-                <th>Статус</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.id} className={r.status === "new" ? styles.rowNew : undefined}>
-                  <td className={styles.nowrap}>{dateFormat.format(r.createdAt)}</td>
-                  <td>
-                    {r.name}
+        <div className={styles.cards}>
+          {rows.map((r) => {
+            const s = describeStatus(r.status);
+            const waitingShip = r.deliveryRequested && !r.ttn;
+
+            return (
+              <article
+                key={r.id}
+                className={`${styles.card} ${r.status === "new" ? styles.cardNew : ""} ${waitingShip ? styles.cardShip : ""}`}
+              >
+                <div className={styles.cardMain}>
+                  <div className={styles.cardTop}>
+                    <span className={styles.name}>{r.name}</span>
                     {r.clerkUserId ? (
-                      <span className={styles.tagAccount} title="Клієнт бачить статус у своєму кабінеті">
+                      <span className={styles.tagAccount} title="Бачить статус у своєму кабінеті">
                         кабінет
                       </span>
                     ) : (
-                      <span className={styles.tagAnon} title="Без акаунта — сповіщення пішло в Telegram">
+                      <span className={styles.tagAnon} title="Без акаунта — пішло в Telegram">
                         анонім
                       </span>
                     )}
-                  </td>
-                  <td className={styles.contact}>
+                    <span className={styles.when}>{dateFormat.format(r.createdAt)}</span>
+                    <span className={styles.source}>{sourceLabel[r.source] ?? r.source}</span>
+                  </div>
+
+                  <div className={styles.contacts}>
                     {r.phone && (
                       <a href={`tel:${r.phone.replace(/[^\d+]/g, "")}`} className={styles.link}>
                         {r.phone}
@@ -97,18 +111,43 @@ export default async function AdminPage() {
                         {r.email}
                       </a>
                     )}
-                    {r.city && <span className={styles.muted}>{r.city}</span>}
-                  </td>
-                  <td>{r.model ?? r.service ?? "—"}</td>
-                  <td className={styles.problem}>{r.problem || "—"}</td>
-                  <td className={styles.nowrap}>{sourceLabel[r.source] ?? r.source}</td>
-                  <td>
-                    <StatusSelect id={r.id} status={r.status} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </div>
+
+                  {(r.model || r.service) && (
+                    <div className={styles.what}>{r.model ?? r.service}</div>
+                  )}
+                  {r.problem && <p className={styles.problem}>{r.problem}</p>}
+
+                  {/* Доставка: показуємо, лише коли клієнт її попросив */}
+                  {r.deliveryRequested && (
+                    <div className={waitingShip ? styles.shipBoxHot : styles.shipBox}>
+                      <div className={styles.shipHead}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M3 7l9-4 9 4v10l-9 4-9-4z" />
+                          <path d="M3 7l9 4 9-4" />
+                          <path d="M12 11v10" />
+                        </svg>
+                        {waitingShip ? "Просить надіслати — ТТН не вписано" : "Відправлено"}
+                      </div>
+
+                      {r.deliveryAddress && (
+                        <div className={styles.shipAddress}>{r.deliveryAddress}</div>
+                      )}
+
+                      <TtnField id={r.id} ttn={r.ttn} />
+                    </div>
+                  )}
+
+                  {r.city && !r.deliveryRequested && <div className={styles.city}>{r.city}</div>}
+                </div>
+
+                <div className={styles.cardSide}>
+                  <StatusSelect id={r.id} status={r.status} />
+                  <span className={styles.hint}>{s.hint}</span>
+                </div>
+              </article>
+            );
+          })}
         </div>
       )}
     </section>
