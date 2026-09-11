@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 import SignInForm from "./SignInForm";
 import styles from "./page.module.css";
 
@@ -35,7 +37,11 @@ const icons = {
   ),
 };
 
-export default function SignInPage() {
+export default async function SignInPage() {
+  // Уже увійшли — форма тут ні до чого
+  const { userId } = await auth();
+  if (userId) redirect("/kabinet");
+
   return (
     <section className={styles.wrap}>
       <span aria-hidden="true" className={styles.bg}>

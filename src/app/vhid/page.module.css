@@ -166,3 +166,14 @@
   color: var(--text-3);
   line-height: 1.5;
 }
+
+/* Пояснення, чому вхід пішов через код, — не помилка */
+.notice {
+  padding: 14px 16px;
+  border-radius: var(--r-field);
+  background: var(--info-bg);
+  border: 1px solid var(--info-border);
+  color: var(--info-text);
+  font-size: 14px;
+  line-height: 1.5;
+}

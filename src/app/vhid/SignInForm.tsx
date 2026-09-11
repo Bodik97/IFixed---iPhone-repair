@@ -11,6 +11,12 @@ type Step = "credentials" | "code" | "codeLogin";
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/;
 const MIN_PASSWORD = 8;
 
+/** Код помилки Clerk лежить у різних місцях залежно від методу — дістаємо звідусіль */
+function errorCode(error: unknown): string {
+  const e = error as { code?: string; errors?: { code?: string }[] } | null;
+  return e?.code ?? e?.errors?.[0]?.code ?? "";
+}
+
 export default function SignInForm() {
   const { signIn } = useSignIn();
   const { signUp } = useSignUp();
@@ -23,6 +29,7 @@ export default function SignInForm() {
   const [code, setCode] = useState("");
   const [isNew, setIsNew] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
 
   const goToCabinet = () => router.push("/kabinet");
@@ -55,7 +62,37 @@ export default function SignInForm() {
         return;
       }
 
-      // Акаунта немає — створюємо разом із паролем і підтверджуємо пошту кодом
+      const code = errorCode(signInError);
+
+      // Вже є активна сесія — просто ведемо в кабінет
+      if (code === "session_exists" || errorCode(signInError) === "session_exists") {
+        goToCabinet();
+        return;
+      }
+
+      // Пароль не підходить до наявного акаунта — реєструвати не можна
+      if (code === "form_password_incorrect") {
+        setError("Пароль не підходить. Спробуйте ще раз або увійдіть кодом на пошту.");
+        return;
+      }
+
+      // Акаунт є, але пароля в нього немає: реєструвався до того, як ми ввели паролі.
+      // Пускаємо кодом — пароль він задасть у кабінеті.
+      if (code && code !== "form_identifier_not_found") {
+        // Після невдалої спроби signIn лишається у стані помилки — інакше код не надішлеться
+        signIn.reset();
+        const { error: sendError } = await signIn.emailCode.sendCode({ emailAddress: mail });
+        if (sendError) {
+          setError("Не вдалося увійти. Спробуйте кодом на пошту або зателефонуйте нам.");
+          return;
+        }
+        setIsNew(false);
+        setNotice("Ви реєструвались раніше, коли паролів ще не було. Надіслали код — увійдіть, і задасте пароль у кабінеті.");
+        setStep("codeLogin");
+        return;
+      }
+
+      // Такого клієнта немає — створюємо разом із паролем
       const created = await signUp.create({
         emailAddress: mail,
         password,
@@ -63,8 +100,13 @@ export default function SignInForm() {
       });
 
       if (created?.error) {
+        const createCode = errorCode(created.error);
         setError(
-          "Пароль не підійшов. Якщо ви вже реєструвались — спробуйте ще раз або увійдіть кодом на пошту.",
+          createCode === "form_password_pwned"
+            ? "Цей пароль засвітився у витоках даних. Придумайте інший."
+            : createCode === "form_password_length_too_short"
+              ? `Пароль має бути щонайменше ${MIN_PASSWORD} символів.`
+              : "Не вдалося створити акаунт. Спробуйте увійти кодом на пошту.",
         );
         return;
       }
@@ -91,7 +133,9 @@ export default function SignInForm() {
 
     setBusy(true);
     setError("");
+    setNotice("");
     try {
+      signIn.reset();
       const { error: sendError } = await signIn.emailCode.sendCode({ emailAddress: mail });
       if (sendError) {
         setError("Такої пошти в нас немає. Впишіть пароль — і створимо вам акаунт.");
@@ -135,6 +179,7 @@ export default function SignInForm() {
     setStep("credentials");
     setCode("");
     setError("");
+    setNotice("");
     setIsNew(false);
   };
 
@@ -142,6 +187,8 @@ export default function SignInForm() {
     return (
       <div className={styles.card}>
         <form onSubmit={verifyCode} className={styles.form} noValidate>
+          {notice && <div className={styles.notice}>{notice}</div>}
+
           <p className={styles.sentTo}>
             {isNew ? "Підтвердіть пошту — надіслали код на " : "Надіслали код на "}
             <strong>{email}</strong>

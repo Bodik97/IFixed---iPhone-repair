@@ -4,6 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import ActiveOrder from "@/components/account/ActiveOrder";
 import History from "@/components/account/History";
 import NewRepair from "@/components/account/NewRepair";
+import SetPassword from "@/components/account/SetPassword";
 import SignOutButton from "@/components/account/SignOutButton";
 import { describeStatus, getClientLeads } from "@/db/leads";
 import styles from "./page.module.css";
@@ -72,6 +73,8 @@ export default async function AccountPage() {
             {name && email ? " · " : null}
             {email}
           </p>
+
+          <SetPassword />
         </div>
       </section>
 
