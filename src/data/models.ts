@@ -26,7 +26,7 @@ export const models: Model[] = [
     ],
     "time": "від 60 хв",
     "inStock": false,
-    "image": "/assets/bg-phone-a.jpeg"
+    "image": "/models/iphone-16-pro-max.webp"
   },
   {
     "slug": "iphone-16-pro",
@@ -39,7 +39,7 @@ export const models: Model[] = [
     ],
     "time": "від 60 хв",
     "inStock": false,
-    "image": "/assets/bg-phone-b.jpeg"
+    "image": "/models/iphone-16-pro.webp"
   },
   {
     "slug": "iphone-16-plus",
@@ -52,7 +52,7 @@ export const models: Model[] = [
     ],
     "time": "від 55 хв",
     "inStock": false,
-    "image": "/assets/bg-tech.jpeg"
+    "image": "/models/iphone-16-plus.webp"
   },
   {
     "slug": "iphone-16",
@@ -66,7 +66,7 @@ export const models: Model[] = [
     ],
     "time": "від 55 хв",
     "inStock": true,
-    "image": "/assets/bg-circuit.jpeg"
+    "image": "/models/iphone-16.webp"
   },
   {
     "slug": "iphone-15-pro-max",
@@ -80,7 +80,7 @@ export const models: Model[] = [
     ],
     "time": "від 50 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-a.jpeg"
+    "image": "/models/iphone-15-pro-max.webp"
   },
   {
     "slug": "iphone-15-pro",
@@ -94,7 +94,7 @@ export const models: Model[] = [
     ],
     "time": "від 50 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-b.jpeg"
+    "image": "/models/iphone-15-pro.webp"
   },
   {
     "slug": "iphone-15-plus",
@@ -107,7 +107,7 @@ export const models: Model[] = [
     ],
     "time": "від 45 хв",
     "inStock": true,
-    "image": "/assets/bg-tech.jpeg"
+    "image": "/models/iphone-15-plus.webp"
   },
   {
     "slug": "iphone-15",
@@ -121,7 +121,7 @@ export const models: Model[] = [
     ],
     "time": "від 45 хв",
     "inStock": true,
-    "image": "/assets/bg-circuit.jpeg"
+    "image": "/models/iphone-15.webp"
   },
   {
     "slug": "iphone-14-pro-max",
@@ -135,7 +135,7 @@ export const models: Model[] = [
     ],
     "time": "від 45 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-a.jpeg"
+    "image": "/models/iphone-14-pro-max.webp"
   },
   {
     "slug": "iphone-14-pro",
@@ -149,7 +149,7 @@ export const models: Model[] = [
     ],
     "time": "від 45 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-b.jpeg"
+    "image": "/models/iphone-14-pro.webp"
   },
   {
     "slug": "iphone-14-plus",
@@ -162,7 +162,7 @@ export const models: Model[] = [
     ],
     "time": "від 40 хв",
     "inStock": true,
-    "image": "/assets/bg-tech.jpeg"
+    "image": "/models/iphone-14-plus.webp"
   },
   {
     "slug": "iphone-14",
@@ -176,7 +176,7 @@ export const models: Model[] = [
     ],
     "time": "від 40 хв",
     "inStock": true,
-    "image": "/assets/bg-circuit.jpeg"
+    "image": "/models/iphone-14.webp"
   },
   {
     "slug": "iphone-13-pro-max",
@@ -190,7 +190,7 @@ export const models: Model[] = [
     ],
     "time": "від 40 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-a.jpeg"
+    "image": "/models/iphone-13-pro-max.webp"
   },
   {
     "slug": "iphone-13-pro",
@@ -204,7 +204,7 @@ export const models: Model[] = [
     ],
     "time": "від 40 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-b.jpeg"
+    "image": "/models/iphone-13-pro.webp"
   },
   {
     "slug": "iphone-13",
@@ -218,7 +218,7 @@ export const models: Model[] = [
     ],
     "time": "від 40 хв",
     "inStock": true,
-    "image": "/assets/bg-tech.jpeg"
+    "image": "/models/iphone-13.webp"
   },
   {
     "slug": "iphone-13-mini",
@@ -231,7 +231,7 @@ export const models: Model[] = [
     ],
     "time": "від 40 хв",
     "inStock": true,
-    "image": "/assets/bg-circuit.jpeg"
+    "image": "/models/iphone-13-mini.webp"
   },
   {
     "slug": "iphone-12-pro-max",
@@ -245,7 +245,7 @@ export const models: Model[] = [
     ],
     "time": "від 40 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-a.jpeg"
+    "image": "/models/iphone-12-pro-max.webp"
   },
   {
     "slug": "iphone-12-pro",
@@ -259,7 +259,7 @@ export const models: Model[] = [
     ],
     "time": "від 40 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-b.jpeg"
+    "image": "/models/iphone-12-pro.webp"
   },
   {
     "slug": "iphone-12",
@@ -273,7 +273,7 @@ export const models: Model[] = [
     ],
     "time": "від 40 хв",
     "inStock": true,
-    "image": "/assets/bg-tech.jpeg"
+    "image": "/models/iphone-12.webp"
   },
   {
     "slug": "iphone-12-mini",
@@ -286,7 +286,7 @@ export const models: Model[] = [
     ],
     "time": "від 40 хв",
     "inStock": true,
-    "image": "/assets/bg-circuit.jpeg"
+    "image": "/models/iphone-12-mini.webp"
   },
   {
     "slug": "iphone-11-pro-max",
@@ -300,7 +300,7 @@ export const models: Model[] = [
     ],
     "time": "від 35 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-a.jpeg"
+    "image": "/models/iphone-11-pro-max.webp"
   },
   {
     "slug": "iphone-11-pro",
@@ -313,7 +313,7 @@ export const models: Model[] = [
     ],
     "time": "від 35 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-b.jpeg"
+    "image": "/models/iphone-11-pro.webp"
   },
   {
     "slug": "iphone-11",
@@ -327,7 +327,7 @@ export const models: Model[] = [
     ],
     "time": "від 35 хв",
     "inStock": true,
-    "image": "/assets/bg-tech.jpeg"
+    "image": "/models/iphone-11.webp"
   },
   {
     "slug": "iphone-xs-max",
@@ -340,7 +340,7 @@ export const models: Model[] = [
     ],
     "time": "від 35 хв",
     "inStock": true,
-    "image": "/assets/bg-circuit.jpeg"
+    "image": "/models/iphone-xs-max.webp"
   },
   {
     "slug": "iphone-xs",
@@ -354,7 +354,7 @@ export const models: Model[] = [
     ],
     "time": "від 35 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-a.jpeg"
+    "image": "/models/iphone-xs.webp"
   },
   {
     "slug": "iphone-xr",
@@ -368,7 +368,7 @@ export const models: Model[] = [
     ],
     "time": "від 35 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-b.jpeg"
+    "image": "/models/iphone-xr.webp"
   },
   {
     "slug": "iphone-x",
@@ -382,7 +382,7 @@ export const models: Model[] = [
     ],
     "time": "від 35 хв",
     "inStock": true,
-    "image": "/assets/bg-tech.jpeg"
+    "image": "/models/iphone-x.webp"
   },
   {
     "slug": "iphone-8-plus",
@@ -396,7 +396,7 @@ export const models: Model[] = [
     ],
     "time": "від 30 хв",
     "inStock": true,
-    "image": "/assets/bg-circuit.jpeg"
+    "image": "/models/iphone-8-plus.webp"
   },
   {
     "slug": "iphone-8",
@@ -410,7 +410,7 @@ export const models: Model[] = [
     ],
     "time": "від 30 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-a.jpeg"
+    "image": "/models/iphone-8.webp"
   },
   {
     "slug": "iphone-7-plus",
@@ -424,7 +424,7 @@ export const models: Model[] = [
     ],
     "time": "від 30 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-b.jpeg"
+    "image": "/models/iphone-7-plus.webp"
   },
   {
     "slug": "iphone-7",
@@ -437,7 +437,7 @@ export const models: Model[] = [
     ],
     "time": "від 30 хв",
     "inStock": true,
-    "image": "/assets/bg-tech.jpeg"
+    "image": "/models/iphone-7.webp"
   },
   {
     "slug": "iphone-se-3",
@@ -450,7 +450,7 @@ export const models: Model[] = [
     ],
     "time": "від 30 хв",
     "inStock": true,
-    "image": "/assets/bg-circuit.jpeg"
+    "image": "/models/iphone-se-3.webp"
   },
   {
     "slug": "iphone-se-2",
@@ -463,7 +463,7 @@ export const models: Model[] = [
     ],
     "time": "від 30 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-a.jpeg"
+    "image": "/models/iphone-se-2.webp"
   },
   {
     "slug": "iphone-6s-6s-plus",
@@ -477,7 +477,7 @@ export const models: Model[] = [
     ],
     "time": "від 30 хв",
     "inStock": true,
-    "image": "/assets/bg-phone-b.jpeg"
+    "image": "/models/iphone-6s-6s-plus.webp"
   },
   {
     "slug": "iphone-6-6-plus",
@@ -490,7 +490,7 @@ export const models: Model[] = [
     ],
     "time": "від 30 хв",
     "inStock": true,
-    "image": "/assets/bg-tech.jpeg"
+    "image": "/models/iphone-6-6-plus.webp"
   },
   {
     "slug": "ipad-pro-11-12-9",
@@ -504,7 +504,7 @@ export const models: Model[] = [
     ],
     "time": "1–2 дні",
     "inStock": false,
-    "image": "/assets/bg-circuit.jpeg"
+    "image": "/models/ipad-pro-11-12-9.webp"
   },
   {
     "slug": "ipad-air-3-5",
@@ -517,7 +517,7 @@ export const models: Model[] = [
     ],
     "time": "1–2 дні",
     "inStock": false,
-    "image": "/assets/bg-phone-a.jpeg"
+    "image": "/models/ipad-air-3-5.webp"
   },
   {
     "slug": "ipad-7-10",
@@ -531,7 +531,7 @@ export const models: Model[] = [
     ],
     "time": "1–2 дні",
     "inStock": true,
-    "image": "/assets/bg-phone-b.jpeg"
+    "image": "/models/ipad-7-10.webp"
   },
   {
     "slug": "ipad-mini-5-6",
@@ -544,7 +544,7 @@ export const models: Model[] = [
     ],
     "time": "1–2 дні",
     "inStock": false,
-    "image": "/assets/bg-tech.jpeg"
+    "image": "/models/ipad-mini-5-6.webp"
   },
   {
     "slug": "apple-watch-s4-s9",
@@ -557,7 +557,7 @@ export const models: Model[] = [
     ],
     "time": "1–2 дні",
     "inStock": false,
-    "image": "/assets/bg-circuit.jpeg"
+    "image": "/models/apple-watch-s4-s9.webp"
   },
   {
     "slug": "apple-watch-ultra",
@@ -570,7 +570,7 @@ export const models: Model[] = [
     ],
     "time": "1–2 дні",
     "inStock": false,
-    "image": "/assets/bg-phone-a.jpeg"
+    "image": "/models/apple-watch-ultra.webp"
   },
   {
     "slug": "airpods-airpods-pro",

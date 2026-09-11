@@ -107,9 +107,12 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
             </div>
 
             <div className={`${styles.heroShot} anim-float`}>
-              <span className={styles.shotPhoto} style={{ backgroundImage: `url("${model.image}")` }} />
-              <span className={styles.shotVeil} />
-              <span className={styles.shotCaption}>{model.name}</span>
+              {model.image.startsWith("/models/") ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={model.image} alt={model.name} className={styles.shotPhoto} />
+              ) : (
+                <span className={styles.shotCaption}>{model.name}</span>
+              )}
             </div>
           </div>
         </div>

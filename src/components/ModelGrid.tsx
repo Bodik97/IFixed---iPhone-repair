@@ -55,8 +55,18 @@ export default function ModelGrid() {
         {shown.map((m) => (
           <Link key={m.slug} href={`/modeli/${m.slug}`} className={styles.card}>
             <span className={styles.media}>
-              <span className={styles.photo} style={{ backgroundImage: `url("${m.image}")` }} />
-              <span className={styles.veil} />
+              {m.image.startsWith("/models/") ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={m.image} alt="" className={styles.photo} loading="lazy" />
+              ) : (
+                <span className={styles.noPhoto} aria-hidden="true">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M7 5.5c2 0 3 1.4 3 3.5 0 2.5-1 6-1 8.5 0 1.4-.8 2.5-2.2 2.5S4 18.7 4 16.8c0-2.3.8-4.3.8-6.3C4.8 7.5 5.4 5.5 7 5.5z" />
+                    <path d="M17 5.5c-2 0-3 1.4-3 3.5 0 2.5 1 6 1 8.5 0 1.4.8 2.5 2.2 2.5S20 18.7 20 16.8c0-2.3-.8-4.3-.8-6.3 0-3-.6-5-2.2-5z" />
+                  </svg>
+                </span>
+              )}
+
               <span className={m.inStock ? styles.stockIn : styles.stockOut}>
                 {m.inStock ? "в наявності" : "під замовлення"}
               </span>
