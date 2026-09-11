@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #0B0C0E; }
+  a { color: #DAFF3D; }
+  a:hover { color: #EEFF9E; }
+  ::selection { background: #DAFF3D; color: #0B0C0E; }
+  input, select, textarea, button { font: inherit; }
+  :focus-visible { outline: 2px solid #DAFF3D; outline-offset: 3px; }
+  @keyframes nUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @keyframes nFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  @keyframes nDrift { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(-60px,40px) scale(1.12); } 66% { transform: translate(40px,-30px) scale(.95); } }
+  @keyframes nShine { 0% { transform: translateX(-140%); } 55%, 100% { transform: translateX(320%); } }
+  @keyframes nHalo { 0%, 100% { box-shadow: 0 10px 30px rgba(218,255,61,.18); } 50% { box-shadow: 0 16px 46px rgba(218,255,61,.34); } }
+  @keyframes nDot { 0% { opacity: .6; transform: scale(.8); } 70%, 100% { opacity: 0; transform: scale(2); } }
+  @keyframes nRoll { 0% { transform: translateX(-12%); } 50% { transform: translateX(12%); } 100% { transform: translateX(-12%); } }
+  @keyframes nGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</helmet>
+
+<div style="background: #0B0C0E; color: #F1F3EF; font-family: 'Manrope', system-ui, sans-serif; min-height: 100%; overflow-x: hidden;">
+
+  <header style="position: sticky; top: 0; z-index: 30; background: rgba(11,12,14,.72); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,.08);">
+    <nav style="max-width: 1280px; margin: 0 auto; padding: 16px 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+      <a href="iFix%20Landing.dc.html" style="display: flex; align-items: center; gap: 11px; font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 19px; color: #F1F3EF; text-decoration: none;">
+        <span style="display: inline-flex; width: 30px; height: 30px; border-radius: 13px; align-items: center; justify-content: center; background: #DAFF3D; color: #0B0C0E; font-size: 13px;">iF</span>
+        iFix
+      </a>
+      <div style="display: flex; align-items: center; gap: 26px; flex-wrap: wrap; font-size: 14.5px;">
+        <a href="iFix-Services.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Послуги</a>
+        <a href="iFix-Catalog-iPhone.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Моделі</a>
+        <a href="iFix-Mail-in.dc.html" style="color: #DAFF3D; text-decoration: none;">Поштою</a>
+        <a href="iFix-Account%20v2.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Кабінет</a>
+        <a href="tel:+380733150238" style="color: #F1F3EF; text-decoration: none; font-family: 'Unbounded', sans-serif; font-size: 15px;">073 315 02 38</a>
+      </div>
+    </nav>
+  </header>
+
+  <section style="position: relative; overflow: hidden; padding: clamp(48px, 7vw, 110px) 28px clamp(34px, 4vw, 64px);">
+    <span aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none;">
+      <span style="position: absolute; inset: 0; background-image: url('assets/bg-tech.jpeg'); background-size: cover; background-position: 30% 50%; opacity: .3; filter: grayscale(.8);"></span>
+      <span style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,12,14,.9), rgba(11,12,14,.97));"></span>
+      <span style="position: absolute; width: 640px; height: 640px; right: -180px; top: -240px; border-radius: 50%; background: radial-gradient(circle, rgba(218,255,61,.2), transparent 65%); animation: nDrift 22s ease-in-out infinite;"></span>
+    </span>
+    <div style="position: relative; max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(30px, 4vw, 70px); align-items: center;">
+      <div style="min-width: 0;">
+        <span style="display: inline-flex; align-items: center; gap: 9px; padding: 7px 14px 7px 11px; border-radius: 999px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); font-size: 12.5px; color: rgba(241,243,239,.82); animation: nUp .6s cubic-bezier(.2,.7,.2,1) both;">
+          <span style="position: relative; display: inline-flex; width: 8px; height: 8px;">
+            <span style="position: absolute; inset: 0; border-radius: 50%; background: #DAFF3D;"></span>
+            <span style="position: absolute; inset: 0; border-radius: 50%; background: #DAFF3D; animation: nDot 2.6s ease-out infinite;"></span>
+          </span>
+          Приймаємо посилки з усієї України
+        </span>
+        <h1 style="font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: clamp(34px, 5.2vw, 68px); line-height: 1.02; letter-spacing: -.035em; margin: 22px 0 0; max-width: 16ch; text-wrap: balance; animation: nUp .75s cubic-bezier(.2,.7,.2,1) .06s both;">
+          Ремонт <span style="color: #DAFF3D;">поштою</span> — без поїздки до Львова
+        </h1>
+        <p style="font-size: clamp(16px, 1.5vw, 18.5px); line-height: 1.6; max-width: 46ch; margin: 20px 0 0; color: rgba(241,243,239,.7); animation: nUp .75s cubic-bezier(.2,.7,.2,1) .12s both;">
+          Надсилаєте Новою Поштою — діагностуємо, телефонуємо з фіксованою ціною, ремонтуємо і повертаємо за свій кошт.
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; animation: nUp .75s cubic-bezier(.2,.7,.2,1) .18s both;">
+          <a href="#send" style="position: relative; overflow: hidden; padding: 16px 26px; border-radius: 999px; background: #DAFF3D; color: #0B0C0E; font-weight: 600; font-size: 15.5px; text-decoration: none; animation: nHalo 4.5s ease-in-out infinite; transition: transform .2s;" style-hover="transform: translateY(-2px);">Оформити відправку<span aria-hidden="true" style="position: absolute; top: 0; bottom: 0; width: 34%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent); animation: nShine 4.5s ease-in-out 1s infinite; pointer-events: none;"></span></a>
+          <a href="#track" style="padding: 16px 24px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); color: #F1F3EF; font-size: 15.5px; text-decoration: none; transition: background .2s, border-color .2s;" style-hover="background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.4);">Де моя посилка</a>
+        </div>
+      </div>
+      <div style="min-width: 0; display: grid; gap: 14px; animation: nUp .85s cubic-bezier(.2,.7,.2,1) .16s both;">
+        <div style="border-radius: 28px; border: 1px solid rgba(255,255,255,.1); background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); padding: 26px; display: grid; gap: 16px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px;">
+            <span style="font-family: 'Unbounded', sans-serif; font-size: 30px; line-height: 1;">1–3<span style="font-size: 16px; color: rgba(241,243,239,.6);"> дні</span></span>
+            <span style="font-size: 13.5px; color: rgba(241,243,239,.62); text-align: right; max-width: 20ch;">від отримання до відправки назад</span>
+          </div>
+          <div style="height: 1px; background: rgba(255,255,255,.08);"></div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px;">
+            <span style="font-family: 'Unbounded', sans-serif; font-size: 30px; line-height: 1;">0<span style="font-size: 16px; color: rgba(241,243,239,.6);"> ₴</span></span>
+            <span style="font-size: 13.5px; color: rgba(241,243,239,.62); text-align: right; max-width: 20ch;">зворотна доставка — наш кошт</span>
+          </div>
+          <div style="height: 1px; background: rgba(255,255,255,.08);"></div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px;">
+            <span style="font-family: 'Unbounded', sans-serif; font-size: 30px; line-height: 1;">30<span style="font-size: 16px; color: rgba(241,243,239,.6);"> днів</span></span>
+            <span style="font-size: 13.5px; color: rgba(241,243,239,.62); text-align: right; max-width: 20ch;">гарантія така сама, як у сервісі</span>
+          </div>
+        </div>
+        <div aria-hidden="true" style="overflow: hidden; border-radius: 28px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.03); padding: 22px; display: flex; align-items: center; gap: 16px;">
+          <span style="animation: nRoll 6s ease-in-out infinite; display: inline-flex;">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"></path><path d="M3 7l9 4 9-4"></path><path d="M12 11v10"></path></svg>
+          </span>
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 14.5px; color: rgba(241,243,239,.8); margin-bottom: 10px;">Ваша посилка в дорозі</div>
+            <div style="height: 5px; border-radius: 999px; background: rgba(255,255,255,.09); overflow: hidden;">
+              <div style="height: 100%; width: 62%; background: #DAFF3D; transform-origin: left; animation: nGrow 2.2s cubic-bezier(.2,.7,.2,1) .3s both;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width: 1280px; margin: 0 auto; padding: clamp(32px, 5vw, 70px) 28px;">
+    <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 12px;">Як це працює</div>
+    <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(28px, 3.6vw, 46px); line-height: 1.06; letter-spacing: -.03em; margin: 0 0 40px;">П'ять кроків від відправки до повернення</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 18px;">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
+        <div style="border-radius: 24px; border: 1px solid rgba(255,255,255,.09); background: rgba(255,255,255,.03); padding: 24px; display: flex; flex-direction: column; gap: 12px; animation: nUp .8s cubic-bezier(.2,.7,.2,1) both; transition: transform .25s, border-color .25s, background .25s;" style-hover="transform: translateY(-4px); border-color: rgba(218,255,61,.5); background: rgba(255,255,255,.055);">
+          <div style="font-family: 'Unbounded', sans-serif; font-size: 14px; color: #DAFF3D;">{{ s.no }}</div>
+          <div style="font-family: 'Unbounded', sans-serif; font-size: 19px; letter-spacing: -.02em;">{{ s.title }}</div>
+          <p style="margin: 0; font-size: 14.5px; line-height: 1.55; color: rgba(241,243,239,.66);">{{ s.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="border-top: 1px solid rgba(255,255,255,.08); border-bottom: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.02);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: clamp(40px, 5.5vw, 84px) 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(28px, 4vw, 60px); align-items: start;">
+      <div>
+        <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 12px;">Пам'ятка</div>
+        <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(26px, 3.2vw, 42px); line-height: 1.06; letter-spacing: -.03em; margin: 0 0 16px;">Як спакувати, щоб доїхало цілим</h2>
+        <p style="margin: 0; font-size: 15.5px; line-height: 1.6; color: rgba(241,243,239,.68); max-width: 42ch;">Відмітьте пункти — це той самий список, який ми диктуємо телефоном.</p>
+      </div>
+      <div style="display: grid; gap: 10px;">
+        <sc-for list="{{ checklist }}" as="c" hint-placeholder-count="6">
+          <button type="button" onClick="{{ c.toggle }}" style="text-align: left; cursor: pointer; display: flex; gap: 14px; align-items: center; padding: 16px 20px; border-radius: 20px; border: 1px solid {{ c.border }}; background: {{ c.bg }}; color: {{ c.color }}; font-size: 15px; transition: border-color .2s, background .2s, transform .2s;" style-hover="transform: translateX(4px);">
+            <span style="flex: none; width: 22px; height: 22px; border-radius: 8px; border: 1px solid {{ c.boxBorder }}; background: {{ c.boxBg }}; display: inline-flex; align-items: center; justify-content: center; transition: background .2s, border-color .2s;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0B0C0E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{ c.tick }}; transition: opacity .2s;"><path d="M5 12.5l4.5 4.5L19 7"></path></svg>
+            </span>
+            <span>{{ c.label }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width: 1280px; margin: 0 auto; padding: clamp(36px, 5vw, 74px) 28px 0;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-bottom: 22px;">
+      <div>
+        <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 12px;">Що надсилають найчастіше</div>
+        <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(26px, 3.2vw, 42px); line-height: 1.06; letter-spacing: -.03em; margin: 0;">Оберіть модель — і одразу до деталей</h2>
+      </div>
+      <a href="iFix-Catalog-iPhone.dc.html" style="font-size: 14.5px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: gap .2s;" style-hover="gap: 12px;">Весь каталог
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h13"></path><path d="M13 6l6 6-6 6"></path></svg>
+      </a>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px;">
+      <sc-for list="{{ popular }}" as="p" hint-placeholder-count="6">
+        <a href="{{ p.href }}" style="position: relative; overflow: hidden; border-radius: 24px; border: 1px solid rgba(255,255,255,.09); text-decoration: none; color: #F1F3EF; aspect-ratio: 5 / 4; display: flex; align-items: flex-end; padding: 18px; transition: transform .25s, border-color .25s;" style-hover="transform: translateY(-5px); border-color: rgba(218,255,61,.5);">
+          <span style="position: absolute; inset: 0; background-image: {{ p.img }}; background-size: cover; background-position: 50% 50%; filter: grayscale(.6); transition: transform .5s cubic-bezier(.2,.7,.2,1), filter .4s;" style-hover="transform: scale(1.08); filter: grayscale(0);"></span>
+          <span style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,12,14,.2), rgba(11,12,14,.85));"></span>
+          <span style="position: relative; font-family: 'Unbounded', sans-serif; font-size: 16px; letter-spacing: -.02em;">{{ p.name }}</span>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="track" style="max-width: 1280px; margin: 0 auto; padding: clamp(36px, 5vw, 72px) 28px 0;">
+    <div style="border-radius: 30px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.03); padding: clamp(24px, 3.4vw, 42px); display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(24px, 3vw, 48px); align-items: center;">
+      <div>
+        <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 12px;">Трекінг</div>
+        <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(23px, 2.6vw, 34px); line-height: 1.1; letter-spacing: -.03em; margin: 0 0 10px;">Де зараз мій телефон</h2>
+        <p style="margin: 0; font-size: 15px; color: rgba(241,243,239,.66); max-width: 40ch;">Введіть ТТН Нової Пошти або номер замовлення з нашого SMS.</p>
+      </div>
+      <div style="display: grid; gap: 12px;">
+        <input type="text" placeholder="ТТН або №замовлення" value="{{ ttn }}" onChange="{{ onTtn }}" style="min-height: 50px; padding: 0 18px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px;">
+        <button type="button" onClick="{{ track }}" style="min-height: 50px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); background: transparent; color: #F1F3EF; font-size: 15px; cursor: pointer; transition: background .2s;" style-hover="background: rgba(255,255,255,.07);">Перевірити</button>
+        <sc-if value="{{ trackMsg }}" hint-placeholder-val="{{ false }}">
+          <div style="border-radius: 18px; padding: 14px 16px; font-size: 14px; background: rgba(218,255,61,.12); border: 1px solid rgba(218,255,61,.3); color: #EFFFC4; animation: nUp .4s ease both;">{{ trackMsg }}</div>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+
+  <section id="send" style="max-width: 1280px; margin: 0 auto; padding: clamp(40px, 6vw, 90px) 28px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: clamp(28px, 4vw, 60px); align-items: start;">
+      <div>
+        <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 12px;">Оформлення</div>
+        <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(27px, 3.4vw, 44px); line-height: 1.06; letter-spacing: -.03em; margin: 0 0 16px;">Заповніть — надішлемо адресу відділення</h2>
+        <p style="margin: 0 0 28px; font-size: 16px; line-height: 1.6; color: rgba(241,243,239,.7); max-width: 42ch;">Після заявки приходить SMS з адресою, отримувачем і номером замовлення. Далі просто віддаєте пакунок на пошту.</p>
+        <div style="display: grid; gap: 14px; font-size: 15px; color: rgba(241,243,239,.82);">
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" stroke-width="1.5" stroke-linecap="round" style="flex: none;"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+            <span>Приймаємо посилки Пн–Сб до 18:00</span>
+          </div>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" stroke-width="1.5" stroke-linecap="round" style="flex: none;"><path d="M4 6h16v12H4z"></path><path d="M4 7l8 6 8-6"></path></svg>
+            <span>Пишемо в Telegram чи Viber, якщо так зручніше</span>
+          </div>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" stroke-width="1.5" stroke-linecap="round" style="flex: none;"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg>
+            <span>Оплата після ремонту — накладеним платежем</span>
+          </div>
+        </div>
+      </div>
+      <div style="border-radius: 30px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04); padding: clamp(24px, 3.2vw, 36px);">
+        <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 14px; align-items: flex-start; padding: 16px 0; animation: nUp .5s ease both;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l2.5 2.5L16 9.5"></path></svg>
+            <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 24px; letter-spacing: -.02em; margin: 0;">Заявку прийнято</h3>
+            <p style="margin: 0; font-size: 15px; line-height: 1.6; color: rgba(241,243,239,.7);">Надішлемо SMS з адресою відділення та номером замовлення протягом 15 хвилин.</p>
+            <button type="button" onClick="{{ reset }}" style="margin-top: 6px; padding: 12px 22px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); background: transparent; color: #F1F3EF; font-size: 14.5px; cursor: pointer;">Оформити ще одну</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+          <form onSubmit="{{ submit }}" style="display: grid; gap: 16px;">
+            <div style="display: grid; gap: 8px;">
+              <label for="p-name" style="font-size: 13px; color: rgba(241,243,239,.6);">Ім'я та прізвище</label>
+              <input id="p-name" type="text" placeholder="Для відправки Новою Поштою" value="{{ name }}" onChange="{{ onName }}" style="min-height: 50px; padding: 0 18px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px;">
+            </div>
+            <div style="display: grid; gap: 8px;">
+              <label for="p-phone" style="font-size: 13px; color: rgba(241,243,239,.6);">Телефон</label>
+              <input id="p-phone" type="tel" placeholder="+380 __ ___ __ __" value="{{ phone }}" onChange="{{ onPhone }}" style="min-height: 50px; padding: 0 18px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px;">
+            </div>
+            <div style="display: grid; gap: 8px;">
+              <label for="p-city" style="font-size: 13px; color: rgba(241,243,239,.6);">Місто й відділення</label>
+              <input id="p-city" type="text" placeholder="Напр. Тернопіль, відділення 12" value="{{ city }}" onChange="{{ onCity }}" style="min-height: 50px; padding: 0 18px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px;">
+            </div>
+            <div style="display: grid; gap: 8px;">
+              <label for="p-model" style="font-size: 13px; color: rgba(241,243,239,.6);">Модель</label>
+              <select id="p-model" value="{{ model }}" onChange="{{ onModel }}" style="min-height: 50px; padding: 0 14px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px;">
+                <option value="" style="color: #0B0C0E;">Оберіть модель</option>
+                <option value="iPhone 15 / 16" style="color: #0B0C0E;">iPhone 15 / 16</option>
+                <option value="iPhone 13 / 14" style="color: #0B0C0E;">iPhone 13 / 14</option>
+                <option value="iPhone 11 / 12" style="color: #0B0C0E;">iPhone 11 / 12</option>
+                <option value="iPhone X / XR" style="color: #0B0C0E;">iPhone X / XR</option>
+                <option value="iPhone 6 / 7 / 8 / SE" style="color: #0B0C0E;">iPhone 6 / 7 / 8 / SE</option>
+                <option value="iPad / Watch" style="color: #0B0C0E;">iPad / Apple Watch</option>
+                <option value="Інше" style="color: #0B0C0E;">Інше / не знаю</option>
+              </select>
+            </div>
+            <div style="display: grid; gap: 8px;">
+              <label for="p-issue" style="font-size: 13px; color: rgba(241,243,239,.6);">Що трапилось</label>
+              <textarea id="p-issue" placeholder="Опишіть симптом кількома словами" value="{{ issue }}" onChange="{{ onIssue }}" style="min-height: 92px; padding: 14px 18px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px; resize: vertical;"></textarea>
+            </div>
+            <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size: 13.5px; color: #EDFFA6;">Потрібні ім'я, телефон і місто — решту з'ясуємо в розмові.</div>
+            </sc-if>
+            <button type="submit" style="min-height: 54px; border-radius: 999px; border: none; background: #DAFF3D; color: #0B0C0E; font-weight: 600; font-size: 16px; cursor: pointer; transition: transform .2s, box-shadow .2s;" style-hover="transform: translateY(-2px); box-shadow: 0 16px 40px rgba(218,255,61,.26);">Отримати адресу для відправки</button>
+            <p style="margin: 0; font-size: 12.5px; color: rgba(241,243,239,.5);">Дані потрібні лише для доставки й дзвінка. Нікуди їх не передаємо.</p>
+          </form>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width: 1280px; margin: 0 auto; padding: 0 28px clamp(50px, 7vw, 100px);">
+    <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 12px;">Питання про пошту</div>
+    <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(26px, 3.2vw, 42px); line-height: 1.06; letter-spacing: -.03em; margin: 0 0 26px;">Коротко про головне</h2>
+    <div style="display: grid; gap: 10px;">
+      <sc-for list="{{ faq }}" as="f" hint-placeholder-count="4">
+        <div style="border-radius: 22px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.03); overflow: hidden;">
+          <button type="button" onClick="{{ f.toggle }}" style="width: 100%; text-align: left; cursor: pointer; background: transparent; border: none; color: #F1F3EF; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-family: 'Unbounded', sans-serif; font-size: 17px; letter-spacing: -.02em; transition: background .2s;" style-hover="background: rgba(255,255,255,.04);">
+            <span>{{ f.q }}</span>
+            <span style="flex: none; display: inline-flex; transform: {{ f.rotate }}; transition: transform .3s cubic-bezier(.2,.7,.2,1);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" stroke-width="1.6" stroke-linecap="round"><path d="M6 9l6 6 6-6"></path></svg>
+            </span>
+          </button>
+          <div style="display: grid; grid-template-rows: {{ f.rows }}; transition: grid-template-rows .32s cubic-bezier(.2,.7,.2,1);">
+            <div style="overflow: hidden;">
+              <p style="margin: 0; padding: 0 24px 22px; font-size: 15px; line-height: 1.6; color: rgba(241,243,239,.68);">{{ f.a }}</p>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <footer style="border-top: 1px solid rgba(255,255,255,.08);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 22px 28px; font-size: 12.5px; color: rgba(241,243,239,.45); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+      <span>© 2026 iFix · Львів, Новий Розділ</span>
+      <span>Зворотна доставка — наш кошт</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { name: "", phone: "", city: "", model: "", issue: "", sent: false, error: false, ttn: "", trackMsg: "", checked: {}, open: 0 };
+
+  set = (k) => (e) => this.setState({ [k]: e.target.value, error: false });
+  onTtn = (e) => this.setState({ ttn: e.target.value, trackMsg: "" });
+
+  track = () => {
+    const n = this.state.ttn.trim();
+    if (!n) return this.setState({ trackMsg: "Впишіть ТТН або номер замовлення — або просто зателефонуйте нам." });
+    this.setState({ trackMsg: "№" + n + " — посилку отримано, діагностика завершена. Майстер телефонував із ціною сьогодні о 11:20." });
+  };
+
+  submit = (e) => {
+    e.preventDefault();
+    const ok = this.state.name.trim().length > 1 && this.state.phone.replace(/\D/g, "").length >= 9 && this.state.city.trim().length > 1;
+    if (!ok) return this.setState({ error: true });
+    this.setState({ sent: true, error: false });
+  };
+
+  reset = () => this.setState({ name: "", phone: "", city: "", model: "", issue: "", sent: false, error: false });
+
+  renderVals() {
+    const items = [
+      "Вимкнути «Знайти iPhone» або дати пароль",
+      "Дістати SIM-картку й чохол",
+      "Обгорнути телефон у бульбашкову плівку в 2–3 шари",
+      "Покласти в коробку — не у м'який пакет",
+      "Вказати оголошену вартість у ТТН",
+      "Вкласти записку з іменем і симптомом"
+    ];
+    const checklist = items.map((label, i) => {
+      const on = !!this.state.checked[i];
+      return {
+        label, 
+        toggle: () => this.setState(s => ({ checked: { ...s.checked, [i]: !s.checked[i] } })),
+        bg: on ? "rgba(218,255,61,.08)" : "rgba(255,255,255,.03)",
+        border: on ? "rgba(218,255,61,.45)" : "rgba(255,255,255,.1)",
+        color: on ? "#F1F3EF" : "rgba(241,243,239,.78)",
+        boxBg: on ? "#DAFF3D" : "transparent",
+        boxBorder: on ? "#DAFF3D" : "rgba(255,255,255,.22)",
+        tick: on ? 1 : 0
+      };
+    });
+    const qa = [
+      ["Хто платить за доставку?", "Відправку до нас оплачує клієнт. Повернення після ремонту — за наш кошт, будь-яке місто України."],
+      ["А якщо ціна мене не влаштує?", "Тоді просто повертаємо телефон. Ви оплачуєте лише зворотну доставку — жодних платежів за діагностику."],
+      ["Як оплатити ремонт?", "Накладеним платежем при отриманні або переказом після дзвінка — як зручніше."],
+      ["Чи безпечно надсилати телефон?", "Вказуйте оголошену вартість у ТТН — тоді пошта несе відповідальність. Ми знімаємо відео розпакування кожної посилки."]
+    ];
+    const faq = qa.map(([q, a], i) => {
+      const on = this.state.open === i;
+      return {
+        q, a,
+        toggle: () => this.setState(s => ({ open: s.open === i ? -1 : i })),
+        rows: on ? "1fr" : "0fr",
+        rotate: on ? "rotate(180deg)" : "rotate(0deg)"
+      };
+    });
+    return {
+      steps: [
+        { no: "01", title: "Заявка", body: "Заповнюєте форму — надсилаємо SMS з адресою відділення й номером замовлення." },
+        { no: "02", title: "Відправка", body: "Пакуєте за пам'яткою і віддаєте на Нову Пошту. Доставка до нас — за ваш кошт." },
+        { no: "03", title: "Діагностика", body: "Отримуємо, знімаємо відео розпакування, безкоштовно діагностуємо того ж дня." },
+        { no: "04", title: "Погодження", body: "Телефонуємо з фіксованою ціною та терміном. Без вашого «так» нічого не робимо." },
+        { no: "05", title: "Повернення", body: "Ремонтуємо, тестуємо і відправляємо назад за свій кошт. Гарантія 30 днів." }
+      ],
+      checklist, faq,
+      popular: [
+        ["iPhone 13", "assets/bg-phone-a.jpeg"],
+        ["iPhone 12", "assets/bg-phone-b.jpeg"],
+        ["iPhone 11", "assets/bg-tech.jpeg"],
+        ["iPhone XR", "assets/bg-circuit.jpeg"],
+        ["iPhone 14 Pro", "assets/bg-phone-b.jpeg"],
+        ["iPhone SE 2", "assets/bg-phone-a.jpeg"]
+      ].map(([name, img]) => ({ name, img: "url('" + img + "')", href: "iFix-Model.dc.html?m=" + encodeURIComponent(name) })),
+      ttn: this.state.ttn, trackMsg: this.state.trackMsg, onTtn: this.onTtn, track: this.track,
+      name: this.state.name, phone: this.state.phone, city: this.state.city, model: this.state.model, issue: this.state.issue,
+      onName: this.set("name"), onPhone: this.set("phone"), onCity: this.set("city"), onModel: this.set("model"), onIssue: this.set("issue"),
+      sent: this.state.sent, notSent: !this.state.sent, error: this.state.error,
+      submit: this.submit, reset: this.reset
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #0B0C0E; }
+  a { color: #DAFF3D; }
+  a:hover { color: #EEFF9E; }
+  ::selection { background: #DAFF3D; color: #0B0C0E; }
+  input, select, textarea, button { font: inherit; }
+  :focus-visible { outline: 2px solid #DAFF3D; outline-offset: 3px; }
+  @keyframes nUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @keyframes nDrift { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(-60px,40px) scale(1.12); } 66% { transform: translate(40px,-30px) scale(.95); } }
+  @keyframes nShine { 0% { transform: translateX(-140%); } 55%, 100% { transform: translateX(320%); } }
+  @keyframes nHalo { 0%, 100% { box-shadow: 0 10px 30px rgba(218,255,61,.18); } 50% { box-shadow: 0 16px 46px rgba(218,255,61,.34); } }
+  @keyframes nDot { 0% { opacity: .6; transform: scale(.8); } 70%, 100% { opacity: 0; transform: scale(2); } }
+  @keyframes nGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</helmet>
+
+<div style="background: #0B0C0E; color: #F1F3EF; font-family: 'Manrope', system-ui, sans-serif; min-height: 100%; overflow-x: hidden;">
+
+  <header style="position: sticky; top: 0; z-index: 30; background: rgba(11,12,14,.72); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,.08);">
+    <nav style="max-width: 1280px; margin: 0 auto; padding: 16px 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+      <a href="iFix%20Landing.dc.html" style="display: flex; align-items: center; gap: 11px; font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 19px; color: #F1F3EF; text-decoration: none;">
+        <span style="display: inline-flex; width: 30px; height: 30px; border-radius: 13px; align-items: center; justify-content: center; background: #DAFF3D; color: #0B0C0E; font-size: 13px;">iF</span>
+        iFix
+      </a>
+      <div style="display: flex; align-items: center; gap: 26px; flex-wrap: wrap; font-size: 14.5px;">
+        <a href="iFix-Catalog-iPhone.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Моделі</a>
+        <a href="iFix-Mail-in.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Поштою</a>
+        <a href="iFix-Account%20v2.dc.html" style="color: #DAFF3D; text-decoration: none;">Кабінет</a>
+        <span style="display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border-radius: 999px; border: 1px solid rgba(255,255,255,.14); font-size: 14px;">
+          <span style="width: 26px; height: 26px; border-radius: 999px; background: rgba(218,255,61,.16); color: #DAFF3D; display: inline-flex; align-items: center; justify-content: center; font-size: 12px;">ОК</span>
+          Оксана
+        </span>
+      </div>
+    </nav>
+  </header>
+
+  <section style="position: relative; overflow: hidden; padding: clamp(34px, 4.5vw, 66px) 28px clamp(26px, 3vw, 40px);">
+    <span aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none;">
+      <span style="position: absolute; width: 560px; height: 560px; right: -160px; top: -240px; border-radius: 50%; background: radial-gradient(circle, rgba(218,255,61,.16), transparent 65%); animation: nDrift 24s ease-in-out infinite;"></span>
+    </span>
+    <div style="position: relative; max-width: 1280px; margin: 0 auto;">
+      <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 12px; animation: nUp .6s ease both;">Кабінет</div>
+      <h1 style="font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: clamp(30px, 4.2vw, 54px); line-height: 1.04; letter-spacing: -.035em; margin: 0; animation: nUp .7s cubic-bezier(.2,.7,.2,1) .05s both;">Вітаємо, Оксано</h1>
+      <p style="font-size: clamp(15.5px, 1.4vw, 18px); line-height: 1.6; margin: 16px 0 0; color: rgba(241,243,239,.7); max-width: 46ch; animation: nUp .7s cubic-bezier(.2,.7,.2,1) .1s both;">Один ремонт у роботі. Оновлюємо статус щоразу, коли щось змінюється — сюди й у SMS.</p>
+    </div>
+  </section>
+
+  <section style="max-width: 1280px; margin: 0 auto; padding: 0 28px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+      <div style="grid-column: 1 / -1; border-radius: 30px; border: 1px solid rgba(218,255,61,.28); background: linear-gradient(150deg, rgba(218,255,61,.1), rgba(255,255,255,.02)); padding: clamp(24px, 3.2vw, 40px); animation: nUp .8s cubic-bezier(.2,.7,.2,1) .12s both;">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 28px;">
+          <div>
+            <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: #DAFF3D;">
+              <span style="position: relative; display: inline-flex; width: 8px; height: 8px;">
+                <span style="position: absolute; inset: 0; border-radius: 50%; background: #DAFF3D;"></span>
+                <span style="position: absolute; inset: 0; border-radius: 50%; background: #DAFF3D; animation: nDot 2.6s ease-out infinite;"></span>
+              </span>
+              У роботі
+            </span>
+            <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(24px, 2.8vw, 36px); letter-spacing: -.03em; margin: 14px 0 8px;">iPhone 13 · заміна екрана</h2>
+            <div style="font-size: 14.5px; color: rgba(241,243,239,.6);">Замовлення №1042 · прийнято 9 вересня, 10:20</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 12.5px; color: rgba(241,243,239,.55); margin-bottom: 6px;">Готовність</div>
+            <div style="font-family: 'Unbounded', sans-serif; font-size: clamp(20px, 2.2vw, 28px); letter-spacing: -.02em;">сьогодні до 18:00</div>
+          </div>
+        </div>
+
+        <div style="height: 6px; border-radius: 999px; background: rgba(255,255,255,.1); overflow: hidden; margin-bottom: 22px;">
+          <div style="height: 100%; width: {{ progress }}; background: #DAFF3D; transform-origin: left; animation: nGrow 1.6s cubic-bezier(.2,.7,.2,1) .3s both;"></div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px;">
+          <sc-for list="{{ stages }}" as="st" hint-placeholder-count="4">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="width: 20px; height: 20px; border-radius: 999px; flex: none; border: 1px solid {{ st.dotBorder }}; background: {{ st.dotBg }}; display: inline-flex; align-items: center; justify-content: center;">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0B0C0E" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="opacity: {{ st.tick }};"><path d="M5 12.5l4.5 4.5L19 7"></path></svg>
+                </span>
+                <span style="font-family: 'Unbounded', sans-serif; font-size: 15px; letter-spacing: -.01em; color: {{ st.color }};">{{ st.title }}</span>
+              </div>
+              <div style="font-size: 13px; color: rgba(241,243,239,.5); padding-left: 30px;">{{ st.time }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="tel:+380733150238" style="position: relative; overflow: hidden; padding: 14px 24px; border-radius: 999px; background: #DAFF3D; color: #0B0C0E; font-weight: 600; font-size: 15px; text-decoration: none; animation: nHalo 4.5s ease-in-out infinite; transition: transform .2s;" style-hover="transform: translateY(-2px);">Подзвонити майстру<span aria-hidden="true" style="position: absolute; top: 0; bottom: 0; width: 34%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent); animation: nShine 4.5s ease-in-out 1s infinite; pointer-events: none;"></span></a>
+          <button type="button" onClick="{{ toggleLog }}" style="padding: 14px 22px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); background: transparent; color: #F1F3EF; font-size: 15px; cursor: pointer; transition: background .2s, border-color .2s;" style-hover="background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.4);">{{ logLabel }}</button>
+        </div>
+
+        <div style="display: grid; grid-template-rows: {{ logRows }}; transition: grid-template-rows .35s cubic-bezier(.2,.7,.2,1);">
+          <div style="overflow: hidden;">
+            <div style="padding-top: 24px; display: grid; gap: 0;">
+              <sc-for list="{{ log }}" as="l" hint-placeholder-count="4">
+                <div style="display: grid; grid-template-columns: 92px 1fr; gap: 16px; padding: 14px 0; border-top: 1px solid rgba(255,255,255,.1);">
+                  <div style="font-size: 13px; color: rgba(241,243,239,.5);">{{ l.time }}</div>
+                  <div style="font-size: 14.5px; color: rgba(241,243,239,.82);">{{ l.text }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width: 1280px; margin: 0 auto; padding: clamp(30px, 4vw, 56px) 28px 0;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+      <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="3">
+        <div style="border-radius: 26px; border: 1px solid rgba(255,255,255,.09); background: rgba(255,255,255,.03); padding: 24px; display: flex; flex-direction: column; gap: 10px; animation: nUp .75s cubic-bezier(.2,.7,.2,1) both; transition: transform .25s, border-color .25s;" style-hover="transform: translateY(-4px); border-color: rgba(218,255,61,.45);">
+          <div style="font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; color: rgba(241,243,239,.45);">{{ t.label }}</div>
+          <div style="font-family: 'Unbounded', sans-serif; font-size: 30px; letter-spacing: -.02em;">{{ t.value }}</div>
+          <div style="font-size: 13.5px; color: rgba(241,243,239,.6);">{{ t.note }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width: 1280px; margin: 0 auto; padding: clamp(34px, 5vw, 70px) 28px 0;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 22px;">
+      <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(24px, 3vw, 38px); line-height: 1.06; letter-spacing: -.03em; margin: 0;">Історія ремонтів</h2>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="3">
+          <button type="button" onClick="{{ tb.pick }}" style="padding: 9px 17px; border-radius: 999px; cursor: pointer; font-size: 14px; border: 1px solid {{ tb.border }}; background: {{ tb.bg }}; color: {{ tb.color }}; transition: background .2s, color .2s, transform .2s;" style-hover="transform: translateY(-2px);">{{ tb.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display: grid; gap: 10px;">
+      <sc-for list="{{ history }}" as="h" hint-placeholder-count="4">
+        <div style="border-radius: 22px; border: 1px solid rgba(255,255,255,.09); background: rgba(255,255,255,.03); padding: 18px 22px; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.4fr) auto auto; gap: 16px; align-items: center; animation: nUp .6s ease both; transition: border-color .2s, background .2s, transform .2s;" style-hover="border-color: rgba(218,255,61,.4); background: rgba(255,255,255,.05); transform: translateX(4px);">
+          <div style="font-family: 'Unbounded', sans-serif; font-size: 16.5px; letter-spacing: -.02em;">{{ h.device }}</div>
+          <div style="font-size: 14.5px; color: rgba(241,243,239,.68);">{{ h.work }}</div>
+          <div style="font-size: 13.5px; color: rgba(241,243,239,.5); white-space: nowrap;">{{ h.date }}</div>
+          <span style="font-size: 12px; letter-spacing: .06em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; border: 1px solid {{ h.stBorder }}; color: {{ h.stColor }}; white-space: nowrap;">{{ h.status }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ historyEmpty }}" hint-placeholder-val="{{ false }}">
+      <div style="border-radius: 22px; border: 1px dashed rgba(255,255,255,.18); padding: 30px; text-align: center; color: rgba(241,243,239,.65); font-size: 15px;">Тут поки порожньо.</div>
+    </sc-if>
+  </section>
+
+  <section style="max-width: 1280px; margin: 0 auto; padding: clamp(34px, 5vw, 70px) 28px clamp(50px, 7vw, 100px);">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+      <div style="border-radius: 28px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.03); padding: clamp(22px, 3vw, 34px);">
+        <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 21px; letter-spacing: -.02em; margin: 0 0 6px;">Мої пристрої</h3>
+        <p style="margin: 0 0 20px; font-size: 14.5px; color: rgba(241,243,239,.6);">Гарантія рахується від дати видачі.</p>
+        <div style="display: grid; gap: 12px;">
+          <sc-for list="{{ devices }}" as="d" hint-placeholder-count="2">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 15px 18px; border-radius: 18px; border: 1px solid rgba(255,255,255,.09); transition: border-color .2s, background .2s;" style-hover="border-color: rgba(218,255,61,.4); background: rgba(255,255,255,.04);">
+              <div>
+                <div style="font-size: 15.5px;">{{ d.name }}</div>
+                <div style="font-size: 13px; color: rgba(241,243,239,.5); margin-top: 4px;">{{ d.imei }}</div>
+              </div>
+              <div style="font-size: 13px; color: {{ d.warrColor }}; white-space: nowrap;">{{ d.warranty }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="border-radius: 28px; border: 1px solid rgba(255,255,255,.1); background: linear-gradient(150deg, rgba(218,255,61,.09), rgba(255,255,255,.02)); padding: clamp(22px, 3vw, 34px); display: flex; flex-direction: column;">
+        <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 21px; letter-spacing: -.02em; margin: 0 0 6px;">Новий ремонт</h3>
+        <p style="margin: 0 0 22px; font-size: 14.5px; line-height: 1.6; color: rgba(241,243,239,.68); max-width: 34ch;">Ще щось зламалось? Оформимо швидше — дані вже є, потрібно лише сказати симптом.</p>
+        <div style="display: grid; gap: 10px; margin-bottom: 22px;">
+          <sc-if value="{{ requested }}" hint-placeholder-val="{{ false }}">
+            <div style="border-radius: 18px; padding: 14px 16px; font-size: 14px; background: rgba(218,255,61,.12); border: 1px solid rgba(218,255,61,.3); color: #EFFFC4; animation: nUp .4s ease both;">Прийняли — передзвонимо на 073 315 02 38 протягом 15 хвилин.</div>
+          </sc-if>
+          <sc-if value="{{ notRequested }}" hint-placeholder-val="{{ true }}">
+            <textarea placeholder="Що трапилось цього разу?" value="{{ note }}" onChange="{{ onNote }}" style="min-height: 92px; padding: 14px 18px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px; resize: vertical;"></textarea>
+          </sc-if>
+        </div>
+        <button type="button" onClick="{{ request }}" style="margin-top: auto; min-height: 52px; border-radius: 999px; border: none; background: #DAFF3D; color: #0B0C0E; font-weight: 600; font-size: 15.5px; cursor: pointer; transition: transform .2s, box-shadow .2s;" style-hover="transform: translateY(-2px); box-shadow: 0 16px 40px rgba(218,255,61,.26);">{{ requestLabel }}</button>
+      </div>
+    </div>
+  </section>
+
+  <footer style="border-top: 1px solid rgba(255,255,255,.08);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 22px 28px; font-size: 12.5px; color: rgba(241,243,239,.45); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+      <span>© 2026 iFix · Львів, Новий Розділ</span>
+      <span>Питання по замовленню — 073 315 02 38</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { logOpen: false, tab: "all", note: "", requested: false };
+
+  onNote = (e) => this.setState({ note: e.target.value });
+  request = () => this.setState({ requested: true });
+
+  all = [
+    { device: "iPhone 13", work: "Заміна екрана (оригінал)", date: "9 вер 2026", status: "у роботі", kind: "active" },
+    { device: "iPhone 13", work: "Акумулятор — 100% ємності", date: "14 бер 2026", status: "готово", kind: "done" },
+    { device: "iPad Air 4", work: "Чистка роз'єму заряджання", date: "2 лис 2025", status: "готово", kind: "done" },
+    { device: "iPhone XR", work: "Діагностика після заливу", date: "18 сер 2025", status: "готово", kind: "done" }
+  ];
+
+  renderVals() {
+    const stagesDef = [
+      ["Прийнято", "9 вер, 10:20", true],
+      ["Діагностика", "9 вер, 11:05", true],
+      ["Ремонт", "триває зараз", false],
+      ["Готово до видачі", "очікується 18:00", false]
+    ];
+    const stages = stagesDef.map(([title, time, done]) => ({
+      title, time,
+      dotBg: done ? "#DAFF3D" : "transparent",
+      dotBorder: done ? "#DAFF3D" : "rgba(255,255,255,.28)",
+      tick: done ? 1 : 0,
+      color: done ? "#F1F3EF" : "rgba(241,243,239,.6)"
+    }));
+
+    const tabDefs = [["all", "Усі"], ["active", "У роботі"], ["done", "Завершені"]];
+    const tabs = tabDefs.map(([id, label]) => ({
+      label,
+      pick: () => this.setState({ tab: id }),
+      bg: this.state.tab === id ? "#DAFF3D" : "rgba(255,255,255,.04)",
+      color: this.state.tab === id ? "#0B0C0E" : "rgba(241,243,239,.8)",
+      border: this.state.tab === id ? "#DAFF3D" : "rgba(255,255,255,.16)"
+    }));
+
+    const history = this.all
+      .filter(h => this.state.tab === "all" || h.kind === this.state.tab)
+      .map(h => ({
+        ...h,
+        stColor: h.kind === "active" ? "#DAFF3D" : "rgba(241,243,239,.6)",
+        stBorder: h.kind === "active" ? "rgba(218,255,61,.45)" : "rgba(255,255,255,.18)"
+      }));
+
+    return {
+      progress: "62%",
+      stages, tabs, history, historyEmpty: history.length === 0,
+      logOpen: this.state.logOpen,
+      logRows: this.state.logOpen ? "1fr" : "0fr",
+      logLabel: this.state.logOpen ? "Сховати хроніку" : "Показати хроніку",
+      toggleLog: () => this.setState(s => ({ logOpen: !s.logOpen })),
+      log: [
+        { time: "9 вер, 10:20", text: "Телефон прийнято. Оглянули корпус, зафіксували подряпину на рамці знизу." },
+        { time: "9 вер, 11:05", text: "Діагностика: розбитий модуль, сенсор частково не реагує. Face ID справний." },
+        { time: "9 вер, 11:18", text: "Погодили ціну по телефону — оригінальний модуль, гарантія 30 днів." },
+        { time: "9 вер, 14:40", text: "Модуль на місці, переносимо рідний Face ID. Далі тестування True Tone." }
+      ],
+      tiles: [
+        { label: "Активні", value: "1", note: "iPhone 13 · екран" },
+        { label: "Гарантія діє", value: "2", note: "пристрої під гарантією" },
+        { label: "Всього ремонтів", value: "4", note: "з серпня 2025" }
+      ],
+      devices: [
+        { name: "iPhone 13", imei: "IMEI ···· 4471", warranty: "гарантія до 9 жов", warrColor: "#DAFF3D" },
+        { name: "iPad Air 4", imei: "IMEI ···· 0932", warranty: "гарантія завершена", warrColor: "rgba(241,243,239,.5)" }
+      ],
+      note: this.state.note, onNote: this.onNote,
+      requested: this.state.requested, notRequested: !this.state.requested,
+      request: this.request,
+      requestLabel: this.state.requested ? "Заявку надіслано" : "Залишити заявку"
+    };
+  }
+}
+</script>
+</body>
+</html>

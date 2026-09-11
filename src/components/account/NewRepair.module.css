@@ -1,0 +1,49 @@
+.card {
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  background: linear-gradient(150deg, rgba(218, 255, 61, .09), rgba(255, 255, 255, .02));
+  padding: clamp(22px, 3vw, 34px);
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 21px;
+  margin-bottom: 6px;
+}
+
+.lead {
+  margin-bottom: 22px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: rgba(241, 243, 239, .68);
+  max-width: 34ch;
+}
+
+.body {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.textarea {
+  min-height: 92px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.error {
+  font-size: 13.5px;
+  color: #EDFFA6;
+}
+
+.submit {
+  margin-top: auto;
+  min-height: 52px;
+  font-size: 15.5px;
+}
+
+.submit[disabled] {
+  opacity: .7;
+  cursor: default;
+}

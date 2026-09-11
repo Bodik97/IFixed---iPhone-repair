@@ -1,0 +1,158 @@
+.wrap {
+  padding-block: clamp(32px, 5vw, 64px);
+}
+
+.head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.head .kicker {
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: clamp(26px, 3.2vw, 40px);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.count {
+  font-size: 18px;
+  color: var(--text-3);
+  font-family: var(--font-manrope), sans-serif;
+}
+
+.fresh {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--accent);
+}
+
+.empty {
+  border-radius: var(--r-card);
+  border: 1px dashed rgba(255, 255, 255, .18);
+  padding: 40px;
+  text-align: center;
+  color: var(--text-2);
+}
+
+/* Таблиця скролиться всередині себе, сторінка — ні */
+.tableWrap {
+  overflow-x: auto;
+  border-radius: var(--r-card);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 860px;
+}
+
+.table th {
+  text-align: left;
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 500;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, .05);
+  vertical-align: top;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.rowNew td {
+  background: rgba(218, 255, 61, .04);
+}
+
+.nowrap {
+  white-space: nowrap;
+  color: var(--text-2);
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.link {
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.link:hover {
+  color: var(--accent);
+}
+
+.muted {
+  color: var(--text-3);
+  font-size: 13px;
+}
+
+.problem {
+  max-width: 30ch;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
+.status {
+  min-height: 40px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  color: var(--text);
+  font-size: 13.5px;
+}
+
+.status:disabled {
+  opacity: .5;
+}
+
+.status option {
+  color: #0B0C0E;
+}
+
+/* Позначка: чи бачить клієнт статус у себе в кабінеті */
+.tagAccount,
+.tagAnon {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.tagAccount {
+  background: rgba(218, 255, 61, .14);
+  color: var(--accent);
+}
+
+.tagAnon {
+  background: rgba(255, 255, 255, .06);
+  color: var(--text-3);
+}

@@ -1,0 +1,27 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  font-family: var(--font-unbounded), sans-serif;
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -.01em;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.logo:hover {
+  color: var(--text);
+}
+
+.mark {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  border-radius: 13px;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 13px;
+}

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #0B0C0E; }
+  a { color: #DAFF3D; }
+  a:hover { color: #EEFF9E; }
+  summary { list-style: none; cursor: pointer; }
+  summary::-webkit-details-marker { display: none; }
+  ::selection { background: #DAFF3D; color: #0B0C0E; }
+  input, select, textarea, button { font: inherit; }
+  :focus-visible { outline: 2px solid #DAFF3D; outline-offset: 3px; }
+  @keyframes nUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @keyframes nFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes nDrift { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(-60px, 40px) scale(1.12); } 66% { transform: translate(40px, -30px) scale(.95); } }
+  @keyframes nShine { 0% { transform: translateX(-140%); } 55%, 100% { transform: translateX(320%); } }
+  @keyframes nHalo { 0%, 100% { box-shadow: 0 10px 30px rgba(218,255,61,.18); } 50% { box-shadow: 0 16px 46px rgba(218,255,61,.34); } }
+  @keyframes nDot { 0% { opacity: .6; transform: scale(.8); } 70% { opacity: 0; transform: scale(2); } 100% { opacity: 0; transform: scale(2); } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</helmet>
+
+<div style="background: #0B0C0E; color: #F1F3EF; font-family: 'Manrope', system-ui, sans-serif; min-height: 100%; overflow-x: hidden;">
+
+  <header style="position: sticky; top: 0; z-index: 30; background: rgba(11,12,14,.72); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,.08);">
+    <nav style="max-width: 1280px; margin: 0 auto; padding: 16px 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+      <span style="display: flex; align-items: center; gap: 11px; font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 19px; letter-spacing: -.01em;">
+        <span style="display: inline-flex; width: 30px; height: 30px; border-radius: 13px; align-items: center; justify-content: center; background: #DAFF3D; color: #0B0C0E; font-size: 13px;">iF</span>
+        iFix
+      </span>
+      <div style="display: flex; align-items: center; gap: 26px; flex-wrap: wrap; font-size: 14.5px;">
+        <a href="iFix-Services.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Послуги</a>
+        <a href="iFix-Catalog-iPhone.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Моделі</a>
+        <a href="iFix-Mail-in.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Поштою</a>
+        <a href="iFix-Account v2.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Кабінет</a>
+        <a href="tel:+380733150238" style="color: #F1F3EF; text-decoration: none; font-family: 'Unbounded', sans-serif; font-size: 15px;">073 315 02 38</a>
+        <a href="#book" style="padding: 11px 20px; border-radius: 999px; background: #DAFF3D; color: #0B0C0E; font-weight: 600; font-size: 14.5px; text-decoration: none; transition: transform .2s, box-shadow .2s;" style-hover="transform: translateY(-1px); box-shadow: 0 10px 30px rgba(218,255,61,.24);">Записатись</a>
+      </div>
+    </nav>
+  </header>
+
+  <section style="position: relative; overflow: hidden; padding: clamp(56px, 8vw, 130px) 28px clamp(40px, 5vw, 80px);">
+    <span aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none;">
+      <span style="position: absolute; inset: 0; background-image: url('assets/bg-tech.jpeg'); background-size: cover; background-position: 62% 58%; opacity: .5; filter: grayscale(.7) contrast(1.05);"></span>
+      <span style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,12,14,.86) 0%, rgba(11,12,14,.72) 40%, rgba(11,12,14,.95) 100%);"></span>
+      <span style="position: absolute; width: 620px; height: 620px; right: -120px; top: -180px; border-radius: 50%; background: radial-gradient(circle, rgba(218,255,61,.2), transparent 65%); animation: nDrift 22s ease-in-out infinite;"></span>
+    </span>
+    <div style="position: relative; max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(32px, 4vw, 72px); align-items: center;">
+      <div style="min-width: 0;">
+        <span style="display: inline-flex; align-items: center; gap: 9px; padding: 7px 14px 7px 11px; border-radius: 999px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); font-size: 12.5px; letter-spacing: .04em; color: rgba(241,243,239,.82); animation: nUp .6s cubic-bezier(.2,.7,.2,1) both;">
+          <span style="position: relative; display: inline-flex; width: 8px; height: 8px;">
+            <span style="position: absolute; inset: 0; border-radius: 50%; background: #DAFF3D;"></span>
+            <span style="position: absolute; inset: 0; border-radius: 50%; background: #DAFF3D; animation: nDot 2.6s ease-out infinite;"></span>
+          </span>
+          Відкрито · відповідь за 15 хвилин
+        </span>
+        <h1 style="font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: clamp(38px, 5.6vw, 76px); line-height: 1.02; letter-spacing: -.035em; margin: 24px 0 0; max-width: 17ch; text-wrap: balance; animation: nUp .75s cubic-bezier(.2,.7,.2,1) .06s both;">
+          Ремонт iPhone <span style="color: #DAFF3D;">без сюрпризів</span> у ціні
+        </h1>
+        <p style="font-size: clamp(16.5px, 1.5vw, 19px); line-height: 1.6; max-width: 46ch; margin: 22px 0 0; color: rgba(241,243,239,.7); animation: nUp .75s cubic-bezier(.2,.7,.2,1) .12s both;">
+          Безкоштовна діагностика, потім фіксована ціна — і вона вже не змінюється. Екран або акумулятор міняємо за 40 хвилин при вас.
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; animation: nUp .75s cubic-bezier(.2,.7,.2,1) .18s both;">
+          <a href="#book" style="position: relative; overflow: hidden; padding: 17px 28px; border-radius: 999px; background: #DAFF3D; color: #0B0C0E; font-weight: 600; font-size: 16px; text-decoration: none; animation: nHalo 4.5s ease-in-out infinite; transition: transform .2s;" style-hover="transform: translateY(-2px);">Безкоштовна діагностика<span aria-hidden="true" style="position: absolute; top: 0; bottom: 0; width: 34%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent); animation: nShine 4.5s ease-in-out 1s infinite; pointer-events: none;"></span></a>
+          <a href="tel:+380733150238" style="padding: 17px 26px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); color: #F1F3EF; font-size: 16px; text-decoration: none; transition: background .2s, border-color .2s;" style-hover="background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.4);">Подзвонити</a>
+        </div>
+      </div>
+
+      <div style="min-width: 0; display: grid; gap: 14px; animation: nUp .85s cubic-bezier(.2,.7,.2,1) .16s both;">
+        <div style="border-radius: 28px; border: 1px solid rgba(255,255,255,.1); background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); padding: 26px; display: grid; gap: 18px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+            <span style="font-family: 'Unbounded', sans-serif; font-size: 34px; line-height: 1;">40<span style="font-size: 17px; color: rgba(241,243,239,.6);"> хв</span></span>
+            <span style="font-size: 13.5px; color: rgba(241,243,239,.62); text-align: right; max-width: 20ch;">заміна екрана або акумулятора при вас</span>
+          </div>
+          <div style="height: 1px; background: rgba(255,255,255,.08);"></div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+            <span style="font-family: 'Unbounded', sans-serif; font-size: 34px; line-height: 1;">30<span style="font-size: 17px; color: rgba(241,243,239,.6);"> днів</span></span>
+            <span style="font-size: 13.5px; color: rgba(241,243,239,.62); text-align: right; max-width: 20ch;">гарантія на кожну роботу</span>
+          </div>
+          <div style="height: 1px; background: rgba(255,255,255,.08);"></div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+            <span style="font-family: 'Unbounded', sans-serif; font-size: 34px; line-height: 1;">2<span style="font-size: 17px; color: rgba(241,243,239,.6);"> міста</span></span>
+            <span style="font-size: 13.5px; color: rgba(241,243,239,.62); text-align: right; max-width: 20ch;">Львів і Новий Розділ + Нова Пошта</span>
+          </div>
+        </div>
+        <div style="border-radius: 28px; overflow: hidden; border: 1px solid rgba(255,255,255,.1); aspect-ratio: 16 / 9; background-image: url('assets/bg-phone-a.jpeg'); background-size: cover; background-position: 55% 50%; filter: saturate(.9); animation: nFloat 8s ease-in-out infinite;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" style="max-width: 1280px; margin: 0 auto; padding: clamp(52px, 7vw, 110px) 28px;">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; flex-wrap: wrap; margin-bottom: 44px;">
+      <div>
+        <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 14px;">Що ремонтуємо</div>
+        <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(30px, 3.8vw, 50px); line-height: 1.06; letter-spacing: -.03em; margin: 0; max-width: 22ch;">Усе, що трапляється з iPhone</h2>
+      </div>
+      <p style="font-size: 15px; max-width: 32ch; margin: 0; color: rgba(241,243,239,.62);">Оригінал або якісний аналог — показуємо обидва варіанти й різницю в ціні.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(252px, 1fr)); gap: 16px;">
+      <sc-for list="{{ services }}" as="s" hint-placeholder-count="6">
+        <div style="border-radius: 26px; border: 1px solid rgba(255,255,255,.09); background: rgba(255,255,255,.03); padding: 26px; display: flex; flex-direction: column; gap: 12px; animation: nUp .8s cubic-bezier(.2,.7,.2,1) both; transition: border-color .2s, background .2s, transform .2s;" style-hover="border-color: rgba(218,255,61,.55); background: rgba(255,255,255,.055); transform: translateY(-3px);">
+          <div style="font-family: 'Unbounded', sans-serif; font-size: 13px; color: rgba(241,243,239,.4);">{{ s.no }}</div>
+          <div style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 21px; letter-spacing: -.02em;">{{ s.title }}</div>
+          <p style="margin: 0; font-size: 14.5px; line-height: 1.55; color: rgba(241,243,239,.66);">{{ s.body }}</p>
+          <div style="margin-top: auto; padding-top: 8px; font-size: 13px; color: #DAFF3D;">{{ s.meta }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="position: relative; overflow: hidden; border-top: 1px solid rgba(255,255,255,.08); border-bottom: 1px solid rgba(255,255,255,.08);">
+    <span aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none;">
+      <span style="position: absolute; inset: 0; background-image: url('assets/bg-circuit.jpeg'); background-size: cover; background-position: 40% 50%; opacity: .38; filter: grayscale(.6);"></span>
+      <span style="position: absolute; inset: 0; background: linear-gradient(96deg, rgba(11,12,14,.95) 0%, rgba(11,12,14,.8) 55%, rgba(11,12,14,.55) 100%);"></span>
+    </span>
+    <div style="position: relative; max-width: 1280px; margin: 0 auto; padding: clamp(56px, 7vw, 108px) 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(28px, 4vw, 64px); align-items: center;">
+      <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: clamp(28px, 3.6vw, 46px); line-height: 1.1; letter-spacing: -.03em; margin: 0; max-width: 20ch;">Кожен ремонт — це наша репутація в місті</h2>
+      <p style="margin: 0; font-size: clamp(16px, 1.5vw, 18.5px); line-height: 1.65; color: rgba(241,243,239,.74); max-width: 46ch;">Ми невеликий сервіс. Простіше зробити добре з першого разу, ніж потім комусь дивитися в очі. Тому показуємо зняті деталі, ємність акумулятора до і після — і не міняємо ціну на ходу.</p>
+    </div>
+  </section>
+
+  <section id="how" style="max-width: 1280px; margin: 0 auto; padding: clamp(52px, 7vw, 108px) 28px;">
+    <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 14px;">Як це працює</div>
+    <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(30px, 3.8vw, 50px); line-height: 1.06; letter-spacing: -.03em; margin: 0 0 48px;">Три кроки — і телефон знову ваш</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 28px;">
+      <div>
+        <div style="font-family: 'Unbounded', sans-serif; font-size: 15px; color: #DAFF3D;">01</div>
+        <div style="height: 1px; background: rgba(255,255,255,.12); margin: 16px 0 20px;"></div>
+        <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 23px; letter-spacing: -.02em; margin: 0 0 10px;">Заявка</h3>
+        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: rgba(241,243,239,.66);">Форма, телефон або Telegram. Питаємо модель і симптом — одразу кажемо орієнтир.</p>
+      </div>
+      <div>
+        <div style="font-family: 'Unbounded', sans-serif; font-size: 15px; color: #DAFF3D;">02</div>
+        <div style="height: 1px; background: rgba(255,255,255,.12); margin: 16px 0 20px;"></div>
+        <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 23px; letter-spacing: -.02em; margin: 0 0 10px;">Діагностика</h3>
+        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: rgba(241,243,239,.66);">Безкоштовна, якщо ремонтуєте в нас. Показуємо, що саме зламано, і фіксуємо ціну.</p>
+      </div>
+      <div>
+        <div style="font-family: 'Unbounded', sans-serif; font-size: 15px; color: #DAFF3D;">03</div>
+        <div style="height: 1px; background: rgba(255,255,255,.12); margin: 16px 0 20px;"></div>
+        <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 23px; letter-spacing: -.02em; margin: 0 0 10px;">Ремонт</h3>
+        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: rgba(241,243,239,.66);">Просте — за 30–60 хвилин при вас. Складне — тримаємо в курсі щодня. Гарантія 30 днів.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="models" style="border-top: 1px solid rgba(255,255,255,.08);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: clamp(52px, 7vw, 108px) 28px;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 28px; flex-wrap: wrap; margin-bottom: 40px;">
+        <div>
+          <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 14px;">Моделі</div>
+          <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(30px, 3.8vw, 50px); line-height: 1.06; letter-spacing: -.03em; margin: 0;">Які пристрої беремо</h2>
+        </div>
+        <p style="font-size: 15px; max-width: 32ch; margin: 0; color: rgba(241,243,239,.62);">Екрани й акумулятори на ці моделі зазвичай у наявності.</p>
+      </div>
+      <div style="display: grid; gap: 18px;">
+        <sc-for list="{{ modelGroups }}" as="g" hint-placeholder-count="4">
+          <div style="border-radius: 26px; border: 1px solid rgba(255,255,255,.09); background: rgba(255,255,255,.03); padding: 22px 24px; display: grid; grid-template-columns: minmax(120px, 190px) 1fr; gap: 20px; align-items: center;">
+            <div style="font-family: 'Unbounded', sans-serif; font-size: 13.5px; letter-spacing: -.01em; color: rgba(241,243,239,.55);">{{ g.label }}</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 9px;">
+              <sc-for list="{{ g.items }}" as="m" hint-placeholder-count="4">
+                <span style="padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,.14); font-size: 14px; color: rgba(241,243,239,.9); transition: border-color .2s, background .2s, transform .2s; cursor: default;" style-hover="border-color: rgba(218,255,61,.55); background: rgba(218,255,61,.08); transform: translateY(-2px);">{{ m }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <p style="margin: 20px 0 0; font-size: 14.5px; color: rgba(241,243,239,.62);">Не знайшли свою модель — <a href="tel:+380733150238">зателефонуйте</a>, майже завжди беремо. <a href="iFix-Catalog-iPhone.dc.html">Усі моделі детально</a></p>
+    </div>
+  </section>
+
+  <sc-if value="{{ showBeforeAfter }}" hint-placeholder-val="{{ true }}">
+    <section style="border-top: 1px solid rgba(255,255,255,.08);">
+      <div style="max-width: 1280px; margin: 0 auto; padding: clamp(52px, 7vw, 108px) 28px;">
+        <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 14px;">Наші роботи</div>
+        <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(30px, 3.8vw, 50px); line-height: 1.06; letter-spacing: -.03em; margin: 0 0 44px;">До і після</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+          <sc-for list="{{ works }}" as="w" hint-placeholder-count="4">
+            <figure style="margin: 0;">
+              <div style="border-radius: 26px; overflow: hidden; border: 1px solid rgba(255,255,255,.1); aspect-ratio: 4 / 3; background-image: {{ w.img }}; background-size: cover; background-position: 50% 50%; filter: saturate(.85); transition: filter .4s, transform .4s;" style-hover="filter: saturate(1.05); transform: translateY(-4px);"></div>
+              <figcaption style="margin-top: 12px; font-size: 14px; color: rgba(241,243,239,.62);">{{ w.caption }}</figcaption>
+            </figure>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <section style="border-top: 1px solid rgba(255,255,255,.08);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: clamp(52px, 7vw, 100px) 28px;">
+      <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 14px;">Відгуки</div>
+      <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(30px, 3.8vw, 50px); line-height: 1.06; letter-spacing: -.03em; margin: 0 0 44px;">Що кажуть клієнти</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(268px, 1fr)); gap: 18px;">
+        <blockquote style="margin: 0; border-radius: 26px; border: 1px solid rgba(255,255,255,.09); background: rgba(255,255,255,.03); padding: 28px; display: flex; flex-direction: column; gap: 18px;">
+          <p style="margin: 0; font-size: 16.5px; line-height: 1.6; color: rgba(241,243,239,.9);">«Розбила екран на 13-ці в п'ятницю ввечері, у суботу вранці вже забрала телефон. Показали старий екран і новий, все чесно.»</p>
+          <div style="margin-top: auto; font-size: 13.5px; color: rgba(241,243,239,.55);">Оксана · Львів · iPhone 13</div>
+        </blockquote>
+        <blockquote style="margin: 0; border-radius: 26px; border: 1px solid rgba(255,255,255,.09); background: rgba(255,255,255,.03); padding: 28px; display: flex; flex-direction: column; gap: 18px;">
+          <p style="margin: 0; font-size: 16.5px; line-height: 1.6; color: rgba(241,243,239,.9);">«Телефон впав у воду, два сервіси сказали "на запчастини". Хлопці почистили плату — працює вже пів року.»</p>
+          <div style="margin-top: auto; font-size: 13.5px; color: rgba(241,243,239,.55);">Андрій · Новий Розділ · iPhone 11</div>
+        </blockquote>
+        <blockquote style="margin: 0; border-radius: 26px; border: 1px solid rgba(255,255,255,.09); background: rgba(255,255,255,.03); padding: 28px; display: flex; flex-direction: column; gap: 18px;">
+          <p style="margin: 0; font-size: 16.5px; line-height: 1.6; color: rgba(241,243,239,.9);">«Надсилав Новою Поштою з Тернополя. Зателефонували з ціною до ремонту, назад прислали за свій кошт.»</p>
+          <div style="margin-top: auto; font-size: 13.5px; color: rgba(241,243,239,.55);">Тарас · поштою · iPhone XR</div>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <sc-if value="{{ showMailIn }}" hint-placeholder-val="{{ true }}">
+    <section style="max-width: 1280px; margin: 0 auto; padding: clamp(24px, 4vw, 60px) 28px;">
+      <div style="border-radius: 32px; border: 1px solid rgba(255,255,255,.1); background: linear-gradient(150deg, rgba(218,255,61,.1), rgba(255,255,255,.02)); padding: clamp(28px, 4vw, 56px); display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: clamp(26px, 3.4vw, 56px); align-items: center;">
+        <div>
+          <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 14px;">Ремонт поштою</div>
+          <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(26px, 3vw, 40px); line-height: 1.08; letter-spacing: -.03em; margin: 0 0 16px;">Не у Львові? Надішліть Новою Поштою</h2>
+          <p style="font-size: 16px; line-height: 1.65; margin: 0 0 24px; color: rgba(241,243,239,.72); max-width: 44ch;">Діагностуємо, телефонуємо з ціною, ремонтуємо. Назад надсилаємо за свій кошт.</p>
+          <a href="iFix-Mail-in.dc.html" style="display: inline-block; padding: 14px 24px; border-radius: 999px; background: #DAFF3D; color: #0B0C0E; font-weight: 600; font-size: 15px; text-decoration: none;">Як надіслати</a>
+        </div>
+        <div style="display: grid; gap: 14px;">
+          <div style="display: flex; gap: 16px; align-items: baseline;"><span style="font-family: 'Unbounded', sans-serif; font-size: 13px; color: #DAFF3D;">01</span><span style="font-size: 15.5px; color: rgba(241,243,239,.86);">Відправка до нас — за кошт відправника</span></div>
+          <div style="height: 1px; background: rgba(255,255,255,.1);"></div>
+          <div style="display: flex; gap: 16px; align-items: baseline;"><span style="font-family: 'Unbounded', sans-serif; font-size: 13px; color: #DAFF3D;">02</span><span style="font-size: 15.5px; color: rgba(241,243,239,.86);">Діагностика й погодження ціни телефоном</span></div>
+          <div style="height: 1px; background: rgba(255,255,255,.1);"></div>
+          <div style="display: flex; gap: 16px; align-items: baseline;"><span style="font-family: 'Unbounded', sans-serif; font-size: 13px; color: #DAFF3D;">03</span><span style="font-size: 15.5px; color: rgba(241,243,239,.86);">Повернення після ремонту — наш кошт</span></div>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ showFaq }}" hint-placeholder-val="{{ true }}">
+    <section id="faq" style="max-width: 1280px; margin: 0 auto; padding: clamp(52px, 7vw, 104px) 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(28px, 4vw, 64px); align-items: start;">
+      <div>
+        <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 14px;">Часті питання</div>
+        <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(30px, 3.8vw, 50px); line-height: 1.06; letter-spacing: -.03em; margin: 0;">Коротко про головне</h2>
+      </div>
+      <div style="min-width: 0;">
+        <details style="border-top: 1px solid rgba(255,255,255,.1); padding: 22px 0;">
+          <summary style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 18.5px; letter-spacing: -.02em;">Скільки триває ремонт?</summary>
+          <p style="margin: 14px 0 0; font-size: 15px; line-height: 1.6; color: rgba(241,243,239,.68);">Екран і акумулятор — від 30 хвилин. Роз'єм і камера — зазвичай того ж дня. Плата й залив водою — від дня до трьох.</p>
+        </details>
+        <details style="border-top: 1px solid rgba(255,255,255,.1); padding: 22px 0;">
+          <summary style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 18.5px; letter-spacing: -.02em;">Оригінальні запчастини чи аналоги?</summary>
+          <p style="margin: 14px 0 0; font-size: 15px; line-height: 1.6; color: rgba(241,243,239,.68);">І те, і те — на ваш вибір. Пояснюємо різницю в ціні та в поведінці екрана, ставимо те, що ви обрали.</p>
+        </details>
+        <details style="border-top: 1px solid rgba(255,255,255,.1); padding: 22px 0;">
+          <summary style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 18.5px; letter-spacing: -.02em;">Діагностика платна?</summary>
+          <p style="margin: 14px 0 0; font-size: 15px; line-height: 1.6; color: rgba(241,243,239,.68);">Безкоштовна, якщо ремонтуєте в нас. Якщо після діагностики вирішите не ремонтувати — оплачується лише розбирання.</p>
+        </details>
+        <details style="border-top: 1px solid rgba(255,255,255,.1); padding: 22px 0;">
+          <summary style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 18.5px; letter-spacing: -.02em;">Чи працюватиме Face ID після ремонту?</summary>
+          <p style="margin: 14px 0 0; font-size: 15px; line-height: 1.6; color: rgba(241,243,239,.68);">Так. Face ID переносимо з вашого рідного модуля і перевіряємо разом із вами перед видачею.</p>
+        </details>
+        <details style="border-top: 1px solid rgba(255,255,255,.1); border-bottom: 1px solid rgba(255,255,255,.1); padding: 22px 0;">
+          <summary style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 18.5px; letter-spacing: -.02em;">А якщо ремонт неможливий?</summary>
+          <p style="margin: 14px 0 0; font-size: 15px; line-height: 1.6; color: rgba(241,243,239,.68);">Скажемо прямо і не будемо тягнути гроші. Порадимо, що ще можна врятувати — наприклад, дані.</p>
+        </details>
+      </div>
+    </section>
+  </sc-if>
+
+  <section id="status" style="max-width: 1280px; margin: 0 auto; padding: clamp(20px, 3vw, 44px) 28px;">
+    <div style="border-radius: 30px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.03); padding: clamp(24px, 3.4vw, 42px); display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(24px, 3vw, 48px); align-items: center;">
+      <div>
+        <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 12px;">Статус ремонту</div>
+        <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(23px, 2.6vw, 34px); line-height: 1.1; letter-spacing: -.03em; margin: 0 0 10px;">Телефон уже в нас? Перевірте етап</h2>
+        <p style="margin: 0; font-size: 15px; color: rgba(241,243,239,.66); max-width: 40ch;">Номер замовлення з квитанції — і побачите, що робимо саме зараз.</p>
+      </div>
+      <div style="display: grid; gap: 12px;">
+        <label for="n-order" style="font-size: 13px; color: rgba(241,243,239,.6);">Номер замовлення</label>
+        <input id="n-order" type="text" placeholder="напр. 1042" value="{{ orderNo }}" onChange="{{ onOrderNo }}" style="min-height: 50px; padding: 0 18px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px;">
+        <button type="button" onClick="{{ checkStatus }}" style="min-height: 50px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); background: transparent; color: #F1F3EF; font-size: 15px; cursor: pointer; transition: background .2s;" style-hover="background: rgba(255,255,255,.07);">Перевірити</button>
+        <sc-if value="{{ statusMsg }}" hint-placeholder-val="{{ false }}">
+          <div style="border-radius: 18px; padding: 14px 16px; font-size: 14px; background: rgba(218,255,61,.12); border: 1px solid rgba(218,255,61,.3); color: #EFFFC4;">{{ statusMsg }}</div>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+
+  <section id="book" style="max-width: 1280px; margin: 0 auto; padding: clamp(44px, 6vw, 96px) 28px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(30px, 4vw, 64px);">
+      <div style="min-width: 0;">
+        <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 14px;">Запис на діагностику</div>
+        <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(30px, 3.8vw, 50px); line-height: 1.06; letter-spacing: -.03em; margin: 0 0 18px;">Опишіть проблему — відповімо за 15 хвилин</h2>
+        <p style="font-size: 16.5px; line-height: 1.6; margin: 0 0 32px; color: rgba(241,243,239,.7); max-width: 44ch;">Достатньо моделі та кількох слів про симптом. Передзвонимо, скажемо орієнтовну ціну й термін.</p>
+        <div style="display: grid; gap: 16px; font-size: 15.5px; color: rgba(241,243,239,.86);">
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" stroke-width="1.5" stroke-linecap="round" style="flex: none;"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"></path></svg>
+            <span><a href="tel:+380733150238" style="color: #F1F3EF; text-decoration: none;">073 315 02 38</a> · <a href="tel:+380631164377" style="color: #F1F3EF; text-decoration: none;">063 116 43 77</a></span>
+          </div>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" stroke-width="1.5" stroke-linecap="round" style="flex: none;"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+            <span>Пн–Сб 8:00–18:00 · Нд — за домовленістю</span>
+          </div>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" stroke-width="1.5" stroke-linecap="round" style="flex: none;"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+            <span>Львів і Новий Розділ · адресу надсилаємо після запису</span>
+          </div>
+        </div>
+      </div>
+      <div style="min-width: 0; border-radius: 32px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04); padding: clamp(24px, 3.2vw, 38px); align-self: start;">
+        <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 16px; align-items: flex-start; padding: 18px 0;">
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l2.5 2.5L16 9.5"></path></svg>
+            <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 26px; letter-spacing: -.02em; margin: 0;">Заявку прийнято</h3>
+            <p style="margin: 0; font-size: 15px; line-height: 1.6; color: rgba(241,243,239,.7);">Передзвонимо протягом 15 хвилин у робочі години. Якщо терміново — 073 315 02 38.</p>
+            <button type="button" onClick="{{ reset }}" style="margin-top: 6px; padding: 12px 22px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); background: transparent; color: #F1F3EF; font-size: 14.5px; cursor: pointer;">Надіслати ще одну</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+          <form onSubmit="{{ submit }}" style="display: grid; gap: 16px;">
+            <div style="display: grid; gap: 8px;">
+              <label for="n-name" style="font-size: 13px; color: rgba(241,243,239,.6);">Ім'я</label>
+              <input id="n-name" type="text" placeholder="Як до вас звертатись" value="{{ name }}" onChange="{{ onName }}" style="min-height: 50px; padding: 0 18px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px;">
+            </div>
+            <div style="display: grid; gap: 8px;">
+              <label for="n-phone" style="font-size: 13px; color: rgba(241,243,239,.6);">Телефон</label>
+              <input id="n-phone" type="tel" placeholder="+380 __ ___ __ __" value="{{ phone }}" onChange="{{ onPhone }}" style="min-height: 50px; padding: 0 18px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px;">
+            </div>
+            <div style="display: grid; gap: 8px;">
+              <label for="n-model" style="font-size: 13px; color: rgba(241,243,239,.6);">Модель</label>
+              <select id="n-model" value="{{ model }}" onChange="{{ onModel }}" style="min-height: 50px; padding: 0 14px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px;">
+                <option value="" style="color: #0B0C0E;">Оберіть модель</option>
+                <option value="iPhone 15 / 16" style="color: #0B0C0E;">iPhone 15 / 16</option>
+                <option value="iPhone 13 / 14" style="color: #0B0C0E;">iPhone 13 / 14</option>
+                <option value="iPhone 11 / 12" style="color: #0B0C0E;">iPhone 11 / 12</option>
+                <option value="iPhone X / XR" style="color: #0B0C0E;">iPhone X / XR</option>
+                <option value="iPhone 6 / 7 / 8 / SE" style="color: #0B0C0E;">iPhone 6 / 7 / 8 / SE</option>
+                <option value="iPad" style="color: #0B0C0E;">iPad</option>
+                <option value="Apple Watch" style="color: #0B0C0E;">Apple Watch</option>
+                <option value="Інше" style="color: #0B0C0E;">Інше / не знаю</option>
+              </select>
+            </div>
+            <div style="display: grid; gap: 8px;">
+              <label for="n-problem" style="font-size: 13px; color: rgba(241,243,239,.6);">Що трапилось</label>
+              <textarea id="n-problem" placeholder="Наприклад: розбитий екран, не тримає заряд" value="{{ problem }}" onChange="{{ onProblem }}" style="min-height: 100px; padding: 14px 18px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px; resize: vertical;"></textarea>
+            </div>
+            <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size: 13.5px; color: #EDFFA6;">Вкажіть ім'я та телефон — решту з'ясуємо в розмові.</div>
+            </sc-if>
+            <button type="submit" style="min-height: 54px; border-radius: 999px; border: none; background: #DAFF3D; color: #0B0C0E; font-weight: 600; font-size: 16px; cursor: pointer; transition: transform .2s, box-shadow .2s;" style-hover="transform: translateY(-2px); box-shadow: 0 16px 40px rgba(218,255,61,.26);">Записатись на безкоштовну діагностику</button>
+            <p style="margin: 0; font-size: 12.5px; color: rgba(241,243,239,.5);">Телефон потрібен лише щоб передзвонити. Нікуди його не передаємо.</p>
+          </form>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+
+  <footer style="border-top: 1px solid rgba(255,255,255,.08);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: clamp(40px, 5vw, 72px) 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 32px; align-items: start;">
+      <div>
+        <span style="display: flex; align-items: center; gap: 11px; font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 19px;">
+          <span style="display: inline-flex; width: 30px; height: 30px; border-radius: 13px; align-items: center; justify-content: center; background: #DAFF3D; color: #0B0C0E; font-size: 13px;">iF</span>
+          iFix
+        </span>
+        <p style="margin: 14px 0 0; font-size: 14px; line-height: 1.6; color: rgba(241,243,239,.55); max-width: 30ch;">Ремонт iPhone, iPad та Apple Watch у Львові й Новому Розділі.</p>
+      </div>
+      <div style="display: grid; gap: 10px; font-size: 14.5px;">
+        <div style="font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: rgba(241,243,239,.4);">Контакти</div>
+        <a href="tel:+380733150238" style="color: rgba(241,243,239,.86); text-decoration: none;">073 315 02 38</a>
+        <a href="tel:+380631164377" style="color: rgba(241,243,239,.86); text-decoration: none;">063 116 43 77</a>
+        <span style="color: rgba(241,243,239,.55);">Пн–Сб 8:00–18:00</span>
+      </div>
+      <div style="display: grid; gap: 10px; font-size: 14.5px;">
+        <div style="font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: rgba(241,243,239,.4);">Написати</div>
+        <a href="https://t.me/" target="_blank" rel="noopener" style="color: rgba(241,243,239,.86); text-decoration: none;">Telegram</a>
+        <a href="viber://chat?number=%2B380733150238" style="color: rgba(241,243,239,.86); text-decoration: none;">Viber</a>
+        <a href="https://instagram.com/" target="_blank" rel="noopener" style="color: rgba(241,243,239,.86); text-decoration: none;">Instagram</a>
+      </div>
+      <div style="display: grid; gap: 10px; font-size: 14.5px;">
+        <div style="font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: rgba(241,243,239,.4);">Сервіс</div>
+        <a href="#services" style="color: rgba(241,243,239,.86); text-decoration: none;">Послуги</a>
+        <a href="#models" style="color: rgba(241,243,239,.86); text-decoration: none;">Моделі</a>
+        <a href="#faq" style="color: rgba(241,243,239,.86); text-decoration: none;">Питання</a>
+        <a href="#book" style="color: rgba(241,243,239,.86); text-decoration: none;">Запис</a>
+      </div>
+    </div>
+    <div style="border-top: 1px solid rgba(255,255,255,.08);">
+      <div style="max-width: 1280px; margin: 0 auto; padding: 20px 28px; font-size: 12.5px; color: rgba(241,243,239,.45); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <span>© 2026 iFix · Львів, Новий Розділ</span>
+        <span>Гарантія 30 днів на роботу</span>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showBeforeAfter&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Секції&quot;},&quot;showMailIn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Секції&quot;},&quot;showFaq&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Секції&quot;}}">
+class Component extends DCLogic {
+  state = { name: "", phone: "", model: "", problem: "", sent: false, error: false, orderNo: "", statusMsg: "" };
+
+  onOrderNo = (e) => this.setState({ orderNo: e.target.value, statusMsg: "" });
+
+  checkStatus = () => {
+    const n = this.state.orderNo.trim();
+    if (!n) return this.setState({ statusMsg: "Впишіть номер із квитанції — або просто зателефонуйте нам." });
+    this.setState({ statusMsg: "Замовлення №" + n + " — у роботі. Майстер уже за ним, готовність сьогодні до 18:00." });
+  };
+
+  set = (k) => (e) => this.setState({ [k]: e.target.value, error: false });
+
+  submit = (e) => {
+    e.preventDefault();
+    const ok = this.state.name.trim().length > 1 && this.state.phone.replace(/\D/g, "").length >= 9;
+    if (!ok) return this.setState({ error: true });
+    this.setState({ sent: true, error: false });
+  };
+
+  reset = () => this.setState({ name: "", phone: "", model: "", problem: "", sent: false, error: false });
+
+  renderVals() {
+    const p = this.props;
+    return {
+      services: [
+        { no: "01", title: "Заміна екрана", body: "Оригінал або якісний аналог. True Tone і сенсор перевіряємо при вас.", meta: "40 хвилин при вас" },
+        { no: "02", title: "Акумулятор", body: "Ставимо новий АКБ і показуємо ємність до та після заміни.", meta: "30 хвилин при вас" },
+        { no: "03", title: "Роз'єм заряджання", body: "Не бачить кабель, гріється або заряджає лише під кутом.", meta: "часто вирішується чисткою" },
+        { no: "04", title: "Камера і скло камери", body: "Мутне фото, пил під склом, не працює автофокус.", meta: "модуль або лише скло" },
+        { no: "05", title: "Залив водою", body: "Розбираємо, сушимо, чистимо плату від корозії. Чим швидше — тим більше шансів.", meta: "приймаємо того ж дня" },
+        { no: "06", title: "Не вмикається", body: "Чорний екран, циклічне перезавантаження, не бачить ПК — шукаємо причину на платі.", meta: "діагностика безкоштовна" }
+      ],
+      modelGroups: [
+        { label: "iPhone · нові", items: ["16 / 16 Plus", "16 Pro / Pro Max", "15 / 15 Plus", "15 Pro / Pro Max"] },
+        { label: "iPhone · популярні", items: ["14 / 14 Pro", "13 / 13 Pro / mini", "12 / 12 Pro / mini", "11 / 11 Pro"] },
+        { label: "iPhone · старші", items: ["X / XS / XR", "8 / 8 Plus", "7 / 7 Plus", "SE 1 / SE 2 / SE 3", "6 / 6s"] },
+        { label: "Інша техніка", items: ["iPad / Air / Pro", "Apple Watch", "AirPods — діагностика"] }
+      ],
+      works: [
+        { img: "url('assets/bg-phone-b.jpeg')", caption: "iPhone 12 · розбитий екран → новий екран за 40 хвилин" },
+        { img: "url('assets/bg-circuit.jpeg')", caption: "iPhone 11 · залив водою → чистка плати й запуск" },
+        { img: "url('assets/bg-phone-a.jpeg')", caption: "iPhone 13 · акумулятор → 100% ємності" },
+        { img: "url('assets/bg-tech.jpeg')", caption: "iPhone XR · роз'єм заряджання → заміна шлейфа" }
+      ],
+      showBeforeAfter: p.showBeforeAfter ?? true,
+      showMailIn: p.showMailIn ?? true,
+      showFaq: p.showFaq ?? true,
+      orderNo: this.state.orderNo, statusMsg: this.state.statusMsg,
+      onOrderNo: this.onOrderNo, checkStatus: this.checkStatus,
+      name: this.state.name, phone: this.state.phone, model: this.state.model, problem: this.state.problem,
+      sent: this.state.sent, notSent: !this.state.sent, error: this.state.error,
+      onName: this.set("name"), onPhone: this.set("phone"), onModel: this.set("model"), onProblem: this.set("problem"),
+      submit: this.submit, reset: this.reset
+    };
+  }
+}
+</script>
+</body>
+</html>

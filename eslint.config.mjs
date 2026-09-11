@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Дизайн-макети .dc.html і їх рантайм — референс, не наш код.
+    "design/**",
   ]),
 ]);
 

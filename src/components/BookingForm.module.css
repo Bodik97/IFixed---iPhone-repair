@@ -1,0 +1,69 @@
+.box {
+  min-width: 0;
+  border-radius: var(--r-block);
+  border: 1px solid rgba(255, 255, 255, .1);
+  background: rgba(255, 255, 255, .04);
+  padding: clamp(24px, 3.2vw, 38px);
+  align-self: start;
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.row {
+  display: grid;
+  gap: 8px;
+}
+
+.row label {
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.error {
+  font-size: 13.5px;
+  color: #EDFFA6;
+}
+
+.note {
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+.form button[disabled] {
+  opacity: .6;
+  cursor: progress;
+}
+
+/* Стан «надіслано» */
+.done {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 18px 0;
+  animation: nUp .5s var(--ease) both;
+}
+
+.done h3 {
+  font-size: 26px;
+}
+
+.doneText {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+/* Темний список у нативному випадному меню */
+.form select option {
+  color: #0B0C0E;
+}

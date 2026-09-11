@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #0B0C0E; }
+  a { color: #DAFF3D; }
+  a:hover { color: #EEFF9E; }
+  ::selection { background: #DAFF3D; color: #0B0C0E; }
+  input, select, textarea, button { font: inherit; }
+  :focus-visible { outline: 2px solid #DAFF3D; outline-offset: 3px; }
+  @keyframes nUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @keyframes nFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  @keyframes nDrift { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(-60px,40px) scale(1.12); } 66% { transform: translate(40px,-30px) scale(.95); } }
+  @keyframes nShine { 0% { transform: translateX(-140%); } 55%, 100% { transform: translateX(320%); } }
+  @keyframes nHalo { 0%, 100% { box-shadow: 0 10px 30px rgba(218,255,61,.18); } 50% { box-shadow: 0 16px 46px rgba(218,255,61,.34); } }
+  @keyframes nDot { 0% { opacity: .6; transform: scale(.8); } 70%, 100% { opacity: 0; transform: scale(2); } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</helmet>
+
+<div style="background: #0B0C0E; color: #F1F3EF; font-family: 'Manrope', system-ui, sans-serif; min-height: 100%; overflow-x: hidden;">
+
+  <header style="position: sticky; top: 0; z-index: 30; background: rgba(11,12,14,.72); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,.08);">
+    <nav style="max-width: 1280px; margin: 0 auto; padding: 16px 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+      <a href="iFix%20Landing.dc.html" style="display: flex; align-items: center; gap: 11px; font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 19px; color: #F1F3EF; text-decoration: none;">
+        <span style="display: inline-flex; width: 30px; height: 30px; border-radius: 13px; align-items: center; justify-content: center; background: #DAFF3D; color: #0B0C0E; font-size: 13px;">iF</span>
+        iFix
+      </a>
+      <div style="display: flex; align-items: center; gap: 26px; flex-wrap: wrap; font-size: 14.5px;">
+        <a href="iFix-Services.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Послуги</a>
+        <a href="iFix-Catalog-iPhone.dc.html" style="color: #DAFF3D; text-decoration: none;">Моделі</a>
+        <a href="iFix-Mail-in.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Поштою</a>
+        <a href="iFix-Account%20v2.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Кабінет</a>
+        <a href="tel:+380733150238" style="color: #F1F3EF; text-decoration: none; font-family: 'Unbounded', sans-serif; font-size: 15px;">073 315 02 38</a>
+      </div>
+    </nav>
+  </header>
+
+  <section style="position: relative; overflow: hidden; padding: clamp(30px, 4vw, 56px) 28px clamp(40px, 5vw, 76px);">
+    <span aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none;">
+      <span style="position: absolute; inset: 0; background-image: url('assets/bg-tech.jpeg'); background-size: cover; background-position: 60% 55%; opacity: .38; filter: grayscale(.75);"></span>
+      <span style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,12,14,.86), rgba(11,12,14,.97));"></span>
+      <span style="position: absolute; width: 620px; height: 620px; right: -160px; top: -220px; border-radius: 50%; background: radial-gradient(circle, rgba(218,255,61,.2), transparent 65%); animation: nDrift 22s ease-in-out infinite;"></span>
+    </span>
+    <div style="position: relative; max-width: 1280px; margin: 0 auto;">
+      <div style="font-size: 13.5px; color: rgba(241,243,239,.5); margin-bottom: 26px;">
+        <a href="iFix%20Landing.dc.html" style="color: rgba(241,243,239,.62); text-decoration: none;">Головна</a>
+        <span style="padding: 0 8px;">/</span>
+        <a href="iFix-Catalog-iPhone.dc.html" style="color: rgba(241,243,239,.62); text-decoration: none;">Моделі</a>
+        <span style="padding: 0 8px;">/</span>
+        <span style="color: #DAFF3D;">{{ modelName }}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(30px, 4vw, 70px); align-items: center;">
+        <div style="min-width: 0;">
+          <span style="display: inline-flex; align-items: center; gap: 9px; padding: 7px 14px 7px 11px; border-radius: 999px; border: 1px solid rgba(218,255,61,.4); background: rgba(218,255,61,.08); font-size: 12.5px; color: #DAFF3D; animation: nUp .6s cubic-bezier(.2,.7,.2,1) both;">
+            <span style="position: relative; display: inline-flex; width: 8px; height: 8px;">
+              <span style="position: absolute; inset: 0; border-radius: 50%; background: #DAFF3D;"></span>
+              <span style="position: absolute; inset: 0; border-radius: 50%; background: #DAFF3D; animation: nDot 2.6s ease-out infinite;"></span>
+            </span>
+            Екран і акумулятор — у наявності
+          </span>
+          <h1 style="font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: clamp(34px, 5vw, 66px); line-height: 1.02; letter-spacing: -.035em; margin: 22px 0 0; animation: nUp .75s cubic-bezier(.2,.7,.2,1) .06s both;">Ремонт {{ modelName }}</h1>
+          <p style="font-size: clamp(16px, 1.5vw, 18.5px); line-height: 1.6; max-width: 46ch; margin: 20px 0 0; color: rgba(241,243,239,.7); animation: nUp .75s cubic-bezier(.2,.7,.2,1) .12s both;">
+            Найчастіші роботи робимо при вас за 40 хвилин. Ціну називаємо після безкоштовної діагностики — і вона вже не змінюється.
+          </p>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; animation: nUp .75s cubic-bezier(.2,.7,.2,1) .18s both;">
+            <a href="#book" style="position: relative; overflow: hidden; padding: 16px 26px; border-radius: 999px; background: #DAFF3D; color: #0B0C0E; font-weight: 600; font-size: 15.5px; text-decoration: none; animation: nHalo 4.5s ease-in-out infinite; transition: transform .2s;" style-hover="transform: translateY(-2px);">Записатись<span aria-hidden="true" style="position: absolute; top: 0; bottom: 0; width: 34%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent); animation: nShine 4.5s ease-in-out 1s infinite; pointer-events: none;"></span></a>
+            <a href="tel:+380733150238" style="padding: 16px 24px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); color: #F1F3EF; font-size: 15.5px; text-decoration: none; transition: background .2s, border-color .2s;" style-hover="background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.4);">Спитати про модель</a>
+          </div>
+        </div>
+        <div style="min-width: 0; position: relative; border-radius: 30px; overflow: hidden; border: 1px solid rgba(255,255,255,.1); aspect-ratio: 4 / 3; animation: nFloat 8s ease-in-out infinite;">
+          <span style="position: absolute; inset: 0; background-image: {{ heroImg }}; background-size: cover; background-position: 52% 50%; filter: saturate(.95);"></span>
+          <span style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,12,14,.05), rgba(11,12,14,.55));"></span>
+          <span style="position: absolute; left: 20px; bottom: 18px; font-family: 'Unbounded', sans-serif; font-size: 15px; letter-spacing: -.01em; color: #F1F3EF;">{{ modelName }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width: 1280px; margin: 0 auto; padding: 0 28px clamp(40px, 6vw, 88px);">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 26px;">
+      <div>
+        <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 12px;">Роботи</div>
+        <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(27px, 3.4vw, 44px); line-height: 1.06; letter-spacing: -.03em; margin: 0;">Що робимо для цієї моделі</h2>
+      </div>
+      <div style="display: inline-flex; padding: 5px; border-radius: 999px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.04); gap: 4px;">
+        <button type="button" onClick="{{ pickOriginal }}" style="padding: 10px 18px; border-radius: 999px; border: none; cursor: pointer; font-size: 14px; background: {{ origBg }}; color: {{ origColor }}; transition: background .25s, color .25s;">Оригінал</button>
+        <button type="button" onClick="{{ pickAnalog }}" style="padding: 10px 18px; border-radius: 999px; border: none; cursor: pointer; font-size: 14px; background: {{ analogBg }}; color: {{ analogColor }}; transition: background .25s, color .25s;">Аналог</button>
+      </div>
+    </div>
+    <p style="margin: 0 0 26px; font-size: 15px; color: rgba(241,243,239,.62); max-width: 60ch;">{{ partNote }}</p>
+
+    <div style="display: grid; gap: 12px;">
+      <sc-for list="{{ jobs }}" as="j" hint-placeholder-count="6">
+        <div style="border-radius: 24px; border: 1px solid rgba(255,255,255,.09); background: rgba(255,255,255,.03); padding: 20px 24px; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 2fr) auto; gap: 18px; align-items: center; animation: nUp .7s cubic-bezier(.2,.7,.2,1) both; transition: border-color .25s, background .25s, transform .25s;" style-hover="border-color: rgba(218,255,61,.5); background: rgba(255,255,255,.055); transform: translateX(4px);">
+          <div style="font-family: 'Unbounded', sans-serif; font-size: 19px; letter-spacing: -.02em;">{{ j.title }}</div>
+          <div style="font-size: 14.5px; line-height: 1.55; color: rgba(241,243,239,.66);">{{ j.body }}</div>
+          <div style="font-size: 13.5px; color: #DAFF3D; white-space: nowrap;">{{ j.time }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="border-top: 1px solid rgba(255,255,255,.08); border-bottom: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.02);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: clamp(40px, 5vw, 80px) 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 28px;">
+      <div>
+        <div style="font-family: 'Unbounded', sans-serif; font-size: 15px; color: #DAFF3D;">01</div>
+        <div style="height: 1px; background: rgba(255,255,255,.12); margin: 14px 0 18px;"></div>
+        <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 21px; letter-spacing: -.02em; margin: 0 0 10px;">Перевірка при вас</h3>
+        <p style="margin: 0; font-size: 14.5px; line-height: 1.6; color: rgba(241,243,239,.66);">Показуємо знятий модуль, тестуємо сенсор, True Tone і Face ID перед тим, як зібрати.</p>
+      </div>
+      <div>
+        <div style="font-family: 'Unbounded', sans-serif; font-size: 15px; color: #DAFF3D;">02</div>
+        <div style="height: 1px; background: rgba(255,255,255,.12); margin: 14px 0 18px;"></div>
+        <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 21px; letter-spacing: -.02em; margin: 0 0 10px;">Дані на місці</h3>
+        <p style="margin: 0; font-size: 14.5px; line-height: 1.6; color: rgba(241,243,239,.66);">Нічого не скидаємо і не переносимо. Пароль потрібен лише для фінальної перевірки — за вашої присутності.</p>
+      </div>
+      <div>
+        <div style="font-family: 'Unbounded', sans-serif; font-size: 15px; color: #DAFF3D;">03</div>
+        <div style="height: 1px; background: rgba(255,255,255,.12); margin: 14px 0 18px;"></div>
+        <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 21px; letter-spacing: -.02em; margin: 0 0 10px;">Гарантія 30 днів</h3>
+        <p style="margin: 0; font-size: 14.5px; line-height: 1.6; color: rgba(241,243,239,.66);">На роботу й на встановлену деталь. Щось пішло не так — повертайтесь без питань.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="book" style="max-width: 1280px; margin: 0 auto; padding: clamp(44px, 6vw, 92px) 28px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: clamp(28px, 4vw, 60px); align-items: start;">
+      <div>
+        <div style="font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: #DAFF3D; margin-bottom: 12px;">Запис</div>
+        <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(27px, 3.4vw, 44px); line-height: 1.06; letter-spacing: -.03em; margin: 0 0 16px;">Записатись на {{ modelName }}</h2>
+        <p style="margin: 0 0 28px; font-size: 16px; line-height: 1.6; color: rgba(241,243,239,.7); max-width: 42ch;">Залиште телефон — передзвонимо за 15 хвилин і скажемо орієнтир по вашій ситуації.</p>
+        <div style="display: grid; gap: 14px;">
+          <sc-for list="{{ related }}" as="r" hint-placeholder-count="3">
+            <a href="{{ r.href }}" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 15px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,.1); text-decoration: none; color: rgba(241,243,239,.86); font-size: 15px; transition: border-color .2s, background .2s, transform .2s;" style-hover="border-color: rgba(218,255,61,.5); background: rgba(255,255,255,.05); transform: translateX(4px);">
+              <span>{{ r.name }}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h13"></path><path d="M13 6l6 6-6 6"></path></svg>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+      <div style="border-radius: 30px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04); padding: clamp(24px, 3.2vw, 36px);">
+        <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 14px; align-items: flex-start; padding: 16px 0;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M8 12.5l2.5 2.5L16 9.5"></path></svg>
+            <h3 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: 24px; letter-spacing: -.02em; margin: 0;">Заявку прийнято</h3>
+            <p style="margin: 0; font-size: 15px; line-height: 1.6; color: rgba(241,243,239,.7);">Передзвонимо протягом 15 хвилин у робочі години.</p>
+            <button type="button" onClick="{{ reset }}" style="margin-top: 6px; padding: 12px 22px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); background: transparent; color: #F1F3EF; font-size: 14.5px; cursor: pointer;">Надіслати ще одну</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+          <form onSubmit="{{ submit }}" style="display: grid; gap: 16px;">
+            <div style="display: grid; gap: 8px;">
+              <label for="m-name" style="font-size: 13px; color: rgba(241,243,239,.6);">Ім'я</label>
+              <input id="m-name" type="text" placeholder="Як до вас звертатись" value="{{ name }}" onChange="{{ onName }}" style="min-height: 50px; padding: 0 18px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px;">
+            </div>
+            <div style="display: grid; gap: 8px;">
+              <label for="m-phone" style="font-size: 13px; color: rgba(241,243,239,.6);">Телефон</label>
+              <input id="m-phone" type="tel" placeholder="+380 __ ___ __ __" value="{{ phone }}" onChange="{{ onPhone }}" style="min-height: 50px; padding: 0 18px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px;">
+            </div>
+            <div style="display: grid; gap: 8px;">
+              <label for="m-issue" style="font-size: 13px; color: rgba(241,243,239,.6);">Що трапилось</label>
+              <textarea id="m-issue" placeholder="Розбитий екран, не тримає заряд…" value="{{ issue }}" onChange="{{ onIssue }}" style="min-height: 96px; padding: 14px 18px; border-radius: 18px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px; resize: vertical;"></textarea>
+            </div>
+            <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size: 13.5px; color: #EDFFA6;">Вкажіть ім'я та телефон — решту з'ясуємо в розмові.</div>
+            </sc-if>
+            <button type="submit" style="min-height: 54px; border-radius: 999px; border: none; background: #DAFF3D; color: #0B0C0E; font-weight: 600; font-size: 16px; cursor: pointer; transition: transform .2s, box-shadow .2s;" style-hover="transform: translateY(-2px); box-shadow: 0 16px 40px rgba(218,255,61,.26);">Записатись на діагностику</button>
+          </form>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+
+  <footer style="border-top: 1px solid rgba(255,255,255,.08);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 22px 28px; font-size: 12.5px; color: rgba(241,243,239,.45); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+      <span>© 2026 iFix · Львів, Новий Розділ</span>
+      <span>Гарантія 30 днів на роботу</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;modelName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;iPhone 13&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { part: "original", name: "", phone: "", issue: "", sent: false, error: false, urlModel: "" };
+
+  all = [
+    "iPhone 16 Pro Max", "iPhone 16 Pro", "iPhone 16 Plus", "iPhone 16",
+    "iPhone 15 Pro Max", "iPhone 15 Pro", "iPhone 15 Plus", "iPhone 15",
+    "iPhone 14 Pro Max", "iPhone 14 Pro", "iPhone 14 Plus", "iPhone 14",
+    "iPhone 13 Pro Max", "iPhone 13 Pro", "iPhone 13", "iPhone 13 mini",
+    "iPhone 12 Pro Max", "iPhone 12 Pro", "iPhone 12", "iPhone 12 mini",
+    "iPhone 11 Pro Max", "iPhone 11 Pro", "iPhone 11",
+    "iPhone XS Max", "iPhone XS", "iPhone XR", "iPhone X",
+    "iPhone 8 Plus", "iPhone 8", "iPhone 7 Plus", "iPhone 7",
+    "iPhone SE 3", "iPhone SE 2", "iPhone 6s / 6s Plus", "iPhone 6 / 6 Plus",
+    "iPad Pro 11″ / 12.9″", "iPad Air 3–5", "iPad 7–10", "iPad mini 5 / 6",
+    "Apple Watch S4–S9", "Apple Watch Ultra", "AirPods / AirPods Pro"
+  ];
+
+  photos = ["assets/bg-phone-a.jpeg", "assets/bg-phone-b.jpeg", "assets/bg-tech.jpeg", "assets/bg-circuit.jpeg"];
+
+  componentDidMount() {
+    try {
+      const m = new URLSearchParams(window.location.search).get("m");
+      if (m) this.setState({ urlModel: m });
+    } catch (e) {}
+  }
+
+  set = (k) => (e) => this.setState({ [k]: e.target.value, error: false });
+
+  submit = (e) => {
+    e.preventDefault();
+    const ok = this.state.name.trim().length > 1 && this.state.phone.replace(/\D/g, "").length >= 9;
+    if (!ok) return this.setState({ error: true });
+    this.setState({ sent: true, error: false });
+  };
+
+  reset = () => this.setState({ name: "", phone: "", issue: "", sent: false, error: false });
+
+  renderVals() {
+    const orig = this.state.part === "original";
+    const modelName = this.state.urlModel || this.props.modelName || "iPhone 13";
+    const idx = Math.max(0, this.all.indexOf(modelName));
+    const related = [this.all[(idx + 1) % this.all.length], this.all[(idx + 2) % this.all.length]]
+      .map(n => ({ name: n, href: "iFix-Model.dc.html?m=" + encodeURIComponent(n) }))
+      .concat([{ name: "Усі моделі в каталозі", href: "iFix-Catalog-iPhone.dc.html" }]);
+    return {
+      modelName,
+      heroImg: "url('" + this.photos[idx % this.photos.length] + "')",
+      related,
+      partNote: orig
+        ? "Оригінальні модулі: рідна кольоропередача, True Tone і Face ID працюють без застережень. Дорожче, але поводиться як заводський."
+        : "Якісні аналоги: перевірені постачальники, та сама гарантія 30 днів. Дешевше, кольори трохи інші при максимальній яскравості.",
+      origBg: orig ? "#DAFF3D" : "transparent",
+      origColor: orig ? "#0B0C0E" : "rgba(241,243,239,.8)",
+      analogBg: orig ? "transparent" : "#DAFF3D",
+      analogColor: orig ? "rgba(241,243,239,.8)" : "#0B0C0E",
+      pickOriginal: () => this.setState({ part: "original" }),
+      pickAnalog: () => this.setState({ part: "analog" }),
+      jobs: [
+        { title: "Заміна екрана", body: orig ? "Оригінальний модуль, перенесення рідного Face ID, перевірка True Tone." : "Аналог від перевіреного постачальника, перенесення Face ID, перевірка сенсора.", time: "40 хв при вас" },
+        { title: "Акумулятор", body: "Новий АКБ, показуємо ємність до та після. Циклів — 0.", time: "30 хв при вас" },
+        { title: "Роз'єм заряджання", body: "Спершу чистка — часто цього достатньо. Якщо ні, міняємо шлейф.", time: "від 40 хв" },
+        { title: "Камера / скло камери", body: "Мутне фото, пил під склом, не працює автофокус — модуль або лише скло.", time: "того ж дня" },
+        { title: "Залив водою", body: "Розбирання, сушіння, ультразвукова чистка плати від корозії.", time: "1–3 дні" },
+        { title: "Не вмикається", body: "Шукаємо причину на платі: живлення, підсвітка, контролери заряду.", time: "діагностика безкоштовна" }
+      ],
+      name: this.state.name, phone: this.state.phone, issue: this.state.issue,
+      onName: this.set("name"), onPhone: this.set("phone"), onIssue: this.set("issue"),
+      sent: this.state.sent, notSent: !this.state.sent, error: this.state.error,
+      submit: this.submit, reset: this.reset
+    };
+  }
+}
+</script>
+</body>
+</html>

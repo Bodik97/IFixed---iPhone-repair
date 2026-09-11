@@ -1,0 +1,630 @@
+/* ---------- Герой ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(56px, 8vw, 130px) var(--gutter) clamp(40px, 5vw, 80px);
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.heroPhoto {
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/bg-tech.jpeg");
+  background-size: cover;
+  background-position: 62% 58%;
+  opacity: .5;
+  filter: grayscale(.7) contrast(1.05);
+}
+
+.heroVeil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11, 12, 14, .86) 0%, rgba(11, 12, 14, .72) 40%, rgba(11, 12, 14, .95) 100%);
+}
+
+.heroGlow {
+  position: absolute;
+  width: 620px;
+  height: 620px;
+  right: -120px;
+  top: -180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(218, 255, 61, .2), transparent 65%);
+  animation: nDrift 22s ease-in-out infinite;
+}
+
+.heroInner {
+  position: relative;
+  max-width: var(--container);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(32px, 4vw, 72px);
+  align-items: center;
+}
+
+.heroCopy {
+  min-width: 0;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 14px 7px 11px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--field-border);
+  background: var(--field-bg);
+  font-size: 12.5px;
+  letter-spacing: .04em;
+  color: rgba(241, 243, 239, .82);
+}
+
+.h1 {
+  font-size: clamp(38px, 5.6vw, 76px);
+  margin-top: 24px;
+  max-width: 17ch;
+  text-wrap: balance;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.heroLead {
+  font-size: clamp(16.5px, 1.5vw, 19px);
+  max-width: 46ch;
+  margin-top: 22px;
+  color: var(--text-2);
+}
+
+.heroCta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+.heroSide {
+  min-width: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.statsCard {
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  background: linear-gradient(160deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .02));
+  padding: 26px;
+  display: grid;
+  gap: 18px;
+}
+
+.statRow {
+  display: grid;
+  gap: 18px;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, .08);
+}
+
+.stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.statValue {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 34px;
+  line-height: 1;
+}
+
+.statUnit {
+  font-size: 17px;
+  color: rgba(241, 243, 239, .6);
+}
+
+.statNote {
+  font-size: 13.5px;
+  color: rgba(241, 243, 239, .62);
+  text-align: right;
+  max-width: 20ch;
+}
+
+.heroShot {
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  aspect-ratio: 16 / 9;
+  background-image: url("/assets/bg-phone-a.jpeg");
+  background-size: cover;
+  background-position: 55% 50%;
+  filter: saturate(.9);
+  animation: nFloat 8s ease-in-out infinite;
+}
+
+/* ---------- Спільне для секцій ---------- */
+.h2 {
+  font-size: clamp(30px, 3.8vw, 50px);
+  max-width: 22ch;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-bottom: 44px;
+}
+
+.sectionHead .kicker {
+  margin-bottom: 14px;
+}
+
+.sectionNote {
+  font-size: 15px;
+  max-width: 32ch;
+  color: rgba(241, 243, 239, .62);
+}
+
+.sectionLink {
+  margin-top: 24px;
+  font-size: 15px;
+}
+
+/* ---------- Послуги ---------- */
+.services {
+  padding-block: clamp(52px, 7vw, 110px);
+}
+
+.serviceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(252px, 1fr));
+  gap: 16px;
+}
+
+.serviceCard {
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.serviceNo {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 13px;
+  color: rgba(241, 243, 239, .4);
+}
+
+.serviceCard h3 {
+  font-size: 21px;
+}
+
+.serviceBody {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: rgba(241, 243, 239, .66);
+}
+
+.serviceMeta {
+  margin-top: auto;
+  padding-top: 8px;
+  font-size: 13px;
+  color: var(--accent);
+}
+
+/* ---------- Репутація ---------- */
+.reputation {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, .08);
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+
+.repBg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.repPhoto {
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/bg-circuit.jpeg");
+  background-size: cover;
+  background-position: 40% 50%;
+  opacity: .38;
+  filter: grayscale(.6);
+}
+
+.repVeil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(96deg, rgba(11, 12, 14, .95) 0%, rgba(11, 12, 14, .8) 55%, rgba(11, 12, 14, .55) 100%);
+}
+
+.repInner {
+  position: relative;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: clamp(56px, 7vw, 108px) var(--gutter);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+}
+
+.repTitle {
+  font-weight: 300;
+  font-size: clamp(28px, 3.6vw, 46px);
+  line-height: 1.1;
+  max-width: 20ch;
+}
+
+.repText {
+  font-size: clamp(16px, 1.5vw, 18.5px);
+  line-height: 1.65;
+  color: rgba(241, 243, 239, .74);
+  max-width: 46ch;
+}
+
+/* ---------- Як це працює ---------- */
+.how {
+  padding-block: clamp(52px, 7vw, 108px);
+}
+
+.how .kicker {
+  margin-bottom: 14px;
+}
+
+.howTitle {
+  margin-bottom: 48px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 28px;
+}
+
+.stepNo {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 15px;
+  color: var(--accent);
+}
+
+.stepLine {
+  display: block;
+  height: 1px;
+  background: rgba(255, 255, 255, .12);
+  margin: 16px 0 20px;
+  transform-origin: left;
+  animation: nGrow .8s var(--ease) both;
+}
+
+.stepTitle {
+  font-size: 23px;
+  margin-bottom: 10px;
+}
+
+.stepBody {
+  font-size: 15px;
+  color: rgba(241, 243, 239, .66);
+}
+
+/* ---------- Моделі ---------- */
+.models {
+  border-top: 1px solid rgba(255, 255, 255, .08);
+}
+
+.modelsInner {
+  padding-block: clamp(52px, 7vw, 108px);
+}
+
+.groupList {
+  display: grid;
+  gap: 18px;
+}
+
+.group {
+  border-radius: var(--r-card);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 22px 24px;
+  display: grid;
+  grid-template-columns: minmax(120px, 190px) 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.groupLabel {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 13.5px;
+  letter-spacing: -.01em;
+  color: rgba(241, 243, 239, .55);
+}
+
+.groupItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.modelChip {
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 255, 255, .14);
+  font-size: 14px;
+  color: rgba(241, 243, 239, .9);
+  transition: border-color .2s, background .2s, transform .2s;
+}
+
+.modelChip:hover {
+  border-color: var(--border-active);
+  background: rgba(218, 255, 61, .08);
+  transform: translateY(-2px);
+}
+
+.modelsNote {
+  margin-top: 20px;
+  font-size: 14.5px;
+  color: rgba(241, 243, 239, .62);
+}
+
+@media (max-width: 620px) {
+  .group {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+/* ---------- До і після ---------- */
+.worksSection,
+.reviewsSection {
+  border-top: 1px solid rgba(255, 255, 255, .08);
+}
+
+.worksInner {
+  padding-block: clamp(52px, 7vw, 108px);
+}
+
+.worksInner .kicker,
+.reviewsInner .kicker {
+  margin-bottom: 14px;
+}
+
+.worksTitle {
+  margin-bottom: 44px;
+}
+
+.worksGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.workMedia {
+  border-radius: var(--r-card);
+  border: 1px solid rgba(255, 255, 255, .1);
+  aspect-ratio: 4 / 3;
+}
+
+.work {
+  margin: 0;
+}
+
+.workCaption {
+  margin-top: 12px;
+  font-size: 14px;
+  color: rgba(241, 243, 239, .62);
+}
+
+/* ---------- Відгуки ---------- */
+.reviewsInner {
+  padding-block: clamp(52px, 7vw, 100px);
+}
+
+.reviewGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
+  gap: 18px;
+}
+
+.review {
+  margin: 0;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.reviewText {
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: rgba(241, 243, 239, .9);
+}
+
+.reviewAuthor {
+  margin-top: auto;
+  font-size: 13.5px;
+  color: rgba(241, 243, 239, .55);
+}
+
+/* ---------- Поштою ---------- */
+.mailSection {
+  padding-block: clamp(24px, 4vw, 60px);
+}
+
+.mailBox {
+  border-radius: var(--r-block);
+  border: 1px solid rgba(255, 255, 255, .1);
+  background: linear-gradient(150deg, rgba(218, 255, 61, .1), rgba(255, 255, 255, .02));
+  padding: clamp(28px, 4vw, 56px);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: clamp(26px, 3.4vw, 56px);
+  align-items: center;
+}
+
+.mailTitle {
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 1.08;
+  margin: 14px 0 16px;
+}
+
+.mailLead {
+  font-size: 16px;
+  line-height: 1.65;
+  margin-bottom: 24px;
+  color: var(--text-2);
+  max-width: 44ch;
+}
+
+.mailSteps {
+  display: grid;
+  gap: 14px;
+}
+
+.mailStep {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  padding-top: 14px;
+}
+
+.mailSteps > div:first-child .mailStep {
+  padding-top: 0;
+}
+
+.mailNo {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 13px;
+  color: var(--accent);
+}
+
+.mailText {
+  font-size: 15.5px;
+  color: rgba(241, 243, 239, .86);
+}
+
+/* ---------- FAQ ---------- */
+.faqSection {
+  padding-block: clamp(52px, 7vw, 104px);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(28px, 4vw, 64px);
+  align-items: start;
+}
+
+.faqSection .kicker {
+  margin-bottom: 14px;
+}
+
+.faqList {
+  min-width: 0;
+}
+
+.faqItem {
+  border-top: 1px solid rgba(255, 255, 255, .1);
+  padding: 22px 0;
+}
+
+.faqItem:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+}
+
+.faqQ {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 18.5px;
+  letter-spacing: -.02em;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.faqQ::after {
+  content: "+";
+  color: var(--accent);
+  font-size: 22px;
+  line-height: 1;
+  transition: transform .3s var(--ease);
+  flex: none;
+}
+
+.faqItem[open] .faqQ::after {
+  transform: rotate(45deg);
+}
+
+.faqA {
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(241, 243, 239, .68);
+  max-width: 60ch;
+}
+
+/* ---------- Запис ---------- */
+.book {
+  padding-block: clamp(44px, 6vw, 96px);
+}
+
+.bookGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(30px, 4vw, 64px);
+}
+
+.bookCopy {
+  min-width: 0;
+}
+
+.bookCopy .kicker {
+  margin-bottom: 14px;
+}
+
+.bookCopy .h2 {
+  margin-bottom: 18px;
+}
+
+.bookLead {
+  font-size: 16.5px;
+  margin-bottom: 32px;
+  color: var(--text-2);
+  max-width: 44ch;
+}
+
+.contacts {
+  display: grid;
+  gap: 16px;
+  font-size: 15.5px;
+  color: rgba(241, 243, 239, .86);
+}
+
+.contact {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.contact svg {
+  flex: none;
+}
+
+.contactLink {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.contactLink:hover {
+  color: var(--accent);
+}

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #0B0C0E; }
+  a { color: #DAFF3D; }
+  a:hover { color: #EEFF9E; }
+  ::selection { background: #DAFF3D; color: #0B0C0E; }
+  input, select, textarea, button { font: inherit; }
+  :focus-visible { outline: 2px solid #DAFF3D; outline-offset: 3px; }
+  @keyframes nUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @keyframes nDrift { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(-60px,40px) scale(1.12); } 66% { transform: translate(40px,-30px) scale(.95); } }
+  @keyframes nShine { 0% { transform: translateX(-140%); } 55%, 100% { transform: translateX(320%); } }
+  @keyframes nHalo { 0%, 100% { box-shadow: 0 10px 30px rgba(218,255,61,.18); } 50% { box-shadow: 0 16px 46px rgba(218,255,61,.34); } }
+  @keyframes nDot { 0% { opacity: .6; transform: scale(.8); } 70%, 100% { opacity: 0; transform: scale(2); } }
+  @keyframes nTicker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</helmet>
+
+<div style="background: #0B0C0E; color: #F1F3EF; font-family: 'Manrope', system-ui, sans-serif; min-height: 100%; overflow-x: hidden;">
+
+  <header style="position: sticky; top: 0; z-index: 30; background: rgba(11,12,14,.72); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,.08);">
+    <nav style="max-width: 1280px; margin: 0 auto; padding: 16px 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+      <a href="iFix%20Landing.dc.html" style="display: flex; align-items: center; gap: 11px; font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: 19px; letter-spacing: -.01em; color: #F1F3EF; text-decoration: none;">
+        <span style="display: inline-flex; width: 30px; height: 30px; border-radius: 13px; align-items: center; justify-content: center; background: #DAFF3D; color: #0B0C0E; font-size: 13px;">iF</span>
+        iFix
+      </a>
+      <div style="display: flex; align-items: center; gap: 26px; flex-wrap: wrap; font-size: 14.5px;">
+        <a href="iFix-Services.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Послуги</a>
+        <a href="iFix-Catalog-iPhone.dc.html" style="color: #DAFF3D; text-decoration: none;">Моделі</a>
+        <a href="iFix-Mail-in.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Поштою</a>
+        <a href="iFix-Account%20v2.dc.html" style="color: rgba(241,243,239,.72); text-decoration: none;" style-hover="color: #F1F3EF;">Кабінет</a>
+        <a href="tel:+380733150238" style="color: #F1F3EF; text-decoration: none; font-family: 'Unbounded', sans-serif; font-size: 15px;">073 315 02 38</a>
+      </div>
+    </nav>
+  </header>
+
+  <section style="position: relative; overflow: hidden; padding: clamp(46px, 6vw, 96px) 28px clamp(26px, 3vw, 44px);">
+    <span aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none;">
+      <span style="position: absolute; inset: 0; background-image: url('assets/bg-circuit.jpeg'); background-size: cover; background-position: 50% 40%; opacity: .32; filter: grayscale(.7);"></span>
+      <span style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,12,14,.9), rgba(11,12,14,.98));"></span>
+      <span style="position: absolute; width: 560px; height: 560px; left: -140px; top: -200px; border-radius: 50%; background: radial-gradient(circle, rgba(218,255,61,.18), transparent 65%); animation: nDrift 24s ease-in-out infinite;"></span>
+    </span>
+    <div style="position: relative; max-width: 1280px; margin: 0 auto;">
+      <span style="display: inline-flex; align-items: center; gap: 9px; padding: 7px 14px 7px 11px; border-radius: 999px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); font-size: 12.5px; letter-spacing: .04em; color: rgba(241,243,239,.82); animation: nUp .6s cubic-bezier(.2,.7,.2,1) both;">
+        <span style="position: relative; display: inline-flex; width: 8px; height: 8px;">
+          <span style="position: absolute; inset: 0; border-radius: 50%; background: #DAFF3D;"></span>
+          <span style="position: absolute; inset: 0; border-radius: 50%; background: #DAFF3D; animation: nDot 2.6s ease-out infinite;"></span>
+        </span>
+        {{ total }} моделей · склад оновлено сьогодні
+      </span>
+      <h1 style="font-family: 'Unbounded', sans-serif; font-weight: 600; font-size: clamp(34px, 4.8vw, 62px); line-height: 1.04; letter-spacing: -.035em; margin: 22px 0 0; max-width: 18ch; text-wrap: balance; animation: nUp .75s cubic-bezier(.2,.7,.2,1) .06s both;">
+        Каталог моделей <span style="color: #DAFF3D;">Apple</span>
+      </h1>
+      <p style="font-size: clamp(16px, 1.4vw, 18.5px); line-height: 1.6; max-width: 48ch; margin: 20px 0 0; color: rgba(241,243,239,.7); animation: nUp .75s cubic-bezier(.2,.7,.2,1) .12s both;">
+        Натисніть на свою модель — відкриється сторінка з переліком робіт, термінами й наявністю деталей.
+      </p>
+    </div>
+  </section>
+
+  <div style="position: relative; overflow: hidden; border-top: 1px solid rgba(255,255,255,.08); border-bottom: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.02);">
+    <div style="display: flex; width: max-content; animation: nTicker 34s linear infinite;">
+      <div style="display: flex; gap: 40px; padding: 12px 20px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: rgba(241,243,239,.5); white-space: nowrap;">
+        <span>Екрани в наявності</span><span style="color: #DAFF3D;">·</span><span>Акумулятори з ємністю 100%</span><span style="color: #DAFF3D;">·</span><span>Гарантія 30 днів</span><span style="color: #DAFF3D;">·</span><span>Діагностика безкоштовна</span><span style="color: #DAFF3D;">·</span><span>Ремонт при вас за 40 хвилин</span><span style="color: #DAFF3D;">·</span>
+      </div>
+      <div aria-hidden="true" style="display: flex; gap: 40px; padding: 12px 20px; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: rgba(241,243,239,.5); white-space: nowrap;">
+        <span>Екрани в наявності</span><span style="color: #DAFF3D;">·</span><span>Акумулятори з ємністю 100%</span><span style="color: #DAFF3D;">·</span><span>Гарантія 30 днів</span><span style="color: #DAFF3D;">·</span><span>Діагностика безкоштовна</span><span style="color: #DAFF3D;">·</span><span>Ремонт при вас за 40 хвилин</span><span style="color: #DAFF3D;">·</span>
+      </div>
+    </div>
+  </div>
+
+  <section style="max-width: 1280px; margin: 0 auto; padding: clamp(28px, 4vw, 52px) 28px clamp(40px, 6vw, 90px);">
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 26px;">
+      <div style="display: flex; gap: 9px; flex-wrap: wrap;">
+        <sc-for list="{{ filters }}" as="f" hint-placeholder-count="6">
+          <button type="button" onClick="{{ f.pick }}" style="padding: 10px 18px; border-radius: 999px; cursor: pointer; font-size: 14px; border: 1px solid {{ f.border }}; background: {{ f.bg }}; color: {{ f.color }}; transition: transform .2s, border-color .2s, background .2s;" style-hover="transform: translateY(-2px); border-color: rgba(218,255,61,.6);">{{ f.label }}</button>
+        </sc-for>
+      </div>
+      <div style="position: relative; min-width: 240px; flex: 1 1 240px; max-width: 340px;">
+        <input type="text" placeholder="Пошук: 13 Pro, XR, SE…" value="{{ q }}" onChange="{{ onQ }}" style="width: 100%; box-sizing: border-box; min-height: 48px; padding: 0 18px 0 44px; border-radius: 999px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #F1F3EF; font-size: 15px; transition: border-color .2s, background .2s;" style-focus="border-color: rgba(218,255,61,.55); background: rgba(255,255,255,.08);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(241,243,239,.5)" stroke-width="1.5" stroke-linecap="round" style="position: absolute; left: 17px; top: 50%; transform: translateY(-50%); pointer-events: none;"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4 4"></path></svg>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(244px, 1fr)); gap: 16px;">
+      <sc-for list="{{ shown }}" as="m" hint-placeholder-count="12">
+        <a href="{{ m.href }}" style="position: relative; overflow: hidden; text-decoration: none; color: inherit; border-radius: 26px; border: 1px solid rgba(255,255,255,.09); background: rgba(255,255,255,.03); display: flex; flex-direction: column; animation: nUp .7s cubic-bezier(.2,.7,.2,1) both; transition: transform .25s, border-color .25s, background .25s;" style-hover="transform: translateY(-5px); border-color: rgba(218,255,61,.5); background: rgba(255,255,255,.06);">
+          <span style="position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; border-bottom: 1px solid rgba(255,255,255,.08);">
+            <span style="position: absolute; inset: 0; background-image: {{ m.img }}; background-size: cover; background-position: 50% 50%; filter: grayscale(.55) contrast(1.05); transition: transform .5s cubic-bezier(.2,.7,.2,1), filter .4s;" style-hover="transform: scale(1.07); filter: grayscale(0) saturate(1.05);"></span>
+            <span style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,12,14,.15), rgba(11,12,14,.82));"></span>
+            <span style="position: absolute; left: 14px; bottom: 12px; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; border: 1px solid {{ m.stockBorder }}; background: rgba(11,12,14,.6); color: {{ m.stockColor }};">{{ m.stock }}</span>
+          </span>
+          <span style="display: flex; flex-direction: column; gap: 11px; padding: 18px 20px 20px; flex: 1;">
+            <span style="font-family: 'Unbounded', sans-serif; font-size: 18px; letter-spacing: -.02em; line-height: 1.2;">{{ m.name }}</span>
+            <span style="font-size: 12.5px; color: rgba(241,243,239,.45);">{{ m.year }}</span>
+            <span style="display: flex; flex-wrap: wrap; gap: 6px;">
+              <sc-for list="{{ m.jobs }}" as="j" hint-placeholder-count="3">
+                <span style="padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); font-size: 12px; color: rgba(241,243,239,.75);">{{ j }}</span>
+              </sc-for>
+            </span>
+            <span style="margin-top: auto; padding-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; color: #DAFF3D;">
+              <span>{{ m.time }}</span>
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h13"></path><path d="M13 6l6 6-6 6"></path></svg>
+            </span>
+          </span>
+        </a>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top: 24px; border-radius: 26px; border: 1px dashed rgba(255,255,255,.18); padding: 34px; text-align: center; color: rgba(241,243,239,.7); font-size: 15.5px;">
+        Такої моделі в списку немає — але майже завжди беремо. <a href="tel:+380733150238">Зателефонуйте</a>, скажемо одразу.
+      </div>
+    </sc-if>
+  </section>
+
+  <section style="max-width: 1280px; margin: 0 auto; padding: 0 28px clamp(50px, 7vw, 100px);">
+    <div style="position: relative; overflow: hidden; border-radius: 32px; border: 1px solid rgba(255,255,255,.1); background: linear-gradient(150deg, rgba(218,255,61,.1), rgba(255,255,255,.02)); padding: clamp(28px, 4vw, 54px); display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(24px, 3vw, 48px); align-items: center;">
+      <div>
+        <h2 style="font-family: 'Unbounded', sans-serif; font-weight: 400; font-size: clamp(26px, 3vw, 40px); line-height: 1.08; letter-spacing: -.03em; margin: 0 0 14px;">Не бачите своєї моделі?</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 1.65; color: rgba(241,243,239,.72); max-width: 42ch;">Напишіть модель і симптом — відповімо за 15 хвилин, разом із орієнтиром по ціні й терміну.</p>
+      </div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <a href="iFix%20Landing.dc.html#book" style="position: relative; overflow: hidden; padding: 16px 26px; border-radius: 999px; background: #DAFF3D; color: #0B0C0E; font-weight: 600; font-size: 15.5px; text-decoration: none; animation: nHalo 4.5s ease-in-out infinite; transition: transform .2s;" style-hover="transform: translateY(-2px);">Написати нам<span aria-hidden="true" style="position: absolute; top: 0; bottom: 0; width: 34%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent); animation: nShine 4.5s ease-in-out 1s infinite; pointer-events: none;"></span></a>
+        <a href="iFix-Mail-in.dc.html" style="padding: 16px 24px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); color: #F1F3EF; font-size: 15.5px; text-decoration: none; transition: background .2s, border-color .2s;" style-hover="background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.4);">Надіслати поштою</a>
+      </div>
+    </div>
+  </section>
+
+  <footer style="border-top: 1px solid rgba(255,255,255,.08);">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 22px 28px; font-size: 12.5px; color: rgba(241,243,239,.45); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+      <span>© 2026 iFix · Львів, Новий Розділ</span>
+      <span>Гарантія 30 днів на роботу</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { filter: "all", q: "" };
+
+  onQ = (e) => this.setState({ q: e.target.value });
+
+  models = [
+    ["iPhone 16 Pro Max", "2024", "new", ["Екран", "АКБ", "Камера"], "від 60 хв", 0],
+    ["iPhone 16 Pro", "2024", "new", ["Екран", "АКБ"], "від 60 хв", 0],
+    ["iPhone 16 Plus", "2024", "new", ["Екран", "АКБ"], "від 55 хв", 0],
+    ["iPhone 16", "2024", "new", ["Екран", "АКБ", "Роз'єм"], "від 55 хв", 1],
+    ["iPhone 15 Pro Max", "2023", "new", ["Екран", "АКБ", "Камера"], "від 50 хв", 1],
+    ["iPhone 15 Pro", "2023", "new", ["Екран", "АКБ", "Роз'єм"], "від 50 хв", 1],
+    ["iPhone 15 Plus", "2023", "new", ["Екран", "АКБ"], "від 45 хв", 1],
+    ["iPhone 15", "2023", "new", ["Екран", "АКБ", "Камера"], "від 45 хв", 1],
+    ["iPhone 14 Pro Max", "2022", "popular", ["Екран", "АКБ", "Плата"], "від 45 хв", 1],
+    ["iPhone 14 Pro", "2022", "popular", ["Екран", "АКБ", "Face ID"], "від 45 хв", 1],
+    ["iPhone 14 Plus", "2022", "popular", ["Екран", "АКБ"], "від 40 хв", 1],
+    ["iPhone 14", "2022", "popular", ["Екран", "АКБ", "Камера"], "від 40 хв", 1],
+    ["iPhone 13 Pro Max", "2021", "popular", ["Екран", "АКБ", "Камера"], "від 40 хв", 1],
+    ["iPhone 13 Pro", "2021", "popular", ["Екран", "АКБ", "Face ID"], "від 40 хв", 1],
+    ["iPhone 13", "2021", "popular", ["Екран", "АКБ", "Роз'єм"], "від 40 хв", 1],
+    ["iPhone 13 mini", "2021", "popular", ["Екран", "АКБ"], "від 40 хв", 1],
+    ["iPhone 12 Pro Max", "2020", "popular", ["Екран", "АКБ", "Камера"], "від 40 хв", 1],
+    ["iPhone 12 Pro", "2020", "popular", ["Екран", "АКБ", "Роз'єм"], "від 40 хв", 1],
+    ["iPhone 12", "2020", "popular", ["Екран", "АКБ", "Роз'єм"], "від 40 хв", 1],
+    ["iPhone 12 mini", "2020", "popular", ["Екран", "АКБ"], "від 40 хв", 1],
+    ["iPhone 11 Pro Max", "2019", "popular", ["Екран", "АКБ", "Камера"], "від 35 хв", 1],
+    ["iPhone 11 Pro", "2019", "popular", ["Екран", "АКБ"], "від 35 хв", 1],
+    ["iPhone 11", "2019", "popular", ["Екран", "АКБ", "Роз'єм"], "від 35 хв", 1],
+    ["iPhone XS Max", "2018", "old", ["Екран", "АКБ"], "від 35 хв", 1],
+    ["iPhone XS", "2018", "old", ["Екран", "АКБ", "Роз'єм"], "від 35 хв", 1],
+    ["iPhone XR", "2018", "old", ["Екран", "АКБ", "Роз'єм"], "від 35 хв", 1],
+    ["iPhone X", "2017", "old", ["Екран", "АКБ", "Face ID"], "від 35 хв", 1],
+    ["iPhone 8 Plus", "2017", "old", ["Екран", "АКБ", "Кнопка Home"], "від 30 хв", 1],
+    ["iPhone 8", "2017", "old", ["Екран", "АКБ", "Роз'єм"], "від 30 хв", 1],
+    ["iPhone 7 Plus", "2016", "old", ["Екран", "АКБ", "Мікрофон"], "від 30 хв", 1],
+    ["iPhone 7", "2016", "old", ["Екран", "АКБ"], "від 30 хв", 1],
+    ["iPhone SE 3", "2022", "old", ["Екран", "АКБ"], "від 30 хв", 1],
+    ["iPhone SE 2", "2020", "old", ["Екран", "АКБ"], "від 30 хв", 1],
+    ["iPhone 6s / 6s Plus", "2015", "old", ["Екран", "АКБ", "Роз'єм"], "від 30 хв", 1],
+    ["iPhone 6 / 6 Plus", "2014", "old", ["Екран", "АКБ"], "від 30 хв", 1],
+    ["iPad Pro 11″ / 12.9″", "усі покоління", "other", ["Скло", "АКБ", "Роз'єм"], "1–2 дні", 0],
+    ["iPad Air 3–5", "2019–2024", "other", ["Скло", "АКБ"], "1–2 дні", 0],
+    ["iPad 7–10", "2019–2024", "other", ["Скло", "АКБ", "Роз'єм"], "1–2 дні", 1],
+    ["iPad mini 5 / 6", "2019–2021", "other", ["Скло", "АКБ"], "1–2 дні", 0],
+    ["Apple Watch S4–S9", "2018–2024", "other", ["Скло", "АКБ"], "1–2 дні", 0],
+    ["Apple Watch Ultra", "2022–2024", "other", ["Скло", "АКБ"], "1–2 дні", 0],
+    ["AirPods / AirPods Pro", "усі покоління", "other", ["Діагностика", "Чистка"], "того ж дня", 1]
+  ];
+
+  photos = ["assets/bg-phone-a.jpeg", "assets/bg-phone-b.jpeg", "assets/bg-tech.jpeg", "assets/bg-circuit.jpeg"];
+
+  renderVals() {
+    const defs = [["all", "Усі"], ["new", "Нові"], ["popular", "Популярні"], ["old", "Старші"], ["other", "iPad · Watch"]];
+    const active = this.state.filter;
+    const filters = defs.map(([id, label]) => ({
+      label,
+      pick: () => this.setState({ filter: id }),
+      bg: active === id ? "#DAFF3D" : "rgba(255,255,255,.04)",
+      color: active === id ? "#0B0C0E" : "rgba(241,243,239,.82)",
+      border: active === id ? "#DAFF3D" : "rgba(255,255,255,.16)"
+    }));
+    const q = this.state.q.trim().toLowerCase();
+    const shown = this.models
+      .map(([name, year, group, jobs, time, inStock], i) => ({
+        name, year, group, jobs, time,
+        img: "url('" + this.photos[i % this.photos.length] + "')",
+        href: "iFix-Model.dc.html?m=" + encodeURIComponent(name),
+        stock: inStock ? "в наявності" : "під замовлення",
+        stockColor: inStock ? "#DAFF3D" : "rgba(241,243,239,.62)",
+        stockBorder: inStock ? "rgba(218,255,61,.45)" : "rgba(255,255,255,.2)"
+      }))
+      .filter(m => (active === "all" || m.group === active) && (!q || m.name.toLowerCase().includes(q)));
+    return { filters, shown, empty: shown.length === 0, total: this.models.length, q: this.state.q, onQ: this.onQ };
+  }
+}
+</script>
+</body>
+</html>

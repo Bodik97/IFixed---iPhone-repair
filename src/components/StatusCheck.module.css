@@ -1,0 +1,60 @@
+.section {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: clamp(20px, 3vw, 44px) var(--gutter);
+}
+
+.box {
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  background: var(--surface);
+  padding: clamp(24px, 3.4vw, 42px);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(24px, 3vw, 48px);
+  align-items: center;
+}
+
+.title {
+  font-size: clamp(23px, 2.6vw, 34px);
+  line-height: 1.1;
+  margin: 12px 0 10px;
+}
+
+.lead {
+  font-size: 15px;
+  color: rgba(241, 243, 239, .66);
+  max-width: 40ch;
+}
+
+.form {
+  display: grid;
+  gap: 12px;
+}
+
+.label {
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.stages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+  font-size: 13px;
+}
+
+.stage,
+.stageDone {
+  padding: 4px 12px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(218, 255, 61, .28);
+  color: rgba(239, 255, 196, .55);
+}
+
+.stageDone {
+  background: rgba(218, 255, 61, .18);
+  color: var(--info-text);
+  border-color: rgba(218, 255, 61, .5);
+}

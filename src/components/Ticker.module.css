@@ -1,0 +1,38 @@
+.wrap {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, .08);
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  background: rgba(255, 255, 255, .02);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: nTicker 32s linear infinite;
+}
+
+.clone {
+  display: flex;
+}
+
+.row {
+  display: flex;
+  gap: 40px;
+  padding: 12px 20px;
+  font-size: 13px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.dot {
+  color: var(--accent);
+}

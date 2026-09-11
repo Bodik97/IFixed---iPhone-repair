@@ -1,36 +1,186 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# iFix — сайт сервісу ремонту Apple
 
-## Getting Started
+Next.js 16 (App Router) + TypeScript. Реалізовано за `design/iFix-Handoff.md` і макетами `design/*.dc.html`.
 
-First, run the development server:
+## Запуск
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # продакшн-збірка
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Сторінки
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| URL | Файл | Тип |
+| --- | --- | --- |
+| `/` | `src/app/page.tsx` | статична |
+| `/poslugy` | `src/app/poslugy/page.tsx` | статична |
+| `/modeli` | `src/app/modeli/page.tsx` | статична |
+| `/modeli/{slug}` | `src/app/modeli/[slug]/page.tsx` | 42 статичні (SSG) |
+| `/poshtoyu` | `src/app/poshtoyu/page.tsx` | статична |
+| `/kabinet` | `src/app/kabinet/page.tsx` | динамічна, за авторизацією, `noindex` |
+| `/vhid` | `src/app/vhid/page.tsx` | вхід клієнта за кодом на пошту, `noindex` |
+| `/admin` | `src/app/admin/page.tsx` | заявки для майстра, `noindex` |
+| `/admin/vhid` | `src/app/admin/vhid/page.tsx` | вхід майстра, `noindex` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Стилі
 
-## Learn More
+Дизайн-токени, типографіка й вісім keyframes зі специфікації — у `src/app/globals.css`
+(CSS-змінні + спільні класи `.btn`, `.card`, `.chip`, `.field`, `.container`, `.kicker`).
+Решта — CSS Modules поруч із компонентами. Tailwind не використовується: макети містять
+точні CSS-значення, які переносяться один в один.
 
-To learn more about Next.js, take a look at the following resources:
+Підтримка `prefers-reduced-motion: reduce` глушить усі анімації й переходи глобально.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Дані
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `src/data/models.ts` — 42 моделі. **Згенеровано** скриптом `scripts/extract-models.mjs` з макета каталогу.
+- `src/data/services.ts` — 12 послуг з SVG-іконками. **Згенеровано** `scripts/extract-services.mjs`.
+- Решта (`landing.ts`, `servicesPage.ts`, `mailIn.ts`, `account.ts`, `site.ts`) — редагується вручну.
 
-## Deploy on Vercel
+Перегенерувати дані з макетів:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+node scripts/extract-models.mjs
+node scripts/extract-services.mjs
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Контакти, телефони, години роботи, домен — у `src/data/site.ts`.
+
+## API
+
+| Роут | Метод | Стан |
+| --- | --- | --- |
+| `/api/lead` | POST | Пише заявку в Postgres, потім шле в Telegram (якщо задані токени). Якщо запис у базу впав — заявка все одно йде в Telegram, а помилка в лог: губити заявки не можна. |
+| `/api/orders/{no}` | GET | **Заглушка**: повертає фіксоване замовлення. Структура відповіді фінальна. |
+
+Форма заявки: `{ name, phone, email?, problem?, model?, service?, city?, branch?, source }`.
+Валідація на сервері: ім'я + щонайменше один спосіб зв'язку (телефон ≥9 цифр **або** пошта),
+інакше 422. Пошта потрібна, бо заявка з кабінету при email-вході приходить без телефону.
+
+## База даних
+
+Neon Postgres через Vercel Marketplace, ORM — Drizzle.
+
+- `src/db/schema.ts` — таблиця `leads`. Enum `lead_source` (landing / model / services / mail-in)
+  і `lead_status` (new / in_progress / done / rejected). Індекси на `created_at` і `status`.
+- `src/db/index.ts` — лінива ініціалізація клієнта. **Без `Proxy`**: він ламає бібліотеки,
+  що інспектують об'єкт клієнта.
+
+```bash
+npm run db:push     # накотити схему
+npm run db:studio   # переглянути дані
+```
+
+`drizzle-kit` не читає `.env.local` сам — обидві команди йдуть через `dotenv-cli`.
+
+## Як пов'язані заявка, адмінка й кабінет
+
+Одна таблиця `leads` обслуговує обидві сторони:
+
+- Клієнт лишає заявку. Якщо він **залогінений**, у рядок пишеться `clerk_user_id`
+  і пошта з профілю — заявка стає видимою в його кабінеті.
+- Якщо **не залогінений**, `clerk_user_id` лишається NULL, і заявка додатково
+  йде в Telegram: ніде більше вона не «висить», тож майстер має дізнатись одразу.
+  В адмінці такі рядки позначені `анонім`, решта — `кабінет`.
+- Майстер міняє статус в адмінці → клієнт бачить нову стадію в себе. Проміжної
+  синхронізації немає: кабінет читає ту саму таблицю (`dynamic = "force-dynamic"`).
+
+Статуси мапляться на стадії, які бачить клієнт (`src/db/leads.ts`):
+
+| Статус у базі | Клієнт бачить | Прогрес |
+| --- | --- | --- |
+| `new` | Прийнято | 25% |
+| `in_progress` | У роботі | 65% |
+| `done` | Готово | 100% |
+| `rejected` | Закрито | — |
+
+Кабінет шукає заявки і за `clerk_user_id`, і за поштою — щоб людина побачила те,
+що лишала до реєстрації з тією самою адресою.
+
+## Адмінка
+
+`/admin` — одна сторінка: список заявок, найновіші зверху, нові підсвічені.
+Статус міняється випадним списком, зберігається одразу (server action).
+Свідомо без пошуку, фільтрів, пагінації й редагування — так замовлено.
+
+Вхід окремий від Clerk: `/admin/vhid`, пошта + пароль із env.
+Сесія — підписана HMAC-SHA256 httpOnly-cookie на 12 годин. Порівняння креденшелів
+timing-safe, після невдалої спроби — затримка 0.7 с проти перебору.
+
+Перевірено: підроблена cookie й прострочена (навіть з валідним підписом) відхиляються.
+
+## Авторизація клієнтів
+
+Clerk (`@clerk/nextjs` v7), вхід **за кодом на пошту** — без пароля.
+
+- `src/middleware.ts` закриває `/kabinet`; неавторизованого кидає на `/vhid`
+- `src/app/vhid/SignInForm.tsx` — двокроковий потік «пошта → код». Clerk не каже наперед,
+  чи клієнт уже реєструвався, тому спершу пробуємо вхід, а на помилку — реєструємо.
+  Ім'я запитуємо лише при першому вході, необов'язкове.
+- `<div id="clerk-captcha" />` у формі — інакше Clerk падає на invisible-CAPTCHA і пише в консоль
+- Вихід — `src/components/account/SignOutButton.tsx`
+
+**Чому пошта, а не SMS.** Специфікація просила SMS-код, але Clerk блокує SMS в Україну:
+`Cannot remove the following countries from the SMS blocklist without an upgraded plan: [UA]`.
+Потрібен платний план плюс окреме звернення в їхню підтримку. Щоб перейти на SMS пізніше:
+або активувати Україну в Clerk, або переписати `SignInForm` на український шлюз
+(TurboSMS/SMS Club) з власним сховищем кодів. Утиліта `src/lib/phone.ts` — нормалізація
+українських номерів в E.164 — уже написана й перевірена, вона знадобиться в обох випадках.
+
+**Налаштування інстансу Clerk** (задане через `clerk config patch`, не руками в дашборді):
+пароль вимкнено, `email_code` як єдина стратегія входу, `first_name` увімкнено й необов'язкове.
+
+Тестування без реальних листів: адреса з `+clerk_test@` (напр. `bohdan+clerk_test@example.com`)
+і код `424242`.
+
+## Змінні оточення
+
+Скопіюйте `.env.example` у `.env.local`:
+
+- `NEXT_PUBLIC_SITE_URL` — продакшн-домен. Впливає на `canonical`, `sitemap.xml`, `robots.txt`.
+- `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — необов'язкові. Без них заявка все одно приймається.
+- `DATABASE_URL` — Neon, провізовано через Marketplace.
+- `ADMIN_EMAIL`, `ADMIN_PASSWORD` — вхід у `/admin`. Порожні = адмінка закрита для всіх.
+- `ADMIN_SESSION_SECRET` — підпис сесійної cookie, уже згенерований і заданий у Vercel.
+
+**Увага:** `vercel env pull` перезаписує `.env.local` і виставляє порожні значення як `ADMIN_EMAIL=""`.
+Після кожного pull перевірте, що ваші значення на місці.
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` — підтягуються `clerk env pull`.
+
+Marketplace-інтеграцію Clerk знято: вона провізувала окремий accountless-застосунок, який не
+дає міняти налаштування авторизації. Ключі застосунку `iFix` (`adapting-catfish-3035`) задані
+у Vercel напряму для production / preview / development. Оновити їх: `vercel env add <NAME> <env> --force`.
+
+Зараз ключі **development** (`pk_test_` / `sk_test_`) — у Clerk це окремий інстанс із лімітами.
+Перед бойовим запуском створіть production-інстанс (`clerk deploy`) і замініть ключі на `pk_live_` / `sk_live_`.
+
+## SEO
+
+`title`/`description` на кожній сторінці, `canonical`, `sitemap.xml`, `robots.txt`.
+Мікророзмітка: `LocalBusiness` (глобально в layout), `Service` (сторінка моделі),
+`ItemList`/`Service` (послуги), `FAQPage` (головна, поштою). `/kabinet` закрито від індексації.
+
+## Що лишилося зробити
+
+1. **Telegram не налаштований.** `TELEGRAM_BOT_TOKEN` і `TELEGRAM_CHAT_ID` порожні,
+   тож сповіщення про анонімні заявки нікуди не йдуть. Самі заявки зберігаються в базі
+   і видимі в адмінці, але швидкого сигналу майстер не отримує.
+2. **Хроніка ремонту.** Клієнт бачить стадію, але не перелік подій («прийняли», «погодили ціну»).
+   Для цього потрібна окрема таблиця подій.
+3. **Пристрої й гарантія в кабінеті.** Блок прибрано разом з демо-даними — повернути,
+   коли з'явиться облік пристроїв.
+4. **Статус і трекінг.** `/api/orders/{no}` та трекінг ТТН на `/poshtoyu` — заглушки.
+5. **Контент від замовника** (розділ 6 специфікації): реальні фото по моделях і «до/після»,
+   логотип у SVG, справжні відгуки, юридичний блок (політика конфіденційності,
+   умови гарантії, ФОП-реквізити).
+6. **Фото.** У `public/assets/` — 4 знімки-плейсхолдери, які циклічно повторюються
+   по всіх 42 моделях. Стиснуті до 1800px (8.4 МБ → 568 КБ); оригінали лежать
+   у `design/assets/`. Реальні фото варто проганяти так само і, за потреби, перевести на WebP.
+
+## Папка `design/`
+
+Оригінальні макети, `support.js` (рантайм Claude Design) і специфікація. Референс —
+у збірку не потрапляє, з лінту виключена.
