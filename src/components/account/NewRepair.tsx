@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
+import { bookingModels } from "@/data/landing";
 import { site } from "@/data/site";
 import FormError from "../FormError";
 import styles from "./NewRepair.module.css";
@@ -9,6 +10,7 @@ import styles from "./NewRepair.module.css";
 export default function NewRepair() {
   const { user } = useUser();
   const [note, setNote] = useState("");
+  const [model, setModel] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [requested, setRequested] = useState(false);
@@ -29,6 +31,7 @@ export default function NewRepair() {
           name: user?.firstName ?? email,
           phone: phone || "—",
           email,
+          model,
           problem: note,
           source: "landing",
         }),
@@ -57,8 +60,25 @@ export default function NewRepair() {
           </div>
         ) : (
           <>
-            <label htmlFor="new-note" className="visually-hidden">
-              Що трапилось цього разу?
+            <label htmlFor="new-model" className={styles.label}>
+              Модель
+            </label>
+            <select
+              id="new-model"
+              className="field"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+            >
+              <option value="">Оберіть модель</option>
+              {bookingModels.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+
+            <label htmlFor="new-note" className={styles.label}>
+              Що трапилось
             </label>
             <textarea
               id="new-note"

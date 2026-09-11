@@ -1,7 +1,8 @@
 import { describeStatus, STAGES } from "@/db/leads";
-import type { Lead } from "@/db/schema";
+import type { Lead, LeadEvent } from "@/db/schema";
 import { site } from "@/data/site";
 import DeliveryRequest from "./DeliveryRequest";
+import Timeline from "./Timeline";
 import styles from "./ActiveOrder.module.css";
 
 const dateTime = new Intl.DateTimeFormat("uk-UA", {
@@ -11,7 +12,7 @@ const dateTime = new Intl.DateTimeFormat("uk-UA", {
   minute: "2-digit",
 });
 
-export default function ActiveOrder({ lead }: { lead: Lead }) {
+export default function ActiveOrder({ lead, events }: { lead: Lead; events: LeadEvent[] }) {
   const s = describeStatus(lead.status);
   const what = lead.model ?? lead.service ?? "Ремонт";
   const shortId = lead.id.slice(0, 8);
@@ -118,6 +119,8 @@ export default function ActiveOrder({ lead }: { lead: Lead }) {
           address={lead.deliveryAddress}
         />
       )}
+
+      <Timeline events={events} />
 
       <div className={styles.actions}>
         <a href={site.phones[0].href} className="btn btn-ghost">

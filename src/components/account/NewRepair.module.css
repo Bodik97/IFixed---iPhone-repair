@@ -43,3 +43,8 @@
   opacity: .7;
   cursor: default;
 }
+
+.label {
+  font-size: 13px;
+  color: var(--text-2);
+}

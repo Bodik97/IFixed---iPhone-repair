@@ -7,6 +7,8 @@ import NewRepair from "@/components/account/NewRepair";
 import SetPassword from "@/components/account/SetPassword";
 import SignOutButton from "@/components/account/SignOutButton";
 import { describeStatus, getClientLeads } from "@/db/leads";
+import { getDevices, getEvents } from "@/db/events";
+import Devices from "@/components/account/Devices";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -29,6 +31,11 @@ export default async function AccountPage() {
   const leads = user ? await getClientLeads(user.id, email) : [];
   const active = leads.find((l) => describeStatus(l.status).active);
   const done = leads.filter((l) => !describeStatus(l.status).active).length;
+
+  const [events, userDevices] = await Promise.all([
+    active ? getEvents(active.id) : Promise.resolve([]),
+    user ? getDevices(user.id) : Promise.resolve([]),
+  ]);
 
   const rows = leads.map((l) => {
     const s = describeStatus(l.status);
@@ -80,7 +87,7 @@ export default async function AccountPage() {
 
       {active && (
         <section className="container">
-          <ActiveOrder lead={active} />
+          <ActiveOrder lead={active} events={events} />
         </section>
       )}
 
@@ -127,6 +134,7 @@ export default async function AccountPage() {
 
       <section className={`container ${styles.bottom}`}>
         <div className={styles.bottomGrid}>
+          <Devices devices={userDevices} />
           <NewRepair />
         </div>
       </section>

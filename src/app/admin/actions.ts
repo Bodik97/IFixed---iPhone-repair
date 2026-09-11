@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { getDb } from "@/db";
 import { leads, reviews } from "@/db/schema";
 import { STATUS_OPTIONS } from "@/db/leads";
+import { addEvent, getLeadById, registerDevice } from "@/db/events";
 import { checkCredentials, createSession, destroySession, isAdmin } from "@/lib/admin";
 
 export async function signIn(_prev: string | null, formData: FormData): Promise<string | null> {
@@ -43,10 +44,32 @@ export async function setStatus(formData: FormData): Promise<void> {
   const allowed = STATUS_OPTIONS.map((o) => o.value);
   if (!allowed.includes(status as (typeof allowed)[number])) return;
 
-  await getDb()
-    .update(leads)
-    .set({ status: status as (typeof allowed)[number], updatedAt: new Date() })
-    .where(eq(leads.id, id));
+  const next = status as (typeof allowed)[number];
+
+  await getDb().update(leads).set({ status: next, updatedAt: new Date() }).where(eq(leads.id, id));
+
+  // Хроніка: клієнт бачить, що саме сталося, а не лише підсвічену стадію
+  await addEvent(id, { status: next });
+
+  // Ремонт завершено — пристрій потрапляє в список клієнта з гарантією
+  if (next === "done") {
+    const lead = await getLeadById(id);
+    if (lead) await registerDevice(lead);
+  }
+
+  revalidatePath("/admin");
+  revalidatePath("/kabinet");
+}
+
+/** Майстер дописує подію в хроніку своїми словами */
+export async function addNote(formData: FormData): Promise<void> {
+  if (!(await isAdmin())) redirect("/admin/vhid");
+
+  const id = String(formData.get("id") ?? "");
+  const text = String(formData.get("text") ?? "").trim();
+  if (!id || text.length < 3) return;
+
+  await addEvent(id, { text, byMaster: true });
 
   revalidatePath("/admin");
   revalidatePath("/kabinet");
@@ -68,6 +91,10 @@ export async function setTtn(formData: FormData): Promise<void> {
       updatedAt: new Date(),
     })
     .where(eq(leads.id, id));
+
+  if (ttn) {
+    await addEvent(id, { text: `Відправлено Новою Поштою, накладна ${ttn}`, status: "shipped" });
+  }
 
   revalidatePath("/admin");
   revalidatePath("/kabinet");

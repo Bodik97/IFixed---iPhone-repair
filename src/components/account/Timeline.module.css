@@ -1,0 +1,76 @@
+.wrap {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, .09);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+/* Крапка на лінії часу; остання — лаймова, з ореолом */
+.dot,
+.dotNow {
+  width: 9px;
+  height: 9px;
+  margin-top: 6px;
+  border-radius: 50%;
+  justify-self: center;
+}
+
+.dot {
+  background: rgba(255, 255, 255, .28);
+}
+
+.dotNow {
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(218, 255, 61, .16);
+}
+
+.body {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.text {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: rgba(241, 243, 239, .88);
+}
+
+.time {
+  font-size: 13px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.toggle {
+  margin-top: 14px;
+  background: none;
+  border: none;
+  padding: 0;
+  min-height: 44px;
+  color: var(--text-2);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.toggle:hover {
+  color: var(--accent);
+}

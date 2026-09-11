@@ -94,3 +94,53 @@ export const reviews = pgTable(
 );
 
 export type Review = typeof reviews.$inferSelect;
+
+/** Подія в хроніці ремонту — те, що клієнт бачить у кабінеті як стрічку подій */
+export const leadEvents = pgTable(
+  "lead_events",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    leadId: uuid("lead_id")
+      .notNull()
+      .references(() => leads.id, { onDelete: "cascade" }),
+
+    /** Текст для клієнта: «Погодили ціну», «Замінили модуль» */
+    text: text("text").notNull(),
+
+    /** Статус, у який перевели заявку разом із цією подією (якщо переводили) */
+    status: leadStatus("status"),
+
+    /** Подію створив майстер вручну, чи вона з'явилась автоматично при зміні статусу */
+    byMaster: boolean("by_master").notNull().default(false),
+
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("lead_events_lead_idx").on(t.leadId, t.createdAt)],
+);
+
+export type LeadEvent = typeof leadEvents.$inferSelect;
+
+/** Пристрій клієнта: зʼявляється, коли ремонт завершено, і несе дату кінця гарантії */
+export const devices = pgTable(
+  "devices",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    clerkUserId: text("clerk_user_id").notNull(),
+    /** Заявка, після якої пристрій потрапив у список */
+    leadId: uuid("lead_id").references(() => leads.id, { onDelete: "set null" }),
+
+    name: text("name").notNull(),
+    /** Що саме робили — показуємо поруч із гарантією */
+    work: text("work"),
+
+    /** Гарантія 30 днів від дати видачі */
+    warrantyUntil: timestamp("warranty_until", { withTimezone: true }).notNull(),
+
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("devices_user_idx").on(t.clerkUserId, t.createdAt)],
+);
+
+export type Device = typeof devices.$inferSelect;

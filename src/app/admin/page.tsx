@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { desc } from "drizzle-orm";
 import { getDb } from "@/db";
 import { leads } from "@/db/schema";
 import { describeStatus } from "@/db/leads";
 import { getAllReviews } from "@/db/reviews";
+import { leadEvents } from "@/db/schema";
+import { asc, desc, inArray } from "drizzle-orm";
 import { isAdmin } from "@/lib/admin";
 import { signOut } from "./actions";
+import NoteField from "./NoteField";
 import ReviewList from "./ReviewList";
 import StatusSelect from "./StatusSelect";
 import TtnField from "./TtnField";
@@ -43,6 +45,22 @@ export default async function AdminPage() {
   ]);
 
   const pendingReviews = allReviews.filter((r) => !r.published).length;
+
+  // Хроніка одним запитом на всі заявки, а не по одному на кожну
+  const events = rows.length
+    ? await getDb()
+        .select()
+        .from(leadEvents)
+        .where(inArray(leadEvents.leadId, rows.map((r) => r.id)))
+        .orderBy(asc(leadEvents.createdAt))
+    : [];
+
+  const eventsByLead = new Map<string, typeof events>();
+  for (const e of events) {
+    const list = eventsByLead.get(e.leadId) ?? [];
+    list.push(e);
+    eventsByLead.set(e.leadId, list);
+  }
 
   const fresh = rows.filter((r) => r.status === "new").length;
   // Готові пристрої, на які клієнт попросив доставку, але ТТН ще немає
@@ -150,6 +168,8 @@ export default async function AdminPage() {
                   )}
 
                   {r.city && !r.deliveryRequested && <div className={styles.city}>{r.city}</div>}
+
+                  <NoteField id={r.id} events={eventsByLead.get(r.id) ?? []} />
                 </div>
 
                 <div className={styles.cardSide}>
