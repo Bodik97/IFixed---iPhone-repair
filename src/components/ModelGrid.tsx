@@ -6,14 +6,21 @@ import { models, modelGroups, type ModelGroup } from "@/data/models";
 import { site } from "@/data/site";
 import styles from "./ModelGrid.module.css";
 
+/** Скільки карток показуємо за раз — решта підвантажується кнопкою */
+const PAGE = 12;
+
 export default function ModelGrid() {
   const [filter, setFilter] = useState<ModelGroup | "all">("all");
   const [q, setQ] = useState("");
+  const [limit, setLimit] = useState(PAGE);
 
   const query = q.trim().toLowerCase();
-  const shown = models.filter(
+  const matched = models.filter(
     (m) => (filter === "all" || m.group === filter) && (!query || m.name.toLowerCase().includes(query)),
   );
+
+  const shown = matched.slice(0, limit);
+  const rest = matched.length - shown.length;
 
   return (
     <section className={`container ${styles.section}`}>
@@ -25,7 +32,10 @@ export default function ModelGrid() {
               type="button"
               className="chip"
               aria-pressed={filter === g.id}
-              onClick={() => setFilter(g.id)}
+              onClick={() => {
+                setFilter(g.id);
+                setLimit(PAGE);
+              }}
             >
               {g.label}
             </button>
@@ -42,7 +52,10 @@ export default function ModelGrid() {
             className={styles.searchInput}
             placeholder="Пошук: 13 Pro, XR, SE…"
             value={q}
-            onChange={(e) => setQ(e.target.value)}
+            onChange={(e) => {
+              setQ(e.target.value);
+              setLimit(PAGE);
+            }}
           />
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(241,243,239,.5)" strokeWidth="1.5" strokeLinecap="round" className={styles.searchIcon} aria-hidden="true">
             <circle cx="11" cy="11" r="6.5" />
@@ -95,6 +108,17 @@ export default function ModelGrid() {
           </Link>
         ))}
       </div>
+
+      {rest > 0 && (
+        <div className={styles.more}>
+          <button type="button" className="btn btn-ghost btn-lg" onClick={() => setLimit((n) => n + PAGE)}>
+            Показати ще {Math.min(rest, PAGE)}
+          </button>
+          <span className={styles.counter}>
+            {shown.length} з {matched.length}
+          </span>
+        </div>
+      )}
 
       {shown.length === 0 && (
         <div className={styles.empty}>

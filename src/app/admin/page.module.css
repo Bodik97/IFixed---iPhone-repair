@@ -550,3 +550,19 @@
     flex: 1 1 100%;
   }
 }
+
+/* ---------- Сторінки заявок ---------- */
+.pager {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.pagerInfo {
+  font-size: 13.5px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}

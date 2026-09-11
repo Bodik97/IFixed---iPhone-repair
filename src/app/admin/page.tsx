@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getDb } from "@/db";
+import { and, eq, isNull } from "drizzle-orm";
 import { leads } from "@/db/schema";
 import { describeStatus } from "@/db/leads";
 import { getAllReviews } from "@/db/reviews";
 import { leadEvents } from "@/db/schema";
-import { asc, desc, inArray } from "drizzle-orm";
+import { asc, count, desc, inArray } from "drizzle-orm";
 import { isAdmin } from "@/lib/admin";
 import { signOut } from "./actions";
 import NoteField from "./NoteField";
@@ -36,13 +37,31 @@ const dateFormat = new Intl.DateTimeFormat("uk-UA", {
   minute: "2-digit",
 });
 
-export default async function AdminPage() {
+/** Заявок на сторінці — щоб база не віддавала все одразу, коли їх стануть сотні */
+const PER_PAGE = 20;
+
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
   if (!(await isAdmin())) redirect("/admin/vhid");
 
-  const [rows, allReviews] = await Promise.all([
-    getDb().select().from(leads).orderBy(desc(leads.createdAt)),
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, Number(pageParam) || 1);
+
+  const [[{ total }], rows, allReviews] = await Promise.all([
+    getDb().select({ total: count() }).from(leads),
+    getDb()
+      .select()
+      .from(leads)
+      .orderBy(desc(leads.createdAt))
+      .limit(PER_PAGE)
+      .offset((page - 1) * PER_PAGE),
     getAllReviews(),
   ]);
+
+  const pages = Math.max(1, Math.ceil(total / PER_PAGE));
 
   const pendingReviews = allReviews.filter((r) => !r.published).length;
 
@@ -62,9 +81,14 @@ export default async function AdminPage() {
     eventsByLead.set(e.leadId, list);
   }
 
-  const fresh = rows.filter((r) => r.status === "new").length;
-  // Готові пристрої, на які клієнт попросив доставку, але ТТН ще немає
-  const toShip = rows.filter((r) => r.deliveryRequested && !r.ttn && r.status !== "done").length;
+  // Рахуємо по всій базі, а не по сторінці — інакше цифри брехали б
+  const [[{ fresh }], [{ toShip }]] = await Promise.all([
+    getDb().select({ fresh: count() }).from(leads).where(eq(leads.status, "new")),
+    getDb()
+      .select({ toShip: count() })
+      .from(leads)
+      .where(and(eq(leads.deliveryRequested, true), isNull(leads.ttn))),
+  ]);
 
   return (
     <section className={`container ${styles.wrap}`}>
@@ -83,7 +107,7 @@ export default async function AdminPage() {
 
       <div className={styles.summary}>
         <div className={styles.stat}>
-          <span className={styles.statValue}>{rows.length}</span>
+          <span className={styles.statValue}>{total}</span>
           <span className={styles.statLabel}>усього</span>
         </div>
         <div className={fresh > 0 ? styles.statHot : styles.stat}>
@@ -180,6 +204,24 @@ export default async function AdminPage() {
             );
           })}
         </div>
+      )}
+
+      {pages > 1 && (
+        <nav className={styles.pager} aria-label="Сторінки заявок">
+          {page > 1 && (
+            <a href={`/admin?page=${page - 1}`} className="btn btn-ghost">
+              Новіші
+            </a>
+          )}
+          <span className={styles.pagerInfo}>
+            Сторінка {page} з {pages}
+          </span>
+          {page < pages && (
+            <a href={`/admin?page=${page + 1}`} className="btn btn-ghost">
+              Старіші
+            </a>
+          )}
+        </nav>
       )}
 
       <div className={styles.reviewsHead}>

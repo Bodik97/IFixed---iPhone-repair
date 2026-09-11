@@ -190,3 +190,19 @@
   color: var(--text-2);
   font-size: 15.5px;
 }
+
+/* ---------- Підвантаження решти карток ---------- */
+.more {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.counter {
+  font-size: 13.5px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
