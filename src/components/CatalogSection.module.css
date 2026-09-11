@@ -1,0 +1,162 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(46px, 6vw, 96px) var(--gutter) clamp(26px, 3vw, 44px);
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.heroPhoto {
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/bg-circuit.webp");
+  background-size: cover;
+  background-position: 50% 40%;
+  opacity: .32;
+  filter: grayscale(.7);
+}
+
+.heroVeil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11, 12, 14, .9), rgba(11, 12, 14, .98));
+}
+
+.heroGlow {
+  position: absolute;
+  width: 560px;
+  height: 560px;
+  left: -140px;
+  top: -200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(218, 255, 61, .18), transparent 65%);
+}
+
+.heroInner {
+  position: relative;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 14px 7px 11px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--field-border);
+  background: var(--field-bg);
+  font-size: 12.5px;
+  letter-spacing: .04em;
+  color: rgba(241, 243, 239, .82);
+}
+
+.h1 {
+  font-size: clamp(34px, 4.8vw, 62px);
+  line-height: 1.04;
+  margin-top: 22px;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.heroLead {
+  font-size: clamp(16px, 1.4vw, 18.5px);
+  max-width: 48ch;
+  margin-top: 20px;
+  color: var(--text-2);
+}
+
+/* ---------- CTA ---------- */
+.cta {
+  padding-bottom: clamp(50px, 7vw, 100px);
+}
+
+.ctaBox {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r-block);
+  border: 1px solid rgba(255, 255, 255, .1);
+  background: linear-gradient(150deg, rgba(218, 255, 61, .1), rgba(255, 255, 255, .02));
+  padding: clamp(28px, 4vw, 54px);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(24px, 3vw, 48px);
+  align-items: center;
+}
+
+.ctaTitle {
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 1.08;
+  margin-bottom: 14px;
+}
+
+.ctaLead {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-2);
+  max-width: 42ch;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Вкладки розділів ---------- */
+.tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.tab,
+.tabActive {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: var(--r-pill);
+  font-size: 14.5px;
+  text-decoration: none;
+  transition: background .2s, color .2s, border-color .2s, transform .2s;
+}
+
+.tab {
+  border: 1px solid var(--field-border);
+  background: rgba(255, 255, 255, .04);
+  color: rgba(241, 243, 239, .82);
+}
+
+.tab:hover {
+  color: var(--text);
+  border-color: var(--border-active);
+  transform: translateY(-2px);
+}
+
+.tabActive {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.tabActive:hover {
+  color: var(--on-accent);
+}
+
+.tabCount {
+  font-size: 12px;
+  opacity: .65;
+  font-variant-numeric: tabular-nums;
+}

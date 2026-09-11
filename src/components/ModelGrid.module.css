@@ -206,3 +206,8 @@
   color: var(--text-3);
   font-variant-numeric: tabular-nums;
 }
+
+.total {
+  font-size: 14.5px;
+  color: var(--text-3);
+}

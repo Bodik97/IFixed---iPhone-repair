@@ -3,12 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookingForm from "@/components/BookingForm";
 import ModelJobs from "@/components/ModelJobs";
-import { getModel, models } from "@/data/models";
+import { allModels, getModel, relatedTo, sectionOf } from "@/data/catalog";
 import { site } from "@/data/site";
 import styles from "./page.module.css";
 
 export function generateStaticParams() {
-  return models.map((m) => ({ slug: m.slug }));
+  return allModels.map((m) => ({ slug: m.slug }));
 }
 
 export async function generateMetadata({
@@ -50,8 +50,8 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
   const model = getModel(slug);
   if (!model) notFound();
 
-  const idx = models.indexOf(model);
-  const related = [models[(idx + 1) % models.length], models[(idx + 2) % models.length]];
+  const section = sectionOf(model.slug);
+  const related = relatedTo(model.slug);
 
   const schema = {
     "@context": "https://schema.org",
@@ -77,7 +77,7 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
           <nav className={styles.crumbs} aria-label="Хлібні крихти">
             <Link href="/">Головна</Link>
             <span className={styles.sep}>/</span>
-            <Link href="/modeli">Моделі</Link>
+            <Link href={section.href}>{section.tab}</Link>
             <span className={styles.sep}>/</span>
             <span className={styles.current}>{model.name}</span>
           </nav>
@@ -107,7 +107,7 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
             </div>
 
             <div className={`${styles.heroShot} anim-float`}>
-              {model.image.startsWith("/models/") ? (
+              {model.image ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={model.image} alt={model.name} className={styles.shotPhoto} />
               ) : (
@@ -152,8 +152,8 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
                   </svg>
                 </Link>
               ))}
-              <Link href="/modeli" className={styles.relatedLink}>
-                <span>Усі моделі в каталозі</span>
+              <Link href={section.href} className={styles.relatedLink}>
+                <span>Усі моделі: {section.tab}</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
                   <path d="M5 12h13" />
                   <path d="M13 6l6 6-6 6" />

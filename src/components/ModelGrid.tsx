@@ -2,21 +2,32 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { models, modelGroups, type ModelGroup } from "@/data/models";
+import { modelGroups, type Model, type ModelGroup } from "@/data/models";
 import { site } from "@/data/site";
 import styles from "./ModelGrid.module.css";
 
 /** Скільки карток показуємо за раз — решта підвантажується кнопкою */
 const PAGE = 12;
 
-export default function ModelGrid() {
+export default function ModelGrid({
+  models,
+  /** Фільтри за поколінням мають сенс лише для iPhone */
+  withGroups = false,
+  searchPlaceholder = "Пошук моделі",
+}: {
+  models: Model[];
+  withGroups?: boolean;
+  searchPlaceholder?: string;
+}) {
   const [filter, setFilter] = useState<ModelGroup | "all">("all");
   const [q, setQ] = useState("");
   const [limit, setLimit] = useState(PAGE);
 
   const query = q.trim().toLowerCase();
   const matched = models.filter(
-    (m) => (filter === "all" || m.group === filter) && (!query || m.name.toLowerCase().includes(query)),
+    (m) =>
+      (!withGroups || filter === "all" || m.group === filter) &&
+      (!query || m.name.toLowerCase().includes(query)),
   );
 
   const shown = matched.slice(0, limit);
@@ -25,7 +36,8 @@ export default function ModelGrid() {
   return (
     <section className={`container ${styles.section}`}>
       <div className={styles.controls}>
-        <div className={styles.filters} role="group" aria-label="Фільтр моделей">
+        {withGroups ? (
+          <div className={styles.filters} role="group" aria-label="Фільтр моделей">
           {modelGroups.map((g) => (
             <button
               key={g.id}
@@ -39,8 +51,11 @@ export default function ModelGrid() {
             >
               {g.label}
             </button>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <span className={styles.total}>{models.length} моделей</span>
+        )}
 
         <div className={styles.search}>
           <label htmlFor="model-q" className="visually-hidden">
@@ -50,7 +65,7 @@ export default function ModelGrid() {
             id="model-q"
             type="search"
             className={styles.searchInput}
-            placeholder="Пошук: 13 Pro, XR, SE…"
+            placeholder={searchPlaceholder}
             value={q}
             onChange={(e) => {
               setQ(e.target.value);
@@ -68,7 +83,7 @@ export default function ModelGrid() {
         {shown.map((m) => (
           <Link key={m.slug} href={`/modeli/${m.slug}`} className={styles.card}>
             <span className={styles.media}>
-              {m.image.startsWith("/models/") ? (
+              {m.image ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={m.image} alt="" className={styles.photo} loading="lazy" />
               ) : (

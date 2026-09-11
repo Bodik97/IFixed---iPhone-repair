@@ -1,6 +1,10 @@
-// Згенеровано з design/iFix-Catalog-iPhone.dc.html — scripts/extract-models.mjs
+// iPhone — перенесено з design/iFix-Catalog-iPhone.dc.html (scripts/extract-models.mjs).
+// Планшети й годинники живуть у devices.ts.
 
 export type ModelGroup = "new" | "popular" | "old" | "other";
+
+/** Розділ каталогу: у кожного своя сторінка */
+export type DeviceKind = "iphone" | "ipad" | "watch";
 
 export type Model = {
   slug: string;
@@ -13,7 +17,7 @@ export type Model = {
   image: string;
 };
 
-export const models: Model[] = [
+export const iphones: Model[] = [
   {
     "slug": "iphone-16-pro-max",
     "name": "iPhone 16 Pro Max",
@@ -491,99 +495,6 @@ export const models: Model[] = [
     "time": "від 30 хв",
     "inStock": true,
     "image": "/models/iphone-6-6-plus.webp"
-  },
-  {
-    "slug": "ipad-pro-11-12-9",
-    "name": "iPad Pro 11″ / 12.9″",
-    "year": "усі покоління",
-    "group": "other",
-    "jobs": [
-      "Скло",
-      "АКБ",
-      "Роз'єм"
-    ],
-    "time": "1–2 дні",
-    "inStock": false,
-    "image": "/models/ipad-pro-11-12-9.webp"
-  },
-  {
-    "slug": "ipad-air-3-5",
-    "name": "iPad Air 3–5",
-    "year": "2019–2024",
-    "group": "other",
-    "jobs": [
-      "Скло",
-      "АКБ"
-    ],
-    "time": "1–2 дні",
-    "inStock": false,
-    "image": "/models/ipad-air-3-5.webp"
-  },
-  {
-    "slug": "ipad-7-10",
-    "name": "iPad 7–10",
-    "year": "2019–2024",
-    "group": "other",
-    "jobs": [
-      "Скло",
-      "АКБ",
-      "Роз'єм"
-    ],
-    "time": "1–2 дні",
-    "inStock": true,
-    "image": "/models/ipad-7-10.webp"
-  },
-  {
-    "slug": "ipad-mini-5-6",
-    "name": "iPad mini 5 / 6",
-    "year": "2019–2021",
-    "group": "other",
-    "jobs": [
-      "Скло",
-      "АКБ"
-    ],
-    "time": "1–2 дні",
-    "inStock": false,
-    "image": "/models/ipad-mini-5-6.webp"
-  },
-  {
-    "slug": "apple-watch-s4-s9",
-    "name": "Apple Watch S4–S9",
-    "year": "2018–2024",
-    "group": "other",
-    "jobs": [
-      "Скло",
-      "АКБ"
-    ],
-    "time": "1–2 дні",
-    "inStock": false,
-    "image": "/models/apple-watch-s4-s9.webp"
-  },
-  {
-    "slug": "apple-watch-ultra",
-    "name": "Apple Watch Ultra",
-    "year": "2022–2024",
-    "group": "other",
-    "jobs": [
-      "Скло",
-      "АКБ"
-    ],
-    "time": "1–2 дні",
-    "inStock": false,
-    "image": "/models/apple-watch-ultra.webp"
-  },
-  {
-    "slug": "airpods-airpods-pro",
-    "name": "AirPods / AirPods Pro",
-    "year": "усі покоління",
-    "group": "other",
-    "jobs": [
-      "Діагностика",
-      "Чистка"
-    ],
-    "time": "того ж дня",
-    "inStock": true,
-    "image": "/assets/bg-phone-b.webp"
   }
 ];
 
@@ -592,7 +503,4 @@ export const modelGroups: { id: ModelGroup | "all"; label: string }[] = [
   { id: "new", label: "Нові" },
   { id: "popular", label: "Популярні" },
   { id: "old", label: "Старші" },
-  { id: "other", label: "iPad · Watch" },
 ];
-
-export const getModel = (slug: string) => models.find((m) => m.slug === slug);

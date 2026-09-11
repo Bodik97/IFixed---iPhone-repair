@@ -5,8 +5,10 @@ import styles from "./Footer.module.css";
 
 const serviceLinks = [
   { href: "/poslugy", label: "Послуги" },
-  { href: "/modeli", label: "Моделі" },
-  { href: "/#faq", label: "Питання" },
+  { href: "/modeli", label: "iPhone" },
+  { href: "/planshety", label: "iPad" },
+  { href: "/godynnyky", label: "Apple Watch" },
+  { href: "/poshtoyu", label: "Ремонт поштою" },
   { href: "/#book", label: "Запис" },
 ];
 
