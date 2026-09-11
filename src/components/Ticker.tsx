@@ -14,7 +14,7 @@ export default function Ticker({ items }: { items: string[] }) {
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.track}>
+      <div className={`${styles.track} ticker-track`}>
         {row}
         <span aria-hidden="true" className={styles.clone}>
           {row}

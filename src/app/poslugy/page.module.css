@@ -35,7 +35,6 @@
   top: -230px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(218, 255, 61, .2), transparent 65%);
-  animation: nDrift 22s ease-in-out infinite;
 }
 
 .heroInner {
@@ -95,7 +94,6 @@
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, .1);
   aspect-ratio: 4 / 3;
-  animation: nFloat 8s ease-in-out infinite;
 }
 
 .shotPhoto {
@@ -148,7 +146,6 @@
 }
 
 .flowItem {
-  animation: nUp .8s var(--ease) both;
 }
 
 .flowNo {
@@ -169,7 +166,6 @@
   height: 100%;
   background: var(--accent);
   transform-origin: left;
-  animation: nGrow 1.4s var(--ease) .2s both;
 }
 
 .flowTitle {

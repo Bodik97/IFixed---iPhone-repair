@@ -9,7 +9,6 @@
 .track {
   display: flex;
   width: max-content;
-  animation: nTicker 32s linear infinite;
 }
 
 .clone {

@@ -18,7 +18,6 @@
   top: -220px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(218, 255, 61, .18), transparent 65%);
-  animation: nDrift 24s ease-in-out infinite;
 }
 
 .heroInner {
@@ -112,7 +111,6 @@
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, .1);
   aspect-ratio: 4 / 3;
-  animation: nFloat 8s ease-in-out infinite;
 }
 
 .shotPhoto {
@@ -165,7 +163,6 @@
   background: rgba(255, 255, 255, .12);
   margin: 14px 0 18px;
   transform-origin: left;
-  animation: nGrow .8s var(--ease) both;
 }
 
 .wTitle {

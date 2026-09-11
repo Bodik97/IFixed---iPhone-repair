@@ -21,7 +21,6 @@
   top: -240px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(218, 255, 61, .16), transparent 65%);
-  animation: nDrift 24s ease-in-out infinite;
 }
 
 .inner {
@@ -81,7 +80,6 @@
   background: rgba(255, 255, 255, .04);
   padding: clamp(24px, 3.2vw, 38px);
   align-self: start;
-  animation: nUp .7s var(--ease) both;
 }
 
 .form {

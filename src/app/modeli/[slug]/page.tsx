@@ -70,7 +70,7 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
     <>
       <section className={styles.hero}>
         <span aria-hidden="true" className={styles.heroBg}>
-          <span className={styles.heroGlow} />
+          <span className={`${styles.heroGlow} anim-drift`} />
         </span>
 
         <div className={styles.heroInner}>
@@ -106,7 +106,7 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
               </div>
             </div>
 
-            <div className={styles.heroShot}>
+            <div className={`${styles.heroShot} anim-float`}>
               <span className={styles.shotPhoto} style={{ backgroundImage: `url("${model.image}")` }} />
               <span className={styles.shotVeil} />
               <span className={styles.shotCaption}>{model.name}</span>
@@ -122,7 +122,7 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
           {warranty.map((w) => (
             <div key={w.no}>
               <div className={styles.wNo}>{w.no}</div>
-              <span className={styles.wLine} />
+              <span className={`${styles.wLine} anim-grow`} />
               <h3 className={styles.wTitle}>{w.title}</h3>
               <p className={styles.wBody}>{w.body}</p>
             </div>

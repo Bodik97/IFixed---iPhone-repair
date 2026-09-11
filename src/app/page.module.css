@@ -35,7 +35,6 @@
   top: -180px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(218, 255, 61, .2), transparent 65%);
-  animation: nDrift 22s ease-in-out infinite;
 }
 
 .heroInner {
@@ -148,7 +147,6 @@
   background-size: cover;
   background-position: 55% 50%;
   filter: saturate(.9);
-  animation: nFloat 8s ease-in-out infinite;
 }
 
 /* ---------- Спільне для секцій ---------- */
@@ -308,7 +306,6 @@
   background: rgba(255, 255, 255, .12);
   margin: 16px 0 20px;
   transform-origin: left;
-  animation: nGrow .8s var(--ease) both;
 }
 
 .stepTitle {

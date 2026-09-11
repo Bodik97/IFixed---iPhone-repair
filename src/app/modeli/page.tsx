@@ -27,7 +27,7 @@ export default function CatalogPage() {
         <span aria-hidden="true" className={styles.heroBg}>
           <span className={styles.heroPhoto} />
           <span className={styles.heroVeil} />
-          <span className={styles.heroGlow} />
+          <span className={`${styles.heroGlow} anim-drift`} />
         </span>
 
         <div className={styles.heroInner}>

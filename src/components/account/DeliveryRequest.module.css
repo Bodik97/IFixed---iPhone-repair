@@ -25,7 +25,6 @@
   background: rgba(218, 255, 61, .06);
   display: grid;
   gap: 10px;
-  animation: nUp .4s var(--ease) both;
 }
 
 .label {

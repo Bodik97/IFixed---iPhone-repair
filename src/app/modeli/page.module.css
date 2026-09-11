@@ -34,7 +34,6 @@
   top: -200px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(218, 255, 61, .18), transparent 65%);
-  animation: nDrift 24s ease-in-out infinite;
 }
 
 .heroInner {

@@ -39,7 +39,7 @@ export default function ServicesPage() {
         <span aria-hidden="true" className={styles.heroBg}>
           <span className={styles.heroPhoto} />
           <span className={styles.heroVeil} />
-          <span className={styles.heroGlow} />
+          <span className={`${styles.heroGlow} anim-drift`} />
         </span>
 
         <div className={styles.heroInner}>
@@ -68,7 +68,7 @@ export default function ServicesPage() {
             </div>
           </div>
 
-          <div className={`${styles.heroShot} nUp nUp-2`}>
+          <div className={`${styles.heroShot} nUp nUp-2 anim-float`}>
             <span className={styles.shotPhoto} />
             <span className={styles.shotVeil} />
             <span className={styles.shotCaption}>Пайка й мікроелектроніка — наш профіль</span>
@@ -91,7 +91,7 @@ export default function ServicesPage() {
               <div key={f.no} className={styles.flowItem}>
                 <div className={styles.flowNo}>{f.no}</div>
                 <div className={styles.bar}>
-                  <div className={styles.barFill} />
+                  <div className={`${styles.barFill} anim-grow`} />
                 </div>
                 <h3 className={styles.flowTitle}>{f.title}</h3>
                 <p className={styles.flowBody}>{f.body}</p>

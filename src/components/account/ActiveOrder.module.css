@@ -3,7 +3,6 @@
   border: 1px solid rgba(255, 255, 255, .1);
   background: linear-gradient(150deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .02));
   padding: clamp(24px, 3.2vw, 40px);
-  animation: nUp .8s var(--ease) .12s both;
   transition: border-color .3s;
 }
 
@@ -37,7 +36,6 @@
   border-radius: 20px;
   background: rgba(218, 255, 61, .14);
   border: 1px solid rgba(218, 255, 61, .34);
-  animation: nUp .5s var(--ease) both;
 }
 
 .bannerIcon {
@@ -168,7 +166,6 @@
   background: var(--accent);
   border-radius: var(--r-pill);
   transform-origin: left;
-  animation: nGrow 1.4s var(--ease) .2s both;
 }
 
 .stages {

@@ -32,7 +32,7 @@ export default function MailInPage() {
         <span aria-hidden="true" className={styles.heroBg}>
           <span className={styles.heroPhoto} />
           <span className={styles.heroVeil} />
-          <span className={styles.heroGlow} />
+          <span className={`${styles.heroGlow} anim-drift`} />
         </span>
 
         <div className={styles.heroInner}>
@@ -78,7 +78,7 @@ export default function MailInPage() {
             </div>
 
             <div aria-hidden="true" className={styles.tracker}>
-              <span className={styles.parcel}>
+              <span className={`${styles.parcel} anim-roll`}>
                 <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 7l9-4 9 4v10l-9 4-9-4z" />
                   <path d="M3 7l9 4 9-4" />
@@ -88,7 +88,7 @@ export default function MailInPage() {
               <div className={styles.trackerBody}>
                 <div className={styles.trackerLabel}>Ваша посилка в дорозі</div>
                 <div className={styles.trackerBar}>
-                  <div className={styles.trackerFill} />
+                  <div className={`${styles.trackerFill} anim-grow`} />
                 </div>
               </div>
             </div>

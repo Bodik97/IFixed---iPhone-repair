@@ -87,7 +87,7 @@ export default function ActiveOrder({ lead }: { lead: Lead }) {
       {s.stage >= 0 ? (
         <>
           <div className={styles.bar}>
-            <div className={styles.barFill} style={{ width: `${s.percent}%` }} />
+            <div className={`${styles.barFill} anim-grow`} style={{ width: `${s.percent}%` }} />
           </div>
 
           <ol className={styles.stages}>

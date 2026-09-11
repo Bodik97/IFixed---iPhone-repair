@@ -400,6 +400,32 @@ summary::-webkit-details-marker {
   pointer-events: none;
 }
 
+/* ---------- Утиліти анімацій ----------
+   CSS Modules локалізує імена keyframes, тому анімації підключаємо
+   глобальними класами, а не через animation: у .module.css       */
+
+.anim-drift {
+  animation: nDrift var(--anim-dur, 22s) ease-in-out infinite;
+}
+
+.anim-float {
+  animation: nFloat var(--anim-dur, 8s) ease-in-out infinite;
+}
+
+.anim-grow {
+  transform-origin: left;
+  animation: nGrow var(--anim-dur, 1.4s) var(--ease) var(--anim-delay, .2s) both;
+}
+
+.anim-roll {
+  animation: nRoll var(--anim-dur, 6s) ease-in-out infinite;
+}
+
+@keyframes nRoll {
+  0%, 100% { transform: translateX(-12%); }
+  50% { transform: translateX(12%); }
+}
+
 /* Бігуча стрічка */
 .ticker {
   overflow: hidden;
@@ -409,10 +435,7 @@ summary::-webkit-details-marker {
 }
 
 .ticker-track {
-  display: flex;
-  width: max-content;
-  gap: 40px;
-  animation: nTicker 34s linear infinite;
+  animation: nTicker 32s linear infinite;
 }
 
 .visually-hidden {

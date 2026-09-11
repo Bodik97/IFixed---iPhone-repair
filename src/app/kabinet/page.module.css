@@ -18,7 +18,6 @@
   top: -240px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(218, 255, 61, .16), transparent 65%);
-  animation: nDrift 24s ease-in-out infinite;
 }
 
 .heroInner {
@@ -59,7 +58,6 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  animation: nUp .75s var(--ease) both;
 }
 
 .tileLabel {

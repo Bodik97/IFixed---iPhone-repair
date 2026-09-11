@@ -49,7 +49,7 @@ export default async function AccountPage() {
     <>
       <section className={styles.hero}>
         <span aria-hidden="true" className={styles.heroBg}>
-          <span className={styles.heroGlow} />
+          <span className={`${styles.heroGlow} anim-drift`} />
         </span>
 
         <div className={styles.heroInner}>

@@ -45,7 +45,7 @@ export default async function SignInPage() {
   return (
     <section className={styles.wrap}>
       <span aria-hidden="true" className={styles.bg}>
-        <span className={styles.glow} />
+        <span className={`${styles.glow} anim-drift`} />
       </span>
 
       <div className={styles.inner}>

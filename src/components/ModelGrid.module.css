@@ -73,7 +73,6 @@
   background: var(--surface);
   display: flex;
   flex-direction: column;
-  animation: nUp .7s var(--ease) both;
   transition: transform .25s, border-color .25s, background .25s;
 }
 

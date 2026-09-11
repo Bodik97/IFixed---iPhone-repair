@@ -74,7 +74,6 @@
   grid-template-columns: minmax(0, 1.4fr) minmax(0, 2fr) auto;
   gap: 18px;
   align-items: center;
-  animation: nUp .7s var(--ease) both;
   transition: border-color .25s, background .25s, transform .25s;
 }
 

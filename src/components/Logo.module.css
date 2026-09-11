@@ -1,6 +1,7 @@
 .logo {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
   gap: 11px;
   font-family: var(--font-unbounded), sans-serif;
   font-weight: 600;

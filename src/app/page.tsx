@@ -56,7 +56,7 @@ export default async function Home() {
         <span aria-hidden="true" className={styles.heroBg}>
           <span className={styles.heroPhoto} />
           <span className={styles.heroVeil} />
-          <span className={styles.heroGlow} />
+          <span className={`${styles.heroGlow} anim-drift`} />
         </span>
 
         <div className={styles.heroInner}>
@@ -100,7 +100,7 @@ export default async function Home() {
                 </div>
               ))}
             </div>
-            <div className={styles.heroShot} />
+            <div className={`${styles.heroShot} anim-float`} />
           </div>
         </div>
       </section>
@@ -158,7 +158,7 @@ export default async function Home() {
           {howItWorks.map((s) => (
             <div key={s.no}>
               <div className={styles.stepNo}>{s.no}</div>
-              <span className={styles.stepLine} />
+              <span className={`${styles.stepLine} anim-grow`} />
               <h3 className={styles.stepTitle}>{s.title}</h3>
               <p className={styles.stepBody}>{s.body}</p>
             </div>

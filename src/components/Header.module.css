@@ -10,12 +10,24 @@
 .nav {
   max-width: var(--container);
   margin: 0 auto;
-  padding: 16px var(--gutter);
+  padding: 14px var(--gutter);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
   flex-wrap: wrap;
+}
+
+.navPlain {
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.adminMark {
+  font-size: 12.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-3);
 }
 
 .links {
@@ -47,8 +59,8 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
+  gap: 12px;
+  flex-wrap: nowrap;
 }
 
 .phone {
@@ -63,25 +75,81 @@
   color: var(--accent);
 }
 
-.actions :global(.btn) {
+/* Кнопка-дзвінок показується лише на вузьких екранах */
+.callButton {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 255, 255, .2);
+  color: var(--text);
+  transition: background .2s, border-color .2s;
+}
+
+.callButton:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+  border-color: var(--border-active);
+}
+
+.cta {
   min-height: 44px;
   padding: 11px 20px;
   font-size: 14.5px;
+  white-space: nowrap;
 }
 
-@media (max-width: 720px) {
+/* ---------- Мобільна шапка ---------- */
+@media (max-width: 860px) {
   .nav {
-    gap: 14px;
-  }
-
-  .links {
-    order: 3;
-    width: 100%;
-    gap: 18px;
-    justify-content: space-between;
+    gap: 10px;
+    padding: 10px var(--gutter);
   }
 
   .phone {
     display: none;
+  }
+
+  .callButton {
+    display: inline-flex;
+  }
+
+  /* Меню окремим рядом, посилання — повноцінні тач-зони */
+  .links {
+    order: 3;
+    width: 100%;
+    gap: 4px;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, .07);
+    padding-top: 2px;
+    margin-top: 2px;
+  }
+
+  .link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 6px;
+    font-size: 14px;
+  }
+
+  /* Активний пункт підкреслено — видно, де ти, без кольору дрібним шрифтом */
+  .active {
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+}
+
+@media (max-width: 400px) {
+  .cta {
+    padding: 11px 16px;
+    font-size: 14px;
+  }
+
+  .link {
+    padding: 0 2px;
+    font-size: 13.5px;
   }
 }
