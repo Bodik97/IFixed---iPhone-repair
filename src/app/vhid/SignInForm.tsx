@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSignIn, useSignUp } from "@clerk/nextjs";
+import FormError from "@/components/FormError";
 import styles from "./page.module.css";
 
 /** credentials — пошта+пароль; code — підтвердження пошти при реєстрації; codeLogin — вхід без пароля */
@@ -214,11 +215,7 @@ export default function SignInForm() {
             <span className={styles.hint}>Лист іде до хвилини. Гляньте теку «Спам», якщо не видно.</span>
           </div>
 
-          {error && (
-            <div className={styles.error} role="alert">
-              {error}
-            </div>
-          )}
+          <FormError>{error}</FormError>
 
           <button type="submit" className="btn btn-accent btn-lg" disabled={busy}>
             {busy ? "Перевіряємо…" : isNew ? "Завершити реєстрацію" : "Увійти"}
@@ -285,11 +282,7 @@ export default function SignInForm() {
           />
         </div>
 
-        {error && (
-          <div className={styles.error} role="alert">
-            {error}
-          </div>
-        )}
+        <FormError>{error}</FormError>
 
         {/* Сюди Clerk монтує Smart CAPTCHA — без цього елемента він падає на invisible-варіант */}
         <div id="clerk-captcha" />

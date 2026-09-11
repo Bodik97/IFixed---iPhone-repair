@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { signIn } from "../actions";
+import FormError from "@/components/FormError";
 import styles from "./page.module.css";
 
 export default function SignInForm() {
@@ -26,11 +27,7 @@ export default function SignInForm() {
         />
       </div>
 
-      {error && (
-        <div className={styles.error} role="alert">
-          {error}
-        </div>
-      )}
+      <FormError>{error}</FormError>
 
       <button type="submit" className="btn btn-accent btn-lg" disabled={pending}>
         {pending ? "Перевіряємо…" : "Увійти"}

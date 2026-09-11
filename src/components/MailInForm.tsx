@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { bookingModels } from "@/data/landing";
 import { site } from "@/data/site";
+import FormError from "./FormError";
 import styles from "./BookingForm.module.css";
 
 export default function MailInForm() {
@@ -142,11 +143,7 @@ export default function MailInForm() {
           />
         </div>
 
-        {error && (
-          <div className={styles.error} role="alert">
-            {error}
-          </div>
-        )}
+        <FormError>{error}</FormError>
 
         <button type="submit" className="btn btn-accent btn-lg" disabled={sending}>
           {sending ? "Надсилаємо…" : "Оформити відправку"}

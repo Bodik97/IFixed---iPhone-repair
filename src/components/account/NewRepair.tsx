@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { site } from "@/data/site";
+import FormError from "../FormError";
 import styles from "./NewRepair.module.css";
 
 export default function NewRepair() {
@@ -66,11 +67,7 @@ export default function NewRepair() {
               value={note}
               onChange={(e) => setNote(e.target.value)}
             />
-            {error && (
-              <div className={styles.error} role="alert">
-                {error}
-              </div>
-            )}
+            <FormError>{error}</FormError>
           </>
         )}
       </div>

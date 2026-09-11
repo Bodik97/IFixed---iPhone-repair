@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { site } from "@/data/site";
+import FormError from "./FormError";
 import styles from "./BookingForm.module.css";
 
 export type LeadSource = "landing" | "model" | "services" | "mail-in";
@@ -154,11 +155,7 @@ export default function BookingForm({
           />
         </div>
 
-        {error && (
-          <div className={styles.error} role="alert">
-            {error}
-          </div>
-        )}
+        <FormError>{error}</FormError>
 
         <button type="submit" className="btn btn-accent btn-lg" disabled={sending}>
           {sending ? "Надсилаємо…" : submitLabel}

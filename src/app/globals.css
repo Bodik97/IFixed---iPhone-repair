@@ -17,6 +17,11 @@
   --info-border: rgba(218, 255, 61, .3);
   --info-text: #EFFFC4;
 
+  /* Помилка — єдиний неакцентний колір у палітрі: має читатись як «щось не так» */
+  --danger: #FF6B6B;
+  --danger-bg: rgba(255, 107, 107, .1);
+  --danger-border: rgba(255, 107, 107, .38);
+
   /* Радіуси */
   --r-pill: 999px;
   --r-card: 26px;
@@ -417,4 +422,30 @@ summary::-webkit-details-marker {
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+/* Повідомлення про помилку у формах */
+.form-error {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: var(--r-field);
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger);
+  font-size: 13.5px;
+  line-height: 1.5;
+  animation: nUp .3s var(--ease) both;
+}
+
+.form-error svg {
+  flex: none;
+  margin-top: 1px;
+}
+
+/* Поле, у якому помилка */
+.field-invalid {
+  border-color: var(--danger-border);
+  background: var(--danger-bg);
 }

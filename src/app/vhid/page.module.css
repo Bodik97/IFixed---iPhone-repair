@@ -104,10 +104,6 @@
   color: var(--text-3);
 }
 
-.error {
-  font-size: 13.5px;
-  color: #EDFFA6;
-}
 
 /* Поле коду — великі цифри з розрядкою */
 .codeField {

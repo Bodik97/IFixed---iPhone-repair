@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { submitReview, type ReviewResult } from "@/app/actions/reviews";
+import FormError from "./FormError";
 import styles from "./ReviewForm.module.css";
 
 export default function ReviewForm({
@@ -97,11 +98,7 @@ export default function ReviewForm({
               />
             </div>
 
-            {state && !state.ok && (
-              <div className={styles.error} role="alert">
-                {state.error}
-              </div>
-            )}
+            {state && !state.ok && <FormError>{state.error}</FormError>}
 
             <button type="submit" className="btn btn-accent btn-lg" disabled={pending}>
               {pending ? "Надсилаємо…" : "Лишити відгук"}

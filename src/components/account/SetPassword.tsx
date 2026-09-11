@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
+import FormError from "../FormError";
 import styles from "./SetPassword.module.css";
 
 const MIN_PASSWORD = 8;
@@ -101,11 +102,7 @@ export default function SetPassword() {
         />
       </div>
 
-      {error && (
-        <div className={styles.error} role="alert">
-          {error}
-        </div>
-      )}
+      <FormError>{error}</FormError>
 
       <div className={styles.actions}>
         <button type="submit" className="btn btn-accent" disabled={busy}>
