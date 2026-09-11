@@ -17,14 +17,17 @@
   background-image: url("/assets/bg-tech.webp");
   background-size: cover;
   background-position: 62% 58%;
-  opacity: .5;
-  filter: grayscale(.7) contrast(1.05);
+  opacity: .82;
+  filter: grayscale(.25) contrast(1.06) brightness(.92);
 }
 
+/* Затемнення під текстом, а не по всьому кадру — фон лишається видимим */
 .heroVeil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(11, 12, 14, .86) 0%, rgba(11, 12, 14, .72) 40%, rgba(11, 12, 14, .95) 100%);
+  background:
+    linear-gradient(100deg, rgba(11, 12, 14, .94) 0%, rgba(11, 12, 14, .82) 38%, rgba(11, 12, 14, .3) 68%, rgba(11, 12, 14, .5) 100%),
+    linear-gradient(180deg, rgba(11, 12, 14, .5) 0%, transparent 22%, transparent 72%, rgba(11, 12, 14, .92) 100%);
 }
 
 .heroGlow {
@@ -58,7 +61,8 @@
   padding: 7px 14px 7px 11px;
   border-radius: var(--r-pill);
   border: 1px solid var(--field-border);
-  background: var(--field-bg);
+  background: rgba(11, 12, 14, .7);
+  backdrop-filter: blur(8px);
   font-size: 12.5px;
   letter-spacing: .04em;
   color: rgba(241, 243, 239, .82);
@@ -97,8 +101,10 @@
 
 .statsCard {
   border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, .1);
-  background: linear-gradient(160deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .02));
+  border: 1px solid rgba(255, 255, 255, .14);
+  /* Щільна підкладка: картка лежить поверх фото, текст має читатись */
+  background: linear-gradient(160deg, rgba(17, 19, 22, .92), rgba(11, 12, 14, .88));
+  backdrop-filter: blur(12px);
   padding: 26px;
   display: grid;
   gap: 18px;
@@ -141,12 +147,11 @@
 
 .heroShot {
   border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255, 255, 255, .12);
   aspect-ratio: 16 / 9;
-  background-image: url("/assets/bg-phone-a.webp");
+  background-image: url("/assets/hero-exploded.webp");
   background-size: cover;
-  background-position: 55% 50%;
-  filter: saturate(.9);
+  background-position: 50% 50%;
 }
 
 /* ---------- Спільне для секцій ---------- */
@@ -231,7 +236,7 @@
 .serviceNo {
   font-family: var(--font-unbounded), sans-serif;
   font-size: 13px;
-  color: rgba(241, 243, 239, .4);
+  color: var(--text-3);
 }
 
 .serviceCard h3 {
@@ -295,14 +300,14 @@
   background-image: url("/assets/bg-circuit.webp");
   background-size: cover;
   background-position: 40% 50%;
-  opacity: .38;
-  filter: grayscale(.6);
+  opacity: .7;
+  filter: grayscale(.3) brightness(.95);
 }
 
 .repVeil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(96deg, rgba(11, 12, 14, .95) 0%, rgba(11, 12, 14, .8) 55%, rgba(11, 12, 14, .55) 100%);
+  background: linear-gradient(96deg, rgba(11, 12, 14, .93) 0%, rgba(11, 12, 14, .84) 46%, rgba(11, 12, 14, .38) 100%);
 }
 
 .repInner {
@@ -403,7 +408,7 @@
   font-family: var(--font-unbounded), sans-serif;
   font-size: 13.5px;
   letter-spacing: -.01em;
-  color: rgba(241, 243, 239, .55);
+  color: var(--text-2);
 }
 
 .groupItems {
@@ -508,7 +513,7 @@
 .reviewAuthor {
   margin-top: auto;
   font-size: 13.5px;
-  color: rgba(241, 243, 239, .55);
+  color: var(--text-2);
 }
 
 /* ---------- Поштою ---------- */

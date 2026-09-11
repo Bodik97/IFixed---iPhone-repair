@@ -16,14 +16,16 @@
   background-image: url("/assets/bg-circuit.webp");
   background-size: cover;
   background-position: 50% 40%;
-  opacity: .32;
-  filter: grayscale(.7);
+  opacity: .72;
+  filter: grayscale(.3) brightness(.9);
 }
 
 .heroVeil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(11, 12, 14, .9), rgba(11, 12, 14, .98));
+  background:
+    linear-gradient(100deg, rgba(11, 12, 14, .93) 0%, rgba(11, 12, 14, .82) 45%, rgba(11, 12, 14, .4) 78%),
+    linear-gradient(180deg, rgba(11, 12, 14, .4) 0%, transparent 30%, rgba(11, 12, 14, .95) 100%);
 }
 
 .heroGlow {
@@ -49,7 +51,8 @@
   padding: 7px 14px 7px 11px;
   border-radius: var(--r-pill);
   border: 1px solid var(--field-border);
-  background: var(--field-bg);
+  background: rgba(11, 12, 14, .7);
+  backdrop-filter: blur(8px);
   font-size: 12.5px;
   letter-spacing: .04em;
   color: rgba(241, 243, 239, .82);
