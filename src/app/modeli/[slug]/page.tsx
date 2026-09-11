@@ -106,7 +106,7 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
               </div>
             </div>
 
-            <div className={`${styles.heroShot} anim-float`}>
+            <div className={styles.heroShot}>
               {model.image ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={model.image} alt={model.name} className={styles.shotPhoto} />
