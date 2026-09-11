@@ -13,7 +13,7 @@
 .heroPhoto {
   position: absolute;
   inset: 0;
-  background-image: url("/assets/bg-circuit.jpeg");
+  background-image: url("/assets/bg-circuit.webp");
   background-size: cover;
   background-position: 50% 40%;
   opacity: .32;

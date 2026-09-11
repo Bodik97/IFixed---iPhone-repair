@@ -14,7 +14,7 @@
 .heroPhoto {
   position: absolute;
   inset: 0;
-  background-image: url("/assets/bg-phone-b.jpeg");
+  background-image: url("/assets/bg-phone-b.webp");
   background-size: cover;
   background-position: 55% 45%;
   opacity: .34;
@@ -99,7 +99,7 @@
 .shotPhoto {
   position: absolute;
   inset: 0;
-  background-image: url("/assets/bg-circuit.jpeg");
+  background-image: url("/assets/bg-circuit.webp");
   background-size: cover;
   background-position: 45% 50%;
   filter: saturate(.85);

@@ -14,7 +14,7 @@
 .heroPhoto {
   position: absolute;
   inset: 0;
-  background-image: url("/assets/bg-tech.jpeg");
+  background-image: url("/assets/bg-tech.webp");
   background-size: cover;
   background-position: 62% 58%;
   opacity: .5;
@@ -143,7 +143,7 @@
   border-radius: 28px;
   border: 1px solid rgba(255, 255, 255, .1);
   aspect-ratio: 16 / 9;
-  background-image: url("/assets/bg-phone-a.jpeg");
+  background-image: url("/assets/bg-phone-a.webp");
   background-size: cover;
   background-position: 55% 50%;
   filter: saturate(.9);
@@ -292,7 +292,7 @@
 .repPhoto {
   position: absolute;
   inset: 0;
-  background-image: url("/assets/bg-circuit.jpeg");
+  background-image: url("/assets/bg-circuit.webp");
   background-size: cover;
   background-position: 40% 50%;
   opacity: .38;

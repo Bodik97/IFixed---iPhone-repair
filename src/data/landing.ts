@@ -30,10 +30,10 @@ export const modelGroups = [
 ];
 
 export const works = [
-  { img: "/assets/bg-phone-b.jpeg", caption: "iPhone 12 · розбитий екран → новий екран за 40 хвилин" },
-  { img: "/assets/bg-circuit.jpeg", caption: "iPhone 11 · залив водою → чистка плати й запуск" },
-  { img: "/assets/bg-phone-a.jpeg", caption: "iPhone 13 · акумулятор → 100% ємності" },
-  { img: "/assets/bg-tech.jpeg", caption: "iPhone XR · роз'єм заряджання → заміна шлейфа" },
+  { img: "/assets/bg-phone-b.webp", caption: "iPhone 12 · розбитий екран → новий екран за 40 хвилин" },
+  { img: "/assets/bg-circuit.webp", caption: "iPhone 11 · залив водою → чистка плати й запуск" },
+  { img: "/assets/bg-phone-a.webp", caption: "iPhone 13 · акумулятор → 100% ємності" },
+  { img: "/assets/bg-tech.webp", caption: "iPhone XR · роз'єм заряджання → заміна шлейфа" },
 ];
 
 export const reviews = [

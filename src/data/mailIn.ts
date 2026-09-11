@@ -23,14 +23,15 @@ export const packingList = [
   "Вкласти записку з іменем і симптомом",
 ];
 
+/** Фото беремо з каталогу — ті самі знімки, що й на сторінках моделей */
 export const popular = [
-  { name: "iPhone 13", slug: "iphone-13", img: "/assets/bg-phone-a.jpeg" },
-  { name: "iPhone 12", slug: "iphone-12", img: "/assets/bg-phone-b.jpeg" },
-  { name: "iPhone 11", slug: "iphone-11", img: "/assets/bg-tech.jpeg" },
-  { name: "iPhone XR", slug: "iphone-xr", img: "/assets/bg-circuit.jpeg" },
-  { name: "iPhone 14 Pro", slug: "iphone-14-pro", img: "/assets/bg-phone-b.jpeg" },
-  { name: "iPhone SE 2", slug: "iphone-se-2", img: "/assets/bg-phone-a.jpeg" },
-];
+  { name: "iPhone 13", slug: "iphone-13" },
+  { name: "iPhone 12", slug: "iphone-12" },
+  { name: "iPhone 11", slug: "iphone-11" },
+  { name: "iPhone XR", slug: "iphone-xr" },
+  { name: "iPhone 14 Pro", slug: "iphone-14-pro" },
+  { name: "iPhone SE 2", slug: "iphone-se-2" },
+].map((m) => ({ ...m, img: `/models/${m.slug}.webp` }));
 
 export const faq = [
   { q: "Хто платить за доставку?", a: "Відправку до нас оплачує клієнт. Повернення після ремонту — за наш кошт, будь-яке місто України." },

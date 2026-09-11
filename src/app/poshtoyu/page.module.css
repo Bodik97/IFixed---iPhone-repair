@@ -14,7 +14,7 @@
 .heroPhoto {
   position: absolute;
   inset: 0;
-  background-image: url("/assets/bg-tech.jpeg");
+  background-image: url("/assets/bg-tech.webp");
   background-size: cover;
   background-position: 30% 50%;
   opacity: .3;
@@ -308,6 +308,7 @@
   display: flex;
   align-items: flex-end;
   padding: 18px;
+  background: radial-gradient(120% 90% at 50% 25%, rgba(255, 255, 255, .08), rgba(255, 255, 255, .02) 70%);
   transition: transform .25s, border-color .25s;
 }
 
@@ -319,22 +320,23 @@
 
 .popularPhoto {
   position: absolute;
-  inset: 0;
-  background-size: cover;
+  inset: 18px 18px 44px;
+  background-size: contain;
   background-position: 50% 50%;
-  filter: grayscale(.6);
-  transition: transform .5s var(--ease), filter .4s;
+  background-repeat: no-repeat;
+  transition: transform .45s var(--ease);
 }
 
 .popularCard:hover .popularPhoto {
-  transform: scale(1.08);
-  filter: grayscale(0);
+  transform: scale(1.06) translateY(-2px);
 }
 
+/* Легке затемнення знизу, щоб назва читалась поверх знімка */
 .popularVeil {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(11, 12, 14, .2), rgba(11, 12, 14, .85));
+  inset: auto 0 0;
+  height: 50%;
+  background: linear-gradient(180deg, transparent, rgba(11, 12, 14, .75));
 }
 
 .popularName {

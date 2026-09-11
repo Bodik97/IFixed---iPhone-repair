@@ -583,7 +583,7 @@ export const models: Model[] = [
     ],
     "time": "того ж дня",
     "inStock": true,
-    "image": "/assets/bg-phone-b.jpeg"
+    "image": "/assets/bg-phone-b.webp"
   }
 ];
 
