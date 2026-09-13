@@ -43,6 +43,19 @@
   background: rgba(218, 255, 61, .08);
 }
 
+/* Лічильники — посилання: клік фільтрує список */
+.stat,
+.statHot {
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .15s, background .15s;
+}
+
+.stat:hover,
+.statHot:hover {
+  border-color: var(--border-active);
+}
+
 .statValue {
   font-family: var(--font-unbounded), sans-serif;
   font-size: 22px;

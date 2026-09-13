@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { getDb } from "@/db";
 import { and, eq, isNull } from "drizzle-orm";
 import { leads } from "@/db/schema";
-import { describeStatus } from "@/db/leads";
+import { describeStatus, findLeads, STATUS_OPTIONS } from "@/db/leads";
 import { getAllReviews } from "@/db/reviews";
 import { leadEvents } from "@/db/schema";
-import { asc, count, desc, inArray } from "drizzle-orm";
+import { asc, count, inArray } from "drizzle-orm";
 import { isAdmin } from "@/lib/admin";
 import { signOut } from "./actions";
 import NoteField from "./NoteField";
+import Search, { adminHref, type Query } from "./Search";
 import ReviewList from "./ReviewList";
 import StatusSelect from "./StatusSelect";
 import TtnField from "./TtnField";
@@ -43,25 +45,27 @@ const PER_PAGE = 20;
 export default async function AdminPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; q?: string; status?: string; shipping?: string }>;
 }) {
   if (!(await isAdmin())) redirect("/admin/vhid");
 
-  const { page: pageParam } = await searchParams;
-  const page = Math.max(1, Number(pageParam) || 1);
+  const params = await searchParams;
+  const page = Math.max(1, Number(params.page) || 1);
 
-  const [[{ total }], rows, allReviews] = await Promise.all([
+  // Невідомий статус із адреси ігноруємо, щоб фільтр не міг зламати вибірку
+  const status = STATUS_OPTIONS.some((o) => o.value === params.status)
+    ? (params.status as (typeof STATUS_OPTIONS)[number]["value"])
+    : undefined;
+
+  const query: Query = { q: params.q, status, shipping: params.shipping };
+
+  const [{ rows, found }, [{ total }], allReviews] = await Promise.all([
+    findLeads({ q: params.q, status, shipping: Boolean(params.shipping), page, perPage: PER_PAGE }),
     getDb().select({ total: count() }).from(leads),
-    getDb()
-      .select()
-      .from(leads)
-      .orderBy(desc(leads.createdAt))
-      .limit(PER_PAGE)
-      .offset((page - 1) * PER_PAGE),
     getAllReviews(),
   ]);
 
-  const pages = Math.max(1, Math.ceil(total / PER_PAGE));
+  const pages = Math.max(1, Math.ceil(found / PER_PAGE));
 
   const pendingReviews = allReviews.filter((r) => !r.published).length;
 
@@ -105,27 +109,40 @@ export default async function AdminPage({
         </form>
       </div>
 
+      {/* Лічильники рахуються по всій базі, не по сторінці — і кожен одразу фільтрує */}
       <div className={styles.summary}>
-        <div className={styles.stat}>
+        <Link href="/admin" className={styles.stat}>
           <span className={styles.statValue}>{total}</span>
           <span className={styles.statLabel}>усього</span>
-        </div>
-        <div className={fresh > 0 ? styles.statHot : styles.stat}>
+        </Link>
+        <Link
+          href={adminHref(query, { status: "new", shipping: "", page: 1 })}
+          className={fresh > 0 ? styles.statHot : styles.stat}
+        >
           <span className={styles.statValue}>{fresh}</span>
           <span className={styles.statLabel}>нових</span>
-        </div>
-        <div className={toShip > 0 ? styles.statHot : styles.stat}>
+        </Link>
+        <Link
+          href={adminHref(query, { shipping: "1", status: "", page: 1 })}
+          className={toShip > 0 ? styles.statHot : styles.stat}
+        >
           <span className={styles.statValue}>{toShip}</span>
           <span className={styles.statLabel}>чекають відправки</span>
-        </div>
-        <div className={pendingReviews > 0 ? styles.statHot : styles.stat}>
+        </Link>
+        <a href="#vidhuky" className={pendingReviews > 0 ? styles.statHot : styles.stat}>
           <span className={styles.statValue}>{pendingReviews}</span>
           <span className={styles.statLabel}>відгуки на перевірці</span>
-        </div>
+        </a>
       </div>
 
+      <Search query={query} found={found} />
+
       {rows.length === 0 ? (
-        <div className={styles.empty}>Заявок ще немає.</div>
+        <div className={styles.empty}>
+          {params.q || status || params.shipping
+            ? "За цим запитом нічого не знайшли. Спробуйте інший або скиньте фільтр."
+            : "Заявок ще немає."}
+        </div>
       ) : (
         <div className={styles.cards}>
           {rows.map((r) => {
@@ -211,23 +228,23 @@ export default async function AdminPage({
       {pages > 1 && (
         <nav className={styles.pager} aria-label="Сторінки заявок">
           {page > 1 && (
-            <a href={`/admin?page=${page - 1}`} className="btn btn-ghost">
+            <Link href={adminHref(query, { page: page - 1 })} className="btn btn-ghost">
               Новіші
-            </a>
+            </Link>
           )}
           <span className={styles.pagerInfo}>
             Сторінка {page} з {pages}
           </span>
           {page < pages && (
-            <a href={`/admin?page=${page + 1}`} className="btn btn-ghost">
+            <Link href={adminHref(query, { page: page + 1 })} className="btn btn-ghost">
               Старіші
-            </a>
+            </Link>
           )}
         </nav>
       )}
 
       <div className={styles.reviewsHead}>
-        <h2 className={styles.sectionTitle}>Відгуки</h2>
+        <h2 id="vidhuky" className={styles.sectionTitle}>Відгуки</h2>
         <p className={styles.sectionNote}>
           Опубліковані показуються на головній. Нові чекають вашого схвалення.
         </p>
