@@ -1,5 +1,13 @@
 import { NextResponse } from "next/server";
+import { eq } from "drizzle-orm";
+import { getDb } from "@/db";
+import { getEvents } from "@/db/events";
+import { describeStatus, STAGES } from "@/db/leads";
+import { leads } from "@/db/schema";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
+import { digits, lastFour } from "@/lib/phone";
+
+export const dynamic = "force-dynamic";
 
 export type Order = {
   no: string;
@@ -11,22 +19,11 @@ export type Order = {
   log: { time: string; text: string }[];
 };
 
-// Заглушка до підключення CRM замовника: структура відповіді вже фінальна.
-function stubOrder(no: string): Order {
-  return {
-    no,
-    device: "iPhone 13",
-    work: "Заміна екрана",
-    stage: 2,
-    stages: ["Прийнято", "Діагностика", "Ремонт", "Готово"],
-    eta: "сьогодні до 18:00",
-    log: [
-      { time: "09:20", text: "Прийняли пристрій, оформили квитанцію" },
-      { time: "10:05", text: "Діагностика: пошкоджений дисплейний модуль" },
-      { time: "10:30", text: "Погодили фіксовану ціну, почали ремонт" },
-    ],
-  };
-}
+/** Одна відповідь на «не знайшли» і на «не той телефон» — щоб номери не можна було перебрати */
+const NOT_FOUND = "Не знайшли замовлення з таким номером і телефоном.";
+
+const formatTime = (d: Date) =>
+  d.toLocaleString("uk-UA", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
 
 export async function GET(request: Request, { params }: { params: Promise<{ no: string }> }) {
   // Перебір номерів замовлень — теж форма атаки
@@ -42,5 +39,35 @@ export async function GET(request: Request, { params }: { params: Promise<{ no: 
     return NextResponse.json({ error: "Номер замовлення — лише цифри з квитанції" }, { status: 400 });
   }
 
-  return NextResponse.json(stubOrder(clean));
+  // Номер сам по собі не таємниця, тож без другого поля статус не віддаємо
+  const check = digits(new URL(request.url).searchParams.get("phone") ?? "");
+  if (check.length !== 4) {
+    return NextResponse.json(
+      { error: "Впишіть останні 4 цифри телефону, який лишали при зверненні." },
+      { status: 400 },
+    );
+  }
+
+  const [lead] = await getDb()
+    .select()
+    .from(leads)
+    .where(eq(leads.orderNo, Number(clean)))
+    .limit(1);
+
+  if (!lead || lastFour(lead.phone) !== check) {
+    return NextResponse.json({ error: NOT_FOUND }, { status: 404 });
+  }
+
+  const info = describeStatus(lead.status);
+  const events = await getEvents(lead.id);
+
+  return NextResponse.json({
+    no: String(lead.orderNo),
+    device: lead.model || "Ваш пристрій",
+    work: lead.service || lead.problem || "Ремонт",
+    stage: info.stage,
+    stages: [...STAGES],
+    eta: info.hint,
+    log: events.map((e) => ({ time: formatTime(e.createdAt), text: e.text })),
+  } satisfies Order);
 }

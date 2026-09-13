@@ -2,35 +2,48 @@
 
 import { useState } from "react";
 import type { Order } from "@/app/api/orders/[no]/route";
+import FormError from "./FormError";
 import styles from "./StatusCheck.module.css";
 
 export default function StatusCheck() {
   const [orderNo, setOrderNo] = useState("");
-  const [message, setMessage] = useState("");
+  const [phone, setPhone] = useState("");
+  const [error, setError] = useState("");
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const reset = () => {
+    setError("");
+    setOrder(null);
+  };
+
   const check = async () => {
     const n = orderNo.trim();
-    setOrder(null);
+    const tail = phone.replace(/\D/g, "");
+    reset();
 
     if (!n) {
-      setMessage("Впишіть номер із квитанції — або просто зателефонуйте нам.");
+      setError("Впишіть номер замовлення з квитанції.");
+      return;
+    }
+    if (tail.length !== 4) {
+      setError("Впишіть останні 4 цифри телефону, який лишали при зверненні.");
       return;
     }
 
     setLoading(true);
     try {
-      const res = await fetch(`/api/orders/${encodeURIComponent(n)}`);
+      const res = await fetch(
+        `/api/orders/${encodeURIComponent(n)}?phone=${encodeURIComponent(tail)}`,
+      );
       const data = await res.json();
       if (!res.ok) {
-        setMessage(data.error ?? "Не знайшли таке замовлення.");
+        setError(data.error ?? "Не знайшли таке замовлення.");
         return;
       }
       setOrder(data as Order);
-      setMessage("");
     } catch {
-      setMessage("Не вдалося перевірити. Спробуйте пізніше або зателефонуйте нам.");
+      setError("Не вдалося перевірити. Спробуйте пізніше або зателефонуйте нам.");
     } finally {
       setLoading(false);
     }
@@ -42,32 +55,61 @@ export default function StatusCheck() {
         <div>
           <div className="kicker">Статус ремонту</div>
           <h2 className={styles.title}>Телефон уже в нас? Перевірте етап</h2>
-          <p className={styles.lead}>Номер замовлення з квитанції — і побачите, що робимо саме зараз.</p>
+          <p className={styles.lead}>
+            Номер замовлення з квитанції та останні 4 цифри вашого телефону — і побачите, що
+            робимо саме зараз.
+          </p>
         </div>
 
         <div className={styles.form}>
-          <label htmlFor="n-order" className={styles.label}>
-            Номер замовлення
-          </label>
-          <input
-            id="n-order"
-            className="field"
-            type="text"
-            inputMode="numeric"
-            placeholder="напр. 1042"
-            value={orderNo}
-            onChange={(e) => {
-              setOrderNo(e.target.value);
-              setMessage("");
-              setOrder(null);
-            }}
-            onKeyDown={(e) => e.key === "Enter" && check()}
-          />
+          <div className={styles.pair}>
+            <div className={styles.field}>
+              <label htmlFor="n-order" className={styles.label}>
+                Номер замовлення
+              </label>
+              <input
+                id="n-order"
+                className="field"
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                placeholder="напр. 1042"
+                value={orderNo}
+                onChange={(e) => {
+                  setOrderNo(e.target.value);
+                  reset();
+                }}
+                onKeyDown={(e) => e.key === "Enter" && check()}
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label htmlFor="n-tail" className={styles.label}>
+                Останні 4 цифри телефону
+              </label>
+              <input
+                id="n-tail"
+                className="field"
+                type="text"
+                inputMode="numeric"
+                autoComplete="off"
+                maxLength={4}
+                placeholder="напр. 0238"
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value.replace(/\D/g, "").slice(0, 4));
+                  reset();
+                }}
+                onKeyDown={(e) => e.key === "Enter" && check()}
+              />
+            </div>
+          </div>
+
           <button type="button" onClick={check} className="btn btn-ghost" disabled={loading}>
             {loading ? "Перевіряємо…" : "Перевірити"}
           </button>
 
-          {message && <div className="info">{message}</div>}
+          <FormError>{error}</FormError>
 
           {order && (
             <div className="info">
@@ -82,8 +124,19 @@ export default function StatusCheck() {
                 ))}
               </div>
               <div>
-                {order.work} · готовність {order.eta}
+                {order.work} · {order.eta}
               </div>
+
+              {order.log.length > 0 && (
+                <ul className={styles.log}>
+                  {order.log.map((e, i) => (
+                    <li key={i}>
+                      <span className={styles.logTime}>{e.time}</span>
+                      {e.text}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           )}
         </div>

@@ -29,3 +29,14 @@ export function formatUaPhone(e164: string): string {
   // 380731234567 → 0 + 73 123 45 67
   return `0${d.slice(3, 5)} ${d.slice(5, 8)} ${d.slice(8, 10)} ${d.slice(10, 12)}`;
 }
+
+/** Лише цифри — для звірки того, що ввів клієнт */
+export function digits(input: string): string {
+  return input.replace(/\D/g, "");
+}
+
+/** Останні 4 цифри номера: контрольне поле в перевірці статусу */
+export function lastFour(phone: string | null | undefined): string | null {
+  const d = digits(phone ?? "");
+  return d.length >= 4 ? d.slice(-4) : null;
+}

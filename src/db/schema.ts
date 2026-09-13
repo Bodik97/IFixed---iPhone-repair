@@ -1,4 +1,14 @@
-import { boolean, index, integer, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  index,
+  integer,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 /** Звідки прийшла заявка — відповідає полю `source` у формах */
 export const leadSource = pgEnum("lead_source", ["landing", "model", "services", "mail-in"]);
@@ -20,6 +30,15 @@ export const leads = pgTable(
   "leads",
   {
     id: uuid("id").defaultRandom().primaryKey(),
+
+    /**
+     * Короткий номер для клієнта: його диктують по телефону, пишуть у квитанції
+     * і вводять у перевірку статусу на сайті. UUID для цього не годиться.
+     */
+    orderNo: integer("order_no").notNull().generatedByDefaultAsIdentity({
+      name: "leads_order_no_seq",
+      startWith: 1001,
+    }),
 
     // Контакти клієнта
     name: text("name").notNull(),
@@ -58,6 +77,8 @@ export const leads = pgTable(
     // Кабінет вибирає заявки свого клієнта
     index("leads_clerk_user_idx").on(t.clerkUserId),
     index("leads_email_idx").on(t.email),
+    // Перевірка статусу шукає заявку саме за цим номером
+    uniqueIndex("leads_order_no_idx").on(t.orderNo),
   ],
 );
 

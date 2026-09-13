@@ -41,6 +41,7 @@ export default async function AccountPage() {
     const s = describeStatus(l.status);
     return {
       id: l.id,
+      orderNo: l.orderNo,
       what: l.model ?? l.service ?? "Ремонт",
       problem: l.problem,
       date: dateShort.format(l.createdAt),

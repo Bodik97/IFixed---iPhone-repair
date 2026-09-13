@@ -32,6 +32,19 @@
   gap: 12px;
 }
 
+/* Два поля поруч на широкому, одне під одним на телефоні */
+.pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
 .label {
   font-size: 13px;
   color: var(--text-2);
@@ -57,4 +70,22 @@
   background: rgba(218, 255, 61, .18);
   color: var(--info-text);
   border-color: rgba(218, 255, 61, .5);
+}
+
+/* Хроніка ремонту під шкалою етапів */
+.log {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, .1);
+  display: grid;
+  gap: 8px;
+  font-size: 13.5px;
+}
+
+.logTime {
+  display: inline-block;
+  min-width: 92px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
 }

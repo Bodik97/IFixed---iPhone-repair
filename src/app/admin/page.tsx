@@ -139,6 +139,8 @@ export default async function AdminPage({
               >
                 <div className={styles.cardMain}>
                   <div className={styles.cardTop}>
+                    {/* Номер, який клієнт диктує по телефону — тримаємо першим */}
+                    <span className={styles.orderNo}>№&#8202;{r.orderNo}</span>
                     <span className={styles.name}>{r.name}</span>
                     {r.clerkUserId ? (
                       <span className={styles.tagAccount} title="Бачить статус у своєму кабінеті">

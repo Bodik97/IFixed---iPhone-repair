@@ -144,3 +144,12 @@
     align-items: center;
   }
 }
+
+/* Номер замовлення поруч із назвою пристрою — його диктують у розмові з майстром */
+.no {
+  display: inline-block;
+  margin-right: 9px;
+  font-size: .78em;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}

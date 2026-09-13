@@ -5,6 +5,7 @@ import styles from "./History.module.css";
 
 export type HistoryRow = {
   id: string;
+  orderNo: number;
   what: string;
   problem: string | null;
   date: string;
@@ -56,7 +57,10 @@ export default function History({ rows }: { rows: HistoryRow[] }) {
           {shown.map((r) => (
             <article key={r.id} className={styles.row}>
               <div className={styles.main}>
-                <div className={styles.device}>{r.what}</div>
+                <div className={styles.device}>
+                  <span className={styles.no}>№&#8202;{r.orderNo}</span>
+                  {r.what}
+                </div>
                 {r.problem && <div className={styles.work}>{r.problem}</div>}
                 {r.ttn && (
                   <div className={styles.ttn}>

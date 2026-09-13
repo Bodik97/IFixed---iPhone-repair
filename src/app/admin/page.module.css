@@ -111,6 +111,19 @@
   margin-bottom: 10px;
 }
 
+/* Номер замовлення — те, що майстер диктує клієнту, тож читається першим */
+.orderNo {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 15px;
+  letter-spacing: -.02em;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  background: rgba(218, 255, 61, .14);
+  border: 1px solid rgba(218, 255, 61, .3);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
 .name {
   font-family: var(--font-unbounded), sans-serif;
   font-size: 17px;

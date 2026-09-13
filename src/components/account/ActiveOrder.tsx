@@ -15,7 +15,6 @@ const dateTime = new Intl.DateTimeFormat("uk-UA", {
 export default function ActiveOrder({ lead, events }: { lead: Lead; events: LeadEvent[] }) {
   const s = describeStatus(lead.status);
   const what = lead.model ?? lead.service ?? "Ремонт";
-  const shortId = lead.id.slice(0, 8);
 
   return (
     <div className={`${styles.card} ${styles[s.tone]}`}>
@@ -73,7 +72,7 @@ export default function ActiveOrder({ lead, events }: { lead: Lead; events: Lead
           <h2 className={styles.title}>{what}</h2>
 
           <div className={styles.meta}>
-            Заявка №{shortId} · прийнято {dateTime.format(lead.createdAt)}
+            Замовлення №{lead.orderNo} · прийнято {dateTime.format(lead.createdAt)}
           </div>
 
           {lead.problem && <p className={styles.problem}>«{lead.problem}»</p>}
