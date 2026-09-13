@@ -1,297 +1,99 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { and, desc, eq, isNull, or } from "drizzle-orm";
 import { getDb } from "@/db";
-import { and, eq, gte, isNull, sql } from "drizzle-orm";
+import { getCounters, getEventsFor, getMoney, monthStart } from "@/db/adminStats";
 import { leads } from "@/db/schema";
-import { describeStatus, findLeads, STATUS_OPTIONS } from "@/db/leads";
-import { getAllReviews } from "@/db/reviews";
-import { leadEvents } from "@/db/schema";
-import { asc, count, inArray } from "drizzle-orm";
 import { isAdmin } from "@/lib/admin";
-import { signOut } from "./actions";
-import MoneyFields from "./MoneyFields";
-import NoteField from "./NoteField";
-import Search, { adminHref, type Query } from "./Search";
-import ReviewList from "./ReviewList";
-import StatusSelect from "./StatusSelect";
-import TtnField from "./TtnField";
+import LeadCard from "./LeadCard";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "Заявки — адміністрування",
+  title: "Огляд — адміністрування",
   robots: { index: false, follow: false },
 };
 
-// Список має бути свіжим завжди
 export const dynamic = "force-dynamic";
 
-const sourceLabel: Record<string, string> = {
-  landing: "головна",
-  model: "модель",
-  services: "послуги",
-  "mail-in": "поштою",
-};
+/** Скільки заявок показати в «потребує уваги» — решта лишається у повному списку */
+const ATTENTION = 5;
 
-const dateFormat = new Intl.DateTimeFormat("uk-UA", {
-  day: "2-digit",
-  month: "2-digit",
-  hour: "2-digit",
-  minute: "2-digit",
-});
-
-/** Заявок на сторінці — щоб база не віддавала все одразу, коли їх стануть сотні */
-const PER_PAGE = 20;
-
-export default async function AdminPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ page?: string; q?: string; status?: string; shipping?: string }>;
-}) {
+export default async function AdminOverview() {
   if (!(await isAdmin())) redirect("/admin/vhid");
 
-  const params = await searchParams;
-  const page = Math.max(1, Number(params.page) || 1);
-
-  // Невідомий статус із адреси ігноруємо, щоб фільтр не міг зламати вибірку
-  const status = STATUS_OPTIONS.some((o) => o.value === params.status)
-    ? (params.status as (typeof STATUS_OPTIONS)[number]["value"])
-    : undefined;
-
-  const query: Query = { q: params.q, status, shipping: params.shipping };
-
-  const [{ rows, found }, [{ total }], allReviews] = await Promise.all([
-    findLeads({ q: params.q, status, shipping: Boolean(params.shipping), page, perPage: PER_PAGE }),
-    getDb().select({ total: count() }).from(leads),
-    getAllReviews(),
+  const [counters, money, attention] = await Promise.all([
+    getCounters(),
+    getMoney(monthStart()),
+    // Нові заявки й ті, що чекають ТТН — усе, що вимагає дії просто зараз
+    getDb()
+      .select()
+      .from(leads)
+      .where(
+        or(
+          eq(leads.status, "new"),
+          and(eq(leads.deliveryRequested, true), isNull(leads.ttn)),
+        ),
+      )
+      .orderBy(desc(leads.createdAt))
+      .limit(ATTENTION),
   ]);
 
-  const pages = Math.max(1, Math.ceil(found / PER_PAGE));
-
-  const pendingReviews = allReviews.filter((r) => !r.published).length;
-
-  // Хроніка одним запитом на всі заявки, а не по одному на кожну
-  const events = rows.length
-    ? await getDb()
-        .select()
-        .from(leadEvents)
-        .where(inArray(leadEvents.leadId, rows.map((r) => r.id)))
-        .orderBy(asc(leadEvents.createdAt))
-    : [];
-
-  const eventsByLead = new Map<string, typeof events>();
-  for (const e of events) {
-    const list = eventsByLead.get(e.leadId) ?? [];
-    list.push(e);
-    eventsByLead.set(e.leadId, list);
-  }
-
-  // Рахуємо по всій базі, а не по сторінці — інакше цифри брехали б
-  const monthStart = new Date();
-  monthStart.setDate(1);
-  monthStart.setHours(0, 0, 0, 0);
-
-  const [[{ fresh }], [{ toShip }], [month]] = await Promise.all([
-    getDb().select({ fresh: count() }).from(leads).where(eq(leads.status, "new")),
-    getDb()
-      .select({ toShip: count() })
-      .from(leads)
-      .where(and(eq(leads.deliveryRequested, true), isNull(leads.ttn))),
-    // Заробіток рахуємо за датою оплати, а не за датою заявки
-    getDb()
-      .select({
-        revenue: sql<number>`coalesce(sum(${leads.price}), 0)::int`,
-        cost: sql<number>`coalesce(sum(${leads.partsCost}), 0)::int`,
-        jobs: count(),
-      })
-      .from(leads)
-      .where(gte(leads.paidAt, monthStart)),
-  ]);
-
-  const profit = month.revenue - month.cost;
+  const eventsByLead = await getEventsFor(attention.map((r) => r.id));
+  const uah = (n: number) => `${n.toLocaleString("uk-UA")} ₴`;
 
   return (
-    <section className={`container ${styles.wrap}`}>
+    <section className={styles.wrap}>
       <div className={styles.head}>
         <div>
           <div className="kicker">Адміністрування</div>
-          <h1 className={styles.title}>Заявки</h1>
+          <h1 className={styles.title}>Огляд</h1>
         </div>
-
-        <form action={signOut}>
-          <button type="submit" className="btn btn-ghost">
-            Вийти
-          </button>
-        </form>
       </div>
 
-      {/* Лічильники рахуються по всій базі, не по сторінці — і кожен одразу фільтрує */}
       <div className={styles.summary}>
-        <Link href="/admin" className={styles.stat}>
-          <span className={styles.statValue}>{total}</span>
-          <span className={styles.statLabel}>усього</span>
+        <Link href="/admin/zayavky" className={styles.stat}>
+          <span className={styles.statValue}>{counters.total}</span>
+          <span className={styles.statLabel}>заявок усього</span>
         </Link>
         <Link
-          href={adminHref(query, { status: "new", shipping: "", page: 1 })}
-          className={fresh > 0 ? styles.statHot : styles.stat}
+          href="/admin/zayavky?status=new"
+          className={counters.fresh > 0 ? styles.statHot : styles.stat}
         >
-          <span className={styles.statValue}>{fresh}</span>
+          <span className={styles.statValue}>{counters.fresh}</span>
           <span className={styles.statLabel}>нових</span>
         </Link>
         <Link
-          href={adminHref(query, { shipping: "1", status: "", page: 1 })}
-          className={toShip > 0 ? styles.statHot : styles.stat}
+          href="/admin/zayavky?shipping=1"
+          className={counters.toShip > 0 ? styles.statHot : styles.stat}
         >
-          <span className={styles.statValue}>{toShip}</span>
+          <span className={styles.statValue}>{counters.toShip}</span>
           <span className={styles.statLabel}>чекають відправки</span>
         </Link>
-        <a href="#vidhuky" className={pendingReviews > 0 ? styles.statHot : styles.stat}>
-          <span className={styles.statValue}>{pendingReviews}</span>
-          <span className={styles.statLabel}>відгуки на перевірці</span>
-        </a>
+        <Link href="/admin/groshi" className={styles.stat}>
+          <span className={styles.statValue}>{uah(money.profit)}</span>
+          <span className={styles.statLabel}>чистими за місяць</span>
+        </Link>
       </div>
 
-      {/* Заробіток — за датою оплати, тож цифра не залежить від того, коли прийшла заявка */}
-      <div className={styles.money}>
-        <div className={styles.moneyItem}>
-          <span className={styles.moneyValue}>{month.revenue.toLocaleString("uk-UA")} ₴</span>
-          <span className={styles.statLabel}>оплачено цього місяця</span>
-        </div>
-        <div className={styles.moneyItem}>
-          <span className={styles.moneyValue}>−{month.cost.toLocaleString("uk-UA")} ₴</span>
-          <span className={styles.statLabel}>деталі</span>
-        </div>
-        <div className={styles.moneyItem}>
-          <span className={styles.moneyProfit}>{profit.toLocaleString("uk-UA")} ₴</span>
-          <span className={styles.statLabel}>
-            чистими · {month.jobs} {month.jobs === 1 ? "ремонт" : "ремонтів"}
-          </span>
-        </div>
+      <div className={styles.sectionHead}>
+        <h2 className={styles.sectionTitle}>Потребує уваги</h2>
+        <Link href="/admin/zayavky" className="btn btn-ghost">
+          Усі заявки
+        </Link>
       </div>
 
-      <Search query={query} found={found} />
-
-      {rows.length === 0 ? (
+      {attention.length === 0 ? (
         <div className={styles.empty}>
-          {params.q || status || params.shipping
-            ? "За цим запитом нічого не знайшли. Спробуйте інший або скиньте фільтр."
-            : "Заявок ще немає."}
+          Нових заявок немає, все відправлено. Можна видихнути.
         </div>
       ) : (
         <div className={styles.cards}>
-          {rows.map((r) => {
-            const s = describeStatus(r.status);
-            const waitingShip = r.deliveryRequested && !r.ttn;
-
-            return (
-              <article
-                key={r.id}
-                className={`${styles.card} ${r.status === "new" ? styles.cardNew : ""} ${waitingShip ? styles.cardShip : ""}`}
-              >
-                <div className={styles.cardMain}>
-                  <div className={styles.cardTop}>
-                    {/* Номер, який клієнт диктує по телефону — тримаємо першим */}
-                    <span className={styles.orderNo}>№&#8202;{r.orderNo}</span>
-                    <span className={styles.name}>{r.name}</span>
-                    {r.clerkUserId ? (
-                      <span className={styles.tagAccount} title="Бачить статус у своєму кабінеті">
-                        кабінет
-                      </span>
-                    ) : (
-                      <span className={styles.tagAnon} title="Без акаунта — пішло в Telegram">
-                        анонім
-                      </span>
-                    )}
-                    <span className={styles.when}>{dateFormat.format(r.createdAt)}</span>
-                    <span className={styles.source}>{sourceLabel[r.source] ?? r.source}</span>
-                  </div>
-
-                  <div className={styles.contacts}>
-                    {r.phone && (
-                      <a href={`tel:${r.phone.replace(/[^\d+]/g, "")}`} className={styles.link}>
-                        {r.phone}
-                      </a>
-                    )}
-                    {r.email && (
-                      <a href={`mailto:${r.email}`} className={styles.link}>
-                        {r.email}
-                      </a>
-                    )}
-                  </div>
-
-                  {(r.model || r.service) && (
-                    <div className={styles.what}>{r.model ?? r.service}</div>
-                  )}
-                  {r.problem && <p className={styles.problem}>{r.problem}</p>}
-
-                  {/* Доставка: показуємо, лише коли клієнт її попросив */}
-                  {r.deliveryRequested && (
-                    <div className={waitingShip ? styles.shipBoxHot : styles.shipBox}>
-                      <div className={styles.shipHead}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                          <path d="M3 7l9-4 9 4v10l-9 4-9-4z" />
-                          <path d="M3 7l9 4 9-4" />
-                          <path d="M12 11v10" />
-                        </svg>
-                        {waitingShip ? "Просить надіслати — ТТН не вписано" : "Відправлено"}
-                      </div>
-
-                      {r.deliveryAddress && (
-                        <div className={styles.shipAddress}>{r.deliveryAddress}</div>
-                      )}
-
-                      <TtnField id={r.id} ttn={r.ttn} />
-                    </div>
-                  )}
-
-                  {r.city && !r.deliveryRequested && <div className={styles.city}>{r.city}</div>}
-
-                  <NoteField id={r.id} events={eventsByLead.get(r.id) ?? []} />
-
-                  <MoneyFields
-                    id={r.id}
-                    price={r.price}
-                    partsCost={r.partsCost}
-                    paidAt={r.paidAt}
-                  />
-                </div>
-
-                <div className={styles.cardSide}>
-                  <StatusSelect id={r.id} status={r.status} />
-                  <span className={styles.hint}>{s.hint}</span>
-                </div>
-              </article>
-            );
-          })}
+          {attention.map((r) => (
+            <LeadCard key={r.id} lead={r} events={eventsByLead.get(r.id) ?? []} />
+          ))}
         </div>
       )}
-
-      {pages > 1 && (
-        <nav className={styles.pager} aria-label="Сторінки заявок">
-          {page > 1 && (
-            <Link href={adminHref(query, { page: page - 1 })} className="btn btn-ghost">
-              Новіші
-            </Link>
-          )}
-          <span className={styles.pagerInfo}>
-            Сторінка {page} з {pages}
-          </span>
-          {page < pages && (
-            <Link href={adminHref(query, { page: page + 1 })} className="btn btn-ghost">
-              Старіші
-            </Link>
-          )}
-        </nav>
-      )}
-
-      <div className={styles.reviewsHead}>
-        <h2 id="vidhuky" className={styles.sectionTitle}>Відгуки</h2>
-        <p className={styles.sectionNote}>
-          Опубліковані показуються на головній. Нові чекають вашого схвалення.
-        </p>
-      </div>
-
-      <ReviewList reviews={allReviews} />
     </section>
   );
 }

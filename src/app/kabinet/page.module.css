@@ -201,3 +201,10 @@
   max-width: 46ch;
   margin: 0 auto 24px;
 }
+
+.heroTopLeft {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}

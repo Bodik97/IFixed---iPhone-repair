@@ -1,0 +1,162 @@
+.big {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin-bottom: 38px;
+}
+
+.bigItem,
+.bigItemAccent {
+  display: grid;
+  gap: 8px;
+  padding: 20px 22px;
+  border-radius: 22px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.bigItemAccent {
+  border-color: rgba(218, 255, 61, .4);
+  background: rgba(218, 255, 61, .07);
+}
+
+.bigLabel {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+.bigValue,
+.bigProfit {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: clamp(24px, 3vw, 32px);
+  letter-spacing: -.02em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.bigProfit {
+  color: var(--accent);
+}
+
+.up,
+.down {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+}
+
+.up {
+  color: var(--accent);
+  background: rgba(218, 255, 61, .14);
+}
+
+.down {
+  color: var(--danger);
+  background: var(--danger-bg);
+}
+
+.h2 {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 22px;
+  letter-spacing: -.02em;
+  margin: 0 0 16px;
+}
+
+.table {
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 150px minmax(60px, 1fr) repeat(4, auto);
+  align-items: center;
+  gap: 18px;
+  padding: 15px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.month {
+  font-size: 15px;
+}
+
+/* Intl віддає «вересень 2026 р.» — велику літеру ставимо лише на початку,
+   інакше capitalize зачепить і скорочення «р.» */
+.month::first-letter {
+  text-transform: uppercase;
+}
+
+/* Смужка дає відчути співвідношення місяців, не вчитуючись у цифри */
+.bar {
+  height: 7px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, .07);
+  overflow: hidden;
+}
+
+.barFill {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--accent);
+  opacity: .75;
+}
+
+.cell,
+.cellStrong {
+  display: grid;
+  gap: 2px;
+  font-size: 14.5px;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  min-width: 92px;
+}
+
+.cellStrong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.cellLabel {
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 400;
+}
+
+@media (max-width: 860px) {
+  .row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 18px;
+    padding: 16px 18px;
+  }
+
+  .month {
+    grid-column: 1 / -1;
+    font-family: var(--font-unbounded), sans-serif;
+    letter-spacing: -.02em;
+  }
+
+  .bar {
+    grid-column: 1 / -1;
+  }
+
+  .cell,
+  .cellStrong {
+    text-align: left;
+    min-width: 0;
+  }
+}

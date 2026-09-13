@@ -5,6 +5,7 @@ import ActiveOrder from "@/components/account/ActiveOrder";
 import History from "@/components/account/History";
 import NewRepair from "@/components/account/NewRepair";
 import SetPassword from "@/components/account/SetPassword";
+import BackButton from "@/components/BackButton";
 import SignOutButton from "@/components/account/SignOutButton";
 import { describeStatus, getClientLeads } from "@/db/leads";
 import { getDevices, getEvents } from "@/db/events";
@@ -64,7 +65,10 @@ export default async function AccountPage() {
 
         <div className={styles.heroInner}>
           <div className={styles.heroTop}>
-            <div className="kicker">Кабінет</div>
+            <div className={styles.heroTopLeft}>
+              <BackButton fallback="/" />
+              <div className="kicker">Кабінет</div>
+            </div>
             <SignOutButton />
           </div>
 

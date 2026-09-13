@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookingForm from "@/components/BookingForm";
+import BackButton from "@/components/BackButton";
 import ModelJobs from "@/components/ModelJobs";
 import { getModelPrice } from "@/data/prices";
 import { allModels, getModel, relatedTo, sectionOf } from "@/data/catalog";
@@ -75,13 +76,17 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
         </span>
 
         <div className={styles.heroInner}>
-          <nav className={styles.crumbs} aria-label="Хлібні крихти">
-            <Link href="/">Головна</Link>
-            <span className={styles.sep}>/</span>
-            <Link href={section.href}>{section.tab}</Link>
-            <span className={styles.sep}>/</span>
-            <span className={styles.current}>{model.name}</span>
-          </nav>
+          <div className={styles.navRow}>
+            <BackButton fallback={section.href} />
+
+            <nav className={styles.crumbs} aria-label="Хлібні крихти">
+              <Link href="/">Головна</Link>
+              <span className={styles.sep}>/</span>
+              <Link href={section.href}>{section.tab}</Link>
+              <span className={styles.sep}>/</span>
+              <span className={styles.current}>{model.name}</span>
+            </nav>
+          </div>
 
           <div className={styles.heroGrid}>
             <div className={styles.heroCopy}>

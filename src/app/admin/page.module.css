@@ -622,3 +622,13 @@
 .moneyProfit {
   color: var(--accent);
 }
+
+/* Заголовок розділу на сторінці огляду */
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 34px 0 16px;
+}

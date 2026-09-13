@@ -16,7 +16,7 @@ export function adminHref(current: Query & { page?: number }, patch: Partial<Que
   }
 
   const qs = params.toString();
-  return qs ? `/admin?${qs}` : "/admin";
+  return qs ? `/admin/zayavky?${qs}` : "/admin/zayavky";
 }
 
 export default function Search({ query, found }: { query: Query; found: number }) {
@@ -25,7 +25,7 @@ export default function Search({ query, found }: { query: Query; found: number }
   return (
     <div className={styles.wrap}>
       {/* Звичайна GET-форма: працює й без JS, адреса лишається такою, щоб її можна було зберегти */}
-      <form className={styles.form} action="/admin" method="get">
+      <form className={styles.form} action="/admin/zayavky" method="get">
         {query.status && <input type="hidden" name="status" value={query.status} />}
         {query.shipping && <input type="hidden" name="shipping" value={query.shipping} />}
 
@@ -79,7 +79,7 @@ export default function Search({ query, found }: { query: Query; found: number }
       {filtered && (
         <div className={styles.result}>
           Знайдено: <strong>{found}</strong>
-          <Link href="/admin" className={styles.reset}>
+          <Link href="/admin/zayavky" className={styles.reset}>
             Скинути
           </Link>
         </div>
