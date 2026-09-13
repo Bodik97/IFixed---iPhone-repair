@@ -26,7 +26,7 @@ export const modelGroups = [
   { label: "iPhone · нові", items: ["16 / 16 Plus", "16 Pro / Pro Max", "15 / 15 Plus", "15 Pro / Pro Max"] },
   { label: "iPhone · популярні", items: ["14 / 14 Pro", "13 / 13 Pro / mini", "12 / 12 Pro / mini", "11 / 11 Pro"] },
   { label: "iPhone · старші", items: ["X / XS / XR", "8 / 8 Plus", "7 / 7 Plus", "SE 1 / SE 2 / SE 3", "6 / 6s"] },
-  { label: "Інша техніка", items: ["iPad / Air / Pro", "Apple Watch", "AirPods — діагностика"] },
+  { label: "Інша техніка", items: ["iPad / Air / Pro", "Apple Watch"] },
 ];
 
 export const works = [

@@ -4,10 +4,10 @@
 import type { Model } from "./models";
 
 /** Поля, однакові для всіх записів розділу */
-const pad = (m: Omit<Model, "group" | "image"> & { image?: string }): Model => ({
+const pad = (m: Omit<Model, "group" | "image">): Model => ({
   ...m,
   group: "other",
-  image: m.image ?? `/models/${m.slug}.webp`,
+  image: `/models/${m.slug}.webp`,
 });
 
 export const ipads: Model[] = [
@@ -49,14 +49,4 @@ export const watches: Model[] = [
   pad({ slug: "apple-watch-s3", name: "Apple Watch Series 3", year: "2017", jobs: ["Скло", "АКБ"], time: "1–2 дні", inStock: false }),
   pad({ slug: "apple-watch-s2", name: "Apple Watch Series 2", year: "2016", jobs: ["Скло", "АКБ"], time: "1–2 дні", inStock: false }),
   pad({ slug: "apple-watch-s1", name: "Apple Watch Series 1", year: "2015", jobs: ["Скло", "АКБ"], time: "1–2 дні", inStock: false }),
-
-  pad({
-    slug: "airpods-airpods-pro",
-    name: "AirPods / AirPods Pro",
-    year: "усі покоління",
-    jobs: ["Діагностика", "Чистка"],
-    time: "того ж дня",
-    inStock: true,
-    image: "",
-  }),
 ];
