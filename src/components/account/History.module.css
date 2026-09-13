@@ -153,3 +153,20 @@
   color: var(--text-3);
   font-variant-numeric: tabular-nums;
 }
+
+.price {
+  margin-top: 6px;
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 15px;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.paid {
+  margin-left: 9px;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 12px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}

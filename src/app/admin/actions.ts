@@ -126,3 +126,54 @@ export async function deleteReview(formData: FormData): Promise<void> {
   revalidatePath("/admin");
   revalidatePath("/");
 }
+
+/**
+ * Гривні з того, що ввів майстер.
+ * undefined = поля у формі не було, значення не чіпаємо;
+ * null = майстер очистив поле.
+ */
+function parseUah(form: FormData, key: string): number | null | undefined {
+  if (!form.has(key)) return undefined;
+
+  const text = String(form.get(key) ?? "").replace(/\s/g, "").replace(",", ".");
+  if (!text) return null;
+
+  const n = Math.round(Number(text));
+  // Не число або дурниця на кшталт від'ємної суми — поле не чіпаємо
+  if (!Number.isFinite(n) || n < 0 || n > 1_000_000) return undefined;
+  return n;
+}
+
+/** Погоджена ціна, собівартість деталі та відмітка про оплату */
+export async function setMoney(formData: FormData): Promise<void> {
+  if (!(await isAdmin())) redirect("/admin/vhid");
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  const price = parseUah(formData, "price");
+  const partsCost = parseUah(formData, "partsCost");
+  const paid = formData.get("paid") === "on";
+
+  const [before] = await getDb().select().from(leads).where(eq(leads.id, id)).limit(1);
+  if (!before) return;
+
+  await getDb()
+    .update(leads)
+    .set({
+      ...(price === undefined ? {} : { price }),
+      ...(partsCost === undefined ? {} : { partsCost }),
+      // Відмітку ставимо раз: повторне збереження не має зсувати дату оплати
+      paidAt: paid ? (before.paidAt ?? new Date()) : null,
+      updatedAt: new Date(),
+    })
+    .where(eq(leads.id, id));
+
+  // Клієнт бачить ціну в кабінеті, тож про її появу пишемо в хроніку
+  if (price !== undefined && price !== null && price !== before.price) {
+    await addEvent(id, { text: `Погодили ціну ремонту: ${price} ₴` });
+  }
+
+  revalidatePath("/admin");
+  revalidatePath("/kabinet");
+}

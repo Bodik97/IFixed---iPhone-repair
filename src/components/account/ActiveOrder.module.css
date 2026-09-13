@@ -241,3 +241,24 @@
     text-align: left;
   }
 }
+
+/* Погоджена ціна: те, заради чого клієнт часто й відкриває кабінет */
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.priceValue {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 26px;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.priceNote {
+  font-size: 13.5px;
+  color: var(--text-3);
+}

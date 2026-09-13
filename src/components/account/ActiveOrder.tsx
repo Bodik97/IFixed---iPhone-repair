@@ -76,6 +76,16 @@ export default function ActiveOrder({ lead, events }: { lead: Lead; events: Lead
           </div>
 
           {lead.problem && <p className={styles.problem}>«{lead.problem}»</p>}
+
+          {/* Фіксована ціна — головна обіцянка сервісу, тож показуємо її прямо тут */}
+          {lead.price !== null && (
+            <div className={styles.price}>
+              <span className={styles.priceValue}>{lead.price.toLocaleString("uk-UA")} ₴</span>
+              <span className={styles.priceNote}>
+                {lead.paidAt ? "оплачено" : "погоджена ціна — не зміниться"}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className={styles.eta}>

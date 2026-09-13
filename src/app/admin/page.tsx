@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getDb } from "@/db";
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, gte, isNull, sql } from "drizzle-orm";
 import { leads } from "@/db/schema";
 import { describeStatus, findLeads, STATUS_OPTIONS } from "@/db/leads";
 import { getAllReviews } from "@/db/reviews";
@@ -10,6 +10,7 @@ import { leadEvents } from "@/db/schema";
 import { asc, count, inArray } from "drizzle-orm";
 import { isAdmin } from "@/lib/admin";
 import { signOut } from "./actions";
+import MoneyFields from "./MoneyFields";
 import NoteField from "./NoteField";
 import Search, { adminHref, type Query } from "./Search";
 import ReviewList from "./ReviewList";
@@ -86,13 +87,28 @@ export default async function AdminPage({
   }
 
   // Рахуємо по всій базі, а не по сторінці — інакше цифри брехали б
-  const [[{ fresh }], [{ toShip }]] = await Promise.all([
+  const monthStart = new Date();
+  monthStart.setDate(1);
+  monthStart.setHours(0, 0, 0, 0);
+
+  const [[{ fresh }], [{ toShip }], [month]] = await Promise.all([
     getDb().select({ fresh: count() }).from(leads).where(eq(leads.status, "new")),
     getDb()
       .select({ toShip: count() })
       .from(leads)
       .where(and(eq(leads.deliveryRequested, true), isNull(leads.ttn))),
+    // Заробіток рахуємо за датою оплати, а не за датою заявки
+    getDb()
+      .select({
+        revenue: sql<number>`coalesce(sum(${leads.price}), 0)::int`,
+        cost: sql<number>`coalesce(sum(${leads.partsCost}), 0)::int`,
+        jobs: count(),
+      })
+      .from(leads)
+      .where(gte(leads.paidAt, monthStart)),
   ]);
+
+  const profit = month.revenue - month.cost;
 
   return (
     <section className={`container ${styles.wrap}`}>
@@ -133,6 +149,24 @@ export default async function AdminPage({
           <span className={styles.statValue}>{pendingReviews}</span>
           <span className={styles.statLabel}>відгуки на перевірці</span>
         </a>
+      </div>
+
+      {/* Заробіток — за датою оплати, тож цифра не залежить від того, коли прийшла заявка */}
+      <div className={styles.money}>
+        <div className={styles.moneyItem}>
+          <span className={styles.moneyValue}>{month.revenue.toLocaleString("uk-UA")} ₴</span>
+          <span className={styles.statLabel}>оплачено цього місяця</span>
+        </div>
+        <div className={styles.moneyItem}>
+          <span className={styles.moneyValue}>−{month.cost.toLocaleString("uk-UA")} ₴</span>
+          <span className={styles.statLabel}>деталі</span>
+        </div>
+        <div className={styles.moneyItem}>
+          <span className={styles.moneyProfit}>{profit.toLocaleString("uk-UA")} ₴</span>
+          <span className={styles.statLabel}>
+            чистими · {month.jobs} {month.jobs === 1 ? "ремонт" : "ремонтів"}
+          </span>
+        </div>
       </div>
 
       <Search query={query} found={found} />
@@ -213,6 +247,13 @@ export default async function AdminPage({
                   {r.city && !r.deliveryRequested && <div className={styles.city}>{r.city}</div>}
 
                   <NoteField id={r.id} events={eventsByLead.get(r.id) ?? []} />
+
+                  <MoneyFields
+                    id={r.id}
+                    price={r.price}
+                    partsCost={r.partsCost}
+                    paidAt={r.paidAt}
+                  />
                 </div>
 
                 <div className={styles.cardSide}>

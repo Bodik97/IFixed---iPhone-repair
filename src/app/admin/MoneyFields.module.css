@@ -1,0 +1,92 @@
+.form {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+  margin-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.field {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 12px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.input {
+  width: 104px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--field-border);
+  background: var(--field-bg);
+  color: var(--text);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.input:focus-visible {
+  outline: none;
+  border-color: var(--border-active);
+}
+
+.profit,
+.profitBad {
+  padding: 9px 4px;
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 16px;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.profit {
+  color: var(--accent);
+}
+
+/* Деталь дорожча за озвучену ціну — майстер має це помітити одразу */
+.profitBad {
+  color: var(--danger);
+}
+
+.paid {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 9px;
+  margin-left: auto;
+  font-size: 14.5px;
+  color: var(--text-2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.paid input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+@media (max-width: 620px) {
+  .form {
+    gap: 12px;
+  }
+
+  .input {
+    width: 92px;
+  }
+
+  .paid {
+    margin-left: 0;
+    width: 100%;
+    padding-bottom: 0;
+  }
+}

@@ -592,3 +592,33 @@
   color: var(--text-3);
   font-variant-numeric: tabular-nums;
 }
+
+/* Гроші за місяць — окремим рядком під лічильниками заявок */
+.money {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.moneyItem {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.moneyValue,
+.moneyProfit {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 20px;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.moneyProfit {
+  color: var(--accent);
+}

@@ -6,6 +6,8 @@ import styles from "./History.module.css";
 export type HistoryRow = {
   id: string;
   orderNo: number;
+  price: number | null;
+  paid: boolean;
   what: string;
   problem: string | null;
   date: string;
@@ -62,6 +64,12 @@ export default function History({ rows }: { rows: HistoryRow[] }) {
                   {r.what}
                 </div>
                 {r.problem && <div className={styles.work}>{r.problem}</div>}
+                {r.price !== null && (
+                  <div className={styles.price}>
+                    {r.price.toLocaleString("uk-UA")} ₴
+                    {r.paid && <span className={styles.paid}>оплачено</span>}
+                  </div>
+                )}
                 {r.ttn && (
                   <div className={styles.ttn}>
                     Накладна{" "}

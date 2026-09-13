@@ -42,6 +42,8 @@ export default async function AccountPage() {
     return {
       id: l.id,
       orderNo: l.orderNo,
+      price: l.price,
+      paid: Boolean(l.paidAt),
       what: l.model ?? l.service ?? "Ремонт",
       problem: l.problem,
       date: dateShort.format(l.createdAt),

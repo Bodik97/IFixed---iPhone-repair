@@ -64,6 +64,16 @@ export const leads = pgTable(
     /** Накладна Нової Пошти, коли майстер відправив */
     ttn: text("ttn"),
 
+    /**
+     * Гроші, у гривнях.
+     * price клієнт бачить у кабінеті — це та сама «фіксована ціна», яку ми
+     * обіцяємо не змінювати. partsCost і прибуток лишаються тільки в адмінці.
+     */
+    price: integer("price"),
+    partsCost: integer("parts_cost"),
+    /** Коли клієнт розрахувався. NULL = ще не оплачено. */
+    paidAt: timestamp("paid_at", { withTimezone: true }),
+
     source: leadSource("source").notNull(),
     status: leadStatus("status").notNull().default("new"),
 
