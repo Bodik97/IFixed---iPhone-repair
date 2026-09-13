@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { boardPrices, flatPrices, jobRange, PRICED_JOBS, uah } from "@/data/prices";
+import { boardPrices, flatPrices, jobRange, PRICED_JOBS, PRICES_PUBLISHED, uah } from "@/data/prices";
 import { services } from "@/data/services";
 import styles from "./PriceSummary.module.css";
 
@@ -12,6 +12,8 @@ const ranged = PRICED_JOBS.map((job) => ({ job, range: jobRange(job) })).filter(
 );
 
 export default function PriceSummary() {
+  if (!PRICES_PUBLISHED) return null;
+
   return (
     <section id="tsiny" className={`container ${styles.section}`}>
       <div className={styles.head}>

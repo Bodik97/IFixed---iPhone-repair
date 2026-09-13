@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { boardPrices, uah, type ModelPrice } from "@/data/prices";
+import { boardPrices, PRICES_PUBLISHED, uah, type ModelPrice } from "@/data/prices";
 import styles from "./ModelJobs.module.css";
 
 const partNote = {
@@ -55,7 +55,7 @@ export default function ModelJobs({ prices }: { prices?: ModelPrice }) {
     <section className={`container ${styles.section}`}>
       <div className={styles.head}>
         <div>
-          <div className="kicker">Роботи й ціни</div>
+          <div className="kicker">{PRICES_PUBLISHED ? "Роботи й ціни" : "Роботи"}</div>
           <h2 className={styles.title}>Що робимо для цієї моделі</h2>
         </div>
 
@@ -94,7 +94,7 @@ export default function ModelJobs({ prices }: { prices?: ModelPrice }) {
 
               <div className={styles.jobFoot}>
                 <span className={styles.jobTime}>{j.time}</span>
-                {price && (
+                {PRICES_PUBLISHED && price && (
                   <span className={price.exact ? styles.price : styles.priceFrom}>
                     {price.exact ? price.text : `від ${price.text}`}
                   </span>
@@ -106,8 +106,9 @@ export default function ModelJobs({ prices }: { prices?: ModelPrice }) {
       </div>
 
       <p className={styles.priceNote}>
-        Ціни під ключ — робота разом із деталлю. Точну суму називаємо після безкоштовної
-        діагностики, і далі вона вже не змінюється.
+        {PRICES_PUBLISHED
+          ? "Ціни під ключ — робота разом із деталлю. Точну суму називаємо після безкоштовної діагностики, і далі вона вже не змінюється."
+          : "Ціну називаємо після безкоштовної діагностики — і далі вона вже не змінюється."}
       </p>
     </section>
   );
