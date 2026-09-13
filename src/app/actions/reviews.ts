@@ -12,7 +12,7 @@ export type ReviewResult = { ok: true } | { ok: false; error: string };
 export async function submitReview(_prev: ReviewResult | null, formData: FormData): Promise<ReviewResult> {
   const user = await currentUser();
   if (!user) {
-    return { ok: false, error: "Щоб лишити відгук, увійдіть у кабінет." };
+    return { ok: false, error: "Щоб лишити відгук, увійдіть у свій акаунт." };
   }
 
   const text = String(formData.get("text") ?? "").trim();

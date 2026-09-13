@@ -27,5 +27,5 @@ export async function requestDelivery(formData: FormData): Promise<void> {
     })
     .where(and(eq(leads.id, id), eq(leads.clerkUserId, userId)));
 
-  revalidatePath("/kabinet");
+  revalidatePath("/moi-remonty");
 }

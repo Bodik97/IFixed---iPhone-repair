@@ -22,7 +22,7 @@ export default function ReviewForm({
         <div className={styles.gate}>
           <h3 className={styles.gateTitle}>Ремонтувались у нас?</h3>
           <p className={styles.gateText}>
-            Увійдіть у кабінет — і зможете лишити відгук. Так ми певні, що пишуть справжні клієнти,
+            Увійдіть у свій акаунт — і зможете лишити відгук. Так ми певні, що пишуть справжні клієнти,
             а не боти.
           </p>
           <Link href="/vhid" className="btn btn-accent">

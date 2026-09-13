@@ -12,8 +12,7 @@ export default function Devices({ devices }: { devices: Device[] }) {
 
   return (
     <div className={styles.card}>
-      <h3 className={styles.title}>Мої пристрої</h3>
-      <p className={styles.lead}>Гарантія рахується від дати видачі.</p>
+      <p className={styles.lead}>Гарантія рахується від дати видачі пристрою.</p>
 
       <div className={styles.list}>
         {devices.map((d) => {

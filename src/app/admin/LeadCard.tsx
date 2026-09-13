@@ -34,8 +34,8 @@ export default function LeadCard({ lead: r, events }: { lead: Lead; events: Lead
           <span className={styles.orderNo}>№&#8202;{r.orderNo}</span>
           <span className={styles.name}>{r.name}</span>
           {r.clerkUserId ? (
-            <span className={styles.tagAccount} title="Бачить статус у своєму кабінеті">
-              кабінет
+            <span className={styles.tagAccount} title="Має акаунт — бачить статус у себе на сторінці">
+              акаунт
             </span>
           ) : (
             <span className={styles.tagAnon} title="Без акаунта — пішло в Telegram">

@@ -5,8 +5,8 @@ import SignInForm from "./SignInForm";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "Вхід у кабінет",
-  description: "Вхід у кабінет клієнта iFix — статус ремонту та історія заявок.",
+  title: "Вхід",
+  description: "Вхід для клієнтів iFix — статус ремонту, посилка та історія заявок.",
   robots: { index: false, follow: false },
 };
 
@@ -40,7 +40,7 @@ const icons = {
 export default async function SignInPage() {
   // Уже увійшли — форма тут ні до чого
   const { userId } = await auth();
-  if (userId) redirect("/kabinet");
+  if (userId) redirect("/moi-remonty");
 
   return (
     <section className={styles.wrap}>
@@ -50,7 +50,7 @@ export default async function SignInPage() {
 
       <div className={styles.inner}>
         <div className={styles.copy}>
-          <div className="kicker">Кабінет</div>
+          <div className="kicker">Мої ремонти</div>
           <h1 className={styles.title}>Вхід для клієнтів</h1>
           <p className={styles.lead}>
             Пошта й пароль. Заходите вперше — акаунт створимо автоматично.

@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import styles from "./History.module.css";
 
 export type HistoryRow = {
@@ -18,42 +15,11 @@ export type HistoryRow = {
   ttn: string | null;
 };
 
-const tabs = [
-  { id: "all", label: "Усі" },
-  { id: "active", label: "У роботі" },
-  { id: "done", label: "Завершені" },
-] as const;
-
 export default function History({ rows }: { rows: HistoryRow[] }) {
-  const [tab, setTab] = useState<(typeof tabs)[number]["id"]>("all");
-
-  const shown =
-    tab === "all" ? rows : tab === "active" ? rows.filter((r) => r.active) : rows.filter((r) => !r.active);
-
-  const count = (id: (typeof tabs)[number]["id"]) =>
-    id === "all" ? rows.length : id === "active" ? rows.filter((r) => r.active).length : rows.filter((r) => !r.active).length;
+  const shown = rows;
 
   return (
-    <section className={`container ${styles.section}`}>
-      <div className={styles.head}>
-        <h2 className={styles.title}>Мої заявки</h2>
-
-        <div className={styles.tabs} role="group" aria-label="Фільтр заявок">
-          {tabs.map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              className="chip"
-              aria-pressed={tab === t.id}
-              onClick={() => setTab(t.id)}
-            >
-              {t.label}
-              <span className={styles.count}>{count(t.id)}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
+    <section className={styles.section}>
       {shown.length > 0 ? (
         <div className={styles.list}>
           {shown.map((r) => (

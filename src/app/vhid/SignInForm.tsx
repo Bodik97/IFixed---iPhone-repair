@@ -33,7 +33,7 @@ export default function SignInForm() {
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const goToCabinet = () => router.push("/kabinet");
+  const goToAccount = () => router.push("/moi-remonty");
 
   /** Вхід паролем; якщо акаунта немає — реєструємо з цим же паролем */
   const submitCredentials = async (e: React.FormEvent) => {
@@ -56,18 +56,29 @@ export default function SignInForm() {
 
       if (!signInError) {
         if (signIn.status === "complete") {
-          await signIn.finalize({ navigate: goToCabinet });
+          await signIn.finalize({ navigate: goToAccount });
           return;
         }
-        setError("Не вдалося завершити вхід. Спробуйте увійти кодом на пошту.");
+
+        // Пароль правильний, але Clerk хоче підтвердити пристрій (needs_client_trust)
+        // або другий фактор. Єдиний спосіб, який ми підтримуємо, — код на пошту.
+        const { error: sendError } = await signIn.emailCode.sendCode({ emailAddress: mail });
+        if (sendError) {
+          setError("Не вдалося увійти. Спробуйте кодом на пошту або зателефонуйте нам.");
+          return;
+        }
+
+        setIsNew(false);
+        setNotice("Ви входите з нового пристрою. Надіслали код на пошту — введіть його, щоб підтвердити, що це ви.");
+        setStep("codeLogin");
         return;
       }
 
       const code = errorCode(signInError);
 
-      // Вже є активна сесія — просто ведемо в кабінет
+      // Вже є активна сесія — просто ведемо на сторінку ремонтів
       if (code === "session_exists" || errorCode(signInError) === "session_exists") {
-        goToCabinet();
+        goToAccount();
         return;
       }
 
@@ -78,7 +89,7 @@ export default function SignInForm() {
       }
 
       // Акаунт є, але пароля в нього немає: реєструвався до того, як ми ввели паролі.
-      // Пускаємо кодом — пароль він задасть у кабінеті.
+      // Пускаємо кодом — пароль він задасть у себе на сторінці.
       if (code && code !== "form_identifier_not_found") {
         // Після невдалої спроби signIn лишається у стані помилки — інакше код не надішлеться
         signIn.reset();
@@ -88,7 +99,7 @@ export default function SignInForm() {
           return;
         }
         setIsNew(false);
-        setNotice("Ви реєструвались раніше, коли паролів ще не було. Надіслали код — увійдіть, і задасте пароль у кабінеті.");
+        setNotice("Ви реєструвались раніше, коли паролів ще не було. Надіслали код — увійдіть, і задасте пароль у себе на сторінці.");
         setStep("codeLogin");
         return;
       }
@@ -164,11 +175,11 @@ export default function SignInForm() {
       if (isNew) {
         await signUp.verifications.verifyEmailCode({ code: code.trim() });
         if (signUp.status !== "complete") throw new Error("incomplete");
-        await signUp.finalize({ navigate: goToCabinet });
+        await signUp.finalize({ navigate: goToAccount });
       } else {
         await signIn.emailCode.verifyCode({ code: code.trim() });
         if (signIn.status !== "complete") throw new Error("incomplete");
-        await signIn.finalize({ navigate: goToCabinet });
+        await signIn.finalize({ navigate: goToAccount });
       }
     } catch {
       setError("Код не підійшов. Перевірте останній лист або надішліть код ще раз.");

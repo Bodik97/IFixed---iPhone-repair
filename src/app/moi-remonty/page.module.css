@@ -1,0 +1,116 @@
+.page {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: clamp(20px, 4vw, 40px) var(--gutter) clamp(56px, 8vw, 96px);
+  display: grid;
+  gap: clamp(28px, 4vw, 42px);
+}
+
+/* ---------- Шапка ---------- */
+.head {
+  display: grid;
+  gap: 14px;
+}
+
+.headTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.h1 {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: clamp(30px, 5.5vw, 46px);
+  letter-spacing: -.03em;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.who {
+  margin: 0;
+  font-size: 14.5px;
+  color: var(--text-3);
+  overflow-wrap: anywhere;
+}
+
+.who strong {
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+/* ---------- Секції ---------- */
+.section {
+  display: grid;
+  gap: 16px;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.h2 {
+  margin: 0;
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: clamp(19px, 2.6vw, 24px);
+  letter-spacing: -.02em;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 13px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(218, 255, 61, .35);
+  background: rgba(218, 255, 61, .1);
+  color: var(--accent);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.cards {
+  display: grid;
+  gap: 16px;
+}
+
+/* ---------- Порожній стан ---------- */
+.empty {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: clamp(32px, 6vw, 56px) 24px;
+  border-radius: 26px;
+  border: 1px dashed var(--border-active);
+  background: var(--surface);
+  text-align: center;
+}
+
+.emptyIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: rgba(218, 255, 61, .1);
+  color: var(--accent);
+}
+
+.emptyTitle {
+  margin: 0;
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: clamp(20px, 3vw, 25px);
+  letter-spacing: -.02em;
+}
+
+.emptyText {
+  margin: 0;
+  max-width: 44ch;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--text-2);
+}

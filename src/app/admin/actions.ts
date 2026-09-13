@@ -58,7 +58,7 @@ export async function setStatus(formData: FormData): Promise<void> {
   }
 
   revalidatePath("/admin");
-  revalidatePath("/kabinet");
+  revalidatePath("/moi-remonty");
 }
 
 /** Майстер дописує подію в хроніку своїми словами */
@@ -72,7 +72,7 @@ export async function addNote(formData: FormData): Promise<void> {
   await addEvent(id, { text, byMaster: true });
 
   revalidatePath("/admin");
-  revalidatePath("/kabinet");
+  revalidatePath("/moi-remonty");
 }
 
 /** Майстер вписує накладну — статус одразу стає «Відправлено» */
@@ -97,7 +97,7 @@ export async function setTtn(formData: FormData): Promise<void> {
   }
 
   revalidatePath("/admin");
-  revalidatePath("/kabinet");
+  revalidatePath("/moi-remonty");
 }
 
 /** Схвалити або сховати відгук */
@@ -175,5 +175,5 @@ export async function setMoney(formData: FormData): Promise<void> {
   }
 
   revalidatePath("/admin");
-  revalidatePath("/kabinet");
+  revalidatePath("/moi-remonty");
 }

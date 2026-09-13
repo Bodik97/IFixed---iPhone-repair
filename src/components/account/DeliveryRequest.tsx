@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { requestDelivery } from "@/app/kabinet/actions";
+import { requestDelivery } from "@/app/moi-remonty/actions";
 import styles from "./DeliveryRequest.module.css";
 
 export default function DeliveryRequest({
