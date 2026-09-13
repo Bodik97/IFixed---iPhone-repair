@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookingForm from "@/components/BookingForm";
 import BackButton from "@/components/BackButton";
+import BookLink from "@/components/BookLink";
 import ModelJobs from "@/components/ModelJobs";
 import { getModelPrice } from "@/data/prices";
 import { allModels, getModel, relatedTo, sectionOf } from "@/data/catalog";
@@ -103,9 +104,9 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
               </p>
 
               <div className={`${styles.heroCta} nUp nUp-3`}>
-                <Link href="#book" className="btn btn-accent btn-lg btn-hero">
+                <BookLink model={model.name} className="btn btn-accent btn-lg btn-hero">
                   Записатись
-                </Link>
+                </BookLink>
                 <a href={site.phones[0].href} className="btn btn-ghost btn-lg">
                   Спитати про модель
                 </a>

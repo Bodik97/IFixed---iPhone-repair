@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { site } from "@/data/site";
 import FormError from "./FormError";
 import styles from "./BookingForm.module.css";
@@ -16,15 +17,16 @@ type Props = {
   submitLabel?: string;
 };
 
-export default function BookingForm({
+function BookingFormInner({
   source,
   select,
   model,
   submitLabel = "Записатись на безкоштовну діагностику",
-}: Props) {
+  initialChoice = "",
+}: Props & { initialChoice?: string }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [choice, setChoice] = useState("");
+  const [choice, setChoice] = useState(initialChoice);
   const [problem, setProblem] = useState("");
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
@@ -164,5 +166,22 @@ export default function BookingForm({
         <p className={styles.note}>Телефон потрібен лише щоб передзвонити. Нікуди його не передаємо.</p>
       </form>
     </div>
+  );
+}
+
+/** Дістає вибір із адреси: ?service=… або ?model=… від картки на сайті */
+function BookingFormWithChoice(props: Props) {
+  const params = useSearchParams();
+  const choice = props.select ? (params.get(props.select.name) ?? "") : "";
+  return <BookingFormInner {...props} initialChoice={choice} />;
+}
+
+export default function BookingForm(props: Props) {
+  // Запасний варіант — та сама форма без підстановки. Так розмітка потрапляє
+  // в статичний пререндер, а підстановка додається вже на клієнті.
+  return (
+    <Suspense fallback={<BookingFormInner {...props} />}>
+      <BookingFormWithChoice {...props} />
+    </Suspense>
   );
 }

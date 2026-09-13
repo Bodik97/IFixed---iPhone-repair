@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Suspense } from "react";
 import { currentUser } from "@clerk/nextjs/server";
 import BackButton from "@/components/BackButton";
 import Devices from "@/components/account/Devices";
 import History from "@/components/account/History";
-import NewRepair from "@/components/account/NewRepair";
+import QuickOrder from "@/components/account/QuickOrder";
 import RepairCard from "@/components/account/RepairCard";
 import SetPassword from "@/components/account/SetPassword";
 import SignOutButton from "@/components/account/SignOutButton";
@@ -104,28 +104,13 @@ export default async function MyRepairsPage() {
           </div>
         </section>
       ) : (
-        <section className={styles.section}>
-          <div className={styles.empty}>
-            <span className={styles.emptyIcon} aria-hidden="true">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="6" y="2.5" width="12" height="19" rx="2.5" />
-                <path d="M10.5 5.5h3" />
-              </svg>
-            </span>
-
-            <h2 className={styles.emptyTitle}>
-              {leads.length > 0 ? "Зараз нічого не в роботі" : "Тут з'являться ваші ремонти"}
-            </h2>
-            <p className={styles.emptyText}>
-              {leads.length > 0
-                ? "Усі ваші ремонти завершені. Історія — нижче."
-                : "Залиште заявку — і побачите тут етап, на якому зараз ваш пристрій, без дзвінків і очікування."}
-            </p>
-
-            <Link href="/#book" className="btn btn-accent btn-lg">
-              Залишити заявку
-            </Link>
-          </div>
+        <section className={styles.section} aria-labelledby="zamovyty">
+          <h2 id="zamovyty" className={styles.h2}>
+            {leads.length > 0 ? "Зараз нічого не в роботі" : "Замовити ремонт"}
+          </h2>
+          <Suspense fallback={null}>
+            <QuickOrder compact />
+          </Suspense>
         </section>
       )}
 
@@ -147,9 +132,12 @@ export default async function MyRepairsPage() {
         </section>
       )}
 
+      {/* Коли щось уже в роботі, форма лишається внизу — як додаткова дія */}
       {active.length > 0 && (
         <section className={styles.section}>
-          <NewRepair />
+          <Suspense fallback={null}>
+            <QuickOrder />
+          </Suspense>
         </section>
       )}
     </div>
