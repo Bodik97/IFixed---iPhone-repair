@@ -90,7 +90,7 @@
   background: linear-gradient(150deg, rgba(218, 255, 61, .1), rgba(255, 255, 255, .02));
   padding: clamp(28px, 4vw, 54px);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
   gap: clamp(24px, 3vw, 48px);
   align-items: center;
 }

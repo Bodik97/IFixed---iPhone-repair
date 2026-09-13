@@ -473,3 +473,11 @@ summary::-webkit-details-marker {
   border-color: var(--danger-border);
   background: var(--danger-bg);
 }
+
+/* Нижня навігація фіксована — резервуємо під неї висоту, інакше вона
+   накриє кінець сторінки (підвал, кнопки форм) */
+@media (max-width: 860px) {
+  body {
+    padding-bottom: calc(66px + env(safe-area-inset-bottom, 0px));
+  }
+}

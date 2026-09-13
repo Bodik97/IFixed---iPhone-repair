@@ -45,7 +45,7 @@
   max-width: var(--container);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: clamp(32px, 4vw, 72px);
   align-items: center;
 }
@@ -317,7 +317,7 @@
   margin: 0 auto;
   padding: clamp(56px, 7vw, 108px) var(--gutter);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: clamp(28px, 4vw, 64px);
   align-items: center;
 }
@@ -466,7 +466,7 @@
 
 .worksGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: 24px;
 }
 
@@ -493,7 +493,7 @@
 
 .reviewGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(268px, 100%), 1fr));
   gap: 18px;
 }
 
@@ -528,7 +528,7 @@
   background: linear-gradient(150deg, rgba(218, 255, 61, .1), rgba(255, 255, 255, .02));
   padding: clamp(28px, 4vw, 56px);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
   gap: clamp(26px, 3.4vw, 56px);
   align-items: center;
 }
@@ -578,7 +578,7 @@
 .faqSection {
   padding-block: clamp(52px, 7vw, 104px);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: clamp(28px, 4vw, 64px);
   align-items: start;
 }
@@ -638,7 +638,7 @@
 
 .bookGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: clamp(30px, 4vw, 64px);
 }
 
@@ -691,7 +691,7 @@
 .reviewFormWrap {
   margin-top: clamp(28px, 4vw, 48px);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
   gap: clamp(24px, 3vw, 48px);
   align-items: start;
 }

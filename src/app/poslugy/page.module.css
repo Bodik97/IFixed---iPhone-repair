@@ -44,7 +44,7 @@
   max-width: var(--container);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: clamp(30px, 4vw, 70px);
   align-items: center;
 }
@@ -219,7 +219,7 @@
 
 .bookGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
   gap: clamp(28px, 4vw, 60px);
   align-items: start;
 }

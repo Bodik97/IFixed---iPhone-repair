@@ -44,7 +44,7 @@
   max-width: var(--container);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: clamp(30px, 4vw, 70px);
   align-items: center;
 }
@@ -239,7 +239,7 @@
 .packingGrid {
   padding-block: clamp(40px, 5.5vw, 84px);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: clamp(28px, 4vw, 60px);
   align-items: start;
 }
@@ -357,7 +357,7 @@
 
 .sendGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
   gap: clamp(28px, 4vw, 60px);
   align-items: start;
 }
@@ -399,7 +399,7 @@
 .faqSection {
   padding-bottom: clamp(50px, 7vw, 100px);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: clamp(28px, 4vw, 64px);
   align-items: start;
 }

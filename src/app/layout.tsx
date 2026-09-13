@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Unbounded, Manrope } from "next/font/google";
 import Header from "@/components/Header";
+import BottomNav from "@/components/BottomNav";
 import Footer from "@/components/Footer";
 import { site } from "@/data/site";
 import "./globals.css";
@@ -63,6 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <main>{children}</main>
           <Footer />
+          <BottomNav />
         </ClerkProvider>
         <script
           type="application/ld+json"
