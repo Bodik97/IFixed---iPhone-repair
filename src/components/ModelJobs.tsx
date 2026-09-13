@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { boardPrices, uah, type ModelPrice } from "@/data/prices";
 import styles from "./ModelJobs.module.css";
 
 const partNote = {
@@ -16,60 +17,98 @@ const screenBody = {
 };
 
 const restJobs = [
-  { title: "Акумулятор", body: "Новий АКБ, показуємо ємність до та після. Циклів — 0.", time: "30 хв при вас" },
-  { title: "Роз'єм заряджання", body: "Спершу чистка — часто цього достатньо. Якщо ні, міняємо шлейф.", time: "від 40 хв" },
-  { title: "Камера / скло камери", body: "Мутне фото, пил під склом, не працює автофокус — модуль або лише скло.", time: "того ж дня" },
-  { title: "Залив водою", body: "Розбирання, сушіння, ультразвукова чистка плати від корозії.", time: "1–3 дні" },
-  { title: "Не вмикається", body: "Шукаємо причину на платі: живлення, підсвітка, контролери заряду.", time: "діагностика безкоштовна" },
-];
+  { slug: "akumuliator", title: "Акумулятор", body: "Новий АКБ, показуємо ємність до та після. Циклів — 0.", time: "30 хв при вас" },
+  { slug: "roziem-zariadzhannia", title: "Роз'єм заряджання", body: "Спершу чистка — часто цього достатньо. Якщо ні, міняємо шлейф.", time: "від 40 хв" },
+  { slug: "kamera", title: "Камера / скло камери", body: "Мутне фото, пил під склом, не працює автофокус — модуль або лише скло.", time: "того ж дня" },
+  { slug: "zalyv-vodoiu", title: "Залив водою", body: "Розбирання, сушіння, ультразвукова чистка плати від корозії.", time: "1–3 дні" },
+  { slug: "ne-vmykaietsia", title: "Не вмикається", body: "Шукаємо причину на платі: живлення, підсвітка, контролери заряду.", time: "діагностика безкоштовна" },
+] as const;
 
-export default function ModelJobs() {
+const boardFrom = new Map(boardPrices.map((b) => [b.slug, b.from]));
+
+export default function ModelJobs({ prices }: { prices?: ModelPrice }) {
   const [part, setPart] = useState<"original" | "analog">("original");
 
+  // Перемикач має сенс лише там, де деталь буває двох рівнів — тобто де є екран
+  const screen = prices?.["zamina-ekrana"];
+  const tiered = typeof screen === "object";
+
+  /** Ціна роботи так, як її треба показати: точна сума або «від» */
+  function priceOf(slug: string): { text: string; exact: boolean } | null {
+    const board = boardFrom.get(slug);
+    if (board !== undefined) return { text: uah(board), exact: false };
+
+    const value = prices?.[slug as keyof ModelPrice];
+    if (value === undefined) return null;
+    if (typeof value === "number") return { text: uah(value), exact: true };
+    return { text: uah(value[part]), exact: true };
+  }
+
+  // Роботи без ціни для цієї моделі не показуємо: у годинника немає ні камери,
+  // ні роз'єму, і порожній рядок поруч із цінами читався б як «ціну приховали».
   const jobs = [
-    { title: "Заміна екрана", body: screenBody[part], time: "40 хв при вас" },
+    { slug: "zamina-ekrana", title: "Заміна екрана", body: tiered ? screenBody[part] : "Нове скло або модуль у зборі, з відновленням герметизації.", time: "40 хв при вас" },
     ...restJobs,
-  ];
+  ].filter((j) => priceOf(j.slug) !== null);
 
   return (
     <section className={`container ${styles.section}`}>
       <div className={styles.head}>
         <div>
-          <div className="kicker">Роботи</div>
+          <div className="kicker">Роботи й ціни</div>
           <h2 className={styles.title}>Що робимо для цієї моделі</h2>
         </div>
 
-        <div className={styles.toggle} role="group" aria-label="Тип запчастини">
-          <button
-            type="button"
-            className={part === "original" ? styles.tabActive : styles.tab}
-            aria-pressed={part === "original"}
-            onClick={() => setPart("original")}
-          >
-            Оригінал
-          </button>
-          <button
-            type="button"
-            className={part === "analog" ? styles.tabActive : styles.tab}
-            aria-pressed={part === "analog"}
-            onClick={() => setPart("analog")}
-          >
-            Аналог
-          </button>
-        </div>
+        {tiered && (
+          <div className={styles.toggle} role="group" aria-label="Тип запчастини">
+            <button
+              type="button"
+              className={part === "original" ? styles.tabActive : styles.tab}
+              aria-pressed={part === "original"}
+              onClick={() => setPart("original")}
+            >
+              Оригінал
+            </button>
+            <button
+              type="button"
+              className={part === "analog" ? styles.tabActive : styles.tab}
+              aria-pressed={part === "analog"}
+              onClick={() => setPart("analog")}
+            >
+              Аналог
+            </button>
+          </div>
+        )}
       </div>
 
-      <p className={styles.note}>{partNote[part]}</p>
+      {tiered && <p className={styles.note}>{partNote[part]}</p>}
 
       <div className={styles.list}>
-        {jobs.map((j) => (
-          <div key={j.title} className={styles.job}>
-            <div className={styles.jobTitle}>{j.title}</div>
-            <div className={styles.jobBody}>{j.body}</div>
-            <div className={styles.jobTime}>{j.time}</div>
-          </div>
-        ))}
+        {jobs.map((j) => {
+          const price = priceOf(j.slug);
+
+          return (
+            <div key={j.title} className={styles.job}>
+              <div className={styles.jobTitle}>{j.title}</div>
+              <div className={styles.jobBody}>{j.body}</div>
+
+              <div className={styles.jobFoot}>
+                <span className={styles.jobTime}>{j.time}</span>
+                {price && (
+                  <span className={price.exact ? styles.price : styles.priceFrom}>
+                    {price.exact ? price.text : `від ${price.text}`}
+                  </span>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
+
+      <p className={styles.priceNote}>
+        Ціни під ключ — робота разом із деталлю. Точну суму називаємо після безкоштовної
+        діагностики, і далі вона вже не змінюється.
+      </p>
     </section>
   );
 }

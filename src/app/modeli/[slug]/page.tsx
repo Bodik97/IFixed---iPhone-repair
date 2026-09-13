@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookingForm from "@/components/BookingForm";
 import ModelJobs from "@/components/ModelJobs";
+import { getModelPrice } from "@/data/prices";
 import { allModels, getModel, relatedTo, sectionOf } from "@/data/catalog";
 import { site } from "@/data/site";
 import styles from "./page.module.css";
@@ -118,7 +119,7 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
         </div>
       </section>
 
-      <ModelJobs />
+      <ModelJobs prices={getModelPrice(model.slug)} />
 
       <section className={styles.warranty}>
         <div className={`container ${styles.warrantyGrid}`}>

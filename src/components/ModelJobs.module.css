@@ -95,16 +95,57 @@
   color: rgba(241, 243, 239, .66);
 }
 
+/* Третя колонка: термін зверху, ціна під ним і крупніше — її шукають очима */
+.jobFoot {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+  text-align: right;
+}
+
 .jobTime {
   font-size: 13.5px;
   color: var(--accent);
   white-space: nowrap;
 }
 
+.price,
+.priceFrom {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 19px;
+  letter-spacing: -.02em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* «від» — сума лише орієнтир, тож приглушена, щоб не читалась як остаточна */
+.priceFrom {
+  font-size: 16px;
+  color: var(--text-2);
+}
+
+.priceNote {
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--text-3);
+  max-width: 64ch;
+}
+
 @media (max-width: 720px) {
   .job {
     grid-template-columns: 1fr;
     gap: 10px;
+  }
+
+  .jobFoot {
+    justify-items: start;
+    text-align: left;
+    grid-auto-flow: column;
+    justify-content: space-between;
+    align-items: baseline;
+    width: 100%;
+    padding-top: 4px;
+    border-top: 1px solid var(--border);
   }
 
   .jobTime {

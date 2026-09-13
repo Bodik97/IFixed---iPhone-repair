@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import BookingForm from "@/components/BookingForm";
+import PriceSummary from "@/components/PriceSummary";
 import ServiceCatalog from "@/components/ServiceCatalog";
 import Ticker from "@/components/Ticker";
 import { services } from "@/data/services";
@@ -79,6 +80,8 @@ export default function ServicesPage() {
       <Ticker items={tickerItems} />
 
       <ServiceCatalog />
+
+      <PriceSummary />
 
       {/* Процес */}
       <section className={styles.process}>

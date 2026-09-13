@@ -1,0 +1,110 @@
+.section {
+  padding: clamp(48px, 6vw, 90px) var(--gutter);
+}
+
+.head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.title {
+  font-size: clamp(28px, 3.4vw, 44px);
+  margin-top: 10px;
+}
+
+.lead {
+  margin-top: 16px;
+  font-size: 16px;
+  color: var(--text-2);
+  max-width: 56ch;
+}
+
+.table {
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+/* Підзаголовок групи: пояснює, чому одні ціни точні, а інші «від» */
+.groupLabel {
+  padding: 16px 24px 10px;
+  font-size: 12.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  background: rgba(255, 255, 255, .025);
+  border-bottom: 1px solid var(--border);
+}
+
+.groupLabel:not(:first-child) {
+  border-top: 1px solid var(--border);
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 15px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.job {
+  font-size: 16px;
+}
+
+.value {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 16px;
+  letter-spacing: -.02em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.dash {
+  color: var(--text-3);
+  margin: 0 2px;
+}
+
+.free {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 16px;
+  letter-spacing: -.02em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.note {
+  margin-top: 18px;
+  font-size: 14px;
+  color: var(--text-3);
+  max-width: 64ch;
+}
+
+@media (max-width: 620px) {
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 14px 18px;
+  }
+
+  .groupLabel {
+    padding: 14px 18px 9px;
+  }
+
+  .value,
+  .free {
+    font-size: 17px;
+  }
+}
