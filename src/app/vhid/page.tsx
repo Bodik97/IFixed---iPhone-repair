@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
-import SignInForm from "./SignInForm";
+import SignInForm from "@/components/auth/SignInForm";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSignIn, useSignUp } from "@clerk/nextjs";
 import FormError from "@/components/FormError";
-import styles from "./page.module.css";
+import styles from "./SignInForm.module.css";
 
 /** credentials — пошта+пароль; code — підтвердження пошти при реєстрації; codeLogin — вхід без пароля */
 type Step = "credentials" | "code" | "codeLogin";
@@ -18,7 +18,14 @@ function errorCode(error: unknown): string {
   return e?.code ?? e?.errors?.[0]?.code ?? "";
 }
 
-export default function SignInForm() {
+type Props = {
+  /** Викликається після успішного входу — модальному вікну треба закритись */
+  onDone?: () => void;
+  /** У модальному вікні картка вже має свою рамку — друга не потрібна */
+  bare?: boolean;
+};
+
+export default function SignInForm({ onDone, bare }: Props = {}) {
   const { signIn } = useSignIn();
   const { signUp } = useSignUp();
   const router = useRouter();
@@ -33,7 +40,12 @@ export default function SignInForm() {
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const goToAccount = () => router.push("/moi-remonty");
+  const goToAccount = () => {
+    onDone?.();
+    router.push("/moi-remonty");
+    // Сторінка «Мої ремонти» рендериться на сервері й має побачити нову сесію
+    router.refresh();
+  };
 
   /** Вхід паролем; якщо акаунта немає — реєструємо з цим же паролем */
   const submitCredentials = async (e: React.FormEvent) => {
@@ -197,7 +209,7 @@ export default function SignInForm() {
 
   if (step === "code" || step === "codeLogin") {
     return (
-      <div className={styles.card}>
+      <div className={bare ? styles.cardBare : styles.card}>
         <form onSubmit={verifyCode} className={styles.form} noValidate>
           {notice && <div className={styles.notice}>{notice}</div>}
 
@@ -243,7 +255,7 @@ export default function SignInForm() {
   }
 
   return (
-    <div className={styles.card}>
+    <div className={bare ? styles.cardBare : styles.card}>
       <form onSubmit={submitCredentials} className={styles.form} noValidate>
         <div className={styles.row}>
           <label htmlFor="v-email">Пошта</label>
