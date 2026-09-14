@@ -47,3 +47,18 @@
     opacity: .7;
   }
 }
+
+/* На вузькому екрані лишається сама крапка: у шапці адмінки поруч
+   стоять «Меню» й «Вийти», і підпис їх виштовхував за екран */
+@media (max-width: 560px) {
+  .live,
+  .updated {
+    gap: 0;
+    padding: 5px 9px;
+  }
+
+  .live .text,
+  .updated .text {
+    display: none;
+  }
+}

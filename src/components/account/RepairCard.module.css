@@ -121,14 +121,17 @@
   color: var(--text-3);
 }
 
+/* Сітка, а не flex: так обидві кнопки завжди однакові, а коли місця бракує —
+   чесно стають одна під одну замість того, щоб стискатись у ніщо */
 .actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr));
   gap: 10px;
-  flex-wrap: wrap;
 }
 
 .action {
-  flex: 1 1 150px;
+  width: 100%;
+  min-width: 0;
   gap: 8px;
 }
 
@@ -138,13 +141,6 @@
     gap: 10px;
   }
 
-  /* На телефоні дії тримаємо в один ряд — вони в зоні великого пальця */
-  .action {
-    flex: 1 1 0;
-    min-width: 0;
-    padding-left: 12px;
-    padding-right: 12px;
-  }
 }
 
 /* ---------- Передоплата ---------- */

@@ -73,12 +73,12 @@ export default function LiveRefresh({ label }: { label?: string }) {
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 12.5l4.5 4.5L19 7.5" />
           </svg>
-          Оновлено
+          <span className={styles.text}>Оновлено</span>
         </span>
       ) : (
         <span className={styles.live}>
           <span className={styles.dot} aria-hidden="true" />
-          {label ?? "Оновлюється саме"}
+          <span className={styles.text}>{label ?? "Оновлюється саме"}</span>
         </span>
       )}
     </div>
