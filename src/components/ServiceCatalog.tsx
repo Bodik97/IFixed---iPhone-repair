@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import BookLink from "./BookLink";
+import Link from "next/link";
 import { services, serviceCats, type ServiceCat } from "@/data/services";
 import styles from "./ServiceCatalog.module.css";
 
@@ -53,7 +53,11 @@ export default function ServiceCatalog() {
               <span className={styles.no}>{s.no}</span>
             </div>
 
-            <h3 className={styles.cardTitle}>{s.title}</h3>
+            <h3 className={styles.cardTitle}>
+              <Link href={`/poslugy/${s.slug}`} className={styles.cardLink}>
+                {s.title}
+              </Link>
+            </h3>
             <p className={styles.body}>{s.body}</p>
 
             <div className={styles.tags}>
@@ -66,13 +70,13 @@ export default function ServiceCatalog() {
 
             <div className={styles.foot}>
               <span className={styles.time}>{s.time}</span>
-              <BookLink service={s.title} className={styles.book}>
-                Записатись
+              <Link href={`/poslugy/${s.slug}`} className={styles.book}>
+                Докладніше
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
                   <path d="M5 12h13" />
                   <path d="M13 6l6 6-6 6" />
                 </svg>
-              </BookLink>
+              </Link>
             </div>
           </article>
         ))}

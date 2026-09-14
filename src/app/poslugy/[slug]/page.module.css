@@ -1,0 +1,285 @@
+.page {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: clamp(20px, 4vw, 40px) var(--gutter) clamp(56px, 8vw, 96px);
+  display: grid;
+  gap: clamp(30px, 4vw, 46px);
+}
+
+/* ---------- Навігація ---------- */
+.navRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.crumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 13.5px;
+  color: var(--text-3);
+}
+
+.crumbs a {
+  color: rgba(241, 243, 239, .6);
+  text-decoration: none;
+}
+
+.crumbs a:hover {
+  color: var(--text);
+}
+
+.sep {
+  margin: 0 8px;
+  opacity: .5;
+}
+
+.current {
+  color: var(--accent);
+}
+
+/* ---------- Шапка ---------- */
+.hero {
+  display: grid;
+  gap: 16px;
+  justify-items: start;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 17px;
+  background: rgba(218, 255, 61, .12);
+  color: var(--accent);
+}
+
+.h1 {
+  margin: 0;
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: clamp(30px, 5.4vw, 48px);
+  letter-spacing: -.03em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.intro {
+  margin: 0;
+  max-width: 58ch;
+  font-size: clamp(16px, 1.8vw, 18.5px);
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.time {
+  padding: 7px 14px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(218, 255, 61, .35);
+  background: rgba(218, 255, 61, .1);
+  color: var(--accent);
+  font-size: 13.5px;
+  white-space: nowrap;
+}
+
+.price {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 15px;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.cta > * {
+  flex: 1 1 200px;
+}
+
+/* ---------- Застереження ---------- */
+.warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid var(--danger-border);
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.warning svg {
+  flex: none;
+  margin-top: 1px;
+}
+
+.warning p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* ---------- Секції ---------- */
+.section {
+  display: grid;
+  gap: 16px;
+}
+
+.h2 {
+  margin: 0;
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: clamp(21px, 2.8vw, 27px);
+  letter-spacing: -.02em;
+}
+
+.signs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 10px;
+}
+
+.signs li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.signs svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--accent);
+}
+
+/* Кроки нумеровані, бо це справді послідовність */
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.step:last-child {
+  border-bottom: none;
+}
+
+.stepNo {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 14px;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+
+.stepTitle {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.stepBody {
+  margin: 6px 0 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-2);
+  max-width: 62ch;
+}
+
+.included {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.included li {
+  position: relative;
+  padding-left: 26px;
+  font-size: 15.5px;
+  line-height: 1.5;
+}
+
+.included li::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 9px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.note {
+  margin: 6px 0 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-3);
+  max-width: 64ch;
+}
+
+/* ---------- Інші роботи ---------- */
+.others {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: 10px;
+}
+
+.other {
+  display: grid;
+  gap: 5px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color .15s, background .15s;
+}
+
+.other:hover {
+  border-color: var(--border-active);
+  background: var(--surface-hover);
+}
+
+.otherTitle {
+  font-size: 16px;
+}
+
+.otherTime {
+  font-size: 13px;
+  color: var(--accent);
+}

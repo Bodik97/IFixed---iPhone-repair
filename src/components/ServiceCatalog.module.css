@@ -130,3 +130,25 @@
   color: var(--accent);
   gap: 11px;
 }
+
+/* Уся назва — посилання на сторінку послуги; розтягуємо зону кліку на картку */
+.cardLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cardLink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.cardLink:focus-visible {
+  outline: none;
+}
+
+.cardLink:focus-visible::after {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
