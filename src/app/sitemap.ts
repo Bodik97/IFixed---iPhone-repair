@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { allModels, sections } from "@/data/catalog";
+import { serviceDetails } from "@/data/serviceDetails";
+import { services } from "@/data/services";
 import { siteUrl } from "@/lib/siteUrl";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -20,6 +22,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: p.priority,
     })),
+    // Сторінки послуг — під них і шукають «заміна екрана львів»
+    ...services
+      .filter((s) => serviceDetails[s.slug])
+      .map((s) => ({
+        url: `${base}/poslugy/${s.slug}`,
+        lastModified: now,
+        changeFrequency: "monthly" as const,
+        priority: 0.8,
+      })),
     ...allModels.map((m) => ({
       url: `${base}/modeli/${m.slug}`,
       lastModified: now,
