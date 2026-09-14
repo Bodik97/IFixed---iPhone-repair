@@ -2,6 +2,7 @@ import { getAllReviews } from "@/db/reviews";
 import { getCounters } from "@/db/adminStats";
 import { countUnreadForMaster } from "@/db/messages";
 import { isAdmin } from "@/lib/admin";
+import LiveRefresh from "@/components/LiveRefresh";
 import AdminShell from "./AdminShell";
 import { signOut } from "./actions";
 
@@ -26,11 +27,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         pendingReviews,
       }}
       actions={
-        <form action={signOut}>
-          <button type="submit" className="btn btn-ghost">
-            Вийти
-          </button>
-        </form>
+        <>
+          <LiveRefresh label="Нові заявки — самі" />
+          <form action={signOut}>
+            <button type="submit" className="btn btn-ghost">
+              Вийти
+            </button>
+          </form>
+        </>
       }
     >
       {children}

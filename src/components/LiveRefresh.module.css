@@ -1,0 +1,49 @@
+.wrap {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+}
+
+.live,
+.updated {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.live {
+  color: var(--text-3);
+}
+
+/* Підтвердження, що дані щойно приїхали — щоб зміна не пройшла непоміченою */
+.updated {
+  border-color: rgba(218, 255, 61, .45);
+  background: rgba(218, 255, 61, .12);
+  color: var(--accent);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: .75;
+  animation: liveBeat 2.4s ease-in-out infinite;
+}
+
+@keyframes liveBeat {
+  0%, 100% { opacity: .3; }
+  50% { opacity: .9; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation: none;
+    opacity: .7;
+  }
+}

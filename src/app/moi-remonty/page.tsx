@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { currentUser } from "@clerk/nextjs/server";
 import BackButton from "@/components/BackButton";
+import LiveRefresh from "@/components/LiveRefresh";
 import Devices from "@/components/account/Devices";
 import History from "@/components/account/History";
 import QuickOrder from "@/components/account/QuickOrder";
@@ -75,6 +76,8 @@ export default async function MyRepairsPage() {
         </div>
 
         <h1 className={styles.h1}>Мої ремонти</h1>
+
+        <LiveRefresh label="Статус оновлюється сам" />
 
         <p className={styles.who}>
           {name ? <strong>{name}</strong> : null}
