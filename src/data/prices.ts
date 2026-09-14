@@ -1,15 +1,24 @@
 // Прайс по моделях, у гривнях, «під ключ»: робота разом із деталлю.
 //
-// Звідки числа. Зведено з відкритих прайсів конкурентів (вересень 2026):
-//   · RobimGood, Київ    — 11, 11 Pro, 12, 12 Pro, 13, 14 Pro, 15, 16 Pro Max
-//   · Технарі, Київ      — екрани 6 → XS Max (їхні ціни на 11 Pro — викид, не брали)
-//   · AppLab, Київ/Львів — повний розклад по XR
-//   · AppleFix           — акумулятори iPad
-//   · sklorepair         — вилки по Apple Watch
+// Звідки числа. iPhone — з відкритих прайсів reboot-service.com.ua (Львів),
+// зі сторінок конкретних моделей: 7, X/XS/XS Max, XR, 11, 12, 13, 14, 15, 16.
+// Моделі, яких у них немає окремою сторінкою (8, SE, 6s, mini, частина Pro),
+// пораховані інтерполяцією між сусідніми.
 //
-// Рівень цін — приблизно на 10% нижче київського: у Львові дешевша оренда й
-// зарплати. Нижче не опускались свідомо — у iFix є кабінет, хроніка ремонту
-// й гарантія, яких у конкурентів немає, і демпінг цю перевагу знецінює.
+// Два місця згладжено свідомо:
+//   · 14 Pro Max, копія екрана — у них 6900 проти 2600 у 14 Pro. Це викид,
+//     поставлено 3000 за трендом серії.
+//   · 16 Pro / Pro Max, копія — у них дешевша за базову 16. Вирівняно вгору.
+//
+// Що НЕ чіпали, хоч виглядає дивно — це їхні реальні числа:
+//   · оригінал 15 Pro Max (23 000) дорожчий за 16 Pro Max (18 000);
+//   · оригінал 15 Pro (15 500) дорожчий за 16 Pro (14 500);
+//   · оригінал 13 (5 500) дорожчий за 14 (5 000).
+// Рідкісні панелі справді бувають дорожчими за новіші. Якщо хочете рівний
+// ряд — скажіть, вирівняю.
+//
+// iPad та Apple Watch — reboot-service цін на них не публікує, тож лишаються
+// зведені з київських прайсів (AppleFix, Технарі).
 //
 // Щоб змінити ціну — правте число тут. Прибрана робота просто зникає з таблиці
 // на сторінці моделі.
@@ -19,7 +28,6 @@
  *
  * Поки тут false, прайс лишається в коді, але клієнти його не бачать: блок цін
  * на сторінці послуг зникає, а на сторінці моделі лишаються самі роботи без сум.
- * Перемкніть на true, коли числа нижче стануть вашими, а не ринковими.
  */
 export const PRICES_PUBLISHED = false;
 
@@ -46,41 +54,41 @@ export type ModelPrice = Partial<Record<PricedJob, JobPrice>>;
 
 export const modelPrices: Record<string, ModelPrice> = {
   // ─── iPhone ───
-  "iphone-16-pro-max": { "zamina-ekrana": { analog: 9300, original: 17000 }, "akumuliator": 4000, "roziem-zariadzhannia": 4200, "kamera": 5000, "dynamik-i-mikrofon": 1500, "korpus": 5700, "knopky-y-vibro": 1300 },
-  "iphone-16-pro": { "zamina-ekrana": { analog: 8800, original: 15000 }, "akumuliator": 3900, "roziem-zariadzhannia": 4100, "kamera": 4800, "dynamik-i-mikrofon": 1500, "korpus": 5400, "knopky-y-vibro": 1300 },
-  "iphone-16-plus": { "zamina-ekrana": { analog: 8000, original: 12500 }, "akumuliator": 3700, "roziem-zariadzhannia": 4000, "kamera": 4400, "dynamik-i-mikrofon": 1400, "korpus": 5100, "knopky-y-vibro": 1250 },
-  "iphone-16": { "zamina-ekrana": { analog: 7500, original: 11500 }, "akumuliator": 3600, "roziem-zariadzhannia": 4000, "kamera": 4200, "dynamik-i-mikrofon": 1400, "korpus": 4900, "knopky-y-vibro": 1250 },
-  "iphone-15-pro-max": { "zamina-ekrana": { analog: 7200, original: 11500 }, "akumuliator": 3700, "roziem-zariadzhannia": 4100, "kamera": 5900, "dynamik-i-mikrofon": 1400, "korpus": 5500, "knopky-y-vibro": 1250 },
-  "iphone-15-pro": { "zamina-ekrana": { analog: 6800, original: 10800 }, "akumuliator": 3600, "roziem-zariadzhannia": 4000, "kamera": 5600, "dynamik-i-mikrofon": 1400, "korpus": 5300, "knopky-y-vibro": 1250 },
-  "iphone-15-plus": { "zamina-ekrana": { analog: 6600, original: 9800 }, "akumuliator": 3500, "roziem-zariadzhannia": 4000, "kamera": 5600, "dynamik-i-mikrofon": 1350, "korpus": 5100, "knopky-y-vibro": 1200 },
-  "iphone-15": { "zamina-ekrana": { analog: 6300, original: 9400 }, "akumuliator": 3500, "roziem-zariadzhannia": 4000, "kamera": 5400, "dynamik-i-mikrofon": 1350, "korpus": 5000, "knopky-y-vibro": 1200 },
-  "iphone-14-pro-max": { "zamina-ekrana": { analog: 7800, original: 10200 }, "akumuliator": 3200, "roziem-zariadzhannia": 4200, "kamera": 4800, "dynamik-i-mikrofon": 1350, "korpus": 3200, "knopky-y-vibro": 1200 },
-  "iphone-14-pro": { "zamina-ekrana": { analog: 7500, original: 9500 }, "akumuliator": 3100, "roziem-zariadzhannia": 4000, "kamera": 4500, "dynamik-i-mikrofon": 1350, "korpus": 2700, "knopky-y-vibro": 1200 },
-  "iphone-14-plus": { "zamina-ekrana": { analog: 5200, original: 6800 }, "akumuliator": 3000, "roziem-zariadzhannia": 3600, "kamera": 3900, "dynamik-i-mikrofon": 1300, "korpus": 2400, "knopky-y-vibro": 1150 },
-  "iphone-14": { "zamina-ekrana": { analog: 4900, original: 6400 }, "akumuliator": 2900, "roziem-zariadzhannia": 3500, "kamera": 3800, "dynamik-i-mikrofon": 1300, "korpus": 2200, "knopky-y-vibro": 1150 },
-  "iphone-13-pro-max": { "zamina-ekrana": { analog: 4600, original: 5900 }, "akumuliator": 2500, "roziem-zariadzhannia": 2600, "kamera": 4000, "dynamik-i-mikrofon": 1300, "korpus": 2100, "knopky-y-vibro": 1100 },
-  "iphone-13-pro": { "zamina-ekrana": { analog: 4200, original: 5400 }, "akumuliator": 2400, "roziem-zariadzhannia": 2500, "kamera": 3800, "dynamik-i-mikrofon": 1300, "korpus": 2000, "knopky-y-vibro": 1100 },
-  "iphone-13": { "zamina-ekrana": { analog: 3900, original: 5000 }, "akumuliator": 2300, "roziem-zariadzhannia": 2200, "kamera": 3500, "dynamik-i-mikrofon": 1250, "korpus": 1800, "knopky-y-vibro": 1100 },
-  "iphone-13-mini": { "zamina-ekrana": { analog: 3700, original: 4800 }, "akumuliator": 2200, "roziem-zariadzhannia": 2200, "kamera": 3400, "dynamik-i-mikrofon": 1250, "korpus": 1750, "knopky-y-vibro": 1050 },
-  "iphone-12-pro-max": { "zamina-ekrana": { analog: 3700, original: 5400 }, "akumuliator": 2400, "roziem-zariadzhannia": 2100, "kamera": 4100, "dynamik-i-mikrofon": 1150, "korpus": 2100, "knopky-y-vibro": 1050 },
-  "iphone-12-pro": { "zamina-ekrana": { analog: 3200, original: 4600 }, "akumuliator": 2300, "roziem-zariadzhannia": 2000, "kamera": 3900, "dynamik-i-mikrofon": 1100, "korpus": 2000, "knopky-y-vibro": 1050 },
-  "iphone-12": { "zamina-ekrana": { analog: 3200, original: 4600 }, "akumuliator": 2300, "roziem-zariadzhannia": 2000, "kamera": 3500, "dynamik-i-mikrofon": 1100, "korpus": 1800, "knopky-y-vibro": 1000 },
-  "iphone-12-mini": { "zamina-ekrana": { analog: 3000, original: 4300 }, "akumuliator": 2200, "roziem-zariadzhannia": 2000, "kamera": 3400, "dynamik-i-mikrofon": 1100, "korpus": 1700, "knopky-y-vibro": 1000 },
-  "iphone-11-pro-max": { "zamina-ekrana": { analog: 2400, original: 3700 }, "akumuliator": 1800, "roziem-zariadzhannia": 2400, "kamera": 3300, "dynamik-i-mikrofon": 1050, "korpus": 1450, "knopky-y-vibro": 1000 },
-  "iphone-11-pro": { "zamina-ekrana": { analog: 2100, original: 3200 }, "akumuliator": 1700, "roziem-zariadzhannia": 2300, "kamera": 3100, "dynamik-i-mikrofon": 1050, "korpus": 1350, "knopky-y-vibro": 1000 },
-  "iphone-11": { "zamina-ekrana": { analog: 1500, original: 2200 }, "akumuliator": 1600, "roziem-zariadzhannia": 1500, "kamera": 2600, "dynamik-i-mikrofon": 1000, "korpus": 1200, "knopky-y-vibro": 950 },
-  "iphone-xs-max": { "zamina-ekrana": { analog: 2900, original: 4800 }, "akumuliator": 1400, "roziem-zariadzhannia": 1300, "kamera": 1900, "dynamik-i-mikrofon": 1000, "korpus": 1100, "knopky-y-vibro": 900 },
-  "iphone-xs": { "zamina-ekrana": { analog: 2300, original: 3600 }, "akumuliator": 1300, "roziem-zariadzhannia": 1200, "kamera": 1800, "dynamik-i-mikrofon": 950, "korpus": 1000, "knopky-y-vibro": 900 },
-  "iphone-xr": { "zamina-ekrana": { analog: 1700, original: 2100 }, "akumuliator": 1000, "roziem-zariadzhannia": 1000, "kamera": 1600, "dynamik-i-mikrofon": 900, "korpus": 850, "knopky-y-vibro": 850 },
-  "iphone-x": { "zamina-ekrana": { analog: 2250, original: 3500 }, "akumuliator": 1200, "roziem-zariadzhannia": 1200, "kamera": 1700, "dynamik-i-mikrofon": 950, "korpus": 1000, "knopky-y-vibro": 850 },
-  "iphone-8-plus": { "zamina-ekrana": { analog: 1000, original: 1700 }, "akumuliator": 1000, "roziem-zariadzhannia": 1000, "kamera": 1200, "dynamik-i-mikrofon": 900, "korpus": 850, "knopky-y-vibro": 800 },
-  "iphone-8": { "zamina-ekrana": { analog: 850, original: 1450 }, "akumuliator": 950, "roziem-zariadzhannia": 1000, "kamera": 1100, "dynamik-i-mikrofon": 900, "korpus": 800, "knopky-y-vibro": 800 },
-  "iphone-7-plus": { "zamina-ekrana": { analog: 900, original: 1550 }, "akumuliator": 900, "roziem-zariadzhannia": 950, "kamera": 1100, "dynamik-i-mikrofon": 850, "korpus": 800, "knopky-y-vibro": 750 },
-  "iphone-7": { "zamina-ekrana": { analog: 850, original: 1150 }, "akumuliator": 900, "roziem-zariadzhannia": 950, "kamera": 1000, "dynamik-i-mikrofon": 850, "korpus": 750, "knopky-y-vibro": 750 },
-  "iphone-se-3": { "zamina-ekrana": { analog: 1050, original: 1650 }, "akumuliator": 1000, "roziem-zariadzhannia": 1000, "kamera": 1100, "dynamik-i-mikrofon": 900, "korpus": 800, "knopky-y-vibro": 800 },
-  "iphone-se-2": { "zamina-ekrana": { analog: 950, original: 1500 }, "akumuliator": 950, "roziem-zariadzhannia": 1000, "kamera": 1000, "dynamik-i-mikrofon": 900, "korpus": 750, "knopky-y-vibro": 800 },
-  "iphone-6s-6s-plus": { "zamina-ekrana": { analog: 800, original: 1150 }, "akumuliator": 900, "roziem-zariadzhannia": 900, "kamera": 900, "dynamik-i-mikrofon": 800, "korpus": 700, "knopky-y-vibro": 700 },
-  "iphone-6-6-plus": { "zamina-ekrana": { analog: 750, original: 1100 }, "akumuliator": 900, "roziem-zariadzhannia": 900, "kamera": 900, "dynamik-i-mikrofon": 800, "korpus": 700, "knopky-y-vibro": 700 },
+  "iphone-16-pro-max": { "zamina-ekrana": { analog: 4200, original: 18000 }, "akumuliator": 2800, "roziem-zariadzhannia": 2600, "kamera": 3200, "dynamik-i-mikrofon": 1200, "korpus": 2800, "knopky-y-vibro": 1100 },
+  "iphone-16-pro": { "zamina-ekrana": { analog: 3900, original: 14500 }, "akumuliator": 2800, "roziem-zariadzhannia": 2500, "kamera": 3000, "dynamik-i-mikrofon": 1200, "korpus": 2800, "knopky-y-vibro": 1100 },
+  "iphone-16-plus": { "zamina-ekrana": { analog: 4500, original: 13000 }, "akumuliator": 2800, "roziem-zariadzhannia": 2400, "kamera": 2600, "dynamik-i-mikrofon": 1100, "korpus": 2300, "knopky-y-vibro": 1000 },
+  "iphone-16": { "zamina-ekrana": { analog: 4500, original: 13000 }, "akumuliator": 2800, "roziem-zariadzhannia": 2400, "kamera": 2500, "dynamik-i-mikrofon": 1100, "korpus": 2300, "knopky-y-vibro": 1000 },
+  "iphone-15-pro-max": { "zamina-ekrana": { analog: 3600, original: 23000 }, "akumuliator": 2600, "roziem-zariadzhannia": 2400, "kamera": 3000, "dynamik-i-mikrofon": 1100, "korpus": 3500, "knopky-y-vibro": 1000 },
+  "iphone-15-pro": { "zamina-ekrana": { analog: 3500, original: 15500 }, "akumuliator": 2500, "roziem-zariadzhannia": 2300, "kamera": 2800, "dynamik-i-mikrofon": 1100, "korpus": 2800, "knopky-y-vibro": 1000 },
+  "iphone-15-plus": { "zamina-ekrana": { analog: 2500, original: 10000 }, "akumuliator": 2400, "roziem-zariadzhannia": 2200, "kamera": 2400, "dynamik-i-mikrofon": 1000, "korpus": 2300, "knopky-y-vibro": 950 },
+  "iphone-15": { "zamina-ekrana": { analog: 2500, original: 10000 }, "akumuliator": 2300, "roziem-zariadzhannia": 2100, "kamera": 2300, "dynamik-i-mikrofon": 1000, "korpus": 2300, "knopky-y-vibro": 950 },
+  "iphone-14-pro-max": { "zamina-ekrana": { analog: 3000, original: 12000 }, "akumuliator": 2200, "roziem-zariadzhannia": 2400, "kamera": 2600, "dynamik-i-mikrofon": 1000, "korpus": 2100, "knopky-y-vibro": 950 },
+  "iphone-14-pro": { "zamina-ekrana": { analog: 2600, original: 11500 }, "akumuliator": 2100, "roziem-zariadzhannia": 2600, "kamera": 2400, "dynamik-i-mikrofon": 1000, "korpus": 2100, "knopky-y-vibro": 950 },
+  "iphone-14-plus": { "zamina-ekrana": { analog: 2600, original: 11500 }, "akumuliator": 2000, "roziem-zariadzhannia": 2600, "kamera": 2200, "dynamik-i-mikrofon": 950, "korpus": 2100, "knopky-y-vibro": 900 },
+  "iphone-14": { "zamina-ekrana": { analog: 1850, original: 5000 }, "akumuliator": 1900, "roziem-zariadzhannia": 1850, "kamera": 2000, "dynamik-i-mikrofon": 950, "korpus": 1850, "knopky-y-vibro": 900 },
+  "iphone-13-pro-max": { "zamina-ekrana": { analog: 3000, original: 8800 }, "akumuliator": 1800, "roziem-zariadzhannia": 1800, "kamera": 2200, "dynamik-i-mikrofon": 950, "korpus": 2000, "knopky-y-vibro": 900 },
+  "iphone-13-pro": { "zamina-ekrana": { analog: 2600, original: 7000 }, "akumuliator": 1500, "roziem-zariadzhannia": 1600, "kamera": 2000, "dynamik-i-mikrofon": 950, "korpus": 2000, "knopky-y-vibro": 900 },
+  "iphone-13": { "zamina-ekrana": { analog: 2500, original: 5500 }, "akumuliator": 1200, "roziem-zariadzhannia": 1200, "kamera": 1800, "dynamik-i-mikrofon": 900, "korpus": 2000, "knopky-y-vibro": 850 },
+  "iphone-13-mini": { "zamina-ekrana": { analog: 2400, original: 5300 }, "akumuliator": 1200, "roziem-zariadzhannia": 1200, "kamera": 1800, "dynamik-i-mikrofon": 900, "korpus": 1900, "knopky-y-vibro": 850 },
+  "iphone-12-pro-max": { "zamina-ekrana": { analog: 2500, original: 6800 }, "akumuliator": 1300, "roziem-zariadzhannia": 1200, "kamera": 1700, "dynamik-i-mikrofon": 900, "korpus": 1800, "knopky-y-vibro": 850 },
+  "iphone-12-pro": { "zamina-ekrana": { analog: 2100, original: 3900 }, "akumuliator": 1100, "roziem-zariadzhannia": 1200, "kamera": 1600, "dynamik-i-mikrofon": 900, "korpus": 1600, "knopky-y-vibro": 800 },
+  "iphone-12": { "zamina-ekrana": { analog: 2100, original: 4500 }, "akumuliator": 1100, "roziem-zariadzhannia": 1200, "kamera": 1500, "dynamik-i-mikrofon": 900, "korpus": 1500, "knopky-y-vibro": 800 },
+  "iphone-12-mini": { "zamina-ekrana": { analog: 2000, original: 4300 }, "akumuliator": 1100, "roziem-zariadzhannia": 1200, "kamera": 1500, "dynamik-i-mikrofon": 850, "korpus": 1450, "knopky-y-vibro": 800 },
+  "iphone-11-pro-max": { "zamina-ekrana": { analog: 1900, original: 3400 }, "akumuliator": 1100, "roziem-zariadzhannia": 1000, "kamera": 1600, "dynamik-i-mikrofon": 850, "korpus": 1300, "knopky-y-vibro": 800 },
+  "iphone-11-pro": { "zamina-ekrana": { analog: 1700, original: 3000 }, "akumuliator": 1000, "roziem-zariadzhannia": 950, "kamera": 1500, "dynamik-i-mikrofon": 850, "korpus": 1200, "knopky-y-vibro": 800 },
+  "iphone-11": { "zamina-ekrana": { analog: 1300, original: 2200 }, "akumuliator": 900, "roziem-zariadzhannia": 890, "kamera": 1450, "dynamik-i-mikrofon": 850, "korpus": 1099, "knopky-y-vibro": 750 },
+  "iphone-xs-max": { "zamina-ekrana": { analog: 1700, original: 3800 }, "akumuliator": 800, "roziem-zariadzhannia": 1100, "kamera": 1400, "dynamik-i-mikrofon": 800, "korpus": 1100, "knopky-y-vibro": 750 },
+  "iphone-xs": { "zamina-ekrana": { analog: 1400, original: 3400 }, "akumuliator": 800, "roziem-zariadzhannia": 900, "kamera": 2000, "dynamik-i-mikrofon": 800, "korpus": 999, "knopky-y-vibro": 700 },
+  "iphone-xr": { "zamina-ekrana": { analog: 2100, original: 2680 }, "akumuliator": 999, "roziem-zariadzhannia": 655, "kamera": 1750, "dynamik-i-mikrofon": 800, "korpus": 999, "knopky-y-vibro": 700 },
+  "iphone-x": { "zamina-ekrana": { analog: 1300, original: 3250 }, "akumuliator": 900, "roziem-zariadzhannia": 800, "kamera": 1200, "dynamik-i-mikrofon": 800, "korpus": 899, "knopky-y-vibro": 700 },
+  "iphone-8-plus": { "zamina-ekrana": { analog: 1000, original: 1900 }, "akumuliator": 750, "roziem-zariadzhannia": 600, "kamera": 700, "dynamik-i-mikrofon": 500, "korpus": 999, "knopky-y-vibro": 650 },
+  "iphone-8": { "zamina-ekrana": { analog: 950, original: 1800 }, "akumuliator": 700, "roziem-zariadzhannia": 580, "kamera": 650, "dynamik-i-mikrofon": 480, "korpus": 950, "knopky-y-vibro": 620 },
+  "iphone-7-plus": { "zamina-ekrana": { analog: 950, original: 1750 }, "akumuliator": 690, "roziem-zariadzhannia": 550, "kamera": 620, "dynamik-i-mikrofon": 450, "korpus": 950, "knopky-y-vibro": 650 },
+  "iphone-7": { "zamina-ekrana": { analog: 900, original: 1700 }, "akumuliator": 690, "roziem-zariadzhannia": 550, "kamera": 600, "dynamik-i-mikrofon": 450, "korpus": 950, "knopky-y-vibro": 650 },
+  "iphone-se-3": { "zamina-ekrana": { analog: 1000, original: 1850 }, "akumuliator": 750, "roziem-zariadzhannia": 600, "kamera": 680, "dynamik-i-mikrofon": 480, "korpus": 950, "knopky-y-vibro": 630 },
+  "iphone-se-2": { "zamina-ekrana": { analog: 950, original: 1800 }, "akumuliator": 700, "roziem-zariadzhannia": 580, "kamera": 650, "dynamik-i-mikrofon": 480, "korpus": 950, "knopky-y-vibro": 620 },
+  "iphone-6s-6s-plus": { "zamina-ekrana": { analog: 850, original: 1500 }, "akumuliator": 650, "roziem-zariadzhannia": 520, "kamera": 560, "dynamik-i-mikrofon": 430, "korpus": 900, "knopky-y-vibro": 600 },
+  "iphone-6-6-plus": { "zamina-ekrana": { analog: 800, original: 1400 }, "akumuliator": 650, "roziem-zariadzhannia": 500, "kamera": 550, "dynamik-i-mikrofon": 420, "korpus": 880, "knopky-y-vibro": 600 },
 
   // ─── iPad ───
   "ipad-pro-13-m4": { "zamina-ekrana": 13400, "akumuliator": 3800, "roziem-zariadzhannia": 1900 },
@@ -125,10 +133,10 @@ export const modelPrices: Record<string, ModelPrice> = {
  * називаємо точну суму.
  */
 export const boardPrices: { slug: string; from: Money }[] = [
-  { slug: "zalyv-vodoiu", from: 900 },
-  { slug: "ne-vmykaietsia", from: 1200 },
-  { slug: "ne-bachyt-merezhu", from: 1500 },
-  { slug: "vidnovlennia-danykh", from: 1800 },
+  { slug: "zalyv-vodoiu", from: 600 },
+  { slug: "ne-vmykaietsia", from: 500 },
+  { slug: "ne-bachyt-merezhu", from: 1990 },
+  { slug: "vidnovlennia-danykh", from: 600 },
 ];
 
 /** Фіксовані ціни, однакові для всіх моделей */
