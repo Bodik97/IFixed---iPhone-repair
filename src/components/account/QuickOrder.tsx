@@ -4,13 +4,10 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { bookingModels } from "@/data/landing";
-import { services } from "@/data/services";
+import ServiceSelect from "../ServiceSelect";
 import { site } from "@/data/site";
 import FormError from "../FormError";
 import styles from "./QuickOrder.module.css";
-
-/** Найчастіші роботи — їх вистачає у більшості випадків, решта ховається */
-const POPULAR = 6;
 
 export default function QuickOrder({ compact }: { compact?: boolean }) {
   const { user } = useUser();
@@ -22,7 +19,6 @@ export default function QuickOrder({ compact }: { compact?: boolean }) {
   const [model, setModel] = useState(params.get("model") ?? "");
   const [note, setNote] = useState("");
 
-  const [showAll, setShowAll] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [sent, setSent] = useState(false);
@@ -30,10 +26,6 @@ export default function QuickOrder({ compact }: { compact?: boolean }) {
   const email = user?.primaryEmailAddress?.emailAddress ?? "";
   const phone = user?.primaryPhoneNumber?.phoneNumber ?? "";
   const contact = phone || email;
-
-  const shown = showAll ? services : services.slice(0, POPULAR);
-  // Послуга з посилання може бути поза короткою добіркою — показуємо її завжди
-  const chosenHidden = service && !shown.some((s) => s.title === service);
 
   const send = async () => {
     if (!service && !note.trim()) {
@@ -118,41 +110,19 @@ export default function QuickOrder({ compact }: { compact?: boolean }) {
         </p>
       </div>
 
-      <fieldset className={styles.group}>
-        <legend className={styles.label}>Що потрібно зробити</legend>
-
-        <div className={styles.chips}>
-          {shown.map((s) => (
-            <button
-              key={s.slug}
-              type="button"
-              className={service === s.title ? styles.chipOn : styles.chip}
-              aria-pressed={service === s.title}
-              onClick={() => {
-                setService(service === s.title ? "" : s.title);
-                setError("");
-              }}
-            >
-              <span className={styles.chipIcon} aria-hidden="true">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{ __html: s.icon }} />
-              </span>
-              {s.title}
-            </button>
-          ))}
-
-          {chosenHidden && (
-            <button type="button" className={styles.chipOn} aria-pressed="true" onClick={() => setService("")}>
-              {service}
-            </button>
-          )}
-
-          {!showAll && services.length > POPULAR && (
-            <button type="button" className={styles.more} onClick={() => setShowAll(true)}>
-              Ще {services.length - POPULAR}
-            </button>
-          )}
-        </div>
-      </fieldset>
+      <div className={styles.row}>
+        <label htmlFor="qo-service" className={styles.label}>
+          Що потрібно зробити
+        </label>
+        <ServiceSelect
+          id="qo-service"
+          value={service}
+          onChange={(v) => {
+            setService(v);
+            setError("");
+          }}
+        />
+      </div>
 
       <div className={styles.row}>
         <label htmlFor="qo-model" className={styles.label}>

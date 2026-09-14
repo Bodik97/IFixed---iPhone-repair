@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Unbounded, Manrope } from "next/font/google";
 import Header from "@/components/Header";
+import BookingProviderWrap from "@/components/BookingModal";
 import BottomNav from "@/components/BottomNav";
 import ChatBot from "@/components/ChatBot";
 import Footer from "@/components/Footer";
@@ -63,11 +64,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="uk" data-scroll-behavior="smooth" className={`${unbounded.variable} ${manrope.variable}`}>
       <body>
         <ClerkProvider>
+          <BookingProviderWrap>
           <Header />
           <main>{children}</main>
           <Footer />
           <BottomNav />
           <ChatBot />
+          </BookingProviderWrap>
         </ClerkProvider>
         <script
           type="application/ld+json"

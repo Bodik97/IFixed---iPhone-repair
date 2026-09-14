@@ -62,3 +62,8 @@
 .form select option {
   color: #0B0C0E;
 }
+
+/* У модальному вікні рамку й тло дає саме вікно */
+.boxBare {
+  min-width: 0;
+}

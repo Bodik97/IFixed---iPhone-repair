@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useBooking } from "./BookingModal";
 import styles from "./BottomNav.module.css";
 
 /**
@@ -52,6 +53,7 @@ const items = [
 
 export default function BottomNav() {
   const pathname = usePathname();
+  const openBooking = useBooking();
 
   // В адмінці своя навігація — ця тільки заважала б
   if (pathname.startsWith("/admin")) return null;
@@ -91,11 +93,12 @@ export default function BottomNav() {
           );
         })}
 
-        {/* Головна дія завжди під рукою — за нею сюди й приходять */}
+        {/* Головна дія завжди під рукою — за нею сюди й приходять.
+            Вікно замість переходу: людина не втрачає сторінку, на якій була. */}
         <li className={styles.ctaCell}>
-          <Link href="/#book" className={styles.cta}>
+          <button type="button" className={styles.cta} onClick={() => openBooking()}>
             Записатись
-          </Link>
+          </button>
         </li>
       </ul>
     </nav>

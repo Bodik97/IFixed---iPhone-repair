@@ -15,6 +15,10 @@ type Props = {
   /** Модель уже відома (сторінка моделі) — списку немає, значення йде в заявку як є */
   model?: string;
   submitLabel?: string;
+  /** Початковий вибір, коли він відомий наперед — напр. у вікні запису */
+  initialChoice?: string;
+  /** У модальному вікні рамку дає саме вікно — друга не потрібна */
+  bare?: boolean;
 };
 
 function BookingFormInner({
@@ -23,6 +27,7 @@ function BookingFormInner({
   model,
   submitLabel = "Записатись на безкоштовну діагностику",
   initialChoice = "",
+  bare,
 }: Props & { initialChoice?: string }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -74,7 +79,7 @@ function BookingFormInner({
 
   if (sent) {
     return (
-      <div className={styles.box}>
+      <div className={bare ? styles.boxBare : styles.box}>
         <div className={styles.done}>
           <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
             <circle cx="12" cy="12" r="9" />
@@ -93,7 +98,7 @@ function BookingFormInner({
   }
 
   return (
-    <div className={styles.box}>
+    <div className={bare ? styles.boxBare : styles.box}>
       <form onSubmit={submit} className={styles.form} noValidate>
         <div className={styles.row}>
           <label htmlFor="bf-name">Ім&apos;я</label>
@@ -175,7 +180,8 @@ function BookingFormInner({
 /** Дістає вибір із адреси: ?service=… або ?model=… від картки на сайті */
 function BookingFormWithChoice(props: Props) {
   const params = useSearchParams();
-  const choice = props.select ? (params.get(props.select.name) ?? "") : "";
+  // Значення з властивості важливіше за адресу: вікно відкрили з конкретної кнопки
+  const choice = props.initialChoice || (props.select ? (params.get(props.select.name) ?? "") : "");
   return <BookingFormInner {...props} initialChoice={choice} />;
 }
 

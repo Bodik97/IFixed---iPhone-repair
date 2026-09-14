@@ -76,6 +76,9 @@
   }
 
   .cta {
+    border: 0;
+    font-family: var(--font-unbounded), sans-serif;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -93,8 +96,19 @@
     white-space: nowrap;
   }
 
+  /* Натискання має відгукнутись одразу — але текст лишається читабельним */
+  .cta {
+    transition: transform .12s ease, filter .12s ease;
+  }
+
   .cta:active {
-    filter: brightness(.93);
+    transform: scale(.955);
+    filter: brightness(.9);
+  }
+
+  .item:active,
+  .itemActive:active {
+    transform: scale(.96);
   }
 
   .item:focus-visible,
