@@ -1,36 +1,35 @@
 import { NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
-import { addMessage, getMessages, markRead, MAX_MESSAGE, ownsLead } from "@/db/messages";
-import { isAdmin } from "@/lib/admin";
+import { put } from "@vercel/blob";
+import { addMessage, getMessages, markRead, MAX_MESSAGE } from "@/db/messages";
+import { canUseChat, type ChatSide } from "@/lib/chatAccess";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
 
 export const dynamic = "force-dynamic";
+
+/** Фото стискається на клієнті, тож більше сюди приходити не має */
+const MAX_IMAGE_BYTES = 6 * 1024 * 1024;
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic"];
 
 export type ChatMessage = {
   id: string;
   author: "client" | "master";
   text: string;
   at: string;
+  image: { url: string; width: number | null; height: number | null } | null;
 };
 
-/**
- * Хто звертається і чи має право до цієї заявки.
- * Майстер має доступ до всіх, клієнт — лише до своїх.
- */
-async function authorize(leadId: string): Promise<"client" | "master" | null> {
-  if (await isAdmin()) return "master";
-
-  const user = await currentUser();
-  if (!user) return null;
-
-  const email = user.primaryEmailAddress?.emailAddress;
-  return (await ownsLead(leadId, user.id, email)) ? "client" : null;
+/** Бік приходить від сторінки; невідоме значення вважаємо клієнтським */
+function sideFrom(value: string | null): ChatSide {
+  return value === "master" ? "master" : "client";
 }
 
-export async function GET(_req: Request, { params }: { params: Promise<{ lead: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ lead: string }> }) {
   const { lead } = await params;
-  const role = await authorize(lead);
-  if (!role) return NextResponse.json({ error: "Немає доступу" }, { status: 403 });
+  const role = sideFrom(new URL(request.url).searchParams.get("side"));
+
+  if (!(await canUseChat(lead, role))) {
+    return NextResponse.json({ error: "Немає доступу" }, { status: 403 });
+  }
 
   const messages = await getMessages(lead);
   // Відкрили чат — усе від іншого боку вважаємо прочитаним
@@ -44,6 +43,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ lead: s
         author: m.author,
         text: m.text,
         at: m.createdAt.toISOString(),
+        // Приватний файл віддаємо своїм маршрутом — там та сама перевірка прав
+        image: m.imagePath
+          ? { url: `/api/chat/${lead}/image/${m.id}`, width: m.imageWidth, height: m.imageHeight }
+          : null,
       }),
     ),
   });
@@ -57,13 +60,17 @@ export async function POST(request: Request, { params }: { params: Promise<{ lea
     return NextResponse.json({ error: "Забагато повідомлень. Трохи зачекайте." }, { status: 429 });
   }
 
-  const role = await authorize(lead);
-  if (!role) return NextResponse.json({ error: "Немає доступу" }, { status: 403 });
+  const role = sideFrom(new URL(request.url).searchParams.get("side"));
+  if (!(await canUseChat(lead, role))) {
+    return NextResponse.json({ error: "Немає доступу" }, { status: 403 });
+  }
 
-  const body = (await request.json().catch(() => null)) as { text?: string } | null;
-  const text = String(body?.text ?? "").trim();
+  const form = await request.formData().catch(() => null);
+  if (!form) return NextResponse.json({ error: "Некоректний запит" }, { status: 400 });
 
-  if (!text) return NextResponse.json({ error: "Повідомлення порожнє" }, { status: 400 });
+  const text = String(form.get("text") ?? "").trim();
+  const file = form.get("image");
+
   if (text.length > MAX_MESSAGE) {
     return NextResponse.json(
       { error: `Задовге повідомлення — максимум ${MAX_MESSAGE} символів.` },
@@ -71,6 +78,33 @@ export async function POST(request: Request, { params }: { params: Promise<{ lea
     );
   }
 
-  await addMessage(lead, role, text);
+  let imagePath: string | null = null;
+  let imageWidth: number | null = null;
+  let imageHeight: number | null = null;
+
+  if (file instanceof File && file.size > 0) {
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      return NextResponse.json({ error: "Можна надсилати лише фото." }, { status: 400 });
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      return NextResponse.json({ error: "Фото завелике — спробуйте інше." }, { status: 400 });
+    }
+
+    // Приватне сховище: файл не відкривається за прямим посиланням
+    const blob = await put(`chat/${lead}/${crypto.randomUUID()}`, file, {
+      access: "private",
+      contentType: file.type,
+    });
+
+    imagePath = blob.pathname;
+    imageWidth = Number(form.get("width")) || null;
+    imageHeight = Number(form.get("height")) || null;
+  }
+
+  if (!text && !imagePath) {
+    return NextResponse.json({ error: "Повідомлення порожнє" }, { status: 400 });
+  }
+
+  await addMessage(lead, role, { text, imagePath, imageWidth, imageHeight });
   return NextResponse.json({ ok: true });
 }

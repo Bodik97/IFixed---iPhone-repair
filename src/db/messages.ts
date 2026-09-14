@@ -36,15 +36,36 @@ export async function ownsLead(
   return Boolean(row);
 }
 
+export type NewMessage = {
+  text: string;
+  imagePath?: string | null;
+  imageWidth?: number | null;
+  imageHeight?: number | null;
+};
+
 export async function addMessage(
   leadId: string,
   author: "client" | "master",
-  text: string,
+  msg: NewMessage,
 ): Promise<void> {
-  const clean = text.trim().slice(0, MAX_MESSAGE);
-  if (!clean) return;
+  const clean = msg.text.trim().slice(0, MAX_MESSAGE);
+  // Порожнє повідомлення без фото зберігати немає сенсу
+  if (!clean && !msg.imagePath) return;
 
-  await getDb().insert(leadMessages).values({ leadId, author, text: clean });
+  await getDb().insert(leadMessages).values({
+    leadId,
+    author,
+    text: clean,
+    imagePath: msg.imagePath ?? null,
+    imageWidth: msg.imageWidth ?? null,
+    imageHeight: msg.imageHeight ?? null,
+  });
+}
+
+/** Одне повідомлення — щоб віддати фото лише тому, хто має доступ до заявки */
+export async function getMessage(id: string): Promise<LeadMessage | undefined> {
+  const [row] = await getDb().select().from(leadMessages).where(eq(leadMessages.id, id)).limit(1);
+  return row;
 }
 
 /** Позначити прочитаним усе, що написав інший бік */

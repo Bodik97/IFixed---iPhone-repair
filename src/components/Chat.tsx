@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { shrinkImage, type Shrunk } from "@/lib/shrinkImage";
 import type { ChatMessage } from "@/app/api/chat/[lead]/route";
 import FormError from "./FormError";
 import styles from "./Chat.module.css";
@@ -29,19 +30,22 @@ export default function Chat({ leadId, side, unread = 0 }: Props) {
   const [text, setText] = useState("");
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
+  const [photo, setPhoto] = useState<Shrunk | null>(null);
+  const [preparing, setPreparing] = useState(false);
 
   const listRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const load = useCallback(async () => {
     try {
-      const res = await fetch(`/api/chat/${leadId}`, { cache: "no-store" });
+      const res = await fetch(`/api/chat/${leadId}?side=${side}`, { cache: "no-store" });
       if (!res.ok) throw new Error(String(res.status));
       const data = (await res.json()) as { messages: ChatMessage[] };
       setMessages(data.messages);
     } catch {
       setError("Не вдалося завантажити листування. Спробуйте пізніше.");
     }
-  }, [leadId]);
+  }, [leadId, side]);
 
   // Перше читання — на кліку «відкрити», далі лише опитування за таймером.
   // Виклик load() у тілі ефекту був би синхронним setState на кожен рендер.
@@ -62,25 +66,52 @@ export default function Chat({ leadId, side, unread = 0 }: Props) {
     if (open && listRef.current) listRef.current.scrollTop = listRef.current.scrollHeight;
   }, [open, messages]);
 
+  const pickPhoto = async (file: File | undefined) => {
+    if (!file) return;
+
+    setPreparing(true);
+    setError("");
+    try {
+      setPhoto(await shrinkImage(file));
+    } catch {
+      setError("Не вдалося підготувати фото. Спробуйте інше.");
+    } finally {
+      setPreparing(false);
+      // Щоб те саме фото можна було обрати ще раз після скасування
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  };
+
+  const dropPhoto = () => {
+    if (photo) URL.revokeObjectURL(photo.preview);
+    setPhoto(null);
+  };
+
   const send = async (e: React.FormEvent) => {
     e.preventDefault();
     const clean = text.trim();
-    if (!clean || sending) return;
+    if ((!clean && !photo) || sending) return;
 
     setSending(true);
     setError("");
     try {
-      const res = await fetch(`/api/chat/${leadId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: clean }),
-      });
+      const form = new FormData();
+      form.set("text", clean);
+      if (photo) {
+        form.set("image", photo.file);
+        form.set("width", String(photo.width));
+        form.set("height", String(photo.height));
+      }
+
+      const res = await fetch(`/api/chat/${leadId}?side=${side}`, { method: "POST", body: form });
       const data = await res.json();
       if (!res.ok) {
         setError(data.error ?? "Не вдалося надіслати.");
         return;
       }
+
       setText("");
+      dropPhoto();
       await load();
     } catch {
       setError("Не вдалося надіслати. Перевірте зв'язок.");
@@ -137,7 +168,25 @@ export default function Chat({ leadId, side, unread = 0 }: Props) {
                   <span className={styles.author}>
                     {m.author === side ? "Ви" : side === "client" ? "Майстер" : "Клієнт"}
                   </span>
-                  <p className={styles.text}>{m.text}</p>
+
+                  {m.image && (
+                    <a
+                      href={m.image.url}
+                      target="_blank"
+                      rel="noopener"
+                      className={styles.photo}
+                      style={
+                        m.image.width && m.image.height
+                          ? { aspectRatio: `${m.image.width} / ${m.image.height}` }
+                          : undefined
+                      }
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={m.image.url} alt="Фото в листуванні" loading="lazy" />
+                    </a>
+                  )}
+
+                  {m.text && <p className={styles.text}>{m.text}</p>}
                   <time className={styles.time} dateTime={m.at}>
                     {stamp.format(new Date(m.at))}
                   </time>
@@ -148,7 +197,56 @@ export default function Chat({ leadId, side, unread = 0 }: Props) {
         )}
       </div>
 
+      {photo && (
+        <div className={styles.draft}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={photo.preview} alt="Обране фото" className={styles.draftImg} />
+          <div className={styles.draftInfo}>
+            <span>Фото готове до надсилання</span>
+            <span className={styles.draftSize}>
+              {photo.width}&times;{photo.height} &middot; {Math.round(photo.file.size / 1024)} КБ
+            </span>
+          </div>
+          <button
+            type="button"
+            className={styles.draftDrop}
+            onClick={dropPhoto}
+            aria-label="Прибрати фото"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+              <path d="M6 6l12 12" />
+              <path d="M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
+      )}
+
       <form className={styles.form} onSubmit={send}>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          className="visually-hidden"
+          onChange={(e) => pickPhoto(e.target.files?.[0])}
+        />
+
+        <button
+          type="button"
+          className={styles.attach}
+          onClick={() => fileRef.current?.click()}
+          disabled={preparing}
+          aria-label="Прикріпити фото"
+          title="Прикріпити фото"
+        >
+          {preparing ? (
+            <span className={styles.spinner} aria-hidden="true" />
+          ) : (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M20 11.5l-7.8 7.8a4.5 4.5 0 0 1-6.4-6.4l8-8a3 3 0 0 1 4.3 4.3l-8 8a1.5 1.5 0 0 1-2.2-2.2l7.3-7.3" />
+            </svg>
+          )}
+        </button>
+
         <label htmlFor={`chat-${leadId}`} className="visually-hidden">
           Повідомлення
         </label>
@@ -171,7 +269,11 @@ export default function Chat({ leadId, side, unread = 0 }: Props) {
           }}
         />
 
-        <button type="submit" className={`btn btn-accent ${styles.send}`} disabled={sending || !text.trim()}>
+        <button
+          type="submit"
+          className={`btn btn-accent ${styles.send}`}
+          disabled={sending || (!text.trim() && !photo)}
+        >
           {sending ? "…" : "Надіслати"}
         </button>
       </form>

@@ -154,16 +154,147 @@
 }
 
 @media (max-width: 480px) {
+  /* Скріпка й поле в одному рядку, кнопка надсилання — на всю ширину під ними */
   .form {
-    flex-direction: column;
-    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .input {
+    flex: 1 1 0;
   }
 
   .send {
-    width: 100%;
+    flex: 1 1 100%;
   }
 
   .bubble {
     max-width: 92%;
   }
+
+  .photo {
+    max-width: 100%;
+  }
+}
+
+/* ---------- Фото ---------- */
+.photo {
+  display: block;
+  max-width: 240px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .05);
+}
+
+.photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Прев'ю обраного фото — до надсилання */
+.draft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid var(--border-active);
+  background: rgba(255, 255, 255, .04);
+}
+
+.draftImg {
+  width: 52px;
+  height: 52px;
+  flex: none;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.draftInfo {
+  display: grid;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+
+.draftSize {
+  font-size: 12px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.draftDrop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+.draftDrop:hover {
+  border-color: var(--danger-border);
+  color: var(--danger);
+}
+
+/* Скріпка */
+.attach {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border-radius: 14px;
+  border: 1px solid var(--field-border);
+  background: var(--field-bg);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+
+.attach:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.attach:disabled {
+  opacity: .5;
+  cursor: default;
+}
+
+.attach:focus-visible,
+.draftDrop:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .22);
+  border-top-color: var(--accent);
+  animation: chatSpin .7s linear infinite;
+}
+
+@keyframes chatSpin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation: none; }
 }

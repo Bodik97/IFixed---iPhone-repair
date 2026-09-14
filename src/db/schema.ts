@@ -171,6 +171,16 @@ export const leadMessages = pgTable(
     author: messageAuthor("author").notNull(),
     text: text("text").notNull(),
 
+    /**
+     * Фото у приватному сховищі Vercel Blob. Зберігаємо шлях, а не готове
+     * посилання: приватний файл усе одно віддається через наш API з перевіркою
+     * прав, а підписані посилання протухають.
+     */
+    imagePath: text("image_path"),
+    /** Розміри — щоб зарезервувати місце й стрічка не стрибала при завантаженні */
+    imageWidth: integer("image_width"),
+    imageHeight: integer("image_height"),
+
     /** Коли другий бік прочитав. NULL = ще не бачив — з цього рахуємо лічильник. */
     readAt: timestamp("read_at", { withTimezone: true }),
 
