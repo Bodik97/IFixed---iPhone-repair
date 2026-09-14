@@ -71,7 +71,17 @@ export const leads = pgTable(
      */
     price: integer("price"),
     partsCost: integer("parts_cost"),
-    /** Коли клієнт розрахувався. NULL = ще не оплачено. */
+
+    /**
+     * Передоплата за деталь — сума, яку клієнт вносить після погодження ціни,
+     * до початку робіт. Окреме поле, а не partsCost: собівартість клієнт
+     * бачити не повинен, а передоплату бачить.
+     */
+    prepayment: integer("prepayment"),
+    /** Коли передоплата надійшла. NULL = ще чекаємо. */
+    prepaidAt: timestamp("prepaid_at", { withTimezone: true }),
+
+    /** Коли клієнт розрахувався повністю. NULL = ще не оплачено. */
     paidAt: timestamp("paid_at", { withTimezone: true }),
 
     source: leadSource("source").notNull(),

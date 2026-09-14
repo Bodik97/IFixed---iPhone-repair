@@ -153,6 +153,8 @@ export async function setMoney(formData: FormData): Promise<void> {
 
   const price = parseUah(formData, "price");
   const partsCost = parseUah(formData, "partsCost");
+  const prepayment = parseUah(formData, "prepayment");
+  const prepaid = formData.get("prepaid") === "on";
   const paid = formData.get("paid") === "on";
 
   const [before] = await getDb().select().from(leads).where(eq(leads.id, id)).limit(1);
@@ -163,6 +165,9 @@ export async function setMoney(formData: FormData): Promise<void> {
     .set({
       ...(price === undefined ? {} : { price }),
       ...(partsCost === undefined ? {} : { partsCost }),
+      ...(prepayment === undefined ? {} : { prepayment }),
+      // Дату ставимо раз: повторне збереження не має її зсувати
+      prepaidAt: prepaid ? (before.prepaidAt ?? new Date()) : null,
       // Відмітку ставимо раз: повторне збереження не має зсувати дату оплати
       paidAt: paid ? (before.paidAt ?? new Date()) : null,
       updatedAt: new Date(),
@@ -172,6 +177,14 @@ export async function setMoney(formData: FormData): Promise<void> {
   // Клієнт бачить ціну в кабінеті, тож про її появу пишемо в хроніку
   if (price !== undefined && price !== null && price !== before.price) {
     await addEvent(id, { text: `Погодили ціну ремонту: ${price} ₴` });
+  }
+
+  // Передоплата — умова початку робіт, тож її надходження теж подія
+  if (prepaid && !before.prepaidAt) {
+    const sum = prepayment ?? before.prepayment;
+    await addEvent(id, {
+      text: sum ? `Отримали передоплату: ${sum} ₴. Беремо пристрій у роботу.` : "Отримали передоплату. Беремо пристрій у роботу.",
+    });
   }
 
   revalidatePath("/admin");

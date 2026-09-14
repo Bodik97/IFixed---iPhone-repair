@@ -90,3 +90,30 @@
     padding-bottom: 0;
   }
 }
+
+.rest {
+  padding: 9px 4px;
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 16px;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--text-2);
+}
+
+/* Дві відмітки стоять разом: передоплата й повний розрахунок */
+.marks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-left: auto;
+  padding-bottom: 9px;
+}
+
+@media (max-width: 620px) {
+  .marks {
+    margin-left: 0;
+    width: 100%;
+    padding-bottom: 0;
+  }
+}

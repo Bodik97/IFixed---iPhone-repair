@@ -94,7 +94,14 @@ export default function LeadCard({
 
         <NoteField id={r.id} events={events} />
 
-        <MoneyFields id={r.id} price={r.price} partsCost={r.partsCost} paidAt={r.paidAt} />
+        <MoneyFields
+          id={r.id}
+          price={r.price}
+          partsCost={r.partsCost}
+          prepayment={r.prepayment}
+          prepaidAt={r.prepaidAt}
+          paidAt={r.paidAt}
+        />
 
         <div className={styles.chatRow}>
           <Chat leadId={r.id} side="master" unread={unread} />

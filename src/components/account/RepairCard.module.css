@@ -146,3 +146,53 @@
     padding-right: 12px;
   }
 }
+
+/* ---------- Передоплата ---------- */
+.payWait,
+.payDone {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px 17px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+}
+
+/* Чекаємо на передоплату — це дія клієнта, тож підсвічуємо */
+.payWait {
+  border-color: rgba(218, 255, 61, .35);
+  background: rgba(218, 255, 61, .07);
+}
+
+.payDone {
+  background: var(--surface);
+}
+
+.payIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 11px;
+  background: rgba(218, 255, 61, .14);
+  color: var(--accent);
+}
+
+.payBody {
+  min-width: 0;
+}
+
+.payTitle {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 15.5px;
+  letter-spacing: -.02em;
+}
+
+.payText {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-2);
+}

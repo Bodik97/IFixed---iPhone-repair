@@ -113,7 +113,8 @@ export default function QuickOrder({ compact }: { compact?: boolean }) {
         {!compact && <h3 className={styles.title}>Ще один ремонт</h3>}
         <p className={styles.lead}>
           Ваші контакти вже є — оберіть послугу й натисніть «Замовити». Решту спитаємо по
-          телефону.
+          телефону. Діагностика безкоштовна; ремонт — за передоплатою за деталь після
+          погодження ціни.
         </p>
       </div>
 

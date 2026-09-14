@@ -124,6 +124,42 @@ export default function RepairCard({
         )}
       </dl>
 
+      {/* Передоплата за деталь — умова початку робіт */}
+      {lead.prepayment !== null && !lead.paidAt && (
+        <div className={lead.prepaidAt ? styles.payDone : styles.payWait}>
+          <span className={styles.payIcon} aria-hidden="true">
+            {lead.prepaidAt ? (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M8 12.5l2.5 2.5L16 9.5" />
+              </svg>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2.5" y="6" width="19" height="12" rx="2.5" />
+                <path d="M2.5 10h19" />
+              </svg>
+            )}
+          </span>
+
+          <div className={styles.payBody}>
+            <div className={styles.payTitle}>
+              {lead.prepaidAt
+                ? `Передоплату отримано — ${lead.prepayment.toLocaleString("uk-UA")} ₴`
+                : `Передоплата за деталь — ${lead.prepayment.toLocaleString("uk-UA")} ₴`}
+            </div>
+            <p className={styles.payText}>
+              {lead.prepaidAt
+                ? lead.price !== null
+                  ? `Решта ${Math.max(0, lead.price - lead.prepayment).toLocaleString("uk-UA")} ₴ — при видачі.`
+                  : "Решту доплачуєте при видачі."
+                : lead.price !== null
+                  ? `Деталь замовляємо після передоплати. Решта ${Math.max(0, lead.price - lead.prepayment).toLocaleString("uk-UA")} ₴ — при видачі.`
+                  : "Деталь замовляємо після передоплати, решту доплачуєте при видачі."}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Посилка — головне, що людина шукає, коли пристрій уже відправили */}
       {lead.ttn && <Parcel ttn={lead.ttn} address={lead.deliveryAddress} />}
 
