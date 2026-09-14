@@ -3,6 +3,7 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import BookingForm from "@/components/BookingForm";
 import Reveal from "@/components/Reveal";
+import ReviewSlider from "@/components/ReviewSlider";
 import ReviewForm from "@/components/ReviewForm";
 import StatusCheck from "@/components/StatusCheck";
 import { getPublishedReviews, getReviewByUser } from "@/db/reviews";
@@ -43,12 +44,21 @@ export default async function Home() {
   const published = await getPublishedReviews(6);
   const shownReviews = published.length
     ? published.map((r) => ({
+        id: r.id,
         text: r.text,
-        author: [r.authorName, r.device].filter(Boolean).join(" · "),
+        author: [r.authorName, r.city, r.device].filter(Boolean).join(" · "),
         viaGoogle: r.viaGoogle,
         rating: r.rating,
+        // Фото роботи лежить у приватному сховищі — віддаємо своїм маршрутом
+        image: r.imagePath ? `/api/reviews/${r.id}/image` : null,
       }))
-    : fallbackReviews.map((r) => ({ ...r, viaGoogle: false, rating: 5 }));
+    : fallbackReviews.map((r, i) => ({
+        ...r,
+        id: `fallback-${i}`,
+        viaGoogle: false,
+        rating: 5,
+        image: null,
+      }));
 
   const hasRealReviews = published.length > 0;
 
@@ -276,34 +286,8 @@ export default async function Home() {
             )}
           </div>
 
-          <div className={styles.reviewGrid}>
-            {shownReviews.map((r) => (
-              <blockquote key={r.author} className={`card ${styles.review}`}>
-                <div className={styles.reviewStars} aria-label={`${r.rating} з 5`}>
-                  {"★".repeat(r.rating)}
-                  <span className={styles.reviewStarsOff}>{"★".repeat(5 - r.rating)}</span>
-                </div>
+          <ReviewSlider reviews={shownReviews} />
 
-                <p className={styles.reviewText}>«{r.text}»</p>
-
-                <div className={styles.reviewFoot}>
-                  <span className={styles.reviewAuthor}>{r.author}</span>
-
-                  {r.viaGoogle && (
-                    <span className={styles.googleMark} title="Клієнт увійшов через пошту Google">
-                      <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
-                        <path fill="#4285F4" d="M23 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.2a5.3 5.3 0 0 1-2.3 3.5v2.9h3.7c2.2-2 3.4-5 3.4-8.6z" />
-                        <path fill="#34A853" d="M12 23.5c3.1 0 5.7-1 7.6-2.8l-3.7-2.9c-1 .7-2.3 1.1-3.9 1.1-3 0-5.5-2-6.4-4.7H1.8v3A11.5 11.5 0 0 0 12 23.5z" />
-                        <path fill="#FBBC05" d="M5.6 14.2a6.9 6.9 0 0 1 0-4.4v-3H1.8a11.5 11.5 0 0 0 0 10.4l3.8-3z" />
-                        <path fill="#EA4335" d="M12 5.1c1.7 0 3.2.6 4.4 1.7l3.3-3.3A11.5 11.5 0 0 0 1.8 6.8l3.8 3c.9-2.7 3.4-4.7 6.4-4.7z" />
-                      </svg>
-                      підтверджено
-                    </span>
-                  )}
-                </div>
-              </blockquote>
-            ))}
-          </div>
 
           <div className={styles.reviewFormWrap}>
             <div>

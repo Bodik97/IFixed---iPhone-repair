@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import BackButton from "@/components/BackButton";
 import { getAllReviews } from "@/db/reviews";
 import { isAdmin } from "@/lib/admin";
+import AddReview from "../AddReview";
 import ReviewList from "../ReviewList";
 import styles from "../page.module.css";
 
@@ -32,6 +33,8 @@ export default async function ReviewsPage() {
           </p>
         </div>
       </div>
+
+      <AddReview />
 
       <ReviewList reviews={reviews} />
     </section>

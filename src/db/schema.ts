@@ -111,11 +111,24 @@ export const reviews = pgTable(
   {
     id: uuid("id").defaultRandom().primaryKey(),
 
-    /** Автор — лише зареєстрований клієнт, тож акаунт обовʼязковий */
-    clerkUserId: text("clerk_user_id").notNull(),
+    /**
+     * Акаунт автора. NULL — коли відгук додав майстер із адмінки:
+     * людина лишила його усно, в месенджері або на Google-картці.
+     */
+    clerkUserId: text("clerk_user_id"),
     authorName: text("author_name").notNull(),
     /** Модель пристрою, якщо клієнт вказав — «iPhone 13» під відгуком */
     device: text("device"),
+    /** Місто — «Оксана · Львів · iPhone 13» */
+    city: text("city"),
+
+    /** Відгук завів майстер вручну, а не сам клієнт через сайт */
+    byMaster: boolean("by_master").notNull().default(false),
+
+    /** Фото роботи у приватному сховищі — те саме, що й у чаті */
+    imagePath: text("image_path"),
+    imageWidth: integer("image_width"),
+    imageHeight: integer("image_height"),
 
     rating: integer("rating").notNull(),
     text: text("text").notNull(),

@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { put } from "@vercel/blob";
 import { eq } from "drizzle-orm";
 import { getDb } from "@/db";
 import { leads, reviews } from "@/db/schema";
@@ -189,4 +190,57 @@ export async function setMoney(formData: FormData): Promise<void> {
 
   revalidatePath("/admin");
   revalidatePath("/moi-remonty");
+}
+
+/** Відгук, який майстер заводить сам: людина лишила його усно або в месенджері */
+export async function addReview(formData: FormData): Promise<string | null> {
+  if (!(await isAdmin())) redirect("/admin/vhid");
+
+  const authorName = String(formData.get("authorName") ?? "").trim().slice(0, 60);
+  const text = String(formData.get("text") ?? "").trim().slice(0, 600);
+  const device = String(formData.get("device") ?? "").trim().slice(0, 60) || null;
+  const city = String(formData.get("city") ?? "").trim().slice(0, 60) || null;
+
+  const rating = Number(formData.get("rating"));
+  const safeRating = Number.isInteger(rating) && rating >= 1 && rating <= 5 ? rating : 5;
+
+  if (authorName.length < 2) return "Впишіть імʼя автора.";
+  if (text.length < 10) return "Відгук закороткий — щонайменше 10 символів.";
+
+  let imagePath: string | null = null;
+  let imageWidth: number | null = null;
+  let imageHeight: number | null = null;
+
+  const file = formData.get("image");
+  if (file instanceof File && file.size > 0) {
+    if (!file.type.startsWith("image/")) return "Можна додавати лише фото.";
+    if (file.size > 6 * 1024 * 1024) return "Фото завелике.";
+
+    const blob = await put(`reviews/${crypto.randomUUID()}`, file, {
+      access: "private",
+      contentType: file.type,
+    });
+    imagePath = blob.pathname;
+    imageWidth = Number(formData.get("width")) || null;
+    imageHeight = Number(formData.get("height")) || null;
+  }
+
+  await getDb().insert(reviews).values({
+    clerkUserId: null,
+    authorName,
+    device,
+    city,
+    rating: safeRating,
+    text,
+    byMaster: true,
+    // Свій відгук майстер публікує одразу — модерувати себе немає сенсу
+    published: true,
+    imagePath,
+    imageWidth,
+    imageHeight,
+  });
+
+  revalidatePath("/admin/vidhuky");
+  revalidatePath("/");
+  return null;
 }
