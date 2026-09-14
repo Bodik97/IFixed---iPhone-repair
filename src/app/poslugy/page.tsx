@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import BookingForm from "@/components/BookingForm";
 import PriceSummary from "@/components/PriceSummary";
+import Reveal from "@/components/Reveal";
 import ServiceCatalog from "@/components/ServiceCatalog";
 import Ticker from "@/components/Ticker";
 import { services } from "@/data/services";
@@ -90,15 +91,15 @@ export default function ServicesPage() {
           <h2 className={styles.processTitle}>Як проходить будь-яка робота</h2>
 
           <div className={styles.flowGrid}>
-            {flow.map((f) => (
-              <div key={f.no} className={styles.flowItem}>
+            {flow.map((f, i) => (
+              <Reveal key={f.no} delay={i * 110} className={styles.flowItem}>
                 <div className={styles.flowNo}>{f.no}</div>
                 <div className={styles.bar}>
                   <div className={`${styles.barFill} anim-grow`} />
                 </div>
                 <h3 className={styles.flowTitle}>{f.title}</h3>
                 <p className={styles.flowBody}>{f.body}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>

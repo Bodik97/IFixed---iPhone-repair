@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import BookingForm from "@/components/BookingForm";
+import Reveal from "@/components/Reveal";
 import ReviewForm from "@/components/ReviewForm";
 import StatusCheck from "@/components/StatusCheck";
 import { getPublishedReviews, getReviewByUser } from "@/db/reviews";
@@ -189,13 +190,13 @@ export default async function Home() {
         <h2 className={`${styles.h2} ${styles.howTitle}`}>Три кроки — і телефон знову ваш</h2>
 
         <div className={styles.steps}>
-          {howItWorks.map((s) => (
-            <div key={s.no}>
+          {howItWorks.map((s, i) => (
+            <Reveal key={s.no} delay={i * 110}>
               <div className={styles.stepNo}>{s.no}</div>
               <span className={`${styles.stepLine} anim-grow`} />
               <h3 className={styles.stepTitle}>{s.title}</h3>
               <p className={styles.stepBody}>{s.body}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>

@@ -1,0 +1,26 @@
+.hidden,
+.shown {
+  /* transform + opacity — єдине, що браузер анімує без перерахунку розкладки */
+  transition: opacity .55s var(--ease), transform .55s var(--ease);
+  will-change: opacity, transform;
+}
+
+.hidden {
+  opacity: 0;
+  /* Виїзд знизу: крок ніби піднімається з-під наступного */
+  transform: translateY(26px);
+}
+
+.shown {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hidden,
+  .shown {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

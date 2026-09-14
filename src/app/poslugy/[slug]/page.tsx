@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import BackButton from "@/components/BackButton";
 import BookLink from "@/components/BookLink";
+import Reveal from "@/components/Reveal";
 import { serviceDetails } from "@/data/serviceDetails";
 import { services } from "@/data/services";
 import { jobRange, PRICED_JOBS, PRICES_PUBLISHED, uah } from "@/data/prices";
@@ -130,13 +131,15 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </h2>
         <ol className={styles.steps}>
           {detail.how.map((step, i) => (
-            <li key={step.title} className={styles.step}>
-              <span className={styles.stepNo}>{String(i + 1).padStart(2, "0")}</span>
-              <div>
-                <h3 className={styles.stepTitle}>{step.title}</h3>
-                <p className={styles.stepBody}>{step.body}</p>
-              </div>
-            </li>
+            <Reveal key={step.title} delay={i * 90}>
+              <li className={styles.step}>
+                <span className={styles.stepNo}>{String(i + 1).padStart(2, "0")}</span>
+                <div>
+                  <h3 className={styles.stepTitle}>{step.title}</h3>
+                  <p className={styles.stepBody}>{step.body}</p>
+                </div>
+              </li>
+            </Reveal>
           ))}
         </ol>
       </section>

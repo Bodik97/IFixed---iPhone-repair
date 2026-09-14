@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Reveal from "@/components/Reveal";
 import Accordion from "@/components/Accordion";
 import MailInForm from "@/components/MailInForm";
 import PackingList from "@/components/PackingList";
@@ -102,12 +103,14 @@ export default function MailInPage() {
         <h2 className={styles.stepsTitle}>П&apos;ять кроків від відправки до повернення</h2>
 
         <div className={styles.stepGrid}>
-          {steps.map((s) => (
-            <article key={s.no} className={`card ${styles.step}`}>
-              <div className={styles.stepNo}>{s.no}</div>
-              <div className={styles.stepTitle}>{s.title}</div>
-              <p className={styles.stepBody}>{s.body}</p>
-            </article>
+          {steps.map((s, i) => (
+            <Reveal key={s.no} delay={i * 110}>
+              <article className={`card ${styles.step}`}>
+                <div className={styles.stepNo}>{s.no}</div>
+                <div className={styles.stepTitle}>{s.title}</div>
+                <p className={styles.stepBody}>{s.body}</p>
+              </article>
+            </Reveal>
           ))}
         </div>
       </section>
