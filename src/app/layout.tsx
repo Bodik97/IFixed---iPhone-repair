@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
 import Footer from "@/components/Footer";
 import { site } from "@/data/site";
+import { siteUrl } from "@/lib/siteUrl";
 import "./globals.css";
 
 const unbounded = Unbounded({
@@ -22,7 +23,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
+  metadataBase: new URL(siteUrl()),
   title: {
     default: "iFix — ремонт iPhone у Львові та Новому Розділі",
     template: "%s · iFix",
@@ -40,7 +41,7 @@ const localBusiness = {
   "@type": "LocalBusiness",
   name: site.name,
   description: site.tagline,
-  url: site.url,
+  url: siteUrl(),
   telephone: site.phones.map((p) => p.href.replace("tel:", "")),
   areaServed: site.cities,
   address: site.cities.map((city) => ({

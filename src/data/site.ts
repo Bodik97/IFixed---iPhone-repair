@@ -1,8 +1,6 @@
 export const site = {
   name: "iFix",
   tagline: "Ремонт iPhone, iPad та Apple Watch у Львові й Новому Розділі.",
-  /** Продакшн-домен. Задається через NEXT_PUBLIC_SITE_URL у Vercel. */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ifix.ua",
   phones: [
     { label: "073 315 02 38", href: "tel:+380733150238" },
     { label: "063 116 43 77", href: "tel:+380631164377" },
