@@ -152,6 +152,39 @@ export const leadEvents = pgTable(
 
 export type LeadEvent = typeof leadEvents.$inferSelect;
 
+/** Хто написав повідомлення в чаті ремонту */
+export const messageAuthor = pgEnum("message_author", ["client", "master"]);
+
+/**
+ * Листування по конкретному ремонту. Прив'язка до заявки, а не до клієнта:
+ * майстер одразу бачить, про який пристрій мова, і не питає зайвого.
+ */
+export const leadMessages = pgTable(
+  "lead_messages",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    leadId: uuid("lead_id")
+      .notNull()
+      .references(() => leads.id, { onDelete: "cascade" }),
+
+    author: messageAuthor("author").notNull(),
+    text: text("text").notNull(),
+
+    /** Коли другий бік прочитав. NULL = ще не бачив — з цього рахуємо лічильник. */
+    readAt: timestamp("read_at", { withTimezone: true }),
+
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index("lead_messages_lead_idx").on(t.leadId, t.createdAt),
+    // Лічильник непрочитаних питає саме за цією парою
+    index("lead_messages_unread_idx").on(t.author, t.readAt),
+  ],
+);
+
+export type LeadMessage = typeof leadMessages.$inferSelect;
+
 /** Пристрій клієнта: зʼявляється, коли ремонт завершено, і несе дату кінця гарантії */
 export const devices = pgTable(
   "devices",

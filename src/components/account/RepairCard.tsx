@@ -1,5 +1,6 @@
 import { describeStatus } from "@/db/leads";
 import type { Lead, LeadEvent } from "@/db/schema";
+import Chat from "@/components/Chat";
 import { site } from "@/data/site";
 import DeliveryRequest from "./DeliveryRequest";
 import Parcel from "./Parcel";
@@ -65,7 +66,16 @@ function StatusIcon({ tone }: { tone: string }) {
   );
 }
 
-export default function RepairCard({ lead, events }: { lead: Lead; events: LeadEvent[] }) {
+export default function RepairCard({
+  lead,
+  events,
+  unread = 0,
+}: {
+  lead: Lead;
+  events: LeadEvent[];
+  /** Непрочитані від майстра — щоб клієнт не пропустив відповідь */
+  unread?: number;
+}) {
   const s = describeStatus(lead.status);
   const what = lead.model ?? lead.service ?? "Ремонт";
   const phone = site.phones[0];
@@ -136,19 +146,7 @@ export default function RepairCard({ lead, events }: { lead: Lead; events: LeadE
           Подзвонити
         </a>
 
-        {site.messengers[0] && (
-          <a
-            href={site.messengers[0].href}
-            target="_blank"
-            rel="noopener"
-            className={`btn btn-ghost ${styles.action}`}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M4 5h16v11H9l-5 4z" />
-            </svg>
-            Написати
-          </a>
-        )}
+        <Chat leadId={lead.id} side="client" unread={unread} />
       </div>
     </article>
   );

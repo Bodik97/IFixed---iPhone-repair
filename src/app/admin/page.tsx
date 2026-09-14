@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { and, desc, eq, isNull, or } from "drizzle-orm";
 import { getDb } from "@/db";
 import { getCounters, getEventsFor, getMoney, monthStart } from "@/db/adminStats";
+import { unreadByLead } from "@/db/messages";
 import { leads } from "@/db/schema";
 import { isAdmin } from "@/lib/admin";
 import LeadCard from "./LeadCard";
@@ -39,7 +40,11 @@ export default async function AdminOverview() {
       .limit(ATTENTION),
   ]);
 
-  const eventsByLead = await getEventsFor(attention.map((r) => r.id));
+  const ids = attention.map((r) => r.id);
+  const [eventsByLead, unread] = await Promise.all([
+    getEventsFor(ids),
+    unreadByLead(ids, "client"),
+  ]);
   const uah = (n: number) => `${n.toLocaleString("uk-UA")} ₴`;
 
   return (
@@ -90,7 +95,12 @@ export default async function AdminOverview() {
       ) : (
         <div className={styles.cards}>
           {attention.map((r) => (
-            <LeadCard key={r.id} lead={r} events={eventsByLead.get(r.id) ?? []} />
+            <LeadCard
+              key={r.id}
+              lead={r}
+              events={eventsByLead.get(r.id) ?? []}
+              unread={unread.get(r.id) ?? 0}
+            />
           ))}
         </div>
       )}

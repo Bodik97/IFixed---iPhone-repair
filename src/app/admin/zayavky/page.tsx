@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import BackButton from "@/components/BackButton";
+import { unreadByLead } from "@/db/messages";
 import { getEventsFor } from "@/db/adminStats";
 import { findLeads, STATUS_OPTIONS } from "@/db/leads";
 import { isAdmin } from "@/lib/admin";
@@ -45,7 +46,11 @@ export default async function LeadsPage({
   });
 
   const pages = Math.max(1, Math.ceil(found / PER_PAGE));
-  const eventsByLead = await getEventsFor(rows.map((r) => r.id));
+  const ids = rows.map((r) => r.id);
+  const [eventsByLead, unread] = await Promise.all([
+    getEventsFor(ids),
+    unreadByLead(ids, "client"),
+  ]);
 
   return (
     <section className={styles.wrap}>
@@ -67,7 +72,12 @@ export default async function LeadsPage({
       ) : (
         <div className={styles.cards}>
           {rows.map((r) => (
-            <LeadCard key={r.id} lead={r} events={eventsByLead.get(r.id) ?? []} />
+            <LeadCard
+              key={r.id}
+              lead={r}
+              events={eventsByLead.get(r.id) ?? []}
+              unread={unread.get(r.id) ?? 0}
+            />
           ))}
         </div>
       )}

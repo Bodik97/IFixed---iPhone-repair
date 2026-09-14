@@ -632,3 +632,13 @@
   flex-wrap: wrap;
   margin: 34px 0 16px;
 }
+
+/* Чат із клієнтом — окремим рядком під грошима */
+.chatRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 14px;
+  margin-top: 14px;
+  border-top: 1px solid var(--border);
+}

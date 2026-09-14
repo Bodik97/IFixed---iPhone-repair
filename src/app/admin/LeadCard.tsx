@@ -1,4 +1,5 @@
 import type { Lead, LeadEvent } from "@/db/schema";
+import Chat from "@/components/Chat";
 import { describeStatus } from "@/db/leads";
 import MoneyFields from "./MoneyFields";
 import NoteField from "./NoteField";
@@ -20,7 +21,16 @@ const dateFormat = new Intl.DateTimeFormat("uk-UA", {
   minute: "2-digit",
 });
 
-export default function LeadCard({ lead: r, events }: { lead: Lead; events: LeadEvent[] }) {
+export default function LeadCard({
+  lead: r,
+  events,
+  unread = 0,
+}: {
+  lead: Lead;
+  events: LeadEvent[];
+  /** Непрочитані від клієнта — майстер має бачити, що на нього чекають */
+  unread?: number;
+}) {
   const s = describeStatus(r.status);
   const waitingShip = r.deliveryRequested && !r.ttn;
 
@@ -85,6 +95,10 @@ export default function LeadCard({ lead: r, events }: { lead: Lead; events: Lead
         <NoteField id={r.id} events={events} />
 
         <MoneyFields id={r.id} price={r.price} partsCost={r.partsCost} paidAt={r.paidAt} />
+
+        <div className={styles.chatRow}>
+          <Chat leadId={r.id} side="master" unread={unread} />
+        </div>
       </div>
 
       <div className={styles.cardSide}>

@@ -10,6 +10,7 @@ import SetPassword from "@/components/account/SetPassword";
 import SignOutButton from "@/components/account/SignOutButton";
 import { describeStatus, getClientLeads } from "@/db/leads";
 import { getDevices, getEvents } from "@/db/events";
+import { unreadByLead } from "@/db/messages";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -39,9 +40,10 @@ export default async function MyRepairsPage() {
   const active = leads.filter((l) => describeStatus(l.status).active);
   const finished = leads.filter((l) => !describeStatus(l.status).active);
 
-  const [eventsPerActive, userDevices] = await Promise.all([
+  const [eventsPerActive, userDevices, unread] = await Promise.all([
     Promise.all(active.map((l) => getEvents(l.id))),
     user ? getDevices(user.id) : Promise.resolve([]),
+    unreadByLead(active.map((l) => l.id), "master"),
   ]);
 
   const rows = finished.map((l) => {
@@ -99,7 +101,12 @@ export default async function MyRepairsPage() {
 
           <div className={styles.cards}>
             {active.map((lead, i) => (
-              <RepairCard key={lead.id} lead={lead} events={eventsPerActive[i] ?? []} />
+              <RepairCard
+                key={lead.id}
+                lead={lead}
+                events={eventsPerActive[i] ?? []}
+                unread={unread.get(lead.id) ?? 0}
+              />
             ))}
           </div>
         </section>
