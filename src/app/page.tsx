@@ -23,7 +23,7 @@ import {
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "iFix — ремонт iPhone у Львові та Новому Розділі",
+  title: "iFix — ремонт iPhone у Львові та Новому Роздолі",
   description:
     "Безкоштовна діагностика, фіксована ціна після неї, гарантія 30 днів. Екран або акумулятор — 40 хвилин при вас. Приймаємо й Новою Поштою.",
   alternates: { canonical: "/" },

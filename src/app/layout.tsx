@@ -27,7 +27,7 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: {
-    default: "iFix — ремонт iPhone у Львові та Новому Розділі",
+    default: "iFix — ремонт iPhone у Львові та Новому Роздолі",
     template: "%s · iFix",
   },
   description: site.tagline,

@@ -25,7 +25,7 @@ export async function generateMetadata({
 
   return {
     title: `Ремонт ${model.name}`,
-    description: `Ремонт ${model.name} у Львові та Новому Розділі: ${model.jobs.join(", ").toLowerCase()}. ${model.time}. Безкоштовна діагностика, гарантія 30 днів.`,
+    description: `Ремонт ${model.name} у Львові та Новому Роздолі: ${model.jobs.join(", ").toLowerCase()}. ${model.time}. Безкоштовна діагностика, гарантія 30 днів.`,
     alternates: { canonical: `/modeli/${model.slug}` },
   };
 }
