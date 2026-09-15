@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { addMessage, getMessages, markRead, MAX_MESSAGE } from "@/db/messages";
+import { getLeadBrief } from "@/db/leads";
 import { canUseChat, type ChatSide } from "@/lib/chatAccess";
+import { esc, notifyMaster } from "@/lib/telegram";
+import { siteUrl } from "@/lib/siteUrl";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
 
 export const dynamic = "force-dynamic";
@@ -106,5 +109,18 @@ export async function POST(request: Request, { params }: { params: Promise<{ lea
   }
 
   await addMessage(lead, role, { text, imagePath, imageWidth, imageHeight });
+
+  // Пише клієнт — майстер має дізнатись одразу. Свої ж повідомлення
+  // сповіщати назад не потрібно.
+  if (role === "client") {
+    const brief = await getLeadBrief(lead);
+    const who = brief ? `№${brief.orderNo} · ${esc(brief.name)}` : "заявка";
+    const body = text ? esc(text) : "надіслав фото";
+
+    await notifyMaster(
+      `<b>Повідомлення від клієнта</b>\n${who}\n\n${body}\n\n${siteUrl()}/admin/zayavky`,
+    );
+  }
+
   return NextResponse.json({ ok: true });
 }

@@ -3,6 +3,8 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
 import { getDb } from "@/db";
 import { leads } from "@/db/schema";
+import { esc, notifyMaster } from "@/lib/telegram";
+import { siteUrl } from "@/lib/siteUrl";
 
 const SOURCES = ["landing", "model", "services", "mail-in"] as const;
 type Source = (typeof SOURCES)[number];
@@ -20,33 +22,26 @@ export type Lead = {
   source: Source;
 };
 
-const escapeHtml = (s: string) => s.replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" })[c]!);
+async function notifyTelegram(lead: Lead, orderNo?: number) {
+  const head = orderNo ? `<b>Нова заявка №${orderNo}</b>` : "<b>Нова заявка</b>";
 
-async function notifyTelegram(lead: Lead) {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!token || !chatId) return;
+  const rows: [string, string | undefined][] = [
+    ["Ім'я", lead.name],
+    ["Телефон", lead.phone],
+    ["Пошта", lead.email],
+    ["Модель", lead.model],
+    ["Послуга", lead.service],
+    ["Місто", lead.city],
+    ["Відділення", lead.branch],
+    ["Проблема", lead.problem],
+  ];
 
-  const lines = [
-    `<b>Нова заявка</b> · ${lead.source}`,
-    `Ім'я: ${lead.name}`,
-    lead.phone && `Телефон: ${lead.phone}`,
-    lead.email && `Пошта: ${lead.email}`,
-    lead.model && `Модель: ${lead.model}`,
-    lead.service && `Послуга: ${lead.service}`,
-    lead.city && `Місто: ${lead.city}`,
-    lead.branch && `Відділення: ${lead.branch}`,
-    lead.problem && `Проблема: ${lead.problem}`,
-  ]
-    .filter(Boolean)
-    .map((l) => escapeHtml(String(l)).replace(/&lt;(\/?b)&gt;/g, "<$1>"))
+  const body = rows
+    .filter(([, v]) => v && String(v).trim())
+    .map(([k, v]) => `${k}: ${esc(v)}`)
     .join("\n");
 
-  await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ chat_id: chatId, text: lines, parse_mode: "HTML" }),
-  });
+  await notifyMaster(`${head}\n${body}\n\n${siteUrl()}/admin/zayavky`);
 }
 
 /** Порожній рядок у базі не потрібен — краще NULL */
@@ -89,8 +84,10 @@ export async function POST(request: Request) {
 
   const source: Source = SOURCES.includes(lead.source) ? lead.source : "landing";
 
+  let orderNo: number | undefined;
+
   try {
-    await getDb()
+    const [row] = await getDb()
       .insert(leads)
       .values({
         name: lead.name.trim().slice(0, 200),
@@ -103,7 +100,10 @@ export async function POST(request: Request) {
         branch: clean(lead.branch),
         clerkUserId: userId ?? null,
         source,
-      });
+      })
+      .returning({ orderNo: leads.orderNo });
+
+    orderNo = row?.orderNo;
   } catch (e) {
     // Заявку втрачати не можна: лишаємо слід у логах і пробуємо сповістити майстра
     console.error("[lead] не вдалося записати в базу:", e);
@@ -113,16 +113,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Не вдалося зберегти заявку" }, { status: 500 });
   }
 
-  // Заявки залогінених клієнтів майстер бачить у кабінеті-адмінці разом з історією.
-  // Анонімні ніде більше не «висять», тому про них сповіщаємо в Telegram одразу.
-  if (!userId) {
-    try {
-      await notifyTelegram(lead);
-    } catch (e) {
-      // Заявку вже прийнято — збій сповіщення не має ламати відповідь клієнту
-      console.error("[lead] Telegram не відповів:", e);
-    }
-  }
+  // Сповіщаємо про кожну заявку, не лише анонімну: заявка о 21:00 інакше
+  // пролежить до ранку, бо майстер не тримає адмінку відкритою.
+  await notifyTelegram(lead, orderNo);
 
   return NextResponse.json({ ok: true });
 }

@@ -162,3 +162,14 @@ export async function findLeads(filter: LeadFilter): Promise<{ rows: Lead[]; fou
 
   return { rows, found };
 }
+
+/** Мінімум про заявку — для сповіщення майстру: номер і чиє це звернення */
+export async function getLeadBrief(id: string): Promise<{ orderNo: number; name: string } | undefined> {
+  const [row] = await getDb()
+    .select({ orderNo: leads.orderNo, name: leads.name })
+    .from(leads)
+    .where(eq(leads.id, id))
+    .limit(1);
+
+  return row;
+}
