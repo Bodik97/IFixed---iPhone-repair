@@ -19,6 +19,13 @@
   font-size: clamp(26px, 3.2vw, 40px);
 }
 
+/* Хто зайшов — у звичайному регістрі, на відміну від kicker */
+.hello {
+  margin-top: 6px;
+  color: var(--text-2);
+  font-size: 15px;
+}
+
 /* ---------- Зведення ---------- */
 .summary {
   display: flex;

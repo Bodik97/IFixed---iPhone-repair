@@ -17,6 +17,7 @@ export default function BackButton({ fallback, label = "Назад", className }
     <button
       type="button"
       className={`${styles.back} ${className ?? ""}`}
+      aria-label={label}
       onClick={() => {
         // Перевіряємо в момент кліку, а не при рендері: інакше довелось би
         // тримати стан, якого на сервері ще немає
@@ -27,7 +28,7 @@ export default function BackButton({ fallback, label = "Назад", className }
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M15 5l-7 7 7 7" />
       </svg>
-      {label}
+      <span>{label}</span>
     </button>
   );
 }

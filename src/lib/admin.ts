@@ -22,42 +22,56 @@ function sign(payload: string): string {
   return createHmac("sha256", requireEnv("ADMIN_SESSION_SECRET")).update(payload).digest("hex");
 }
 
+type Account = { email: string; password: string; name: string };
+
 /**
  * Доступ мають лише перелічені майстри. Кожен зі своєю парою:
  * ADMIN_EMAIL / ADMIN_PASSWORD — перший, ADMIN_EMAIL_2 / ADMIN_PASSWORD_2 — другий.
  * Другий необовʼязковий: якщо змінних немає, працює один акаунт.
+ *
+ * ADMIN_NAME / ADMIN_NAME_2 потрібні лише для привітання в адмінці — права
+ * в обох майстрів однакові.
  */
-function accounts(): { email: string; password: string }[] {
+function accounts(): Account[] {
   const list = [
-    { email: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD },
-    { email: process.env.ADMIN_EMAIL_2, password: process.env.ADMIN_PASSWORD_2 },
+    { email: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD, name: process.env.ADMIN_NAME },
+    { email: process.env.ADMIN_EMAIL_2, password: process.env.ADMIN_PASSWORD_2, name: process.env.ADMIN_NAME_2 },
   ];
 
   return list
-    .filter((a): a is { email: string; password: string } => Boolean(a.email && a.password))
-    .map((a) => ({ email: a.email.trim().toLowerCase(), password: a.password }));
+    .filter((a): a is { email: string; password: string; name: string | undefined } =>
+      Boolean(a.email && a.password),
+    )
+    .map((a) => ({
+      email: a.email.trim().toLowerCase(),
+      password: a.password,
+      // Без ADMIN_NAME беремо частину пошти до «@» — краще за порожнє місце
+      name: a.name?.trim() || a.email.split("@")[0],
+    }));
 }
 
-/** Перевіряє пару email+пароль проти списку майстрів */
-export function checkCredentials(email: string, password: string): boolean {
+/** Індекс майстра зі списку, якщо пара email+пароль зійшлася, інакше null */
+export function checkCredentials(email: string, password: string): number | null {
   const list = accounts();
   if (list.length === 0) throw new Error("ADMIN_EMAIL / ADMIN_PASSWORD не задано — адмінка вимкнена");
 
   const given = email.trim().toLowerCase();
 
   // Перебираємо всі акаунти до кінця — час відповіді не має видавати, який саме не зійшовся
-  let matched = false;
-  for (const a of list) {
+  let matched: number | null = null;
+  list.forEach((a, i) => {
     const ok = safeEqual(given, a.email) && safeEqual(password, a.password);
-    matched = matched || ok;
-  }
+    if (ok) matched = i;
+  });
 
   return matched;
 }
 
-export async function createSession(): Promise<void> {
+export async function createSession(index: number): Promise<void> {
   const expires = Date.now() + MAX_AGE * 1000;
-  const value = `${expires}.${sign(String(expires))}`;
+  // Індекс всередині підпису — щоб його не можна було підмінити на чужий
+  const payload = `${expires}.${index}`;
+  const value = `${payload}.${sign(payload)}`;
 
   (await cookies()).set(COOKIE, value, {
     httpOnly: true,
@@ -72,19 +86,38 @@ export async function destroySession(): Promise<void> {
   (await cookies()).delete(COOKIE);
 }
 
-/** true, якщо cookie підписана нашим секретом і ще не протухла */
-export async function isAdmin(): Promise<boolean> {
+/** Індекс майстра з cookie, якщо підпис наш і строк не вийшов */
+async function session(): Promise<number | null> {
   const raw = (await cookies()).get(COOKIE)?.value;
-  if (!raw) return false;
+  if (!raw) return null;
 
-  const [expires, signature] = raw.split(".");
-  if (!expires || !signature) return false;
-  if (Number(expires) < Date.now()) return false;
+  const [expires, index, signature] = raw.split(".");
+  if (!expires || !index || !signature) return null;
+  if (Number(expires) < Date.now()) return null;
 
   try {
-    return safeEqual(signature, sign(expires));
+    if (!safeEqual(signature, sign(`${expires}.${index}`))) return null;
   } catch {
     // Секрет не заданий — вважаємо, що доступу немає
-    return false;
+    return null;
   }
+
+  return Number(index);
+}
+
+/** true, якщо cookie підписана нашим секретом і ще не протухла */
+export async function isAdmin(): Promise<boolean> {
+  return (await session()) !== null;
+}
+
+/**
+ * Хто саме зайшов — потрібно лише для привітання.
+ * Права на заявки, гроші й відгуки в обох майстрів однакові.
+ */
+export async function currentAdmin(): Promise<{ name: string; email: string } | null> {
+  const i = await session();
+  if (i === null) return null;
+
+  const a = accounts()[i];
+  return a ? { name: a.name, email: a.email } : null;
 }

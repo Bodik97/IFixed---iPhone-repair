@@ -15,14 +15,22 @@
   min-width: 0;
 }
 
-.chips {
+.status {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
 }
 
-.chips a {
-  text-decoration: none;
+.statusLabel {
+  color: var(--text-2);
+  font-size: 14px;
+  flex: none;
+}
+
+.select {
+  flex: 1 1 auto;
+  max-width: 320px;
+  cursor: pointer;
 }
 
 .result {
@@ -52,20 +60,7 @@
     width: 100%;
   }
 
-  /* Фільтри в один рядок із горизонтальним скролом — щоб не з'їдали пів екрана */
-  .chips {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-    margin: 0 calc(var(--gutter) * -1);
-    padding: 2px var(--gutter);
-  }
-
-  .chips::-webkit-scrollbar {
-    display: none;
-  }
-
-  .chips a {
-    flex: none;
+  .select {
+    max-width: none;
   }
 }

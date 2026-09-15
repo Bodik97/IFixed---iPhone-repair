@@ -14,20 +14,20 @@ export async function signIn(_prev: string | null, formData: FormData): Promise<
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
 
-  let ok = false;
+  let master: number | null = null;
   try {
-    ok = checkCredentials(email, password);
+    master = checkCredentials(email, password);
   } catch {
     return "Адмінка не налаштована: немає ADMIN_EMAIL, ADMIN_PASSWORD або ADMIN_SESSION_SECRET.";
   }
 
-  if (!ok) {
+  if (master === null) {
     // Невелика затримка, щоб перебір паролів був повільним
     await new Promise((r) => setTimeout(r, 700));
     return "Пошта або пароль не підходять.";
   }
 
-  await createSession();
+  await createSession(master);
   redirect("/admin");
 }
 

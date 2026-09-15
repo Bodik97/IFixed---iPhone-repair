@@ -6,7 +6,7 @@ import { getDb } from "@/db";
 import { getCounters, getEventsFor, getMoney, monthStart } from "@/db/adminStats";
 import { unreadByLead } from "@/db/messages";
 import { leads } from "@/db/schema";
-import { isAdmin } from "@/lib/admin";
+import { currentAdmin } from "@/lib/admin";
 import LeadCard from "./LeadCard";
 import styles from "./page.module.css";
 
@@ -21,7 +21,8 @@ export const dynamic = "force-dynamic";
 const ATTENTION = 5;
 
 export default async function AdminOverview() {
-  if (!(await isAdmin())) redirect("/admin/vhid");
+  const master = await currentAdmin();
+  if (!master) redirect("/admin/vhid");
 
   const [counters, money, attention] = await Promise.all([
     getCounters(),
@@ -53,6 +54,7 @@ export default async function AdminOverview() {
         <div>
           <div className="kicker">Адміністрування</div>
           <h1 className={styles.title}>Огляд</h1>
+          <p className={styles.hello}>Вітаємо, {master.name}</p>
         </div>
       </div>
 

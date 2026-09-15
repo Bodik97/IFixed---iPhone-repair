@@ -14,7 +14,7 @@ const POLL_MS = 8_000;
  * «оновити сторінку». Питаємо короткий відбиток стану і, якщо він змінився,
  * робимо м'яке оновлення: воно перемальовує дані й лишає прокрутку на місці.
  */
-export default function LiveRefresh({ label }: { label?: string }) {
+export default function LiveRefresh({ label, silent }: { label?: string; silent?: boolean }) {
   const router = useRouter();
   const seen = useRef<string | null>(null);
   const [justUpdated, setJustUpdated] = useState(false);
@@ -65,6 +65,11 @@ export default function LiveRefresh({ label }: { label?: string }) {
       window.removeEventListener("focus", onVisible);
     };
   }, [check]);
+
+  // У майстра значок лише заважав у робочій панелі: оновлення й так помітне
+  // по самих даних. Клієнту ж напис потрібен — він пояснює, чому цифри
+  // змінюються самі.
+  if (silent) return null;
 
   return (
     <div className={styles.wrap} role="status" aria-live="polite">

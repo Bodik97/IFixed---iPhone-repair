@@ -2,6 +2,7 @@
 
 import { useCallback, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
+import BackButton from "@/components/BackButton";
 import { usePathname } from "next/navigation";
 import styles from "./AdminShell.module.css";
 
@@ -46,7 +47,7 @@ const items = [
   },
   {
     href: "/admin/groshi",
-    label: "Гроші",
+    label: "Каса",
     badge: null,
     icon: (
       <>
@@ -94,10 +95,13 @@ function writeCollapsed(value: boolean) {
 
 export default function AdminShell({
   badges,
+  master,
   actions,
   children,
 }: {
   badges: NavBadges;
+  /** Імʼя майстра, який зайшов — щоб було видно, під ким відкрита адмінка */
+  master: string;
   /** Кнопка виходу — приходить із серверного layout разом зі своєю дією */
   actions: React.ReactNode;
   children: React.ReactNode;
@@ -211,8 +215,19 @@ export default function AdminShell({
               <path d="M4 12h16" />
               <path d="M4 17h16" />
             </svg>
-            Меню
+            <span>Меню</span>
           </button>
+
+          {pathname !== "/admin" && (
+            <BackButton fallback="/admin" className={styles.back} />
+          )}
+
+          <span className={styles.who} title={`Ви увійшли як ${master}`}>
+            <span className={styles.whoMark} aria-hidden="true">
+              {master.slice(0, 1).toUpperCase()}
+            </span>
+            <span className={styles.whoName}>{master}</span>
+          </span>
 
           {actions}
         </div>

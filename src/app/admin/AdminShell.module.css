@@ -11,14 +11,58 @@
   min-width: 0;
 }
 
-/* Кнопка меню й кнопка виходу — в одному рядку над вмістом */
+/* Робоча панель: «Назад», хто зайшов, оновлення, вихід.
+   Закріплена під шапкою сайту — у майстра ці кнопки мають бути під рукою
+   на будь-якій глибині списку заявок, без прокручування вгору. */
 .topbar {
+  position: sticky;
+  top: var(--site-header, 73px);
+  z-index: 25;
+
   display: flex;
   align-items: center;
   gap: 12px;
   justify-content: flex-end;
   flex-wrap: wrap;
   margin-bottom: 16px;
+  padding: 10px 0;
+
+  /* Непрозоре тло: під панеллю проїжджає вміст сторінки */
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+/* «Назад» ліворуч, решта — праворуч */
+.back {
+  margin-inline-end: auto;
+}
+
+/* Хто зайшов: кружечок з першою літерою + імʼя */
+.who {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.whoMark {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .nav {
@@ -203,7 +247,11 @@
   }
 
   .topbar {
-    justify-content: space-between;
+    justify-content: flex-end;
+  }
+
+  .drawerButton {
+    margin-inline-end: 0;
   }
 
   /* На телефоні меню виїжджає збоку і перекриває вміст */
@@ -284,5 +332,35 @@
 @media (prefers-reduced-motion: reduce) {
   .nav {
     transition: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .whoName {
+    display: none;
+  }
+
+  .who {
+    padding: 4px;
+  }
+}
+
+/* Закріплена панель не має з'їдати екран: на телефоні лишаємо самі іконки,
+   підписи ховаємо — зміст кнопок і так очевидний зі стрілки та дверей */
+@media (max-width: 560px) {
+  .topbar {
+    gap: 8px;
+    padding: 8px 0;
+  }
+
+  .drawerButton > span,
+  .back > span {
+    display: none;
+  }
+
+  /* Іконка без підпису стискає кнопку — тримаємо палець у нормі */
+  .drawerButton,
+  .back {
+    min-height: 44px;
   }
 }

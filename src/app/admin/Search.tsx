@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { STATUS_OPTIONS } from "@/db/leads";
+import StatusFilter from "./StatusFilter";
 import styles from "./Search.module.css";
 
 export type Query = { q?: string; status?: string; shipping?: string };
@@ -43,38 +43,15 @@ export default function Search({ query, found }: { query: Query; found: number }
         />
 
         <button type="submit" className="btn btn-ghost">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20l-3.5-3.5" />
+          </svg>
           Знайти
         </button>
       </form>
 
-      <div className={styles.chips}>
-        <Link
-          href={adminHref(query, { status: "", shipping: "", page: 1 })}
-          className="chip"
-          aria-pressed={!query.status && !query.shipping}
-        >
-          Усі
-        </Link>
-
-        {STATUS_OPTIONS.map((s) => (
-          <Link
-            key={s.value}
-            href={adminHref(query, { status: s.value, shipping: "", page: 1 })}
-            className="chip"
-            aria-pressed={query.status === s.value}
-          >
-            {s.label}
-          </Link>
-        ))}
-
-        <Link
-          href={adminHref(query, { shipping: "1", status: "", page: 1 })}
-          className="chip"
-          aria-pressed={Boolean(query.shipping)}
-        >
-          Чекають відправки
-        </Link>
-      </div>
+      <StatusFilter query={query} />
 
       {filtered && (
         <div className={styles.result}>

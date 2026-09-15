@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import BackButton from "@/components/BackButton";
 import { getAllReviews } from "@/db/reviews";
 import { isAdmin } from "@/lib/admin";
 import AddReview from "../AddReview";
@@ -24,7 +23,6 @@ export default async function ReviewsPage() {
     <section className={styles.wrap}>
       <div className={styles.head}>
         <div>
-          <BackButton fallback="/admin" />
           <h1 className={styles.title}>Відгуки</h1>
           <p className={styles.sectionNote}>
             {pending > 0

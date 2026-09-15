@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import BackButton from "@/components/BackButton";
 import { unreadByLead } from "@/db/messages";
 import { getEventsFor } from "@/db/adminStats";
 import { findLeads, STATUS_OPTIONS } from "@/db/leads";
@@ -56,7 +55,6 @@ export default async function LeadsPage({
     <section className={styles.wrap}>
       <div className={styles.head}>
         <div>
-          <BackButton fallback="/admin" />
           <h1 className={styles.title}>Заявки</h1>
         </div>
       </div>
