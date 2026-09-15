@@ -163,6 +163,26 @@ export function jobRange(job: PricedJob): { min: Money; max: Money } | null {
   return { min: Math.min(...all), max: Math.max(...all) };
 }
 
+/**
+ * Від скількох починається послуга — для картки в каталозі.
+ *
+ * У робіт, що залежать від моделі, це найдешевша модель у прайсі; у решти —
+ * фіксована ціна. Послуга без ціни повертає null: у картці лишиться номер.
+ */
+export function serviceFrom(slug: string): { price: Money; exact: boolean } | null {
+  if ((PRICED_JOBS as readonly string[]).includes(slug)) {
+    const min = jobRange(slug as PricedJob)?.min;
+    return min === undefined ? null : { price: min, exact: false };
+  }
+
+  const board = boardPrices.find((b) => b.slug === slug);
+  if (board) return { price: board.from, exact: false };
+
+  // Профілактика коштує однаково для всіх — «від» тут було б неправдою
+  const flat = flatPrices.find((f) => f.slug === slug);
+  return flat ? { price: flat.price, exact: true } : null;
+}
+
 /** 3400 → «3 400 ₴» — нерозривний пробіл, щоб сума не ламалась на два рядки */
 export function uah(value: Money): string {
   return `${value.toLocaleString("uk-UA").replace(/\s/g, "\u202f")}\u202f₴`;

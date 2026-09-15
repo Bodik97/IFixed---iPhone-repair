@@ -77,6 +77,26 @@
   color: rgba(241, 243, 239, .35);
 }
 
+/* Ціна на місці номера: те, заради чого картку й читають */
+.from {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 17px;
+  letter-spacing: -.02em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.fromLabel {
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--text-3);
+}
+
 .cardTitle {
   font-size: 21px;
   line-height: 1.15;

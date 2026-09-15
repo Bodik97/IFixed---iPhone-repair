@@ -1,0 +1,111 @@
+.section {
+  margin-top: 48px;
+}
+
+.head {
+  margin-bottom: 18px;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: clamp(22px, 2.6vw, 30px);
+  letter-spacing: -.02em;
+}
+
+.lead {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--text-2);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.table {
+  display: grid;
+  gap: 1px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.headRow,
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 13px 20px;
+  background: var(--surface);
+}
+
+.headRow {
+  color: var(--text-3);
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.row {
+  color: var(--text);
+  text-decoration: none;
+  transition: background .15s;
+}
+
+.row:hover {
+  background: var(--surface-hover);
+}
+
+.model {
+  min-width: 0;
+  font-size: 15.5px;
+}
+
+.col,
+.value,
+.valueWide {
+  min-width: 92px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.value {
+  font-size: 15.5px;
+}
+
+/* Одна ціна на два стовпчики — коли в цієї моделі варіант лише один */
+.valueWide {
+  grid-column: 2 / -1;
+}
+
+.note {
+  margin: 14px 0 0;
+  color: var(--text-3);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.link {
+  color: var(--accent);
+}
+
+@media (max-width: 560px) {
+  .headRow,
+  .row {
+    gap: 10px;
+    padding: 12px 16px;
+  }
+
+  .col,
+  .value,
+  .valueWide {
+    min-width: 74px;
+    font-size: 14.5px;
+  }
+
+  .model {
+    font-size: 14.5px;
+  }
+}

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import BackButton from "@/components/BackButton";
 import BookLink from "@/components/BookLink";
 import Reveal from "@/components/Reveal";
+import ServicePrices from "@/components/ServicePrices";
 import { serviceDetails } from "@/data/serviceDetails";
 import { services } from "@/data/services";
 import { jobRange, PRICED_JOBS, PRICES_PUBLISHED, uah } from "@/data/prices";
@@ -158,6 +159,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           іде за передоплатою за деталь — решту сплачуєте при видачі.
         </p>
       </section>
+
+      {range && <ServicePrices job={slug as (typeof PRICED_JOBS)[number]} />}
 
       <section className={styles.section} aria-labelledby="inshi">
         <h2 id="inshi" className={styles.h2}>
