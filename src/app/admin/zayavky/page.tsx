@@ -5,6 +5,7 @@ import { unreadByLead } from "@/db/messages";
 import { getEventsFor } from "@/db/adminStats";
 import { findLeads, STATUS_OPTIONS } from "@/db/leads";
 import { getOrderCounts, phoneKey } from "@/db/clients";
+import { getPriceHints, hintKey } from "@/db/priceHistory";
 import { isAdmin } from "@/lib/admin";
 import LeadCard from "../LeadCard";
 import Search, { adminHref, type Query } from "../Search";
@@ -47,10 +48,11 @@ export default async function LeadsPage({
 
   const pages = Math.max(1, Math.ceil(found / PER_PAGE));
   const ids = rows.map((r) => r.id);
-  const [eventsByLead, unread, orderCounts] = await Promise.all([
+  const [eventsByLead, unread, orderCounts, priceHints] = await Promise.all([
     getEventsFor(ids),
     unreadByLead(ids, "client"),
     getOrderCounts(rows.map((r) => r.phone)),
+    getPriceHints(),
   ]);
 
   return (
@@ -78,6 +80,11 @@ export default async function LeadsPage({
               events={eventsByLead.get(r.id) ?? []}
               unread={unread.get(r.id) ?? 0}
               orders={orderCounts.get(phoneKey(r.phone) ?? "") ?? 1}
+              /* Заявки без ціни не входять у власну статистику, тож підказка
+                 завжди про інші ремонти. Там, де ціна вже стоїть, вона зайва. */
+              priceHint={
+                r.price === null ? (priceHints.get(hintKey(r.model, r.service) ?? "") ?? null) : null
+              }
             />
           ))}
         </div>

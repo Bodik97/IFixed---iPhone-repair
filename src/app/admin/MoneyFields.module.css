@@ -117,3 +117,31 @@
     padding-bottom: 0;
   }
 }
+
+/* Підказка з минулих цін: натиснув — ціна підставилась і збереглась */
+.hint {
+  justify-self: start;
+  margin-top: 4px;
+  padding: 3px 9px;
+  border: 1px dashed var(--border);
+  border-radius: var(--r-pill);
+  background: none;
+  color: var(--text-3);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+
+.hint:hover {
+  border-color: var(--accent);
+  border-style: solid;
+  color: var(--accent);
+}
+
+.hintRange,
+.hintCount {
+  color: var(--text-3);
+}

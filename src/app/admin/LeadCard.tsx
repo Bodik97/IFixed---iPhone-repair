@@ -27,6 +27,7 @@ export default function LeadCard({
   events,
   unread = 0,
   orders = 1,
+  priceHint = null,
 }: {
   lead: Lead;
   events: LeadEvent[];
@@ -34,6 +35,8 @@ export default function LeadCard({
   unread?: number;
   /** Скільки всього звернень з цього номера, разом із цим */
   orders?: number;
+  /** Скільки брали за цю ж роботу на цій же моделі раніше */
+  priceHint?: { count: number; last: number; min: number; max: number } | null;
 }) {
   const s = describeStatus(r.status);
   const waitingShip = r.deliveryRequested && !r.ttn;
@@ -114,6 +117,7 @@ export default function LeadCard({
           prepayment={r.prepayment}
           prepaidAt={r.prepaidAt}
           paidAt={r.paidAt}
+          hint={priceHint}
         />
 
         <div className={styles.chatRow}>

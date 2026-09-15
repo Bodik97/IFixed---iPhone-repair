@@ -12,11 +12,21 @@ type Props = {
   prepayment: number | null;
   prepaidAt: Date | null;
   paidAt: Date | null;
+  /** За скільки вже робили цю ж роботу на цій же моделі */
+  hint?: { count: number; last: number; min: number; max: number } | null;
 };
 
 const digits = (v: string) => v.replace(/\D/g, "");
 
-export default function MoneyFields({ id, price, partsCost, prepayment, prepaidAt, paidAt }: Props) {
+export default function MoneyFields({
+  id,
+  price,
+  partsCost,
+  prepayment,
+  prepaidAt,
+  paidAt,
+  hint,
+}: Props) {
   const formRef = useRef<HTMLFormElement>(null);
   const [pending, startTransition] = useTransition();
 
@@ -60,6 +70,28 @@ export default function MoneyFields({ id, price, partsCost, prepayment, prepaidA
           onChange={(e) => setPriceText(digits(e.target.value))}
           onBlur={() => priceText !== saved.current.price && save()}
         />
+
+        {hint && (
+          <button
+            type="button"
+            className={styles.hint}
+            title="Підставити цю ціну"
+            onClick={() => {
+              setPriceText(String(hint.last));
+              saved.current = { ...saved.current, price: String(hint.last) };
+              startTransition(() => formRef.current?.requestSubmit());
+            }}
+          >
+            було {hint.last.toLocaleString("uk-UA")} ₴
+            {hint.min !== hint.max && (
+              <span className={styles.hintRange}>
+                {" "}
+                · {hint.min.toLocaleString("uk-UA")}–{hint.max.toLocaleString("uk-UA")}
+              </span>
+            )}
+            <span className={styles.hintCount}> · {hint.count}×</span>
+          </button>
+        )}
       </div>
 
       <div className={styles.field}>
