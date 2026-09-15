@@ -1,7 +1,7 @@
 import { getPaidLeads } from "@/db/adminStats";
 import { categoryLabel, getExpenses } from "@/db/expenses";
 import { isAdmin } from "@/lib/admin";
-import { isPeriod, periodRange } from "../period";
+import { resolveRange } from "../period";
 
 /** Один стовпчик CSV: лапки подвоюємо, бо всередині може бути «;» або перенос */
 function cell(v: string | number | null): string {
@@ -20,9 +20,13 @@ const date = new Intl.DateTimeFormat("uk-UA", { dateStyle: "short" });
 export async function GET(request: Request) {
   if (!(await isAdmin())) return new Response("Немає доступу", { status: 403 });
 
-  const raw = new URL(request.url).searchParams.get("period") ?? "month";
-  const period = isPeriod(raw) ? raw : "month";
-  const { from, to } = periodRange(period);
+  const params = new URL(request.url).searchParams;
+  const range = resolveRange({
+    period: params.get("period") ?? undefined,
+    from: params.get("from") ?? undefined,
+    to: params.get("to") ?? undefined,
+  });
+  const { from, to } = range;
 
   const [rows, spending] = await Promise.all([getPaidLeads(from, to), getExpenses(from, to)]);
 
@@ -65,7 +69,7 @@ export async function GET(request: Request) {
   return new Response(csv, {
     headers: {
       "content-type": "text/csv; charset=utf-8",
-      "content-disposition": `attachment; filename="ifix-kasa-${period}.csv"`,
+      "content-disposition": `attachment; filename="ifix-kasa-${range.fromDay}_${range.toDay || "dosi"}.csv"`,
       "cache-control": "no-store",
     },
   });

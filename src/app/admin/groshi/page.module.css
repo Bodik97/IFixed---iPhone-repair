@@ -8,23 +8,66 @@
 }
 
 .period {
-  display: flex;
-  align-items: center;
+  display: grid;
   gap: 10px;
-  flex: 1 1 260px;
+  flex: 1 1 420px;
   min-width: 0;
 }
 
-.periodLabel {
-  color: var(--text-2);
-  font-size: 14px;
-  flex: none;
+/* Готові проміжки: один дотик замість двох дат у календарі */
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
-.periodSelect {
-  flex: 1 1 auto;
-  max-width: 260px;
+.preset,
+.presetOn {
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  background: none;
+  color: var(--text-2);
+  font: inherit;
+  font-size: 13.5px;
   cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
+}
+
+.preset:hover {
+  border-color: var(--border-active);
+  color: var(--text);
+}
+
+.presetOn {
+  border-color: var(--accent);
+  background: rgba(218, 255, 61, .12);
+  color: var(--accent);
+}
+
+.dates {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dateField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.dateLabel {
+  color: var(--text-3);
+  font-size: 13px;
+}
+
+.date {
+  min-width: 0;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Борги: окремо від каси, бо це ще не гроші, а обіцянка */
@@ -71,8 +114,13 @@
 }
 
 @media (max-width: 560px) {
-  .periodSelect {
-    max-width: none;
+  /* Дати на телефоні — у два рядки на всю ширину, інакше поля стискаються */
+  .dateField {
+    flex: 1 1 100%;
+  }
+
+  .date {
+    flex: 1;
   }
 }
 

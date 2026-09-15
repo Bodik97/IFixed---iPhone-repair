@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getMoney, getOutstanding, monthStart } from "@/db/adminStats";
 import { categoryLabel, getExpenses } from "@/db/expenses";
+import { getMoneyJournal } from "@/db/moneyJournal";
 import { isAdmin } from "@/lib/admin";
 import Expenses from "./Expenses";
 import PeriodFilter from "./PeriodFilter";
-import { isPeriod, periodLabel, periodRange } from "./period";
+import Journal from "./Journal";
+import { resolveRange } from "./period";
 import styles from "./page.module.css";
 import shared from "../page.module.css";
 
@@ -27,18 +29,18 @@ const MONTHS = 6;
 export default async function MoneyPage({
   searchParams,
 }: {
-  searchParams: Promise<{ period?: string }>;
+  searchParams: Promise<{ period?: string; from?: string; to?: string }>;
 }) {
   if (!(await isAdmin())) redirect("/admin/vhid");
 
-  const raw = (await searchParams).period;
-  const period = isPeriod(raw) ? raw : "month";
-  const { from, to } = periodRange(period);
+  const range = resolveRange(await searchParams);
+  const { from, to } = range;
 
-  const [chosen, owed, spending] = await Promise.all([
+  const [chosen, owed, spending, journal] = await Promise.all([
     getMoney(from, to),
     getOutstanding(),
     getExpenses(from, to),
+    getMoneyJournal(from, to),
   ]);
 
   const spent = spending.reduce((sum, e) => sum + e.amount, 0);
@@ -80,10 +82,10 @@ export default async function MoneyPage({
       </div>
 
       <div className={styles.tools}>
-        <PeriodFilter value={period} />
+        <PeriodFilter range={range} />
 
         <a
-          href={`/admin/groshi/csv?period=${period}`}
+          href={`/admin/groshi/csv?from=${range.fromDay}&to=${range.toDay}`}
           className="btn btn-ghost"
           download
         >
@@ -98,7 +100,7 @@ export default async function MoneyPage({
 
       <div className={styles.big}>
         <div className={styles.bigItem}>
-          <span className={styles.bigLabel}>Оплачено · {periodLabel(period).toLowerCase()}</span>
+          <span className={styles.bigLabel}>Оплачено · {range.label.toLowerCase()}</span>
           <span className={styles.bigValue}>{uah(chosen.revenue)}</span>
         </div>
         <div className={styles.bigItem}>
@@ -118,7 +120,7 @@ export default async function MoneyPage({
         <div className={styles.bigItemAccent}>
           <span className={styles.bigLabel}>
             Чистими
-            {period === "month" && delta !== null && (
+            {range.label === "Цей місяць" && delta !== null && (
               <span className={delta >= 0 ? styles.up : styles.down}>
                 {delta >= 0 ? "+" : ""}
                 {delta}% до минулого
@@ -153,6 +155,9 @@ export default async function MoneyPage({
           </p>
         </div>
       )}
+
+      <h2 className={styles.h2}>Історія руху</h2>
+      <Journal entries={journal} />
 
       <Expenses
         today={new Date().toISOString().slice(0, 10)}

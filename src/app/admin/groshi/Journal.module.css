@@ -1,0 +1,148 @@
+.wrap {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 38px;
+}
+
+.day {
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.dayHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 13px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.dayName {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.daySum {
+  display: flex;
+  gap: 14px;
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+}
+
+.in {
+  color: var(--accent);
+}
+
+.out {
+  color: var(--danger);
+}
+
+.list {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--border);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 54px 92px 1fr auto;
+  align-items: start;
+  gap: 14px;
+  padding: 14px 20px;
+  background: var(--surface);
+}
+
+.time {
+  color: var(--text-3);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+
+.tagIn,
+.tagOut {
+  justify-self: start;
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tagIn {
+  background: rgba(218, 255, 61, .14);
+  color: var(--accent);
+}
+
+.tagOut {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.what {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.client {
+  color: var(--text);
+  font-size: 15px;
+  text-decoration: none;
+}
+
+a.client:hover {
+  color: var(--accent);
+}
+
+.detail {
+  color: var(--text-3);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.amountIn,
+.amountOut {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  font-size: 15.5px;
+  padding-top: 1px;
+}
+
+.amountIn {
+  color: var(--accent);
+}
+
+.amountOut {
+  color: var(--danger);
+}
+
+.empty {
+  margin: 0 0 38px;
+  padding: 20px;
+  border: 1px dashed var(--border);
+  border-radius: 22px;
+  color: var(--text-3);
+  font-size: 14.5px;
+}
+
+@media (max-width: 680px) {
+  /* Час і позначка зверху, опис під ними, сума праворуч */
+  .row {
+    grid-template-columns: auto 1fr auto;
+    gap: 10px;
+  }
+
+  .what {
+    grid-column: 1 / -1;
+  }
+}
