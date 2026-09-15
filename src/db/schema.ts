@@ -241,3 +241,38 @@ export const devices = pgTable(
 );
 
 export type Device = typeof devices.$inferSelect;
+
+/**
+ * Витрати сервісу, не привʼязані до конкретної роботи.
+ *
+ * Собівартість деталі живе в самій заявці (`partsCost`) — вона стосується
+ * одного ремонту. Оренда, реклама чи інструмент стосуються місяця загалом,
+ * і без них «чистими» в касі завищене.
+ */
+export const expenseCategory = pgEnum("expense_category", [
+  "rent",
+  "ads",
+  "tools",
+  "parts",
+  "tax",
+  "other",
+]);
+
+export const expenses = pgTable(
+  "expenses",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    /** Дата витрати, а не запису: чек можна внести й наступного дня */
+    spentAt: timestamp("spent_at", { withTimezone: true }).notNull().defaultNow(),
+
+    amount: integer("amount").notNull(),
+    category: expenseCategory("category").notNull().default("other"),
+    note: text("note"),
+
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("expenses_spent_at_idx").on(t.spentAt)],
+);
+
+export type Expense = typeof expenses.$inferSelect;

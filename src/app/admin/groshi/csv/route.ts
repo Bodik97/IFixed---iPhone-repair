@@ -1,4 +1,5 @@
 import { getPaidLeads } from "@/db/adminStats";
+import { categoryLabel, getExpenses } from "@/db/expenses";
 import { isAdmin } from "@/lib/admin";
 import { isPeriod, periodRange } from "../period";
 
@@ -23,7 +24,7 @@ export async function GET(request: Request) {
   const period = isPeriod(raw) ? raw : "month";
   const { from, to } = periodRange(period);
 
-  const rows = await getPaidLeads(from, to);
+  const [rows, spending] = await Promise.all([getPaidLeads(from, to), getExpenses(from, to)]);
 
   const head = ["Номер", "Оплачено", "Клієнт", "Телефон", "Модель", "Послуга", "Ціна", "Деталі", "Передоплата", "Чистими"];
   const body = rows.map((r) => {
@@ -43,7 +44,23 @@ export async function GET(request: Request) {
     ].join(";");
   });
 
-  const csv = "﻿" + [head.map(cell).join(";"), ...body].join("\r\n");
+  // Витрати окремим блоком нижче: бухгалтеру потрібні обидві половини в одному файлі
+  const spentHead = ["Витрати", "Дата", "На що", "Коментар", "Сума"];
+  const spentBody = spending.map((e) =>
+    [
+      cell(""),
+      cell(date.format(e.spentAt)),
+      cell(categoryLabel(e.category)),
+      cell(e.note),
+      cell(e.amount),
+    ].join(";"),
+  );
+
+  const csv =
+    "﻿" +
+    [head.map(cell).join(";"), ...body, "", spentHead.map(cell).join(";"), ...spentBody].join(
+      "\r\n",
+    );
 
   return new Response(csv, {
     headers: {

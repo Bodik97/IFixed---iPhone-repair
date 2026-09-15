@@ -8,6 +8,7 @@ import { getDb } from "@/db";
 import { leads, reviews } from "@/db/schema";
 import { STATUS_OPTIONS } from "@/db/leads";
 import { addEvent, getLeadById, registerDevice } from "@/db/events";
+import { addExpense, EXPENSE_CATEGORIES, removeExpense } from "@/db/expenses";
 import { checkCredentials, createSession, destroySession, isAdmin } from "@/lib/admin";
 
 export async function signIn(_prev: string | null, formData: FormData): Promise<string | null> {
@@ -243,4 +244,41 @@ export async function addReview(formData: FormData): Promise<string | null> {
   revalidatePath("/admin/vidhuky");
   revalidatePath("/");
   return null;
+}
+
+/** Записати витрату: оренду, рекламу, інструмент — усе, що не деталь конкретного ремонту */
+export async function createExpense(formData: FormData): Promise<string | null> {
+  if (!(await isAdmin())) redirect("/admin/vhid");
+
+  const amount = Math.round(Number(String(formData.get("amount") ?? "").replace(/\s/g, "")));
+  if (!Number.isFinite(amount) || amount <= 0) return "Вкажіть суму більшу за нуль.";
+
+  const raw = String(formData.get("category") ?? "other");
+  const category = EXPENSE_CATEGORIES.some((c) => c.value === raw)
+    ? (raw as (typeof EXPENSE_CATEGORIES)[number]["value"])
+    : "other";
+
+  // Дата з поля типу date приходить як «2026-09-15»; порожню замінюємо на сьогодні
+  const day = String(formData.get("spentAt") ?? "");
+  const spentAt = /^\d{4}-\d{2}-\d{2}$/.test(day) ? new Date(`${day}T12:00:00`) : new Date();
+
+  const note = String(formData.get("note") ?? "").trim().slice(0, 300);
+
+  await addExpense({ amount, category, note: note || null, spentAt });
+
+  revalidatePath("/admin/groshi");
+  revalidatePath("/admin");
+  return null;
+}
+
+export async function deleteExpense(formData: FormData): Promise<void> {
+  if (!(await isAdmin())) redirect("/admin/vhid");
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  await removeExpense(id);
+
+  revalidatePath("/admin/groshi");
+  revalidatePath("/admin");
 }

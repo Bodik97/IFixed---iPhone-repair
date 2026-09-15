@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getMoney, getOutstanding, monthStart } from "@/db/adminStats";
+import { categoryLabel, getExpenses } from "@/db/expenses";
 import { isAdmin } from "@/lib/admin";
+import Expenses from "./Expenses";
 import PeriodFilter from "./PeriodFilter";
 import { isPeriod, periodLabel, periodRange } from "./period";
 import styles from "./page.module.css";
@@ -17,6 +19,7 @@ export const dynamic = "force-dynamic";
 const uah = (n: number) => `${n.toLocaleString("uk-UA")} ₴`;
 
 const monthName = new Intl.DateTimeFormat("uk-UA", { month: "long", year: "numeric" });
+const day = new Intl.DateTimeFormat("uk-UA", { day: "2-digit", month: "2-digit" });
 
 /** Скільки місяців показуємо в історії */
 const MONTHS = 6;
@@ -32,7 +35,15 @@ export default async function MoneyPage({
   const period = isPeriod(raw) ? raw : "month";
   const { from, to } = periodRange(period);
 
-  const [chosen, owed] = await Promise.all([getMoney(from, to), getOutstanding()]);
+  const [chosen, owed, spending] = await Promise.all([
+    getMoney(from, to),
+    getOutstanding(),
+    getExpenses(from, to),
+  ]);
+
+  const spent = spending.reduce((sum, e) => sum + e.amount, 0);
+  // Чистими в касі — за вирахуванням і деталей, і витрат сервісу
+  const net = chosen.profit - spent;
   // Середній чек рахуємо від чистого: скільки в середньому лишається з роботи
   const average = chosen.jobs > 0 ? Math.round(chosen.profit / chosen.jobs) : 0;
 
@@ -97,6 +108,13 @@ export default async function MoneyPage({
             {uah(chosen.cost)}
           </span>
         </div>
+        <div className={styles.bigItem}>
+          <span className={styles.bigLabel}>Витрати сервісу</span>
+          <span className={styles.bigValue}>
+            {spent > 0 ? "−" : ""}
+            {uah(spent)}
+          </span>
+        </div>
         <div className={styles.bigItemAccent}>
           <span className={styles.bigLabel}>
             Чистими
@@ -107,7 +125,12 @@ export default async function MoneyPage({
               </span>
             )}
           </span>
-          <span className={styles.bigProfit}>{uah(chosen.profit)}</span>
+          <span className={styles.bigProfit}>{uah(net)}</span>
+          {spent > 0 && (
+            <span className={styles.sub}>
+              з робіт {uah(chosen.profit)} − витрати {uah(spent)}
+            </span>
+          )}
         </div>
         <div className={styles.bigItem}>
           <span className={styles.bigLabel}>Ремонтів · у середньому</span>
@@ -130,6 +153,17 @@ export default async function MoneyPage({
           </p>
         </div>
       )}
+
+      <Expenses
+        today={new Date().toISOString().slice(0, 10)}
+        rows={spending.map((e) => ({
+          id: e.id,
+          день: day.format(e.spentAt),
+          сума: uah(e.amount),
+          категорія: categoryLabel(e.category),
+          нотатка: e.note,
+        }))}
+      />
 
       <h2 className={styles.h2}>Останні {MONTHS} місяців</h2>
 
