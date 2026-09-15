@@ -105,6 +105,20 @@ export default function LeadCard({
 
         <div className={styles.chatRow}>
           <Chat leadId={r.id} side="master" unread={unread} />
+
+          <a
+            href={`/admin/zayavky/${r.id}/kvytantsiya`}
+            target="_blank"
+            rel="noopener"
+            className="btn btn-ghost"
+          >
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M6 9V3h12v6" />
+              <path d="M6 18H4v-6h16v6h-2" />
+              <path d="M6 14h12v7H6z" />
+            </svg>
+            Квитанція
+          </a>
         </div>
       </div>
 
