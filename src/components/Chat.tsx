@@ -14,7 +14,7 @@ const stamp = new Intl.DateTimeFormat("uk-UA", {
 });
 
 /** Поки чат відкритий, перепитуємо сервер. Вебсокет тут — зайва інфраструктура. */
-const POLL_MS = 10_000;
+const POLL_MS = 3_000;
 
 type Props = {
   leadId: string;
@@ -37,6 +37,9 @@ export default function Chat({ leadId, side, unread = 0 }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const load = useCallback(async () => {
+    // Згорнута вкладка нічого не показує — не смикаємо сервер тричі на секунду
+    if (document.hidden) return;
+
     try {
       const res = await fetch(`/api/chat/${leadId}?side=${side}`, { cache: "no-store" });
       if (!res.ok) throw new Error(String(res.status));
@@ -53,7 +56,15 @@ export default function Chat({ leadId, side, unread = 0 }: Props) {
     if (!open) return;
 
     const id = setInterval(load, POLL_MS);
-    return () => clearInterval(id);
+
+    // Повернулись на вкладку — читаємо одразу, не чекаючи таймера
+    const onVisible = () => !document.hidden && load();
+    document.addEventListener("visibilitychange", onVisible);
+
+    return () => {
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
   }, [open, load]);
 
   const openChat = () => {
