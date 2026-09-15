@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import BackButton from "@/components/BackButton";
-import { getMoney, monthStart } from "@/db/adminStats";
+import { getMoney, getOutstanding, monthStart } from "@/db/adminStats";
 import { isAdmin } from "@/lib/admin";
+import PeriodFilter from "./PeriodFilter";
+import { isPeriod, periodLabel, periodRange } from "./period";
 import styles from "./page.module.css";
 import shared from "../page.module.css";
 
 export const metadata: Metadata = {
-  title: "Гроші — адміністрування",
+  title: "Каса — адміністрування",
   robots: { index: false, follow: false },
 };
 
@@ -20,8 +21,20 @@ const monthName = new Intl.DateTimeFormat("uk-UA", { month: "long", year: "numer
 /** Скільки місяців показуємо в історії */
 const MONTHS = 6;
 
-export default async function MoneyPage() {
+export default async function MoneyPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ period?: string }>;
+}) {
   if (!(await isAdmin())) redirect("/admin/vhid");
+
+  const raw = (await searchParams).period;
+  const period = isPeriod(raw) ? raw : "month";
+  const { from, to } = periodRange(period);
+
+  const [chosen, owed] = await Promise.all([getMoney(from, to), getOutstanding()]);
+  // Середній чек рахуємо від чистого: скільки в середньому лишається з роботи
+  const average = chosen.jobs > 0 ? Math.round(chosen.profit / chosen.jobs) : 0;
 
   // Кожен місяць — окремий проміжок [початок, початок наступного)
   const months = await Promise.all(
@@ -47,8 +60,7 @@ export default async function MoneyPage() {
     <section className={shared.wrap}>
       <div className={shared.head}>
         <div>
-          <BackButton fallback="/admin" />
-          <h1 className={shared.title}>Гроші</h1>
+          <h1 className={shared.title}>Каса</h1>
           <p className={shared.sectionNote}>
             Рахуємо за датою оплати, а не за датою заявки: ремонт, прийнятий торік і оплачений
             цього місяця, належить цьому місяцю.
@@ -56,35 +68,68 @@ export default async function MoneyPage() {
         </div>
       </div>
 
+      <div className={styles.tools}>
+        <PeriodFilter value={period} />
+
+        <a
+          href={`/admin/groshi/csv?period=${period}`}
+          className="btn btn-ghost"
+          download
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 4v11" />
+            <path d="M8 11l4 4 4-4" />
+            <path d="M5 19h14" />
+          </svg>
+          Вивантажити
+        </a>
+      </div>
+
       <div className={styles.big}>
         <div className={styles.bigItem}>
-          <span className={styles.bigLabel}>Оплачено цього місяця</span>
-          <span className={styles.bigValue}>{uah(current.money.revenue)}</span>
+          <span className={styles.bigLabel}>Оплачено · {periodLabel(period).toLowerCase()}</span>
+          <span className={styles.bigValue}>{uah(chosen.revenue)}</span>
         </div>
         <div className={styles.bigItem}>
           <span className={styles.bigLabel}>Деталі</span>
           <span className={styles.bigValue}>
-            {current.money.cost > 0 ? "−" : ""}
-            {uah(current.money.cost)}
+            {chosen.cost > 0 ? "−" : ""}
+            {uah(chosen.cost)}
           </span>
         </div>
         <div className={styles.bigItemAccent}>
           <span className={styles.bigLabel}>
             Чистими
-            {delta !== null && (
+            {period === "month" && delta !== null && (
               <span className={delta >= 0 ? styles.up : styles.down}>
                 {delta >= 0 ? "+" : ""}
                 {delta}% до минулого
               </span>
             )}
           </span>
-          <span className={styles.bigProfit}>{uah(current.money.profit)}</span>
+          <span className={styles.bigProfit}>{uah(chosen.profit)}</span>
         </div>
         <div className={styles.bigItem}>
-          <span className={styles.bigLabel}>Оплачених ремонтів</span>
-          <span className={styles.bigValue}>{current.money.jobs}</span>
+          <span className={styles.bigLabel}>Ремонтів · у середньому</span>
+          <span className={styles.bigValue}>
+            {chosen.jobs} <span className={styles.sub}>· {uah(average)}</span>
+          </span>
         </div>
       </div>
+
+      {owed.jobs > 0 && (
+        <div className={styles.owed}>
+          <div>
+            <span className={styles.owedLabel}>Очікує оплати</span>
+            <span className={styles.owedValue}>{uah(owed.due)}</span>
+          </div>
+          <p className={styles.owedNote}>
+            {owed.jobs} {owed.jobs === 1 ? "робота з виставленою ціною" : "робіт з виставленою ціною"}{" "}
+            ще не позначені як оплачені
+            {owed.prepaid > 0 && <> · з них уже внесено передоплат на {uah(owed.prepaid)}</>}.
+          </p>
+        </div>
+      )}
 
       <h2 className={styles.h2}>Останні {MONTHS} місяців</h2>
 

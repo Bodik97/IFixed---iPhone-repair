@@ -1,3 +1,81 @@
+/* Період і вивантаження — над цифрами, щоб було видно, за що вони */
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.period {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.periodLabel {
+  color: var(--text-2);
+  font-size: 14px;
+  flex: none;
+}
+
+.periodSelect {
+  flex: 1 1 auto;
+  max-width: 260px;
+  cursor: pointer;
+}
+
+/* Борги: окремо від каси, бо це ще не гроші, а обіцянка */
+.owed {
+  display: grid;
+  gap: 6px;
+  padding: 18px 22px;
+  margin: -20px 0 38px;
+  border-radius: 22px;
+  border: 1px solid var(--info-border);
+  background: var(--info-bg);
+}
+
+.owed > div {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.owedLabel {
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+.owedValue {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 22px;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.owedNote {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-2);
+}
+
+.sub {
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-size: 15px;
+  color: var(--text-3);
+}
+
+@media (max-width: 560px) {
+  .periodSelect {
+    max-width: none;
+  }
+}
+
 .big {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));

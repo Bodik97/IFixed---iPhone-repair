@@ -1,4 +1,4 @@
-import { and, asc, count, eq, gte, inArray, isNull, lt, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, gte, inArray, isNotNull, isNull, lt, ne, sql } from "drizzle-orm";
 import { getDb } from "./index";
 import { leadEvents, leads, type LeadEvent } from "./schema";
 
@@ -77,4 +77,46 @@ export async function getEventsFor(ids: string[]): Promise<Map<string, LeadEvent
   }
 
   return byLead;
+}
+
+/** Скільки грошей ще не зайшло: ціна виставлена, робота не відмовлена, оплати немає */
+export type Outstanding = { jobs: number; billed: number; prepaid: number; due: number };
+
+export async function getOutstanding(): Promise<Outstanding> {
+  const [row] = await getDb()
+    .select({
+      jobs: count(),
+      billed: sql<number>`coalesce(sum(${leads.price}), 0)::int`,
+      prepaid: sql<number>`coalesce(sum(${leads.prepayment}), 0)::int`,
+    })
+    .from(leads)
+    .where(
+      and(isNotNull(leads.price), isNull(leads.paidAt), ne(leads.status, "rejected")),
+    );
+
+  // Передоплату клієнт уже вніс, тож до отримання лишається різниця
+  return { ...row, due: row.billed - row.prepaid };
+}
+
+/** Оплачені роботи за проміжок — рядками, для таблиці та вивантаження */
+export async function getPaidLeads(from: Date, to?: Date) {
+  const where = to
+    ? and(gte(leads.paidAt, from), lt(leads.paidAt, to))
+    : gte(leads.paidAt, from);
+
+  return getDb()
+    .select({
+      orderNo: leads.orderNo,
+      paidAt: leads.paidAt,
+      name: leads.name,
+      phone: leads.phone,
+      model: leads.model,
+      service: leads.service,
+      price: leads.price,
+      partsCost: leads.partsCost,
+      prepayment: leads.prepayment,
+    })
+    .from(leads)
+    .where(where)
+    .orderBy(desc(leads.paidAt));
 }
