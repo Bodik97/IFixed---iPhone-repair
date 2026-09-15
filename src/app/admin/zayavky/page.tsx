@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { unreadByLead } from "@/db/messages";
 import { getEventsFor } from "@/db/adminStats";
 import { findLeads, STATUS_OPTIONS } from "@/db/leads";
+import { getOrderCounts, phoneKey } from "@/db/clients";
 import { isAdmin } from "@/lib/admin";
 import LeadCard from "../LeadCard";
 import Search, { adminHref, type Query } from "../Search";
@@ -46,9 +47,10 @@ export default async function LeadsPage({
 
   const pages = Math.max(1, Math.ceil(found / PER_PAGE));
   const ids = rows.map((r) => r.id);
-  const [eventsByLead, unread] = await Promise.all([
+  const [eventsByLead, unread, orderCounts] = await Promise.all([
     getEventsFor(ids),
     unreadByLead(ids, "client"),
+    getOrderCounts(rows.map((r) => r.phone)),
   ]);
 
   return (
@@ -75,6 +77,7 @@ export default async function LeadsPage({
               lead={r}
               events={eventsByLead.get(r.id) ?? []}
               unread={unread.get(r.id) ?? 0}
+              orders={orderCounts.get(phoneKey(r.phone) ?? "") ?? 1}
             />
           ))}
         </div>

@@ -1,0 +1,84 @@
+.list {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr repeat(3, auto);
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  transition: background .15s;
+}
+
+.row:hover {
+  background: var(--surface-hover);
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  font-size: 15.5px;
+}
+
+.regular {
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  background: rgba(218, 255, 61, .14);
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.phone {
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.cell {
+  display: grid;
+  gap: 2px;
+  justify-items: end;
+  min-width: 78px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cellLabel {
+  color: var(--text-3);
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 760px) {
+  /* Ім'я з телефоном зверху, цифри — рядком під ними */
+  .row {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .name,
+  .phone {
+    grid-column: 1 / -1;
+  }
+
+  .cell {
+    justify-items: start;
+    min-width: 0;
+  }
+}

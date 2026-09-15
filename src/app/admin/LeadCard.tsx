@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Lead, LeadEvent } from "@/db/schema";
 import Chat from "@/components/Chat";
 import { describeStatus } from "@/db/leads";
@@ -25,11 +26,14 @@ export default function LeadCard({
   lead: r,
   events,
   unread = 0,
+  orders = 1,
 }: {
   lead: Lead;
   events: LeadEvent[];
   /** Непрочитані від клієнта — майстер має бачити, що на нього чекають */
   unread?: number;
+  /** Скільки всього звернень з цього номера, разом із цим */
+  orders?: number;
 }) {
   const s = describeStatus(r.status);
   const waitingShip = r.deliveryRequested && !r.ttn;
@@ -51,6 +55,15 @@ export default function LeadCard({
             <span className={styles.tagAnon} title="Без акаунта — пішло в Telegram">
               анонім
             </span>
+          )}
+          {orders > 1 && r.phone && (
+            <Link
+              href={`/admin/zayavky?q=${encodeURIComponent(r.phone)}`}
+              className={styles.tagRepeat}
+              title="Цей номер звертався раніше — показати всі його заявки"
+            >
+              {orders}-е звернення
+            </Link>
           )}
           <span className={styles.when}>{dateFormat.format(r.createdAt)}</span>
           <span className={styles.source}>{sourceLabel[r.source] ?? r.source}</span>

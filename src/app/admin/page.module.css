@@ -166,7 +166,8 @@
 }
 
 .tagAccount,
-.tagAnon {
+.tagAnon,
+.tagRepeat {
   padding: 3px 9px;
   border-radius: var(--r-pill);
   font-size: 11px;
@@ -178,6 +179,18 @@
 .tagAccount {
   background: rgba(218, 255, 61, .14);
   color: var(--accent);
+}
+
+/* Повторне звернення: ознака постійного клієнта, веде до всіх його заявок */
+.tagRepeat {
+  background: var(--info-bg);
+  border: 1px solid var(--info-border);
+  color: var(--info-text);
+  text-decoration: none;
+}
+
+.tagRepeat:hover {
+  border-color: var(--border-active);
 }
 
 .tagAnon {
