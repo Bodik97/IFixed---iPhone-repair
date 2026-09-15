@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PERIODS, type Range } from "./period";
 import styles from "./page.module.css";
@@ -7,13 +8,22 @@ import styles from "./page.module.css";
 /**
  * Період: готові проміжки й календар для довільних дат.
  *
- * Пресети — це швидкий спосіб заповнити ті самі дати, тому після натискання
- * вони одразу видно в полях: майстер бачить, за що саме дивиться.
+ * Дати застосовуються кнопкою, а не одразу після вибору: інакше сторінка
+ * перезавантажувалась після першої ж дати, ще до того, як майстер обрав другу.
+ *
+ * Пресети лишаються миттєвими — там вибір уже завершений одним дотиком.
  */
 export default function PeriodFilter({ range }: { range: Range }) {
   const router = useRouter();
 
-  const go = (from: string, to: string) => {
+  const [from, setFrom] = useState(range.fromDay);
+  const [to, setTo] = useState(range.toDay);
+
+  const changed = from !== range.fromDay || to !== range.toDay;
+
+  const apply = (e: React.FormEvent) => {
+    e.preventDefault();
+
     const params = new URLSearchParams();
     if (from) params.set("from", from);
     if (to) params.set("to", to);
@@ -35,14 +45,15 @@ export default function PeriodFilter({ range }: { range: Range }) {
         ))}
       </div>
 
-      <div className={styles.dates}>
+      <form className={styles.dates} onSubmit={apply}>
         <label className={styles.dateField}>
           <span className={styles.dateLabel}>з</span>
           <input
             type="date"
             className={`field ${styles.date}`}
-            value={range.fromDay}
-            onChange={(e) => go(e.target.value, range.toDay)}
+            value={from}
+            max={to || undefined}
+            onChange={(e) => setFrom(e.target.value)}
           />
         </label>
 
@@ -51,11 +62,20 @@ export default function PeriodFilter({ range }: { range: Range }) {
           <input
             type="date"
             className={`field ${styles.date}`}
-            value={range.toDay}
-            onChange={(e) => go(range.fromDay, e.target.value)}
+            value={to}
+            min={from || undefined}
+            onChange={(e) => setTo(e.target.value)}
           />
         </label>
-      </div>
+
+        <button type="submit" className={changed ? styles.applyOn : styles.apply} disabled={!changed}>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20l-3.5-3.5" />
+          </svg>
+          Застосувати
+        </button>
+      </form>
     </div>
   );
 }

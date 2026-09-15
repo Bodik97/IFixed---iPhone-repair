@@ -70,6 +70,36 @@
   font-variant-numeric: tabular-nums;
 }
 
+.apply,
+.applyOn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--text-3);
+  font: inherit;
+  font-size: 14.5px;
+  white-space: nowrap;
+  cursor: not-allowed;
+  transition: border-color .15s, color .15s, background .15s;
+}
+
+/* Поки дати не змінили, застосовувати нічого — кнопка це показує */
+.applyOn {
+  border-color: var(--accent);
+  background: rgba(218, 255, 61, .12);
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.applyOn:hover {
+  background: rgba(218, 255, 61, .2);
+}
+
 /* Борги: окремо від каси, бо це ще не гроші, а обіцянка */
 .owed {
   display: grid;

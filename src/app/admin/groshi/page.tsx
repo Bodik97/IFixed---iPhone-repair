@@ -82,7 +82,7 @@ export default async function MoneyPage({
       </div>
 
       <div className={styles.tools}>
-        <PeriodFilter range={range} />
+        <PeriodFilter key={`${range.fromDay}:${range.toDay}`} range={range} />
 
         <a
           href={`/admin/groshi/csv?from=${range.fromDay}&to=${range.toDay}`}
