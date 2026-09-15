@@ -9,6 +9,7 @@ import { leads, reviews } from "@/db/schema";
 import { STATUS_OPTIONS } from "@/db/leads";
 import { addEvent, getLeadById, registerDevice } from "@/db/events";
 import { addExpense, EXPENSE_CATEGORIES, removeExpense } from "@/db/expenses";
+import { addPart, removePart, shiftPartQty } from "@/db/parts";
 import { checkCredentials, createSession, destroySession, isAdmin } from "@/lib/admin";
 
 export async function signIn(_prev: string | null, formData: FormData): Promise<string | null> {
@@ -281,4 +282,52 @@ export async function deleteExpense(formData: FormData): Promise<void> {
 
   revalidatePath("/admin/groshi");
   revalidatePath("/admin");
+}
+
+/** Нова позиція на складі */
+export async function createPart(formData: FormData): Promise<string | null> {
+  if (!(await isAdmin())) redirect("/admin/vhid");
+
+  const name = String(formData.get("name") ?? "").trim().slice(0, 120);
+  if (!name) return "Вкажіть, що це за деталь.";
+
+  const num = (key: string) => {
+    const n = Math.round(Number(String(formData.get(key) ?? "").replace(/\s/g, "")));
+    return Number.isFinite(n) && n >= 0 ? n : null;
+  };
+
+  await addPart({
+    name,
+    model: String(formData.get("model") ?? "").trim().slice(0, 120) || null,
+    qty: num("qty") ?? 0,
+    unitCost: num("unitCost"),
+    minQty: num("minQty") ?? 1,
+  });
+
+  revalidatePath("/admin/sklad");
+  return null;
+}
+
+/** ±1 до залишку: поставили деталь у телефон або привезли партію */
+export async function shiftPart(formData: FormData): Promise<void> {
+  if (!(await isAdmin())) redirect("/admin/vhid");
+
+  const id = String(formData.get("id") ?? "");
+  const delta = Number(formData.get("delta"));
+  if (!id || !Number.isFinite(delta) || delta === 0) return;
+
+  await shiftPartQty(id, Math.trunc(delta));
+
+  revalidatePath("/admin/sklad");
+}
+
+export async function deletePart(formData: FormData): Promise<void> {
+  if (!(await isAdmin())) redirect("/admin/vhid");
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  await removePart(id);
+
+  revalidatePath("/admin/sklad");
 }

@@ -35,6 +35,18 @@ const items = [
     ),
   },
   {
+    href: "/admin/sklad",
+    label: "Склад",
+    badge: null,
+    icon: (
+      <>
+        <path d="M4 8.5L12 4l8 4.5v7L12 20l-8-4.5z" />
+        <path d="M4 8.5l8 4.5 8-4.5" />
+        <path d="M12 13v7" />
+      </>
+    ),
+  },
+  {
     href: "/admin/kliyenty",
     label: "Клієнти",
     badge: null,

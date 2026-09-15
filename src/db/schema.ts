@@ -276,3 +276,36 @@ export const expenses = pgTable(
 );
 
 export type Expense = typeof expenses.$inferSelect;
+
+/**
+ * Склад запчастин.
+ *
+ * Собівартість деталі майстер вписує в заявку з пам'яті, а скільки тих
+ * деталей лишилось — не знає ніхто. Тут кожна позиція з кількістю й ціною
+ * закупівлі: видно і залишок, і скільки грошей лежить на полиці.
+ */
+export const parts = pgTable(
+  "parts",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    /** Що це: «Акумулятор», «Дисплей OLED» */
+    name: text("name").notNull(),
+
+    /** Під яку модель — окремо від назви, щоб шукати за моделлю */
+    model: text("model"),
+
+    qty: integer("qty").notNull().default(0),
+
+    /** Скільки коштувала одна штука при закупівлі */
+    unitCost: integer("unit_cost"),
+
+    /** Нижче цього залишку позиція підсвічується як «час замовляти» */
+    minQty: integer("min_qty").notNull().default(1),
+
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("parts_name_idx").on(t.name)],
+);
+
+export type Part = typeof parts.$inferSelect;
