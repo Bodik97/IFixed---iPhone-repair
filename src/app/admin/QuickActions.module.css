@@ -1,0 +1,59 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.action,
+.actionCall,
+.actionDone {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  color: var(--text-2);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
+}
+
+.action:hover,
+.actionCall:hover {
+  border-color: var(--border-active);
+  color: var(--text);
+}
+
+/* Дзвінок — найчастіша дія, тому єдина виділена */
+.actionCall {
+  border-color: rgba(218, 255, 61, .35);
+  background: rgba(218, 255, 61, .1);
+  color: var(--accent);
+}
+
+.actionCall:hover {
+  background: rgba(218, 255, 61, .18);
+  color: var(--accent);
+}
+
+.actionDone {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+@media (max-width: 560px) {
+  /* Палець важчий за курсор: тримаємо 44px і трохи більші проміжки */
+  .action,
+  .actionCall,
+  .actionDone {
+    min-height: 44px;
+  }
+}

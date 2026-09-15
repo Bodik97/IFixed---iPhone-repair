@@ -4,6 +4,7 @@ import Chat from "@/components/Chat";
 import { describeStatus } from "@/db/leads";
 import MoneyFields from "./MoneyFields";
 import NoteField from "./NoteField";
+import QuickActions from "./QuickActions";
 import StatusSelect from "./StatusSelect";
 import TtnField from "./TtnField";
 import styles from "./page.module.css";
@@ -84,6 +85,8 @@ export default function LeadCard({
             </a>
           )}
         </div>
+
+        <QuickActions phone={r.phone} address={r.deliveryAddress} ttn={r.ttn} />
 
         {(r.model || r.service) && <div className={styles.what}>{r.model ?? r.service}</div>}
         {r.problem && <p className={styles.problem}>{r.problem}</p>}
