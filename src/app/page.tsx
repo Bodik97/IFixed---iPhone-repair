@@ -48,6 +48,7 @@ export default async function Home() {
         text: r.text,
         author: [r.authorName, r.city, r.device].filter(Boolean).join(" · "),
         viaGoogle: r.viaGoogle,
+        avatar: r.avatarUrl,
         rating: r.rating,
         // Фото роботи лежить у приватному сховищі — віддаємо своїм маршрутом
         image: r.imagePath ? `/api/reviews/${r.id}/image` : null,
@@ -56,6 +57,7 @@ export default async function Home() {
         ...r,
         id: `fallback-${i}`,
         viaGoogle: false,
+        avatar: null,
         rating: 5,
         image: null,
       }));

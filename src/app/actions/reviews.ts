@@ -47,6 +47,8 @@ export async function submitReview(_prev: ReviewResult | null, formData: FormDat
     rating,
     text: text.slice(0, 1000),
     viaGoogle: isGmail,
+    // hasImage відрізняє справжнє фото від згенерованих Clerk ініціалів
+    avatarUrl: user.hasImage ? user.imageUrl : null,
   });
 
   revalidatePath("/");

@@ -9,6 +9,8 @@ export type ReviewCard = {
   author: string;
   rating: number;
   viaGoogle: boolean;
+  /** Фото з акаунта клієнта, якщо він його ставив */
+  avatar: string | null;
   image: string | null;
 };
 
@@ -34,6 +36,9 @@ function GoogleMark() {
  */
 export default function ReviewSlider({ reviews }: { reviews: ReviewCard[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
+  // Адреса аватара живе в акаунті клієнта й може протухнути. Замість «битої»
+  // картинки показуємо літеру — так само, як у тих, хто фото не ставив.
+  const [brokenAvatars, setBrokenAvatars] = useState<string[]>([]);
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
 
@@ -86,8 +91,25 @@ export default function ReviewSlider({ reviews }: { reviews: ReviewCard[] }) {
             <blockquote className={styles.text}>«{r.text}»</blockquote>
 
             <figcaption className={styles.foot}>
-              <span className={styles.author}>{r.author}</span>
-              {r.viaGoogle && <GoogleMark />}
+              {r.avatar && !brokenAvatars.includes(r.id) ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={r.avatar}
+                  alt=""
+                  className={styles.avatar}
+                  loading="lazy"
+                  onError={() => setBrokenAvatars((prev) => [...prev, r.id])}
+                />
+              ) : (
+                <span className={styles.initial} aria-hidden="true">
+                  {r.author.slice(0, 1).toUpperCase()}
+                </span>
+              )}
+
+              <span className={styles.who}>
+                <span className={styles.author}>{r.author}</span>
+                {r.viaGoogle && <GoogleMark />}
+              </span>
             </figcaption>
           </figure>
         ))}

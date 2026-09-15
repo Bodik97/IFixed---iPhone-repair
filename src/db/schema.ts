@@ -136,6 +136,12 @@ export const reviews = pgTable(
     /** Автор увійшов поштою Gmail — показуємо значок «підтверджено Google» */
     viaGoogle: boolean("via_google").notNull().default(false),
 
+    /**
+     * Аватар з акаунта, якщо клієнт його ставив. Зберігаємо адресу на момент
+     * відгуку: жива людина з обличчям переконує більше за літеру в кружечку.
+     */
+    avatarUrl: text("avatar_url"),
+
     /** Показувати на сайті. Нові відгуки чекають на схвалення. */
     published: boolean("published").notNull().default(false),
 
