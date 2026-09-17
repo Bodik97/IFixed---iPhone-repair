@@ -1,4 +1,4 @@
-import { monthStart } from "@/db/adminStats";
+import { monthStart } from "@/lib/month";
 
 export const PERIODS = [
   { value: "month", label: "Цей місяць" },

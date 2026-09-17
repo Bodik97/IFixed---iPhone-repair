@@ -1,5 +1,6 @@
 import { and, asc, count, desc, eq, gte, inArray, isNotNull, isNull, lt, ne, sql } from "drizzle-orm";
 import { getDb } from "./index";
+export { monthStart } from "@/lib/month";
 import { leadEvents, leads, type LeadEvent } from "./schema";
 
 /** Лічильники в шапці адмінки — рахуються по всій базі, не по сторінці */
@@ -29,14 +30,6 @@ export type Money = {
   jobs: number;
 };
 
-/** Перше число місяця, зсунуте на `back` місяців назад */
-export function monthStart(back = 0): Date {
-  const d = new Date();
-  d.setDate(1);
-  d.setHours(0, 0, 0, 0);
-  d.setMonth(d.getMonth() - back);
-  return d;
-}
 
 /**
  * Гроші за проміжок. Рахуємо за датою оплати, а не за датою заявки: ремонт,

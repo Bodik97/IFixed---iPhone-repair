@@ -2,7 +2,7 @@
 
 import { useRef, useTransition } from "react";
 import { setStatus } from "./actions";
-import { STATUS_OPTIONS } from "@/db/leads";
+import { STATUS_OPTIONS } from "@/data/leadStatus";
 import type { Lead } from "@/db/schema";
 import styles from "./page.module.css";
 

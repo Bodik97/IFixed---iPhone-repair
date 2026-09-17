@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { STATUS_OPTIONS } from "@/db/leads";
+import { STATUS_OPTIONS } from "@/data/leadStatus";
 import { adminHref, type Query } from "./Search";
 import styles from "./Search.module.css";
 

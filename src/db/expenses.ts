@@ -1,19 +1,8 @@
 import { and, desc, eq, gte, lt, sql } from "drizzle-orm";
 import { getDb } from "./index";
 import { expenses, type Expense } from "./schema";
+export { EXPENSE_CATEGORIES, categoryLabel } from "@/data/expenseCategories";
 
-export const EXPENSE_CATEGORIES: { value: Expense["category"]; label: string }[] = [
-  { value: "rent", label: "Оренда" },
-  { value: "ads", label: "Реклама" },
-  { value: "tools", label: "Інструмент" },
-  { value: "parts", label: "Запчастини про запас" },
-  { value: "tax", label: "Податки" },
-  { value: "other", label: "Інше" },
-];
-
-export function categoryLabel(value: Expense["category"]): string {
-  return EXPENSE_CATEGORIES.find((c) => c.value === value)?.label ?? "Інше";
-}
 
 function range(from: Date, to?: Date) {
   return to ? and(gte(expenses.spentAt, from), lt(expenses.spentAt, to)) : gte(expenses.spentAt, from);

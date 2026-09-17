@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import FormError from "@/components/FormError";
-import { EXPENSE_CATEGORIES } from "@/db/expenses";
+import { EXPENSE_CATEGORIES } from "@/data/expenseCategories";
 import { createExpense, deleteExpense } from "../actions";
 import styles from "./Expenses.module.css";
 
