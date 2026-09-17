@@ -1,0 +1,72 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  background: none;
+  color: var(--text-3);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+
+.button:hover {
+  border-color: var(--danger-border);
+  color: var(--danger);
+}
+
+.confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 7px 14px;
+  border: 1px solid var(--danger-border);
+  border-radius: var(--r-pill);
+  background: var(--danger-bg);
+}
+
+.warn {
+  color: var(--danger);
+  font-size: 13.5px;
+}
+
+.yes,
+.no {
+  min-height: 34px;
+  padding: 6px 13px;
+  border-radius: var(--r-pill);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.yes {
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+}
+
+.no {
+  background: none;
+  color: var(--text-2);
+  border-color: var(--border);
+}
+
+.no:hover {
+  border-color: var(--border-active);
+  color: var(--text);
+}
+
+@media (max-width: 560px) {
+  .button,
+  .yes,
+  .no {
+    min-height: 44px;
+  }
+}

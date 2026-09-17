@@ -4,6 +4,7 @@ import Chat from "@/components/Chat";
 import { describeStatus } from "@/db/leads";
 import MoneyFields from "./MoneyFields";
 import NoteField from "./NoteField";
+import DeleteLead from "./DeleteLead";
 import QuickActions from "./QuickActions";
 import StatusSelect from "./StatusSelect";
 import TtnField from "./TtnField";
@@ -139,6 +140,8 @@ export default function LeadCard({
             </svg>
             Квитанція
           </a>
+
+          <DeleteLead id={r.id} orderNo={r.orderNo} />
         </div>
       </div>
 

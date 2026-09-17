@@ -1,0 +1,131 @@
+.page {
+  padding: 26px 0 90px;
+  max-width: 760px;
+}
+
+.head {
+  margin: 22px 0 44px;
+}
+
+.title {
+  margin: 10px 0 14px;
+  font-size: clamp(30px, 5vw, 46px);
+  letter-spacing: -.03em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.lede {
+  margin: 0;
+  color: var(--text-2);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.section {
+  padding-top: 30px;
+  margin-top: 30px;
+  border-top: 1px solid var(--border);
+}
+
+.h2 {
+  margin: 0 0 14px;
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: clamp(19px, 2.4vw, 24px);
+  letter-spacing: -.02em;
+}
+
+.section p {
+  margin: 0 0 12px;
+  color: var(--text-2);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.section p:last-child { margin-bottom: 0; }
+
+.note {
+  color: var(--text-3);
+  font-size: 15px;
+}
+
+/* Що збираємо — питання ліворуч, відповідь праворуч */
+.list {
+  margin: 0;
+  display: grid;
+  gap: 1px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--border);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 20px;
+  padding: 16px 20px;
+  background: var(--surface);
+}
+
+.row dt {
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.row dd {
+  margin: 0;
+  color: var(--text-2);
+  font-size: 15.5px;
+  line-height: 1.6;
+}
+
+.partners {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.partners li {
+  padding: 11px 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--text-2);
+  font-size: 15px;
+}
+
+.partners b {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.link {
+  color: var(--accent);
+}
+
+.foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 40px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+}
+
+.foot p {
+  margin: 0;
+  color: var(--text-3);
+  font-size: 15px;
+}
+
+@media (max-width: 620px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}

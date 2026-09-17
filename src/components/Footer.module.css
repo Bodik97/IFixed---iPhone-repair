@@ -64,3 +64,23 @@
   gap: 16px;
   flex-wrap: wrap;
 }
+
+/* Персональні дані поруч із гарантією — дрібно, але знайти можна */
+.bottomLinks {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bottomLinks a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(241, 243, 239, .3);
+}
+
+.bottomLinks a:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}

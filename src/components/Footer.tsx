@@ -60,7 +60,11 @@ export default function Footer() {
           <span>
             © {new Date().getFullYear()} {site.name} · {site.cities.join(", ")}
           </span>
-          <span>Гарантія {site.warrantyDays} днів на роботу</span>
+          <span className={styles.bottomLinks}>
+            <Link href="/personalni-dani">Персональні дані</Link>
+            <span aria-hidden="true">·</span>
+            Гарантія {site.warrantyDays} днів на роботу
+          </span>
         </div>
       </div>
     </footer>

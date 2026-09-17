@@ -9,7 +9,7 @@
     "lint": "eslint",
     "db:push": "dotenv -e .env.local -- drizzle-kit push",
     "db:studio": "dotenv -e .env.local -- drizzle-kit studio",
-    "db:leads": "dotenv -e .env.local -- tsx scripts/leads.mts",
+    "db:leads": "dotenv -e .env.local -- tsx --conditions=react-server scripts/leads.mts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

@@ -3,10 +3,10 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { put } from "@vercel/blob";
+import { del, put } from "@vercel/blob";
 import { eq } from "drizzle-orm";
 import { getDb } from "@/db";
-import { leads, reviews } from "@/db/schema";
+import { leadMessages, leads, reviews } from "@/db/schema";
 import { STATUS_OPTIONS } from "@/db/leads";
 import { addEvent, getLeadById, registerDevice } from "@/db/events";
 import { addExpense, EXPENSE_CATEGORIES, removeExpense } from "@/db/expenses";
@@ -364,4 +364,35 @@ export async function deletePart(formData: FormData): Promise<void> {
   await removePart(id);
 
   revalidatePath("/admin/sklad");
+}
+
+/**
+ * Видалити заявку назовсім — на вимогу клієнта.
+ *
+ * Закон дає людині право забрати свої дані, і без цієї дії обіцянка на
+ * сторінці про персональні дані була б порожньою. Разом із заявкою
+ * зникають листування (за звʼязком у базі) і фото зі сховища — їх треба
+ * прибирати окремо, бо каскад до сховища не дотягується.
+ */
+export async function deleteLead(formData: FormData): Promise<void> {
+  if (!(await isAdmin())) redirect("/admin/vhid");
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  const photos = await getDb()
+    .select({ path: leadMessages.imagePath })
+    .from(leadMessages)
+    .where(eq(leadMessages.leadId, id));
+
+  for (const { path } of photos) {
+    if (!path) continue;
+    // Одне невдале фото не має лишати заявку невидаленою
+    await del(path).catch((e) => console.error("[deleteLead] фото не прибралось:", path, e));
+  }
+
+  await getDb().delete(leads).where(eq(leads.id, id));
+
+  revalidatePath("/admin/zayavky");
+  revalidatePath("/admin");
 }
