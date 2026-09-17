@@ -52,7 +52,7 @@ const clean = (v: unknown) => {
 
 export async function POST(request: Request) {
   // Не більше 5 заявок за 10 хвилин з однієї адреси
-  const limit = rateLimit(`lead:${clientIp(request)}`, 5, 10 * 60_000);
+  const limit = await rateLimit(`lead:ip:${clientIp(request)}`, 5, 10 * 60_000);
   if (!limit.ok) {
     return NextResponse.json(
       { error: "Забагато заявок поспіль. Спробуйте за кілька хвилин або зателефонуйте нам." },

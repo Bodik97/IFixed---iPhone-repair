@@ -27,7 +27,7 @@ const formatTime = (d: Date) =>
 
 export async function GET(request: Request, { params }: { params: Promise<{ no: string }> }) {
   // Перебір номерів замовлень — теж форма атаки
-  const limit = rateLimit(`order:${clientIp(request)}`, 20, 10 * 60_000);
+  const limit = await rateLimit(`order:ip:${clientIp(request)}`, 20, 10 * 60_000);
   if (!limit.ok) {
     return NextResponse.json({ error: "Забагато запитів. Спробуйте пізніше." }, { status: 429 });
   }

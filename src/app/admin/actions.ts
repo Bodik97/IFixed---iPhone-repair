@@ -11,7 +11,7 @@ import { STATUS_OPTIONS } from "@/db/leads";
 import { addEvent, getLeadById, registerDevice } from "@/db/events";
 import { addExpense, EXPENSE_CATEGORIES, removeExpense } from "@/db/expenses";
 import { addPart, removePart, shiftPartQty } from "@/db/parts";
-import { clearFailures, mayTry } from "@/db/loginAttempts";
+import { rateLimit, release } from "@/lib/rateLimit";
 import { checkCredentials, createSession, destroySession, isAdmin } from "@/lib/admin";
 
 /** Адреса, з якої прийшов запит — за нею теж рахуємо спроби входу */
@@ -21,6 +21,11 @@ async function clientAddress(): Promise<string> {
   if (forwarded) return forwarded.split(",")[0].trim();
   return h.get("x-real-ip") ?? "unknown";
 }
+
+/** Межі входу: на пошту суворіша, бо адреса може бути спільна у двох майстрів */
+const LOGIN_WINDOW = 15 * 60_000;
+const BY_EMAIL = 5;
+const BY_IP = 15;
 
 /** 900 → «15 хв», 90 → «2 хв»: точні секунди тут нікому не потрібні */
 function waitLabel(sec: number): string {
@@ -33,11 +38,12 @@ export async function signIn(_prev: string | null, formData: FormData): Promise<
   const password = String(formData.get("password") ?? "");
   const ip = await clientAddress();
 
-  // Перевіряємо межу ДО пароля: інакше сама перевірка стає тим, що перебирають
-  const allowed = await mayTry(email, ip);
-  if (!allowed.ok) {
-    return `Забагато спроб входу. Спробуйте за ${waitLabel(allowed.retryAfterSec)}.`;
-  }
+  // Межу перевіряємо ДО пароля: інакше сама перевірка стає тим, що перебирають
+  const byEmail = await rateLimit(`login:email:${email}`, BY_EMAIL, LOGIN_WINDOW);
+  if (!byEmail.ok) return `Забагато спроб входу. Спробуйте за ${waitLabel(byEmail.retryAfter)}.`;
+
+  const byIp = await rateLimit(`login:ip:${ip}`, BY_IP, LOGIN_WINDOW);
+  if (!byIp.ok) return `Забагато спроб входу. Спробуйте за ${waitLabel(byIp.retryAfter)}.`;
 
   let master: number | null = null;
   try {
@@ -47,7 +53,7 @@ export async function signIn(_prev: string | null, formData: FormData): Promise<
   }
 
   if (master === null) {
-    // Спробу вже списано в mayTry — окремо записувати нічого.
+    // Спробу вже списано в rateLimit — окремо записувати нічого.
     // Затримка лишається: вона нічого не варта проти паралельних спроб,
     // але робить послідовний перебір ще повільнішим
     await new Promise((r) => setTimeout(r, 700));
@@ -56,7 +62,7 @@ export async function signIn(_prev: string | null, formData: FormData): Promise<
 
   // Успіх знімає лічильник, щоб майстер не лишався заблокованим
   // через власні помилки перед вдалим входом
-  await clearFailures(email);
+  await release(`login:email:${email}`);
   await createSession(master);
   redirect("/admin");
 }

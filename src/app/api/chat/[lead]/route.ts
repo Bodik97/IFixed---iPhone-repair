@@ -58,7 +58,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ lead
 export async function POST(request: Request, { params }: { params: Promise<{ lead: string }> }) {
   const { lead } = await params;
 
-  const limit = rateLimit(`chat:${clientIp(request)}`, 30, 60_000);
+  const limit = await rateLimit(`chat:ip:${clientIp(request)}`, 30, 60_000);
   if (!limit.ok) {
     return NextResponse.json({ error: "Забагато повідомлень. Трохи зачекайте." }, { status: 429 });
   }
