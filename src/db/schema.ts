@@ -315,3 +315,25 @@ export const parts = pgTable(
 );
 
 export type Part = typeof parts.$inferSelect;
+
+/**
+ * Спроби входу в адмінку — щоб пароль не можна було підібрати.
+ *
+ * Лічильник навмисно в базі, а не в памʼяті процесу: на Vercel інстансів
+ * кілька, запити розкидає між ними, і памʼятний лічильник рахує з нуля на
+ * кожному. Заміряно: з 30 спроб проходило 15.
+ *
+ * Обсяг мізерний — кілька рядків на добу, — тож окреме сховище тут зайве.
+ */
+export const loginAttempts = pgTable(
+  "login_attempts",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    /** Пошта, яку вводили, або адреса, з якої прийшли: «email:…» / «ip:…» */
+    subject: text("subject").notNull(),
+
+    at: timestamp("at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("login_attempts_subject_idx").on(t.subject, t.at)],
+);

@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { put } from "@vercel/blob";
 import { eq } from "drizzle-orm";
@@ -10,11 +11,33 @@ import { STATUS_OPTIONS } from "@/db/leads";
 import { addEvent, getLeadById, registerDevice } from "@/db/events";
 import { addExpense, EXPENSE_CATEGORIES, removeExpense } from "@/db/expenses";
 import { addPart, removePart, shiftPartQty } from "@/db/parts";
+import { clearFailures, mayTry } from "@/db/loginAttempts";
 import { checkCredentials, createSession, destroySession, isAdmin } from "@/lib/admin";
 
+/** Адреса, з якої прийшов запит — за нею теж рахуємо спроби входу */
+async function clientAddress(): Promise<string> {
+  const h = await headers();
+  const forwarded = h.get("x-forwarded-for");
+  if (forwarded) return forwarded.split(",")[0].trim();
+  return h.get("x-real-ip") ?? "unknown";
+}
+
+/** 900 → «15 хв», 90 → «2 хв»: точні секунди тут нікому не потрібні */
+function waitLabel(sec: number): string {
+  const min = Math.ceil(sec / 60);
+  return min <= 1 ? "хвилину" : `${min} хв`;
+}
+
 export async function signIn(_prev: string | null, formData: FormData): Promise<string | null> {
-  const email = String(formData.get("email") ?? "");
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
   const password = String(formData.get("password") ?? "");
+  const ip = await clientAddress();
+
+  // Перевіряємо межу ДО пароля: інакше сама перевірка стає тим, що перебирають
+  const allowed = await mayTry(email, ip);
+  if (!allowed.ok) {
+    return `Забагато спроб входу. Спробуйте за ${waitLabel(allowed.retryAfterSec)}.`;
+  }
 
   let master: number | null = null;
   try {
@@ -24,11 +47,16 @@ export async function signIn(_prev: string | null, formData: FormData): Promise<
   }
 
   if (master === null) {
-    // Невелика затримка, щоб перебір паролів був повільним
+    // Спробу вже списано в mayTry — окремо записувати нічого.
+    // Затримка лишається: вона нічого не варта проти паралельних спроб,
+    // але робить послідовний перебір ще повільнішим
     await new Promise((r) => setTimeout(r, 700));
     return "Пошта або пароль не підходять.";
   }
 
+  // Успіх знімає лічильник, щоб майстер не лишався заблокованим
+  // через власні помилки перед вдалим входом
+  await clearFailures(email);
   await createSession(master);
   redirect("/admin");
 }
