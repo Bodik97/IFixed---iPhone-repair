@@ -9,7 +9,9 @@
     "lint": "eslint",
     "db:push": "dotenv -e .env.local -- drizzle-kit push",
     "db:studio": "dotenv -e .env.local -- drizzle-kit studio",
-    "db:leads": "dotenv -e .env.local -- tsx scripts/leads.mts"
+    "db:leads": "dotenv -e .env.local -- tsx scripts/leads.mts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.9.2",
@@ -21,13 +23,14 @@
     "react-dom": "19.2.8"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^24.13.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "dotenv-cli": "^11.0.0",
     "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^5.0.1"
   }
 }

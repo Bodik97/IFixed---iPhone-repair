@@ -21,6 +21,11 @@
 // Service (690 ₴) — у них інша закупівля, і копіювати їхню ціну означає
 // копіювати чужу собівартість.
 //
+// ЩЕ ОДНА ПРАВКА: роз'єм заряджання на 11 Pro і 11 Pro Max. У джерела там
+// 1 751 ₴ — утричі більше за базову 11-ку (584 ₴) і вдвічі за 12 Pro (853 ₴).
+// Це схоже на їхню помилку, а не на ринок, тож поставлено 700 і 750 ₴ за
+// сусідами. Знайшов автоматичний тест цілісності прайсу.
+//
 // ЗГЛАДЖЕНО 6 позицій, де джерело суперечило саме собі (Pro виходив дешевшим
 // за базову модель того ж покоління):
 //   16 Pro акумулятор, 15 Pro і 15 Pro Max динамік, 13 Pro і 13 Pro Max копія
@@ -89,8 +94,8 @@ export const modelPrices: Record<string, ModelPrice> = {
   "iphone-12-pro": { "zamina-ekrana": { analog: 2450, original: 4700 }, "akumuliator": 1400, "roziem-zariadzhannia": 850, "kamera": 5400, "dynamik-i-mikrofon": 650, "korpus": 1600, "knopky-y-vibro": 800 },
   "iphone-12": { "zamina-ekrana": { analog: 2450, original: 4200 }, "akumuliator": 1400, "roziem-zariadzhannia": 850, "kamera": 2900, "dynamik-i-mikrofon": 650, "korpus": 1500, "knopky-y-vibro": 800 },
   "iphone-12-mini": { "zamina-ekrana": { analog: 2900, original: 4300 }, "akumuliator": 1400, "roziem-zariadzhannia": 1150, "kamera": 2900, "dynamik-i-mikrofon": 650, "korpus": 1450, "knopky-y-vibro": 800 },
-  "iphone-11-pro-max": { "zamina-ekrana": { analog: 2250, original: 4600 }, "akumuliator": 1350, "roziem-zariadzhannia": 1750, "kamera": 2700, "dynamik-i-mikrofon": 650, "korpus": 1300, "knopky-y-vibro": 800 },
-  "iphone-11-pro": { "zamina-ekrana": { analog: 1800, original: 3900 }, "akumuliator": 1300, "roziem-zariadzhannia": 1750, "kamera": 2700, "dynamik-i-mikrofon": 650, "korpus": 1200, "knopky-y-vibro": 800 },
+  "iphone-11-pro-max": { "zamina-ekrana": { analog: 2250, original: 4600 }, "akumuliator": 1350, "roziem-zariadzhannia": 750, "kamera": 2700, "dynamik-i-mikrofon": 650, "korpus": 1300, "knopky-y-vibro": 800 },
+  "iphone-11-pro": { "zamina-ekrana": { analog: 1800, original: 3900 }, "akumuliator": 1300, "roziem-zariadzhannia": 700, "kamera": 2700, "dynamik-i-mikrofon": 650, "korpus": 1200, "knopky-y-vibro": 800 },
   "iphone-11": { "zamina-ekrana": { analog: 1000, original: 3000 }, "akumuliator": 1250, "roziem-zariadzhannia": 600, "kamera": 1350, "dynamik-i-mikrofon": 600, "korpus": 1099, "knopky-y-vibro": 750 },
   "iphone-xs-max": { "zamina-ekrana": { analog: 2000, original: 4000 }, "akumuliator": 1150, "roziem-zariadzhannia": 650, "kamera": 1900, "dynamik-i-mikrofon": 600, "korpus": 1100, "knopky-y-vibro": 750 },
   "iphone-xs": { "zamina-ekrana": { analog: 1750, original: 3800 }, "akumuliator": 1050, "roziem-zariadzhannia": 600, "kamera": 1900, "dynamik-i-mikrofon": 600, "korpus": 999, "knopky-y-vibro": 700 },
