@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { services, serviceCats, type ServiceCat } from "@/data/services";
 import { PRICES_PUBLISHED, serviceFrom, uah } from "@/data/prices";
-import MobileDeck from "./MobileDeck";
 import styles from "./ServiceCatalog.module.css";
 
 export default function ServiceCatalog() {
@@ -34,13 +33,7 @@ export default function ServiceCatalog() {
         </div>
       </div>
 
-      {/* key — щоб після зміни фільтра колода починалась з першої картки */}
-      <MobileDeck
-        key={cat}
-        className={styles.grid}
-        labels={shown.map((s) => s.title)}
-        label="Каталог послуг"
-      >
+      <div className={styles.grid}>
         {shown.map((s) => {
           // Ціна важливіша за порядковий номер: із нею картку можна порівняти,
           // не заходячи всередину. Без ціни номер лишається.
@@ -101,7 +94,7 @@ export default function ServiceCatalog() {
             </article>
           );
         })}
-      </MobileDeck>
+      </div>
     </section>
   );
 }

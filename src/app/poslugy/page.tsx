@@ -4,7 +4,6 @@ import BookingForm from "@/components/BookingForm";
 import PriceSummary from "@/components/PriceSummary";
 import Reveal from "@/components/Reveal";
 import ServiceCatalog from "@/components/ServiceCatalog";
-import MobileDeck from "@/components/MobileDeck";
 import Ticker from "@/components/Ticker";
 import { services } from "@/data/services";
 import { flow, promises, tickerItems } from "@/data/servicesPage";
@@ -91,12 +90,7 @@ export default function ServicesPage() {
           <div className="kicker">Процес</div>
           <h2 className={styles.processTitle}>Як проходить будь-яка робота</h2>
 
-          <MobileDeck
-            className={styles.flowGrid}
-            labels={flow.map((f) => f.title)}
-            label="Як проходить робота"
-            padded
-          >
+          <div className={styles.flowGrid}>
             {flow.map((f, i) => (
               <Reveal key={f.no} delay={i * 110} className={styles.flowItem}>
                 <div className={styles.flowNo}>{f.no}</div>
@@ -107,7 +101,7 @@ export default function ServicesPage() {
                 <p className={styles.flowBody}>{f.body}</p>
               </Reveal>
             ))}
-          </MobileDeck>
+          </div>
         </div>
       </section>
 
