@@ -46,3 +46,7 @@ next-env.d.ts
 # Службові файли агентських скілів (Clerk, Neon) і локальні налаштування
 .agents/
 .claude/
+
+# playwright
+/test-results/
+/playwright-report/

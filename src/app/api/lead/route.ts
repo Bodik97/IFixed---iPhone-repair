@@ -75,10 +75,12 @@ export async function POST(request: Request) {
 
   // Потрібне ім'я і хоча б один спосіб зв'язку. З кабінету при email-вході
   // телефону може не бути взагалі — тоді вистачає пошти.
-  const hasPhone = (lead?.phone ?? "").replace(/\D/g, "").length >= 9;
-  const hasEmail = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(lead?.email ?? "");
+  // Тіло приходить ззовні — поле не рядком вважаємо відсутнім, а не падаємо в 500
+  const str = (v: unknown) => (typeof v === "string" ? v : "");
+  const hasPhone = str(lead?.phone).replace(/\D/g, "").length >= 9;
+  const hasEmail = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(str(lead?.email));
 
-  if (!lead?.name?.trim() || (!hasPhone && !hasEmail && !profileEmail)) {
+  if (!str(lead?.name).trim() || (!hasPhone && !hasEmail && !profileEmail)) {
     return NextResponse.json({ error: "Потрібні ім'я та телефон або пошта" }, { status: 422 });
   }
 
