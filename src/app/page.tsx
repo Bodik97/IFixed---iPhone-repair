@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import BookingForm from "@/components/BookingForm";
+import MobileDeck from "@/components/MobileDeck";
 import Reveal from "@/components/Reveal";
 import ReviewSlider from "@/components/ReviewSlider";
 import ReviewForm from "@/components/ReviewForm";
@@ -133,7 +134,11 @@ export default async function Home() {
           </p>
         </div>
 
-        <div className={styles.serviceGrid}>
+        <MobileDeck
+          className={styles.serviceGrid}
+          labels={topServices.map((s) => s.title)}
+          label="Що ремонтуємо"
+        >
           {topServices.map((s) => {
             const icon = services.find((x) => x.slug === s.slug)?.icon;
             return (
@@ -171,7 +176,7 @@ export default async function Home() {
               </Link>
             );
           })}
-        </div>
+        </MobileDeck>
 
         <p className={styles.sectionLink}>
           <Link href="/poslugy">Усі 12 послуг детально →</Link>
