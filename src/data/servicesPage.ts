@@ -1,15 +1,23 @@
 // Контент сторінки /poslugy — перенесено з design/iFix-Services.dc.html
 
-export const tickerItems = [
-  "Екран",
-  "Акумулятор",
-  "Роз'єм заряджання",
-  "Камера",
-  "Залив водою",
-  "Не вмикається",
-  "Динамік і мікрофон",
-  "Корпус",
+import { services } from "./services";
+
+/** Коротка назва для стрічки + іконка з картки тієї ж послуги */
+const ticker: [slug: string, label: string][] = [
+  ["zamina-ekrana", "Екран"],
+  ["akumuliator", "Акумулятор"],
+  ["roziem-zariadzhannia", "Роз'єм заряджання"],
+  ["kamera", "Камера"],
+  ["zalyv-vodoiu", "Залив водою"],
+  ["ne-vmykaietsia", "Не вмикається"],
+  ["dynamik-i-mikrofon", "Динамік і мікрофон"],
+  ["korpus", "Корпус"],
 ];
+
+export const tickerItems = ticker.map(([slug, label]) => ({
+  label,
+  icon: services.find((s) => s.slug === slug)?.icon,
+}));
 
 export const flow = [
   { no: "01", title: "Заявка", body: "Телефон, форма або Telegram. Питаємо модель і симптом — одразу даємо орієнтир." },
@@ -22,6 +30,6 @@ export const flow = [
 export const promises = [
   { value: "0 ₴", note: "діагностика, якщо ремонтуєте в нас" },
   { value: "30 днів", note: "гарантія на кожну роботу й встановлену деталь" },
-  { value: "40 хв", note: "типова заміна екрана або акумулятора при вас" },
+  { value: "1 день", note: "заміна екрана чи акумулятора — того ж дня, як телефон у майстра" },
   { value: "15 хв", note: "середній час відповіді на заявку в робочі години" },
 ];

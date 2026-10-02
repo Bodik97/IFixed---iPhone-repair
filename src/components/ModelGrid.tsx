@@ -95,9 +95,6 @@ export default function ModelGrid({
                 </span>
               )}
 
-              <span className={m.inStock ? styles.stockIn : styles.stockOut}>
-                {m.inStock ? "в наявності" : "під замовлення"}
-              </span>
             </span>
 
             <span className={styles.body}>

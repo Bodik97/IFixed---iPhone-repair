@@ -8,6 +8,7 @@ const serviceLinks = [
   { href: "/modeli", label: "iPhone" },
   { href: "/planshety", label: "iPad" },
   { href: "/godynnyky", label: "Apple Watch" },
+  { href: "/android", label: "Android" },
   { href: "/poshtoyu", label: "Ремонт поштою" },
   { href: "/#book", label: "Запис" },
 ];

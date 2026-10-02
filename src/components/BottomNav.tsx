@@ -30,7 +30,7 @@ const items = [
   },
   {
     href: "/modeli",
-    label: "Моделі",
+    label: "iPhone",
     icon: (
       <>
         <rect x="7" y="2.8" width="10" height="18.4" rx="2.4" />

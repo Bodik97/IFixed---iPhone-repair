@@ -69,7 +69,12 @@
   color: var(--text-3);
 }
 
-.close {
+.headActions {
+  display: flex;
+  gap: 8px;
+}
+
+.iconBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -80,10 +85,11 @@
   border: 1px solid var(--border);
   background: transparent;
   color: var(--text-2);
+  text-decoration: none;
   cursor: pointer;
 }
 
-.close:hover {
+.iconBtn:hover {
   border-color: var(--border-active);
   color: var(--text);
 }
@@ -188,6 +194,34 @@
 .form {
   display: grid;
   gap: 10px;
+}
+
+/* Одне поле й кнопка «Далі» в рядок; помилка — під ними на всю ширину */
+.inline {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.inline > :global(.form-error) {
+  grid-column: 1 / -1;
+}
+
+.restart {
+  justify-self: center;
+  padding: 6px 10px;
+  border: 0;
+  background: none;
+  color: var(--text-3);
+  font-family: inherit;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.restart:hover {
+  color: var(--text);
 }
 
 @media (max-width: 860px) {

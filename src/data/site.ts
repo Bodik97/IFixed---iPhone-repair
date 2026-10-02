@@ -1,6 +1,6 @@
 export const site = {
   name: "iFix",
-  tagline: "Ремонт iPhone, iPad та Apple Watch у Львові й Новому Роздолі.",
+  tagline: "Ремонт iPhone, iPad, Apple Watch та Android-смартфонів у Львові й Новому Роздолі.",
   phones: [
     { label: "073 315 02 38", href: "tel:+380733150238" },
     { label: "063 116 43 77", href: "tel:+380631164377" },
@@ -19,6 +19,7 @@ export const site = {
 export const nav = [
   { href: "/", label: "Головна" },
   { href: "/poslugy", label: "Послуги" },
-  { href: "/modeli", label: "Моделі" },
+  { href: "/modeli", label: "iPhone" },
+  { href: "/android", label: "Android" },
   { href: "/poshtoyu", label: "Поштою" },
 ] as const;

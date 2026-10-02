@@ -32,6 +32,22 @@
   gap: 40px;
 }
 
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: rgba(218, 255, 61, .12);
+}
+
 .dot {
   color: var(--accent);
 }

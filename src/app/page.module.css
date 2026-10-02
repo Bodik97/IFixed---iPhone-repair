@@ -107,42 +107,57 @@
   backdrop-filter: blur(12px);
   padding: 26px;
   display: grid;
-  gap: 18px;
+  /* Три колонки на всі рядки (через subgrid): цифра притиснута вправо,
+     одиниця — вліво, тож «день», «днів», «міста» стоять рівним стовпчиком */
+  grid-template-columns: auto auto 1fr;
+  column-gap: 8px;
+  row-gap: 18px;
 }
 
 .statRow {
+  grid-column: 1 / -1;
   display: grid;
-  gap: 18px;
+  grid-template-columns: subgrid;
+  row-gap: 18px;
 }
 
 .divider {
+  grid-column: 1 / -1;
   height: 1px;
   background: rgba(255, 255, 255, .08);
 }
 
 .stat {
-  display: flex;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
 }
 
 .statValue {
+  justify-self: end;
+  font-variant-numeric: tabular-nums;
   font-family: var(--font-unbounded), sans-serif;
   font-size: 34px;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .statUnit {
+  font-family: var(--font-unbounded), sans-serif;
+  white-space: nowrap;
   font-size: 17px;
   color: rgba(241, 243, 239, .6);
 }
 
 .statNote {
+  /* Підпис у два рядки центруємо навпроти цифри, а не по базовій лінії */
+  align-self: center;
+  margin-left: 18px;
   font-size: 13.5px;
   color: rgba(241, 243, 239, .62);
-  text-align: right;
-  max-width: 20ch;
+  line-height: 1.45;
+  text-wrap: pretty;
 }
 
 /* Знімок без рамки й підкладки: краї кадру розчинені в альфу

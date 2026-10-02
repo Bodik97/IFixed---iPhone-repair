@@ -1,11 +1,35 @@
 import styles from "./Ticker.module.css";
 
-export default function Ticker({ items }: { items: string[] }) {
+type Item = {
+  label: string;
+  /** Вміст <svg viewBox="0 0 24 24"> — той самий формат, що в services.ts */
+  icon?: string;
+};
+
+export default function Ticker({ items }: { items: Item[] }) {
   const row = (
     <div className={styles.row}>
       {items.map((t) => (
-        <span key={t} className={styles.item}>
-          {t}
+        <span key={t.label} className={styles.item}>
+          <span className={styles.label}>
+            {t.icon && (
+              <span className={styles.icon}>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#DAFF3D"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  dangerouslySetInnerHTML={{ __html: t.icon }}
+                />
+              </span>
+            )}
+            {t.label}
+          </span>
           <span className={styles.dot}>·</span>
         </span>
       ))}

@@ -155,49 +155,6 @@
   text-wrap: pretty;
 }
 
-/* Анімований трекер */
-.tracker {
-  overflow: hidden;
-  border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, .14);
-  background: rgba(17, 19, 22, .9);
-  backdrop-filter: blur(12px);
-  padding: 22px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.parcel {
-  display: inline-flex;
-}
-
-
-.trackerBody {
-  flex: 1;
-  min-width: 0;
-}
-
-.trackerLabel {
-  font-size: 14.5px;
-  color: rgba(241, 243, 239, .8);
-  margin-bottom: 10px;
-}
-
-.trackerBar {
-  height: 5px;
-  border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, .09);
-  overflow: hidden;
-}
-
-.trackerFill {
-  height: 100%;
-  width: 62%;
-  background: var(--accent);
-  transform-origin: left;
-}
-
 /* ---------- Кроки ---------- */
 .steps {
   padding-block: clamp(32px, 5vw, 70px);
@@ -212,125 +169,48 @@
   margin-bottom: 40px;
 }
 
-/* ---------- Пам'ятка ---------- */
-.packing {
-  border-top: 1px solid rgba(255, 255, 255, .08);
-  border-bottom: 1px solid rgba(255, 255, 255, .08);
-  background: rgba(255, 255, 255, .02);
-}
-
-.packingGrid {
-  padding-block: clamp(40px, 5.5vw, 84px);
+.stepGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
-  gap: clamp(28px, 4vw, 60px);
-  align-items: start;
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  gap: 18px;
 }
 
-.packingGrid .kicker {
-  margin-bottom: 12px;
-}
-
-.packingTitle {
-  font-size: clamp(26px, 3.2vw, 42px);
-  margin-bottom: 16px;
-}
-
-.packingLead {
-  font-size: 15.5px;
-  line-height: 1.6;
-  color: rgba(241, 243, 239, .68);
-  max-width: 42ch;
-}
-
-/* ---------- Популярні ---------- */
-.popular {
-  padding-top: clamp(36px, 5vw, 74px);
-}
-
-.popularHead {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 22px;
-  flex-wrap: wrap;
-  margin-bottom: 22px;
-}
-
-.popularHead .kicker {
-  margin-bottom: 12px;
-}
-
-.popularTitle {
-  font-size: clamp(26px, 3.2vw, 42px);
-}
-
-.allLink {
-  font-size: 14.5px;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: gap .2s;
-}
-
-.allLink:hover {
-  gap: 12px;
-}
-
-.popularGrid {
+/* Номер, заголовок і текст — три рядки спільної сітки (subgrid через обгортку
+   Reveal). Тому текст у сусідніх картках починається на одній висоті, навіть
+   коли заголовок десь переноситься на два рядки. */
+.stepCell {
+  grid-row: span 3;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: 14px;
+  grid-template-rows: subgrid;
 }
 
-.popularCard {
-  position: relative;
-  overflow: hidden;
+.step {
+  grid-row: span 3;
+  display: grid;
+  grid-template-rows: subgrid;
+  row-gap: 12px;
   border-radius: 24px;
-  border: 1px solid var(--border);
-  text-decoration: none;
-  color: var(--text);
-  aspect-ratio: 5 / 4;
-  display: flex;
-  align-items: flex-end;
-  padding: 18px;
-  background: radial-gradient(120% 90% at 50% 25%, rgba(255, 255, 255, .08), rgba(255, 255, 255, .02) 70%);
-  transition: transform .25s, border-color .25s;
+  padding: 24px;
 }
 
-.popularCard:hover {
-  color: var(--text);
-  transform: translateY(-5px);
-  border-color: var(--border-active);
-}
-
-.popularPhoto {
-  position: absolute;
-  inset: 18px 18px 44px;
-  background-size: contain;
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  transition: transform .45s var(--ease);
-}
-
-.popularCard:hover .popularPhoto {
-  transform: scale(1.06) translateY(-2px);
-}
-
-/* Легке затемнення знизу, щоб назва читалась поверх знімка */
-.popularVeil {
-  position: absolute;
-  inset: auto 0 0;
-  height: 50%;
-  background: linear-gradient(180deg, transparent, rgba(11, 12, 14, .75));
-}
-
-.popularName {
-  position: relative;
+.stepNo {
   font-family: var(--font-unbounded), sans-serif;
-  font-size: 16px;
+  font-size: 14px;
+  color: var(--accent);
+}
+
+.stepTitle {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 19px;
   letter-spacing: -.02em;
+}
+
+.stepBody {
+  /* Відступ від заголовка: текст не липне до нього */
+  margin-top: 6px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: rgba(241, 243, 239, .66);
 }
 
 /* ---------- Оформлення ---------- */

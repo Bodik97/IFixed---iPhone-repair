@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: "/", priority: 1 },
     { url: "/poslugy", priority: 0.9 },
     ...sections.map((s) => ({ url: s.href, priority: 0.9 })),
+    { url: "/android", priority: 0.8 },
     { url: "/poshtoyu", priority: 0.8 },
     { url: "/personalni-dani", priority: 0.3 },
   ];

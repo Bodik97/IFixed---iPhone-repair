@@ -6,7 +6,7 @@ const section = getSection("iphone");
 
 export const metadata: Metadata = {
   title: "Каталог моделей iPhone",
-  description: `${section.models.length} моделей iPhone: перелік робіт, терміни й наявність деталей. Оберіть свою модель — покажемо, що робимо і скільки це триває.`,
+  description: `${section.models.length} моделей iPhone: перелік робіт і терміни. Оберіть свою модель — покажемо, що робимо і скільки це триває.`,
   alternates: { canonical: "/modeli" },
 };
 

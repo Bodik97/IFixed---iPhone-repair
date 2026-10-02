@@ -5,16 +5,13 @@ import { sections, type Section } from "@/data/catalog";
 import styles from "./CatalogSection.module.css";
 
 const tickerItems = [
-  "Екрани в наявності",
   "Акумулятори з ємністю 100%",
   "Гарантія 30 днів",
   "Діагностика безкоштовна",
-  "Ремонт при вас за 40 хвилин",
+  "Екран і акумулятор — того ж дня",
 ];
 
 export default function CatalogSection({ section }: { section: Section }) {
-  const inStock = section.models.filter((m) => m.inStock).length;
-
   return (
     <>
       <section className={styles.hero}>
@@ -27,7 +24,7 @@ export default function CatalogSection({ section }: { section: Section }) {
         <div className={styles.heroInner}>
           <span className={`${styles.badge} nUp`}>
             <span className="pulse" />
-            {section.models.length} моделей · {inStock} з деталями в наявності
+            {section.models.length} моделей · діагностика безкоштовна
           </span>
 
           <h1 className={`${styles.h1} nUp nUp-1`}>{section.title}</h1>
@@ -53,7 +50,7 @@ export default function CatalogSection({ section }: { section: Section }) {
         </div>
       </section>
 
-      <Ticker items={tickerItems} />
+      <Ticker items={tickerItems.map((label) => ({ label }))} />
 
       <ModelGrid
         models={section.models}

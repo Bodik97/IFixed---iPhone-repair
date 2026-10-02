@@ -20,12 +20,12 @@ export const services: Service[] = [
     "slug": "zamina-ekrana",
     "cat": "quick",
     "title": "Заміна екрана",
-    "body": "Оригінал або якісний аналог. Переносимо рідний Face ID, перевіряємо True Tone і сенсор при вас.",
+    "body": "Оригінальні дисплеї або якісні аналоги. Переносимо рідний Face ID, перевіряємо True Tone і сенсор.",
     "tags": [
       "Оригінал",
       "Аналог"
     ],
-    "time": "40 хв при вас",
+    "time": "того ж дня",
     "icon": "<rect x=\"6\" y=\"2.5\" width=\"12\" height=\"19\" rx=\"2.5\"></rect><path d=\"M10.5 5.5h3\"></path>"
   },
   {
@@ -38,7 +38,7 @@ export const services: Service[] = [
       "0 циклів",
       "100% ємності"
     ],
-    "time": "30 хв при вас",
+    "time": "того ж дня",
     "icon": "<rect x=\"2.5\" y=\"7\" width=\"16\" height=\"10\" rx=\"2.5\"></rect><path d=\"M21.5 10.5v3\"></path><path d=\"M6.5 12h5\"></path>"
   },
   {
@@ -166,14 +166,14 @@ export const services: Service[] = [
     "tags": [
       "Раз на рік"
     ],
-    "time": "40 хв при вас",
+    "time": "того ж дня",
     "icon": "<circle cx=\"12\" cy=\"12\" r=\"3\"></circle><path d=\"M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2\"></path>"
   }
 ];
 
 export const serviceCats: { id: ServiceCat | "all"; label: string }[] = [
   { id: "all", label: "Усі" },
-  { id: "quick", label: "Швидкі при вас" },
+  { id: "quick", label: "Швидкі, за день" },
   { id: "board", label: "Плата й вода" },
   { id: "body", label: "Корпус" },
 ];

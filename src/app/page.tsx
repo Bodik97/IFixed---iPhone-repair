@@ -25,7 +25,7 @@ import styles from "./page.module.css";
 export const metadata: Metadata = {
   title: "iFix — ремонт iPhone у Львові та Новому Роздолі",
   description:
-    "Безкоштовна діагностика, фіксована ціна після неї, гарантія 30 днів. Екран або акумулятор — 40 хвилин при вас. Приймаємо й Новою Поштою.",
+    "Безкоштовна діагностика, фіксована ціна після неї, гарантія 30 днів. Екран чи акумулятор міняємо того ж дня, як телефон потрапляє до майстра. Приймаємо й Новою Поштою.",
   alternates: { canonical: "/" },
 };
 
@@ -89,8 +89,8 @@ export default async function Home() {
             </h1>
 
             <p className={`${styles.heroLead} nUp nUp-2`}>
-              Безкоштовна діагностика, потім фіксована ціна — і вона вже не змінюється. Екран або
-              акумулятор міняємо за 40 хвилин при вас.
+              Безкоштовна діагностика, потім фіксована ціна — і вона вже не змінюється. Екран чи
+              акумулятор міняємо того ж дня, як телефон потрапляє до майстра.
             </p>
 
             <div className={`${styles.heroCta} nUp nUp-3`}>
@@ -110,10 +110,8 @@ export default async function Home() {
                 <div key={s.note} className={styles.statRow}>
                   {i > 0 && <span className={styles.divider} />}
                   <div className={styles.stat}>
-                    <span className={styles.statValue}>
-                      {s.value}
-                      <span className={styles.statUnit}>{s.unit}</span>
-                    </span>
+                    <span className={styles.statValue}>{s.value}</span>
+                    <span className={styles.statUnit}>{s.unit.trim()}</span>
                     <span className={styles.statNote}>{s.note}</span>
                   </div>
                 </div>
@@ -131,7 +129,7 @@ export default async function Home() {
             <h2 className={styles.h2}>Усе, що трапляється з iPhone</h2>
           </div>
           <p className={styles.sectionNote}>
-            Оригінал або якісний аналог — показуємо обидва варіанти й різницю в ціні.
+            Оригінальні дисплеї або якісні аналоги — показуємо обидва варіанти й різницю в ціні.
           </p>
         </div>
 
@@ -222,7 +220,7 @@ export default async function Home() {
               <h2 className={styles.h2}>Які пристрої беремо</h2>
             </div>
             <p className={styles.sectionNote}>
-              Екрани й акумулятори на ці моделі зазвичай у наявності.
+              Деталь під вашу модель підбираємо одразу після заявки.
             </p>
           </div>
 
@@ -243,7 +241,8 @@ export default async function Home() {
 
           <p className={styles.modelsNote}>
             Не знайшли свою модель — <a href={site.phones[0].href}>зателефонуйте</a>, майже завжди
-            беремо. <Link href="/modeli">Усі моделі детально</Link>
+            беремо. <Link href="/modeli">Усі моделі детально</Link> ·{" "}
+            <Link href="/android">Ремонт Android</Link>
           </p>
         </div>
       </section>

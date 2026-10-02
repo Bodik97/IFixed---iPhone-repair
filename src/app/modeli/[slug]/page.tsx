@@ -33,13 +33,13 @@ export async function generateMetadata({
 const warranty = [
   {
     no: "01",
-    title: "Перевірка при вас",
-    body: "Показуємо знятий модуль, тестуємо сенсор, True Tone і Face ID перед тим, як зібрати.",
+    title: "Перевірка перед видачею",
+    body: "Тестуємо сенсор, True Tone і Face ID перед тим, як зібрати, а знятий модуль віддаємо вам.",
   },
   {
     no: "02",
     title: "Дані на місці",
-    body: "Нічого не скидаємо і не переносимо. Пароль потрібен лише для фінальної перевірки — за вашої присутності.",
+    body: "Нічого не скидаємо і не переносимо. Пароль потрібен лише для фінальної перевірки.",
   },
   {
     no: "03",
@@ -91,15 +91,15 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
 
           <div className={styles.heroGrid}>
             <div className={styles.heroCopy}>
-              <span className={`${model.inStock ? styles.badgeIn : styles.badgeOut} nUp`}>
+              <span className={`${styles.badge} nUp`}>
                 <span className="pulse" />
-                {model.inStock ? "Екран і акумулятор — у наявності" : "Деталі — під замовлення, 1–3 дні"}
+                Безкоштовна діагностика · гарантія 30 днів
               </span>
 
               <h1 className={`${styles.h1} nUp nUp-1`}>Ремонт {model.name}</h1>
 
               <p className={`${styles.heroLead} nUp nUp-2`}>
-                Найчастіші роботи робимо при вас за 40 хвилин. Ціну називаємо після безкоштовної
+                Найчастіші роботи робимо того ж дня, як телефон потрапляє до майстра. Ціну називаємо після безкоштовної
                 діагностики — і вона вже не змінюється.
               </p>
 

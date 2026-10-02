@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Reveal from "@/components/Reveal";
 import Accordion from "@/components/Accordion";
 import MailInForm from "@/components/MailInForm";
 import PackingList from "@/components/PackingList";
+import StepDeck from "@/components/StepDeck";
 import TtnTracker from "@/components/TtnTracker";
 import { faq, heroStats, popular, steps } from "@/data/mailIn";
 import styles from "./page.module.css";
@@ -68,10 +68,8 @@ export default function MailInPage() {
                 <div key={s.note} className={styles.statRow}>
                   {i > 0 && <span className={styles.divider} />}
                   <div className={styles.stat}>
-                    <span className={styles.statValue}>
-                      {s.value}
-                      <span className={styles.statUnit}>{s.unit}</span>
-                    </span>
+                    <span className={styles.statValue}>{s.value}</span>
+                    <span className={styles.statUnit}>{s.unit.trim()}</span>
                     <span className={styles.statNote}>{s.note}</span>
                   </div>
                 </div>
@@ -100,19 +98,9 @@ export default function MailInPage() {
       {/* Кроки */}
       <section className={`container ${styles.steps}`}>
         <div className="kicker">Як це працює</div>
-        <h2 className={styles.stepsTitle}>П&apos;ять кроків від відправки до повернення</h2>
+        <h2 className={styles.stepsTitle}>Шість кроків від відправки до повернення</h2>
 
-        <div className={styles.stepGrid}>
-          {steps.map((s, i) => (
-            <Reveal key={s.no} delay={i * 110}>
-              <article className={`card ${styles.step}`}>
-                <div className={styles.stepNo}>{s.no}</div>
-                <div className={styles.stepTitle}>{s.title}</div>
-                <p className={styles.stepBody}>{s.body}</p>
-              </article>
-            </Reveal>
-          ))}
-        </div>
+        <StepDeck steps={steps} />
       </section>
 
       {/* Пам'ятка */}

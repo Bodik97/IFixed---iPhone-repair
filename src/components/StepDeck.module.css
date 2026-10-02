@@ -1,0 +1,533 @@
+.root {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+}
+
+/* ---------- Колода ---------- */
+.deckWrap {
+  min-width: 0;
+  display: grid;
+  gap: 22px;
+}
+
+.deck {
+  /* Усі картки в одній клітинці гриду: висота колоди = найвища картка,
+     без фіксованих розмірів, які ламались би на вузьких екранах */
+  display: grid;
+  /* Місце над верхньою карткою під краї тих, що позаду */
+  padding-top: 52px;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.card {
+  --offset: 0;
+  grid-area: 1 / 1;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: 26px 28px 28px;
+  border-radius: var(--r-block);
+  border: 1px solid rgba(255, 255, 255, .1);
+  /* Непрозоре тло: картки лежать одна на одній */
+  background: linear-gradient(165deg, #1a1d21, #121418 70%);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, .45);
+  /* Масштаб від верхнього краю: картки позаду виглядають над верхньою
+     смужками, як край колоди, а не ховаються за нею */
+  transform-origin: 50% 0;
+  transform:
+    translateY(calc(var(--offset) * -15px))
+    scale(calc(1 - var(--offset) * .05))
+    rotate(calc(var(--offset) * -1.6deg));
+  transition: transform .6s var(--ease), opacity .45s, border-color .3s;
+}
+
+.card[data-active] {
+  border-color: var(--border-active);
+}
+
+/* Вміст карток позаду приглушений — читається лише верхня */
+.card:not([data-active]) > * {
+  opacity: .25;
+  transition: opacity .3s;
+}
+
+/* Верхня картка злітає вліво й лягає під низ колоди. Кінцевого кадру немає
+   навмисно: анімація сама доходить до положення, яке задає --offset. */
+.leaving {
+  animation: fly .85s var(--ease);
+}
+
+@keyframes fly {
+  0% {
+    transform: none;
+    z-index: 30;
+  }
+
+  45% {
+    transform: translate(-72%, 18px) rotate(-14deg);
+    z-index: 30;
+  }
+
+  55% {
+    z-index: 0;
+  }
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.no {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 15px;
+  color: var(--accent);
+}
+
+/* Хто діє на цьому кроці */
+.who {
+  padding: 5px 12px;
+  border-radius: var(--r-pill);
+  font-size: 12.5px;
+  letter-spacing: .04em;
+  border: 1px solid var(--field-border);
+  color: var(--text-2);
+}
+
+.who[data-who="Ви"] {
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.who[data-who="Разом"] {
+  border-color: var(--info-border);
+  background: var(--info-bg);
+  color: var(--info-text);
+}
+
+.art {
+  height: 112px;
+  margin: 4px -6px 6px;
+  border-radius: 20px;
+  background: radial-gradient(120% 120% at 50% 0%, rgba(218, 255, 61, .09), rgba(255, 255, 255, .015) 70%);
+  border: 1px solid rgba(255, 255, 255, .05);
+  padding: 8px;
+}
+
+.title {
+  font-size: clamp(22px, 2.4vw, 28px);
+  letter-spacing: -.02em;
+}
+
+.body {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--text-2);
+  max-width: 44ch;
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  margin-top: 4px;
+}
+
+.when {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--accent);
+}
+
+.next {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border-active);
+  background: rgba(218, 255, 61, .1);
+  color: var(--text);
+  font: inherit;
+  font-size: 14.5px;
+  cursor: pointer;
+  transition: background .2s, color .2s, gap .2s;
+}
+
+.next:hover {
+  background: var(--accent);
+  color: var(--on-accent);
+  gap: 12px;
+}
+
+.next:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Підказка ---------- */
+.hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 -24px;
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+
+.hint svg {
+  flex: none;
+  color: var(--accent);
+}
+
+.hintTouch {
+  display: none;
+}
+
+/* На сенсорних екранах головний жест — свайп */
+@media (hover: none) and (pointer: coarse) {
+  .hintPointer {
+    display: none;
+  }
+
+  .hintTouch {
+    display: inline;
+  }
+}
+
+/* Поки колоду ще не гортали, верхня картка двічі «смикається» вліво —
+   видно, що її можна перегорнути */
+.deck[data-hint] .card[data-active] {
+  animation: wiggle 1.6s var(--ease) .5s;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: none; }
+  18% { transform: translateX(-26px) rotate(-3deg); }
+  36% { transform: none; }
+  52% { transform: translateX(-12px) rotate(-1.5deg); }
+  68% { transform: none; }
+}
+
+/* Смужка часу до наступної картки. Тривалість = AUTOPLAY_MS у StepDeck.tsx */
+.timer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  animation: timer 4.2s linear;
+}
+
+@keyframes timer {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ---------- Кнопки під колодою ---------- */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--field-border);
+  background: var(--field-bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color .2s, background .2s, transform .2s;
+}
+
+.arrow:hover {
+  border-color: var(--accent);
+  background: rgba(218, 255, 61, .1);
+}
+
+.arrow:active {
+  transform: scale(.94);
+}
+
+.arrowNext {
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.arrowNext:hover {
+  background: var(--accent-light);
+}
+
+.counter {
+  font-size: 14px;
+  color: var(--text-3);
+  text-align: center;
+}
+
+/* ---------- Маршрут ---------- */
+.route {
+  --progress: 0;
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+/* Лінія від першої зупинки до останньої і її заповнена частина */
+.route::before,
+.route::after {
+  content: "";
+  position: absolute;
+  left: 21px;
+  top: 30px;
+  bottom: 30px;
+  width: 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, .1);
+}
+
+.route::after {
+  background: var(--accent);
+  transform-origin: top;
+  transform: scaleY(var(--progress));
+  transition: transform .6s var(--ease);
+}
+
+.stop {
+  position: relative;
+  z-index: 1;
+}
+
+.stopBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 12px 8px 0;
+  border: 0;
+  border-radius: 18px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.stopBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--field-border);
+  /* Непрозоре тло, щоб лінія маршруту не просвічувала крізь кружок */
+  background: #121418;
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 12.5px;
+  color: var(--text-3);
+  transition: background .3s, border-color .3s, color .3s, box-shadow .3s;
+}
+
+.stopText {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.stopTitle {
+  font-family: var(--font-unbounded), sans-serif;
+  font-size: 15.5px;
+  letter-spacing: -.01em;
+  color: var(--text-2);
+  transition: color .3s;
+}
+
+.stopMeta {
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+.stopBtn:hover .stopTitle {
+  color: var(--text);
+}
+
+.stop[data-state="done"] .dot {
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.stop[data-state="now"] .dot {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 0 6px rgba(218, 255, 61, .12);
+}
+
+.stop[data-state="now"] .stopTitle {
+  color: var(--text);
+}
+
+/* ---------- Анімації в ілюстраціях: грають лише на верхній картці ---------- */
+.pop,
+.drive,
+.driveBack,
+.scan,
+.ring,
+.drop,
+.nudge {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.card[data-active] .pop { animation: pop 2.4s var(--ease) infinite; }
+.card[data-active] .drive { animation: drive 2.8s ease-in-out infinite; }
+.card[data-active] .driveBack { animation: driveBack 2.8s ease-in-out infinite; }
+.card[data-active] .scan { animation: scan 3s ease-in-out infinite; }
+.card[data-active] .ring { animation: ring 1.2s ease-in-out infinite; }
+.card[data-active] .drop { animation: drop 2.2s var(--ease) infinite; }
+.card[data-active] .nudge { animation: nudge 1.4s ease-in-out infinite; }
+
+@keyframes pop {
+  0%, 15% { opacity: 0; transform: scale(.6) translateY(8px); }
+  30%, 85% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: none; }
+}
+
+@keyframes drive {
+  0% { transform: translateX(-26px); opacity: 0; }
+  20%, 75% { opacity: 1; }
+  100% { transform: translateX(46px); opacity: 0; }
+}
+
+@keyframes driveBack {
+  0% { transform: translateX(26px); opacity: 0; }
+  20%, 75% { opacity: 1; }
+  100% { transform: translateX(-46px); opacity: 0; }
+}
+
+@keyframes scan {
+  0%, 100% { transform: translate(0, 0); }
+  35% { transform: translate(44px, -4px); }
+  70% { transform: translate(20px, 10px); }
+}
+
+@keyframes ring {
+  0%, 100% { opacity: .25; }
+  50% { opacity: 1; }
+}
+
+@keyframes drop {
+  0% { transform: translateY(-14px); opacity: 0; }
+  20% { opacity: 1; }
+  60% { transform: translateY(18px); opacity: 1; }
+  75%, 100% { transform: translateY(26px); opacity: 0; }
+}
+
+@keyframes nudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+
+/* ---------- Вузькі екрани ---------- */
+@media (max-width: 900px) {
+  .root {
+    grid-template-columns: 1fr;
+  }
+
+  /* Маршрут стає рядком кружків над колодою: картка й так пояснює крок */
+  .route {
+    order: -1;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .route::before,
+  .route::after {
+    top: 21px;
+    bottom: auto;
+    left: 22px;
+    right: 22px;
+    width: auto;
+    height: 2px;
+  }
+
+  .route::after {
+    transform-origin: left;
+    transform: scaleX(var(--progress));
+  }
+
+  .stopBtn {
+    padding: 0;
+  }
+
+  .stopText {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .card {
+    padding: 22px 20px 24px;
+  }
+
+  .dot {
+    width: 38px;
+    height: 38px;
+  }
+
+  .route::before,
+  .route::after {
+    top: 18px;
+    left: 19px;
+    right: 19px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .route::after {
+    transition: none;
+  }
+
+  .leaving,
+  .deck[data-hint] .card[data-active],
+  .card[data-active] * {
+    animation: none !important;
+  }
+
+  /* Колода сама не гортається — і смужка часу нічого не означає */
+  .timer {
+    display: none;
+  }
+}
