@@ -78,7 +78,9 @@ export default function AuthModal({ open, onClose }: { open: boolean; onClose: (
           ))}
         </ul>
 
-        <SignInForm onDone={onClose} bare />
+        {/* Лише коли відкрите: закрите вікно інакше тримало б у DOM другу форму
+            з тими самими id (v-email, clerk-captcha), що й сторінка /vhid */}
+        {open && <SignInForm onDone={onClose} bare />}
       </div>
     </dialog>
   );

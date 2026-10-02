@@ -27,7 +27,7 @@ export default function AccountButton() {
 
   if (isSignedIn) {
     return (
-      <Link href="/moi-remonty" className={styles.button}>
+      <Link href="/moi-remonty" className={styles.button} aria-label="Мої ремонти">
         <UserIcon />
         <span className={styles.label}>Мої ремонти</span>
       </Link>
@@ -36,7 +36,7 @@ export default function AccountButton() {
 
   return (
     <>
-      <button type="button" className={styles.button} onClick={() => setOpen(true)}>
+      <button type="button" className={styles.button} onClick={() => setOpen(true)} aria-label="Вхід">
         <UserIcon />
         <span className={styles.label}>Вхід</span>
       </button>

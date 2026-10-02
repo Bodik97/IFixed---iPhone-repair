@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Персональні дані — що збираємо і навіщо",
   description:
     "Які дані iFix отримує при записі на ремонт, скільки їх зберігає, кому передає і як їх забрати.",
+  alternates: { canonical: "/personalni-dani" },
 };
 
 /**
