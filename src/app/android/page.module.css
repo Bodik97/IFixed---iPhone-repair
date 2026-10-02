@@ -102,8 +102,8 @@
   backdrop-filter: blur(12px);
   padding: 26px;
   display: grid;
-  /* Три колонки на всі рядки (через subgrid): цифра притиснута вправо,
-     одиниця — вліво, тож «день», «днів», «міста» стоять рівним стовпчиком */
+  /* Три колонки на всі рядки (через subgrid): цифри й одиниці вирівняні
+     по лівому краю, тож «день», «днів», «міста» стоять рівним стовпчиком */
   grid-template-columns: auto auto 1fr;
   column-gap: 8px;
   row-gap: 16px;
@@ -130,7 +130,6 @@
 }
 
 .statValue {
-  justify-self: end;
   font-variant-numeric: tabular-nums;
   font-family: var(--font-unbounded), sans-serif;
   font-size: 30px;
