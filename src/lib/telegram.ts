@@ -30,11 +30,26 @@ export function esc(v: unknown): string {
 export async function notifyMaster(html: string): Promise<void> {
   const cfg = config();
   if (!cfg) return;
+  await send(cfg.token, cfg.chats, html);
+}
 
+/**
+ * Технічні сповіщення (збої сервера) — в окремий чат TELEGRAM_ALERT_CHAT_ID,
+ * не майстрам: їм ці повідомлення ні до чого. Немає змінної — мовчимо,
+ * помилка все одно лишається в логах Vercel.
+ */
+export async function notifyDev(html: string): Promise<void> {
+  const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
+  const chat = process.env.TELEGRAM_ALERT_CHAT_ID?.trim();
+  if (!token || !chat) return;
+  await send(token, [chat], html);
+}
+
+async function send(token: string, chats: string[], html: string): Promise<void> {
   await Promise.all(
-    cfg.chats.map(async (chat) => {
+    chats.map(async (chat) => {
       try {
-        const res = await fetch(`https://api.telegram.org/bot${cfg.token}/sendMessage`, {
+        const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
