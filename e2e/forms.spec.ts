@@ -158,3 +158,13 @@ test("вікно входу відкривається з формою і зак
   await dialog.getByRole("button", { name: "Закрити" }).click();
   await expect(page.locator("#v-email")).toHaveCount(0);
 });
+
+test("вікно входу не порушує CSP", async ({ page }) => {
+  const violations: string[] = [];
+  page.on("console", (m) => /Content Security Policy/i.test(m.text()) && violations.push(m.text()));
+  await open(page, "/");
+  await page.getByRole("button", { name: "Вхід" }).click();
+  await expect(page.getByRole("dialog", { name: "Вхід або реєстрація" }).getByLabel("Пошта")).toBeVisible();
+  await page.waitForLoadState("networkidle");
+  expect(violations).toEqual([]);
+});

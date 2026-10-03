@@ -61,7 +61,12 @@ test("захисні заголовки на місці", async ({ request }) =>
   const res = await request.get("/");
   const h = res.headers();
   expect(h["x-frame-options"]).toBe("DENY");
-  expect(h["content-security-policy"]).toContain("frame-ancestors 'none'");
+  const csp = h["content-security-policy"];
+  expect(csp).toContain("frame-ancestors 'none'");
+  expect(csp).toContain("default-src 'self'");
+  expect(csp).toContain("object-src 'none'");
+  expect(csp).toMatch(/script-src [^;]*https:\/\/[a-z0-9.-]+\.clerk/); // домен Clerk узято з ключа
+  expect(csp).not.toContain("unsafe-eval");
   expect(h["x-content-type-options"]).toBe("nosniff");
   expect(h["referrer-policy"]).toBe("strict-origin-when-cross-origin");
   expect(h["x-powered-by"]).toBeUndefined();

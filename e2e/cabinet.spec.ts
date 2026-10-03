@@ -7,8 +7,20 @@ import { E2E_EMAIL } from "./global-setup";
  * вихід. Тестовий клієнт без заявок — у базу нічого не пишеться.
  */
 
-test.beforeEach(() => {
+test.beforeEach(async ({ page }) => {
   test.skip(!process.env.E2E_CLIENT_PASSWORD, "немає тестового ключа Clerk");
+  // Clerk вантажить скрипти, воркери й капчу ззовні — CSP не має блокувати нічого
+  await page.addInitScript(() => {
+    (window as unknown as { __csp: string[] }).__csp = [];
+    document.addEventListener("securitypolicyviolation", (e) =>
+      (window as unknown as { __csp: string[] }).__csp.push(`${e.violatedDirective} ${e.blockedURI}`),
+    );
+  });
+});
+
+test.afterEach(async ({ page }) => {
+  const violations = await page.evaluate(() => (window as unknown as { __csp?: string[] }).__csp ?? []);
+  expect(violations, "порушення CSP").toEqual([]);
 });
 
 test("вхід → порожній кабінет → вихід", async ({ page }) => {
