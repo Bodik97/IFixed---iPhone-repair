@@ -15,7 +15,9 @@ const MIN_PASSWORD = 8;
 /** Код помилки Clerk лежить у різних місцях залежно від методу — дістаємо звідусіль */
 function errorCode(error: unknown): string {
   const e = error as { code?: string; errors?: { code?: string }[] } | null;
-  return e?.code ?? e?.errors?.[0]?.code ?? "";
+  // Спершу конкретний код від API: у ClerkAPIResponseError власне поле code
+  // завжди "api_response_error" і затуляло б справжню причину
+  return e?.errors?.[0]?.code ?? e?.code ?? "";
 }
 
 type Props = {
