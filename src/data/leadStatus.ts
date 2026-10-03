@@ -91,6 +91,12 @@ export function describeStatus(status: Lead["status"]): StatusInfo {
   }
 }
 
+/**
+ * Закриті заявки — їм місце в архіві, а не в робочому списку. «Готово» сюди
+ * не входить: пристрій ще в сервісі, клієнт його не забрав.
+ */
+export const ARCHIVED: Lead["status"][] = ["done", "rejected"];
+
 /** Підписи статусів для випадного списку в адмінці */
 export const STATUS_OPTIONS: { value: Lead["status"]; label: string }[] = [
   { value: "new", label: "Нова" },

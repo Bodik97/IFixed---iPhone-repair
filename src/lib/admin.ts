@@ -51,6 +51,21 @@ function accounts(): Account[] {
     }));
 }
 
+/** Хто є в адмінці — пошта й імʼя без паролів: щоб показати, хто яку заявку взяв */
+export function adminDirectory(): { email: string; name: string }[] {
+  return accounts().map(({ email, name }) => ({ email, name }));
+}
+
+/** Хто зайшов і як звати кожного майстра за поштою — для позначок «бере: …» */
+export async function currentTeam(): Promise<{ me: string; names: Record<string, string> } | null> {
+  const me = await currentAdmin();
+  if (!me) return null;
+  return {
+    me: me.email,
+    names: Object.fromEntries(adminDirectory().map((a) => [a.email, a.name])),
+  };
+}
+
 /** Індекс майстра зі списку, якщо пара email+пароль зійшлася, інакше null */
 export function checkCredentials(email: string, password: string): number | null {
   const list = accounts();

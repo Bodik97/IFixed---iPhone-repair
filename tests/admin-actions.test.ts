@@ -54,6 +54,7 @@ vi.mock("@/lib/rateLimit", () => ({
 
 vi.mock("@/lib/admin", () => ({
   isAdmin: async () => m.admin,
+  currentAdmin: async () => (m.admin ? { name: "Богдан", email: "b@ifix.ua" } : null),
   checkCredentials: () => {
     if (m.credentials === "throw") throw new Error("no env");
     return m.credentials;
@@ -114,7 +115,8 @@ describe("без входу майстра жодна дія не змінює �
     expect(guarded.map(([n]) => n).sort()).toEqual(
       [
         "addNote", "addReview", "createExpense", "createPart", "deleteExpense", "deleteLead",
-        "deletePart", "deleteReview", "setMoney", "setReviewPublished", "setStatus", "setTtn", "shiftPart",
+        "deletePart", "deleteReview", "setAssignee", "setMoney", "setReviewPublished", "setStatus",
+        "setTtn", "shiftPart",
       ].sort(),
     );
   });
@@ -199,6 +201,26 @@ describe("setStatus", () => {
     fake.onSelect(devices, () => [{ id: "d1", clerkUserId: "user_1", leadId: LEAD.id, name: "x", warrantyUntil: new Date(), createdAt: new Date() }]);
     await actions.setStatus(form({ id: LEAD.id, status: "done" }));
     expect(fake.writes().some((q) => q.sql.startsWith('insert into "devices"'))).toBe(false);
+  });
+});
+
+describe("setAssignee", () => {
+  it("«Взяти собі» — заявка на пошту того, хто зайшов, без події в хроніці", async () => {
+    await actions.setAssignee(form({ id: LEAD.id, take: "1" }));
+    const w = fake.writes();
+    expect(w).toHaveLength(1);
+    expect(w[0].sql).toMatch(/^update "leads" set "assignee" = \$1/);
+    expect(w[0].params[0]).toBe("b@ifix.ua");
+  });
+
+  it("«Відпустити» — поле очищається", async () => {
+    await actions.setAssignee(form({ id: LEAD.id, take: "0" }));
+    expect(fake.writes()[0].params[0]).toBeNull();
+  });
+
+  it("без id — нічого не пишемо", async () => {
+    await actions.setAssignee(form({ take: "1" }));
+    expect(fake.writes()).toEqual([]);
   });
 });
 

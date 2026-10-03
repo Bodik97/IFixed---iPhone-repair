@@ -12,7 +12,7 @@ import { addEvent, getLeadById, registerDevice } from "@/db/events";
 import { addExpense, EXPENSE_CATEGORIES, removeExpense } from "@/db/expenses";
 import { addPart, removePart, shiftPartQty } from "@/db/parts";
 import { rateLimit, release } from "@/lib/rateLimit";
-import { checkCredentials, createSession, destroySession, isAdmin } from "@/lib/admin";
+import { checkCredentials, createSession, currentAdmin, destroySession, isAdmin } from "@/lib/admin";
 
 /** Адреса, з якої прийшов запит — за нею теж рахуємо спроби входу */
 async function clientAddress(): Promise<string> {
@@ -96,6 +96,29 @@ export async function setStatus(formData: FormData): Promise<void> {
 
   revalidatePath("/admin");
   revalidatePath("/moi-remonty");
+}
+
+/**
+ * Майстер бере заявку собі — або відпускає її. Другий майстер бачить, хто
+ * чим займається, і не дзвонить тому самому клієнту вдруге.
+ *
+ * У хроніку не пишемо: її бачить клієнт, а розподіл робіт — внутрішня справа.
+ */
+export async function setAssignee(formData: FormData): Promise<void> {
+  const me = await currentAdmin();
+  if (!me) redirect("/admin/vhid");
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+
+  const take = String(formData.get("take") ?? "") === "1";
+
+  await getDb()
+    .update(leads)
+    .set({ assignee: take ? me.email : null, updatedAt: new Date() })
+    .where(eq(leads.id, id));
+
+  revalidatePath("/admin");
 }
 
 /** Майстер дописує подію в хроніку своїми словами */

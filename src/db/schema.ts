@@ -84,6 +84,13 @@ export const leads = pgTable(
     /** Коли клієнт розрахувався повністю. NULL = ще не оплачено. */
     paidAt: timestamp("paid_at", { withTimezone: true }),
 
+    /**
+     * Хто з майстрів узяв заявку — його пошта з ADMIN_EMAIL / ADMIN_EMAIL_2.
+     * Пошта, а не імʼя чи номер у списку: вона не міняється, коли міняють
+     * ADMIN_NAME або порядок акаунтів. NULL = ще ніхто не взяв.
+     */
+    assignee: text("assignee"),
+
     source: leadSource("source").notNull(),
     status: leadStatus("status").notNull().default("new"),
 

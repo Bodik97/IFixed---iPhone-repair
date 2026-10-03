@@ -1,7 +1,8 @@
-import { and, count, desc, eq, ilike, isNull, or } from "drizzle-orm";
+import { and, count, desc, eq, ilike, inArray, isNull, notInArray, or } from "drizzle-orm";
 import { getDb } from "./index";
 import { leads, type Lead } from "./schema";
-export { STAGES, STATUS_OPTIONS, describeStatus, type StatusInfo } from "@/data/leadStatus";
+import { ARCHIVED } from "@/data/leadStatus";
+export { ARCHIVED, STAGES, STATUS_OPTIONS, describeStatus, type StatusInfo } from "@/data/leadStatus";
 
 /**
  * Заявки клієнта. Шукаємо і за акаунтом, і за поштою — щоб людина побачила
@@ -22,12 +23,14 @@ export type LeadFilter = {
   status?: Lead["status"];
   /** Лише ті, що клієнт просив надіслати, а ТТН ще немає */
   shipping?: boolean;
+  /** Робочий список, архів закритих або все разом (пошук) */
+  scope?: "active" | "archive" | "all";
   page: number;
   perPage: number;
 };
 
 /** Умова вибірки — спільна для списку і для підрахунку сторінок */
-function leadWhere({ q, status, shipping }: LeadFilter) {
+function leadWhere({ q, status, shipping, scope = "all" }: LeadFilter) {
   const parts = [];
 
   const text = q?.trim();
@@ -47,6 +50,8 @@ function leadWhere({ q, status, shipping }: LeadFilter) {
     parts.push(or(...fields));
   }
 
+  if (scope === "active") parts.push(notInArray(leads.status, ARCHIVED));
+  if (scope === "archive") parts.push(inArray(leads.status, ARCHIVED));
   if (status) parts.push(eq(leads.status, status));
   if (shipping) parts.push(and(eq(leads.deliveryRequested, true), isNull(leads.ttn)));
 

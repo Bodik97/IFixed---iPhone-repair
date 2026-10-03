@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCounters, getMoney, monthStart } from "@/db/adminStats";
-import { getSignals } from "@/db/signals";
-import { currentAdmin } from "@/lib/admin";
+import { getSignals, getWorkload } from "@/db/signals";
+import { STATUS_OPTIONS } from "@/data/leadStatus";
+import { adminDirectory, currentAdmin } from "@/lib/admin";
 import Age from "./Age";
 import styles from "./page.module.css";
 
@@ -26,11 +27,17 @@ export default async function AdminOverview() {
   const master = await currentAdmin();
   if (!master) redirect("/admin/vhid");
 
-  const [counters, money, signals] = await Promise.all([
+  const [counters, money, signals, workload] = await Promise.all([
     getCounters(),
     getMoney(monthStart()),
     getSignals(),
+    getWorkload(),
   ]);
+
+  // Свої заявки першими — їх майстер шукає очима найчастіше
+  const team = adminDirectory().sort((a, b) => Number(b.email === master.email) - Number(a.email === master.email));
+  const nameOf = (email: string) => team.find((a) => a.email === email)?.name ?? email.split("@")[0];
+  const statusLabel = (v: string) => STATUS_OPTIONS.find((o) => o.value === v)?.label ?? v;
 
   const uah = (n: number) => `${n.toLocaleString("uk-UA")} ₴`;
   const total =
@@ -67,6 +74,12 @@ export default async function AdminOverview() {
                     <div className={styles.signalTitle}>
                       <span className={styles.signalNo}>№&#8202;{f.orderNo}</span>
                       {f.name}
+                      {f.assignee &&
+                        (f.assignee === master.email ? (
+                          <span className={styles.tagMine}>ваша</span>
+                        ) : (
+                          <span className={styles.tagTaken}>бере: {nameOf(f.assignee)}</span>
+                        ))}
                       <Age at={f.at.toISOString()} overdueMin={CALLBACK_MIN} />
                     </div>
                     <div className={styles.signalText}>
@@ -161,6 +174,54 @@ export default async function AdminOverview() {
             </div>
           )}
         </div>
+      )}
+
+      {/* Хто чим зайнятий — щоб майстри не брали ту саму заявку двічі */}
+      <div className={styles.sectionHead}>
+        <h2 className={styles.sectionTitle}>Хто чим зайнятий</h2>
+      </div>
+
+      <div className={styles.team}>
+        {team.map((a) => {
+          const items = workload.byAdmin.get(a.email) ?? [];
+          return (
+            <div key={a.email} className={styles.member}>
+              <div className={styles.memberHead}>
+                <span className={styles.memberMark} aria-hidden="true">
+                  {a.name.slice(0, 1).toUpperCase()}
+                </span>
+                <span className={styles.memberName}>
+                  {a.name}
+                  {a.email === master.email && <span className={styles.memberYou}> · ви</span>}
+                </span>
+                <span className={styles.memberCount}>{items.length}</span>
+              </div>
+
+              {items.length === 0 ? (
+                <p className={styles.memberEmpty}>Вільний — заявок не взято.</p>
+              ) : (
+                <ul className={styles.memberList}>
+                  {items.map((it) => (
+                    <li key={it.leadId}>
+                      <Link href={openLead(it.orderNo, it.leadId)} className={styles.memberItem}>
+                        <span className={styles.signalNo}>№&#8202;{it.orderNo}</span>
+                        <span className={styles.memberWhat}>{it.what ?? it.name}</span>
+                        <span className={styles.memberStatus}>{statusLabel(it.status)}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {workload.unassigned > 0 && (
+        <p className={styles.unassigned}>
+          Ще не взято: <strong>{workload.unassigned}</strong> — у{" "}
+          <Link href="/admin/zayavky">списку заявок</Link> натисніть «Взяти собі».
+        </p>
       )}
 
       <div className={styles.summary}>

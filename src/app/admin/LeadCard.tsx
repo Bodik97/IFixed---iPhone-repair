@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Lead, LeadEvent } from "@/db/schema";
 import Chat from "@/components/Chat";
-import { describeStatus } from "@/db/leads";
+import { ARCHIVED, describeStatus } from "@/db/leads";
 import MoneyFields from "./MoneyFields";
 import NoteField from "./NoteField";
 import DeleteLead from "./DeleteLead";
@@ -9,7 +9,11 @@ import LeadCardFrame from "./LeadCardFrame";
 import QuickActions from "./QuickActions";
 import StatusSelect from "./StatusSelect";
 import TtnField from "./TtnField";
+import { setAssignee } from "./actions";
 import styles from "./page.module.css";
+
+/** Хто зараз в адмінці і як звати кожного майстра за поштою */
+export type Team = { me: string; names: Record<string, string> };
 
 const sourceLabel: Record<string, string> = {
   landing: "головна",
@@ -32,6 +36,7 @@ export default function LeadCard({
   orders = 1,
   priceHint = null,
   defaultOpen = false,
+  team,
 }: {
   lead: Lead;
   events: LeadEvent[];
@@ -43,9 +48,15 @@ export default function LeadCard({
   priceHint?: { count: number; last: number; min: number; max: number } | null;
   /** Відкрити розгорнутою — коли майстер прийшов сюди із сигналу */
   defaultOpen?: boolean;
+  /** Хто дивиться і як звати майстрів — щоб показати, хто взяв заявку */
+  team: Team;
 }) {
   const s = describeStatus(r.status);
   const waitingShip = r.deliveryRequested && !r.ttn;
+  const mine = r.assignee === team.me;
+  // Закрита заявка вже нічия в роботі — лишається лише памʼять, хто її робив
+  const closed = ARCHIVED.includes(r.status);
+  const assigneeName = r.assignee ? (team.names[r.assignee] ?? r.assignee.split("@")[0]) : null;
 
   return (
     <LeadCardFrame
@@ -75,6 +86,14 @@ export default function LeadCard({
                 {orders}-е звернення
               </Link>
             )}
+            {assigneeName &&
+              (mine ? (
+                <span className={styles.tagMine}>ваша</span>
+              ) : (
+                <span className={styles.tagTaken}>
+                  {closed ? "виконав" : "бере"}: {assigneeName}
+                </span>
+              ))}
             {/* Чат і доставка ховаються в згорнутій картці — сигнал про них лишаємо зверху */}
             {unread > 0 && <span className={styles.tagHot}>{unread} нов. у чаті</span>}
             {waitingShip && <span className={styles.tagHot}>чекає ТТН</span>}
@@ -103,6 +122,17 @@ export default function LeadCard({
         <>
           <StatusSelect id={r.id} status={r.status} />
           <span className={styles.hint}>{s.hint}</span>
+
+          {/* Хто займається заявкою — видно й у згорнутій картці */}
+          {!closed && (
+            <form action={setAssignee}>
+              <input type="hidden" name="id" value={r.id} />
+              <input type="hidden" name="take" value={mine ? "0" : "1"} />
+              <button type="submit" className={mine ? styles.assignMine : styles.assign}>
+                {mine ? "Відпустити" : r.assignee ? "Забрати собі" : "Взяти собі"}
+              </button>
+            </form>
+          )}
         </>
       }
     >

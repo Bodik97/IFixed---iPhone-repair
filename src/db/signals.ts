@@ -1,4 +1,5 @@
-import { and, asc, desc, eq, isNull } from "drizzle-orm";
+import { and, asc, count, desc, eq, isNotNull, isNull, notInArray } from "drizzle-orm";
+import { ARCHIVED } from "@/data/leadStatus";
 import { getDb } from "./index";
 import { leadMessages, leads, reviews } from "./schema";
 
@@ -15,6 +16,8 @@ export type FreshSignal = {
   name: string;
   phone: string | null;
   what: string | null;
+  /** Хто з майстрів уже взяв — щоб другий не дзвонив тому самому клієнту */
+  assignee: string | null;
   at: Date;
 };
 
@@ -66,6 +69,7 @@ export async function getSignals(): Promise<Signals> {
         phone: leads.phone,
         model: leads.model,
         service: leads.service,
+        assignee: leads.assignee,
         at: leads.createdAt,
       })
       .from(leads)
@@ -141,4 +145,47 @@ export async function getSignals(): Promise<Signals> {
     ship,
     reviews: pending,
   };
+}
+
+export type WorkItem = {
+  leadId: string;
+  orderNo: number;
+  name: string;
+  what: string | null;
+  status: string;
+};
+
+/**
+ * Хто чим зайнятий: незакриті заявки кожного майстра й скільки нічиїх.
+ * Ключ — пошта майстра, як у leads.assignee.
+ */
+export async function getWorkload(): Promise<{ byAdmin: Map<string, WorkItem[]>; unassigned: number }> {
+  const db = getDb();
+  const open = notInArray(leads.status, ARCHIVED);
+
+  const [taken, [{ n }]] = await Promise.all([
+    db
+      .select({
+        assignee: leads.assignee,
+        leadId: leads.id,
+        orderNo: leads.orderNo,
+        name: leads.name,
+        model: leads.model,
+        service: leads.service,
+        status: leads.status,
+      })
+      .from(leads)
+      .where(and(open, isNotNull(leads.assignee)))
+      .orderBy(asc(leads.createdAt)),
+    db.select({ n: count() }).from(leads).where(and(open, isNull(leads.assignee))),
+  ]);
+
+  const byAdmin = new Map<string, WorkItem[]>();
+  for (const { assignee, model, service, ...r } of taken) {
+    const list = byAdmin.get(assignee!) ?? [];
+    list.push({ ...r, what: model ?? service });
+    byAdmin.set(assignee!, list);
+  }
+
+  return { byAdmin, unassigned: n };
 }

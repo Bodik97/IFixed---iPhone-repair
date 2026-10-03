@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { STATUS_OPTIONS } from "@/data/leadStatus";
-import { adminHref, type Query } from "./Search";
+import { ARCHIVED, STATUS_OPTIONS } from "@/data/leadStatus";
+import { adminHref, type ListKind, type Query } from "./Search";
 import styles from "./Search.module.css";
 
 /**
@@ -16,10 +16,13 @@ import styles from "./Search.module.css";
  */
 const SHIPPING = "shipping";
 
-export default function StatusFilter({ query }: { query: Query }) {
+export default function StatusFilter({ query, kind }: { query: Query; kind: ListKind }) {
   const router = useRouter();
 
   const value = query.shipping ? SHIPPING : (query.status ?? "");
+
+  // Закриті статуси живуть в архіві, робочі — у списку заявок
+  const options = STATUS_OPTIONS.filter((s) => ARCHIVED.includes(s.value) === (kind === "archive"));
 
   return (
     <label className={styles.status}>
@@ -32,18 +35,18 @@ export default function StatusFilter({ query }: { query: Query }) {
           const v = e.target.value;
           router.push(
             v === SHIPPING
-              ? adminHref(query, { shipping: "1", status: "", page: 1 })
-              : adminHref(query, { status: v, shipping: "", page: 1 }),
+              ? adminHref(query, { shipping: "1", status: "", page: 1 }, kind)
+              : adminHref(query, { status: v, shipping: "", page: 1 }, kind),
           );
         }}
       >
-        <option value="">Усі заявки</option>
-        {STATUS_OPTIONS.map((s) => (
+        <option value="">{kind === "archive" ? "Усі закриті" : "Усі в роботі"}</option>
+        {options.map((s) => (
           <option key={s.value} value={s.value}>
             {s.label}
           </option>
         ))}
-        <option value={SHIPPING}>Чекають відправки</option>
+        {kind === "active" && <option value={SHIPPING}>Чекають відправки</option>}
       </select>
     </label>
   );

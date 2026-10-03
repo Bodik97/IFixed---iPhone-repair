@@ -23,7 +23,7 @@ describe("getSignals", () => {
   it("нові заявки, ТТН і відгуки — вибираються своїми умовами", async () => {
     fake.onSelect(leads, (q) =>
       q.params.includes("new")
-        ? [{ id: "l1", orderNo: 1001, name: "Олег", phone: "0733150238", model: null, service: "Екран", at: t(0) }]
+        ? [{ id: "l1", orderNo: 1001, name: "Олег", phone: "0733150238", model: null, service: "Екран", assignee: "b@x.ua", at: t(0) }]
         : [{ id: "l2", orderNo: 1002, name: "Іра", address: "Київ, 5", at: t(1) }],
     );
     fake.onSelect(reviews, () => [{ id: "r1", author: "Андрій", rating: 4, text: "Добре", at: t(2) }]);
@@ -31,7 +31,7 @@ describe("getSignals", () => {
     const s = await getSignals();
 
     expect(s.fresh).toEqual([
-      { leadId: "l1", orderNo: 1001, name: "Олег", phone: "0733150238", what: "Екран", at: t(0) },
+      { leadId: "l1", orderNo: 1001, name: "Олег", phone: "0733150238", what: "Екран", assignee: "b@x.ua", at: t(0) },
     ]);
     expect(s.ship).toEqual([{ leadId: "l2", orderNo: 1002, name: "Іра", address: "Київ, 5", at: t(1) }]);
     expect(s.reviews).toHaveLength(1);

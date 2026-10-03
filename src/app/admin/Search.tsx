@@ -4,8 +4,17 @@ import styles from "./Search.module.css";
 
 export type Query = { q?: string; status?: string; shipping?: string };
 
+/** Робочий список заявок чи архів закритих — у кожного своя адреса й свої статуси */
+export type ListKind = "active" | "archive";
+
+const BASE: Record<ListKind, string> = { active: "/admin/zayavky", archive: "/admin/arhiv" };
+
 /** Адреса зі зміненим одним параметром — решта фільтрів лишається */
-export function adminHref(current: Query & { page?: number }, patch: Partial<Query & { page?: number }>) {
+export function adminHref(
+  current: Query & { page?: number },
+  patch: Partial<Query & { page?: number }>,
+  kind: ListKind = "active",
+) {
   const next = { ...current, ...patch };
   const params = new URLSearchParams();
 
@@ -16,16 +25,24 @@ export function adminHref(current: Query & { page?: number }, patch: Partial<Que
   }
 
   const qs = params.toString();
-  return qs ? `/admin/zayavky?${qs}` : "/admin/zayavky";
+  return qs ? `${BASE[kind]}?${qs}` : BASE[kind];
 }
 
-export default function Search({ query, found }: { query: Query; found: number }) {
+export default function Search({
+  query,
+  found,
+  kind = "active",
+}: {
+  query: Query;
+  found: number;
+  kind?: ListKind;
+}) {
   const filtered = Boolean(query.q || query.status || query.shipping);
 
   return (
     <div className={styles.wrap}>
       {/* Звичайна GET-форма: працює й без JS, адреса лишається такою, щоб її можна було зберегти */}
-      <form className={styles.form} action="/admin/zayavky" method="get">
+      <form className={styles.form} action={BASE[kind]} method="get">
         {query.status && <input type="hidden" name="status" value={query.status} />}
         {query.shipping && <input type="hidden" name="shipping" value={query.shipping} />}
 
@@ -51,12 +68,12 @@ export default function Search({ query, found }: { query: Query; found: number }
         </button>
       </form>
 
-      <StatusFilter query={query} />
+      <StatusFilter query={query} kind={kind} />
 
       {filtered && (
         <div className={styles.result}>
           Знайдено: <strong>{found}</strong>
-          <Link href="/admin/zayavky" className={styles.reset}>
+          <Link href={BASE[kind]} className={styles.reset}>
             Скинути
           </Link>
         </div>
