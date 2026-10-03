@@ -9,7 +9,7 @@ import LeadCardFrame from "./LeadCardFrame";
 import QuickActions from "./QuickActions";
 import StatusSelect from "./StatusSelect";
 import TtnField from "./TtnField";
-import { setAssignee } from "./actions";
+import AssignButton from "./AssignButton";
 import styles from "./page.module.css";
 
 /** Хто зараз в адмінці і як звати кожного майстра за поштою */
@@ -20,6 +20,7 @@ const sourceLabel: Record<string, string> = {
   model: "модель",
   services: "послуги",
   "mail-in": "поштою",
+  manual: "вручну",
 };
 
 const dateFormat = new Intl.DateTimeFormat("uk-UA", {
@@ -120,18 +121,12 @@ export default function LeadCard({
       }
       side={
         <>
-          <StatusSelect id={r.id} status={r.status} />
+          <StatusSelect id={r.id} status={r.status} delivery={r.deliveryRequested} />
           <span className={styles.hint}>{s.hint}</span>
 
           {/* Хто займається заявкою — видно й у згорнутій картці */}
           {!closed && (
-            <form action={setAssignee}>
-              <input type="hidden" name="id" value={r.id} />
-              <input type="hidden" name="take" value={mine ? "0" : "1"} />
-              <button type="submit" className={mine ? styles.assignMine : styles.assign}>
-                {mine ? "Відпустити" : r.assignee ? "Забрати собі" : "Взяти собі"}
-              </button>
-            </form>
+            <AssignButton id={r.id} state={mine ? "mine" : r.assignee ? "other" : "free"} />
           )}
         </>
       }

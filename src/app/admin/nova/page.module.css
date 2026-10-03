@@ -1,0 +1,50 @@
+.wrap {
+  max-width: 560px;
+  padding-block: clamp(24px, 4vw, 48px);
+}
+
+.title {
+  font-size: clamp(26px, 3.2vw, 40px);
+}
+
+.lead {
+  margin: 6px 0 22px;
+  color: var(--text-2);
+  font-size: 15px;
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.row {
+  display: grid;
+  gap: 6px;
+}
+
+.row label {
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 88px;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 14.5px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.check input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+}

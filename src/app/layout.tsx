@@ -4,6 +4,7 @@ import { Unbounded, Manrope } from "next/font/google";
 import Header from "@/components/Header";
 import BookingProviderWrap from "@/components/BookingModal";
 import BottomNav from "@/components/BottomNav";
+import HideOnAdmin from "@/components/HideOnAdmin";
 import ChatBot from "@/components/ChatBot";
 import Footer from "@/components/Footer";
 import { site } from "@/data/site";
@@ -67,7 +68,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <BookingProviderWrap>
           <Header />
           <main>{children}</main>
-          <Footer />
+          {/* В адмінці підвал сайту — лише зайві два екрани гортання */}
+          <HideOnAdmin>
+            <Footer />
+          </HideOnAdmin>
           <BottomNav />
           <ChatBot />
           </BookingProviderWrap>

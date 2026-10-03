@@ -16,6 +16,7 @@ export type Responder = (q: Query) => Record<string, unknown>[] | undefined;
 export function createFakeDb() {
   const queries: Query[] = [];
   let responders: { table: Table; match: RegExp; respond: Responder }[] = [];
+  let inserts: { match: RegExp; respond: Responder }[] = [];
 
   const db = drizzle(
     async (sql, params, method) => {
@@ -23,6 +24,12 @@ export function createFakeDb() {
       queries.push(q);
 
       if (method !== "all") return { rows: [] };
+
+      // insert … returning: поля в порядку ключів рядка, який дав тест
+      for (const r of inserts) {
+        if (!r.match.test(sql)) continue;
+        return { rows: (r.respond(q) ?? []).map((row) => Object.values(row)) };
+      }
 
       for (const r of responders) {
         if (!r.match.test(sql)) continue;
@@ -52,6 +59,11 @@ export function createFakeDb() {
       const name = (table as unknown as Record<symbol, string>)[Symbol.for("drizzle:Name")];
       responders.push({ table, match: new RegExp(`^select .* from "${name}"`, "s"), respond });
     },
+    /** Що повертає insert … returning у цю таблицю */
+    onInsert(table: Table, respond: Responder) {
+      const name = (table as unknown as Record<symbol, string>)[Symbol.for("drizzle:Name")];
+      inserts.push({ match: new RegExp(`^insert into "${name}"`), respond });
+    },
     /** Запити, що змінюють дані: insert / update / delete */
     writes() {
       return queries.filter((q) => /^(insert|update|delete)/i.test(q.sql));
@@ -59,6 +71,7 @@ export function createFakeDb() {
     reset() {
       queries.length = 0;
       responders = [];
+      inserts = [];
     },
   };
 }

@@ -3,6 +3,7 @@
 import { useCallback, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import BackButton from "@/components/BackButton";
+import Logo from "@/components/Logo";
 import { usePathname } from "next/navigation";
 import styles from "./AdminShell.module.css";
 
@@ -258,6 +259,11 @@ export default function AdminShell({
 
       <div className={styles.content}>
         <div className={styles.topbar}>
+          {/* Шапки сайту в адмінці немає — логотип на широкому екрані живе тут */}
+          <span className={styles.brand}>
+            <Logo />
+          </span>
+
           <span className={styles.who} title={`Ви увійшли як ${master}`}>
             <span className={styles.whoMark} aria-hidden="true">
               {master.slice(0, 1).toUpperCase()}

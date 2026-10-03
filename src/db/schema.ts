@@ -11,7 +11,8 @@ import {
 } from "drizzle-orm/pg-core";
 
 /** Звідки прийшла заявка — відповідає полю `source` у формах */
-export const leadSource = pgEnum("lead_source", ["landing", "model", "services", "mail-in"]);
+// manual — заявку завів сам майстер: клієнт подзвонив чи прийшов без запису
+export const leadSource = pgEnum("lead_source", ["landing", "model", "services", "mail-in", "manual"]);
 
 /**
  * Стадії обробки заявки майстром.

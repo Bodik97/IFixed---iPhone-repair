@@ -10,7 +10,10 @@ import styles from "./Header.module.css";
 export default function Header() {
   const pathname = usePathname();
 
-  // В адмінці навігація сайту тільки заважає
+  // Усередині адмінки шапку замінює її власна панель — дві закріплені смуги
+  // з'їдали чверть екрана телефона. Лишаємо лише на сторінці входу майстра.
+  if (pathname.startsWith("/admin") && pathname !== "/admin/vhid") return null;
+
   if (pathname.startsWith("/admin")) {
     return (
       <header className={styles.header}>

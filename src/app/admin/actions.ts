@@ -121,6 +121,45 @@ export async function setAssignee(formData: FormData): Promise<void> {
   revalidatePath("/admin");
 }
 
+/**
+ * Заявка, яку майстер заводить сам: клієнт подзвонив або приніс пристрій без
+ * запису. Інакше такий ремонт не потрапляє ні в касу, ні в гарантію.
+ *
+ * Заявка одразу за тим, хто її створив. Якщо пристрій уже в сервісі — вона
+ * «У роботі», інакше «Нова». Після збереження відкриваємо її розгорнутою,
+ * щоб одразу надрукувати квитанцію.
+ */
+export async function createLead(_prev: string | null, formData: FormData): Promise<string | null> {
+  const me = await currentAdmin();
+  if (!me) redirect("/admin/vhid");
+
+  const text = (key: string, max: number) => String(formData.get(key) ?? "").trim().slice(0, max);
+  const name = text("name", 200);
+  const phone = text("phone", 40);
+  const model = text("model", 200) || null;
+  const problem = text("problem", 2000) || null;
+  const handedOver = formData.get("handedOver") === "on";
+
+  if (name.length < 2) return "Впишіть імʼя клієнта.";
+  if (phone.replace(/\D/g, "").length < 9) return "Впишіть телефон — щонайменше 9 цифр.";
+
+  const [row] = await getDb()
+    .insert(leads)
+    .values({
+      name,
+      phone,
+      model,
+      problem,
+      source: "manual",
+      status: handedOver ? "in_progress" : "new",
+      assignee: me.email,
+    })
+    .returning({ id: leads.id, orderNo: leads.orderNo });
+
+  revalidatePath("/admin");
+  redirect(`/admin/zayavky?q=${row.orderNo}&open=${row.id}`);
+}
+
 /** Майстер дописує подію в хроніку своїми словами */
 export async function addNote(formData: FormData): Promise<void> {
   if (!(await isAdmin())) redirect("/admin/vhid");

@@ -114,7 +114,7 @@ describe("без входу майстра жодна дія не змінює �
     // Нова дія без перевірки має потрапити сюди, а не прослизнути повз
     expect(guarded.map(([n]) => n).sort()).toEqual(
       [
-        "addNote", "addReview", "createExpense", "createPart", "deleteExpense", "deleteLead",
+        "addNote", "addReview", "createExpense", "createLead", "createPart", "deleteExpense", "deleteLead",
         "deletePart", "deleteReview", "setAssignee", "setMoney", "setReviewPublished", "setStatus",
         "setTtn", "shiftPart",
       ].sort(),
@@ -201,6 +201,32 @@ describe("setStatus", () => {
     fake.onSelect(devices, () => [{ id: "d1", clerkUserId: "user_1", leadId: LEAD.id, name: "x", warrantyUntil: new Date(), createdAt: new Date() }]);
     await actions.setStatus(form({ id: LEAD.id, status: "done" }));
     expect(fake.writes().some((q) => q.sql.startsWith('insert into "devices"'))).toBe(false);
+  });
+});
+
+describe("createLead — заявка, яку заводить майстер", () => {
+  const create = (fields: Record<string, string>) => actions.createLead(null, form(fields));
+
+  it("без імені чи телефону — підказка, без запису", async () => {
+    expect(await create({ name: "О", phone: "0733150238" })).toBe("Впишіть імʼя клієнта.");
+    expect(await create({ name: "Олег", phone: "123" })).toMatch(/телефон/);
+    expect(fake.writes()).toEqual([]);
+  });
+
+  it("джерело «вручну», заявка за тим, хто створив, далі — відкрити її розгорнутою", async () => {
+    fake.onInsert(leads, () => [{ id: "new-id", orderNo: 1077 }]);
+    await expect(create({ name: " Олег ", phone: "073 315 02 38", model: "iPhone 13" })).rejects.toThrow(
+      "REDIRECT:/admin/zayavky?q=1077&open=new-id",
+    );
+    const [q] = fake.writes();
+    expect(q.sql).toMatch(/^insert into "leads"/);
+    expect(q.params).toEqual(expect.arrayContaining(["Олег", "073 315 02 38", "iPhone 13", "b@ifix.ua", "manual", "new"]));
+  });
+
+  it("пристрій уже в сервісі — одразу «У роботі»", async () => {
+    fake.onInsert(leads, () => [{ id: "new-id", orderNo: 1078 }]);
+    await expect(create({ name: "Олег", phone: "0733150238", handedOver: "on" })).rejects.toThrow(/REDIRECT/);
+    expect(fake.writes()[0].params).toContain("in_progress");
   });
 });
 

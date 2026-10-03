@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getAllReviews } from "@/db/reviews";
 import { getCounters } from "@/db/adminStats";
 import { countUnreadForMaster } from "@/db/messages";
@@ -7,6 +8,13 @@ import AdminShell from "./AdminShell";
 import { signOut } from "./actions";
 
 export const dynamic = "force-dynamic";
+
+/** Адмінку можна додати на головний екран як окремий застосунок */
+export const metadata: Metadata = {
+  manifest: "/admin/manifest.webmanifest",
+  appleWebApp: { capable: true, title: "iFix Адмін", statusBarStyle: "black" },
+  icons: { apple: "/admin-icons/icon-180.png" },
+};
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   // Сторінка входу теж лежить під /admin, тож меню показуємо лише тим, хто зайшов

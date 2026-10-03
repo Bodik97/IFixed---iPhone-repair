@@ -1,12 +1,14 @@
 "use client";
 
-import { useRef, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { setTtn } from "./actions";
 import styles from "./page.module.css";
 
 export default function TtnField({ id, ttn }: { id: string; ttn: string | null }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [pending, startTransition] = useTransition();
+  // Поле не блокуємо на час збереження — лише тихо кажемо, що відбувається
+  const [saved, setSaved] = useState(false);
 
   return (
     <form
@@ -26,15 +28,21 @@ export default function TtnField({ id, ttn }: { id: string; ttn: string | null }
         inputMode="numeric"
         defaultValue={ttn ?? ""}
         placeholder="ТТН"
-        disabled={pending}
         className={styles.ttnInput}
+        onChange={() => setSaved(false)}
         onBlur={(e) => {
           // Зберігаємо, лише якщо значення справді змінилось
           if (e.target.value.trim() !== (ttn ?? "")) {
-            startTransition(() => formRef.current?.requestSubmit());
+            startTransition(() => {
+              formRef.current?.requestSubmit();
+              setSaved(true);
+            });
           }
         }}
       />
+      <span className={styles.ttnState} aria-live="polite">
+        {pending ? "Зберігаємо…" : saved ? "Збережено" : ""}
+      </span>
     </form>
   );
 }

@@ -26,7 +26,7 @@ export default function StatusFilter({ query, kind }: { query: Query; kind: List
 
   return (
     <label className={styles.status}>
-      <span className={styles.statusLabel}>Статус</span>
+      <span className="visually-hidden">Статус</span>
 
       <select
         className={`field ${styles.select}`}

@@ -41,34 +41,38 @@ export default function Search({
 
   return (
     <div className={styles.wrap}>
-      {/* Звичайна GET-форма: працює й без JS, адреса лишається такою, щоб її можна було зберегти */}
-      <form className={styles.form} action={BASE[kind]} method="get">
-        {query.status && <input type="hidden" name="status" value={query.status} />}
-        {query.shipping && <input type="hidden" name="shipping" value={query.shipping} />}
+      {/* Пошук і фільтр — один рядок: на телефоні три рядки на всю ширину
+          з'їдали пів екрана ще до першої заявки */}
+      <div className={styles.bar}>
+        {/* Звичайна GET-форма: працює й без JS, адреса лишається такою, щоб її можна було зберегти */}
+        <form className={styles.form} action={BASE[kind]} method="get">
+          {query.status && <input type="hidden" name="status" value={query.status} />}
+          {query.shipping && <input type="hidden" name="shipping" value={query.shipping} />}
 
-        <label htmlFor="admin-q" className="visually-hidden">
-          Пошук заявки
-        </label>
-        <input
-          id="admin-q"
-          name="q"
-          type="search"
-          className="field"
-          defaultValue={query.q ?? ""}
-          placeholder="Номер, ім'я, телефон, пошта або модель"
-          autoComplete="off"
-        />
+          <label htmlFor="admin-q" className="visually-hidden">
+            Пошук заявки
+          </label>
+          <input
+            id="admin-q"
+            name="q"
+            type="search"
+            className="field"
+            defaultValue={query.q ?? ""}
+            placeholder="№, імʼя, телефон"
+            autoComplete="off"
+          />
 
-        <button type="submit" className="btn btn-ghost">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" aria-hidden="true">
-            <circle cx="11" cy="11" r="7" />
-            <path d="M20 20l-3.5-3.5" />
-          </svg>
-          Знайти
-        </button>
-      </form>
+          <button type="submit" className={styles.searchBtn}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-3.5-3.5" />
+            </svg>
+            <span className="visually-hidden">Знайти</span>
+          </button>
+        </form>
 
-      <StatusFilter query={query} kind={kind} />
+        <StatusFilter query={query} kind={kind} />
+      </div>
 
       {filtered && (
         <div className={styles.result}>
