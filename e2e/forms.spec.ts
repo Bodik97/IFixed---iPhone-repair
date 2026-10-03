@@ -5,6 +5,14 @@ import { expect, test, type Page } from "@playwright/test";
  * у справжню базу жодна тестова заявка не потрапляє.
  */
 
+/**
+ * Відкрити й дочекатись, поки React оживить сторінку. Інакше Playwright
+ * встигає ввести текст до гідратації, і React затирає його своїм порожнім станом.
+ */
+async function open(page: Page, path: string) {
+  await page.goto(path, { waitUntil: "networkidle" });
+}
+
 type Captured = { body: Record<string, unknown> | null };
 
 async function mockLead(page: Page, status = 200): Promise<Captured> {
@@ -23,7 +31,7 @@ async function mockLead(page: Page, status = 200): Promise<Captured> {
 test.describe("форма запису на головній", () => {
   test("без імені й телефону — підказка, запит не йде", async ({ page }) => {
     const lead = await mockLead(page);
-    await page.goto("/");
+    await open(page, "/");
     const book = page.locator("#book");
     await book.getByRole("button", { name: /записатись/i }).click();
     await expect(book.getByText("Вкажіть ім'я та телефон")).toBeVisible();
@@ -32,7 +40,7 @@ test.describe("форма запису на головній", () => {
 
   test("заповнена — надсилає заявку й показує «Заявку прийнято»", async ({ page }) => {
     const lead = await mockLead(page);
-    await page.goto("/");
+    await open(page, "/");
     const book = page.locator("#book");
 
     await book.getByLabel("Ім'я").fill("Тест");
@@ -56,7 +64,7 @@ test.describe("форма запису на головній", () => {
 
   test("сервер відмовив — показує телефон для дзвінка, введене не губиться", async ({ page }) => {
     await mockLead(page, 500);
-    await page.goto("/");
+    await open(page, "/");
     const book = page.locator("#book");
 
     await book.getByLabel("Ім'я").fill("Тест");
@@ -70,7 +78,7 @@ test.describe("форма запису на головній", () => {
 
 test("форма на сторінці моделі передає модель і джерело", async ({ page }) => {
   const lead = await mockLead(page);
-  await page.goto("/modeli/iphone-16-pro-max");
+  await open(page, "/modeli/iphone-16-pro-max");
   const book = page.locator("#book");
 
   await book.getByLabel("Ім'я").fill("Тест");
@@ -88,7 +96,7 @@ test.describe("перевірка статусу замовлення", () => {
       called = true;
       return r.abort();
     });
-    await page.goto("/");
+    await open(page, "/");
     await page.getByRole("button", { name: "Перевірити" }).click();
     await expect(page.getByText("Впишіть номер замовлення з квитанції.")).toBeVisible();
     expect(called).toBe(false);
@@ -109,7 +117,7 @@ test.describe("перевірка статусу замовлення", () => {
         }),
       }),
     );
-    await page.goto("/");
+    await open(page, "/");
     await page.getByLabel("Номер замовлення").fill("1042");
     await page.getByLabel("Останні 4 цифри телефону").fill("0238");
     await page.getByRole("button", { name: "Перевірити" }).click();
@@ -124,7 +132,7 @@ test.describe("перевірка статусу замовлення", () => {
         body: JSON.stringify({ error: "Не знайшли замовлення з таким номером і телефоном." }),
       }),
     );
-    await page.goto("/");
+    await open(page, "/");
     await page.getByLabel("Номер замовлення").fill("1");
     await page.getByLabel("Останні 4 цифри телефону").fill("0000");
     await page.getByRole("button", { name: "Перевірити" }).click();
@@ -132,7 +140,7 @@ test.describe("перевірка статусу замовлення", () => {
   });
 
   test("у поле телефону не можна ввести більше 4 цифр і літери", async ({ page }) => {
-    await page.goto("/");
+    await open(page, "/");
     const tail = page.getByLabel("Останні 4 цифри телефону");
     await tail.pressSequentially("ab12345");
     await expect(tail).toHaveValue("1234");
@@ -140,7 +148,7 @@ test.describe("перевірка статусу замовлення", () => {
 });
 
 test("вікно входу відкривається з формою і закривається", async ({ page }) => {
-  await page.goto("/");
+  await open(page, "/");
   await expect(page.locator("#v-email")).toHaveCount(0);
 
   await page.getByRole("button", { name: "Вхід" }).click();
