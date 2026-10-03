@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { and, count, eq, isNull, max, or, sql } from "drizzle-orm";
 import { currentUser } from "@clerk/nextjs/server";
 import { getDb } from "@/db";
-import { leadMessages, leads } from "@/db/schema";
+import { leadMessages, leads, reviews } from "@/db/schema";
 import { isAdmin } from "@/lib/admin";
 
 export const dynamic = "force-dynamic";
@@ -28,8 +28,14 @@ export async function GET() {
       .from(leadMessages)
       .where(and(eq(leadMessages.author, "client"), isNull(leadMessages.readAt)));
 
+    // Новий відгук теж сигнал на головній — без нього сторінка про нього не дізналась би
+    const [rev] = await getDb()
+      .select({ pending: count() })
+      .from(reviews)
+      .where(eq(reviews.published, false));
+
     return NextResponse.json({
-      version: `${row.leads}:${row.updated?.getTime() ?? 0}:${msg.unread}`,
+      version: `${row.leads}:${row.updated?.getTime() ?? 0}:${msg.unread}:${rev.pending}`,
     });
   }
 

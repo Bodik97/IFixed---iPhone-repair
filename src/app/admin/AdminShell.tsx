@@ -81,6 +81,16 @@ const items = [
   },
 ] as const;
 
+function SignOutIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M15 17l5-5-5-5" />
+      <path d="M20 12H9" />
+      <path d="M12 20H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h6" />
+    </svg>
+  );
+}
+
 const STORAGE_KEY = "ifix-admin-nav";
 
 /**
@@ -120,13 +130,16 @@ export default function AdminShell({
   badges,
   master,
   actions,
+  signOut,
   children,
 }: {
   badges: NavBadges;
   /** Імʼя майстра, який зайшов — щоб було видно, під ким відкрита адмінка */
   master: string;
-  /** Кнопка виходу — приходить із серверного layout разом зі своєю дією */
+  /** Живе оновлення — приходить із серверного layout */
   actions: React.ReactNode;
+  /** Server action виходу: кнопка є і в панелі, і в шухляді на телефоні */
+  signOut: () => Promise<void>;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -221,30 +234,18 @@ export default function AdminShell({
             );
           })}
         </ul>
+
+        {/* У шухляді на телефоні вихід — помітною кнопкою під розділами */}
+        <form action={signOut} className={styles.drawerSignOut}>
+          <button type="submit" className="btn btn-accent">
+            <SignOutIcon />
+            Вийти
+          </button>
+        </form>
       </nav>
 
       <div className={styles.content}>
         <div className={styles.topbar}>
-          {/* Кнопка шухляди видима лише на вузькому екрані */}
-          <button
-            type="button"
-            className={styles.drawerButton}
-            aria-expanded={drawer}
-            aria-controls="admin-nav"
-            onClick={() => setDrawer(true)}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
-              <path d="M4 7h16" />
-              <path d="M4 12h16" />
-              <path d="M4 17h16" />
-            </svg>
-            <span>Меню</span>
-          </button>
-
-          {pathname !== "/admin" && (
-            <BackButton fallback="/admin" className={styles.back} />
-          )}
-
           <span className={styles.who} title={`Ви увійшли як ${master}`}>
             <span className={styles.whoMark} aria-hidden="true">
               {master.slice(0, 1).toUpperCase()}
@@ -252,7 +253,36 @@ export default function AdminShell({
             <span className={styles.whoName}>{master}</span>
           </span>
 
+          {pathname !== "/admin" && (
+            <BackButton fallback="/admin" className={styles.back} />
+          )}
+
+          <span className={styles.spacer} />
+
           {actions}
+
+          <form action={signOut}>
+            <button type="submit" className={styles.signOut} aria-label="Вийти">
+              <SignOutIcon />
+              <span className={styles.signOutLabel}>Вийти</span>
+            </button>
+          </form>
+
+          {/* Кнопка шухляди видима лише на вузькому екрані — у правому куті */}
+          <button
+            type="button"
+            className={styles.drawerButton}
+            aria-expanded={drawer}
+            aria-controls="admin-nav"
+            aria-label="Меню"
+            onClick={() => setDrawer(true)}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+              <path d="M4 7h16" />
+              <path d="M4 12h16" />
+              <path d="M4 17h16" />
+            </svg>
+          </button>
         </div>
 
         {children}

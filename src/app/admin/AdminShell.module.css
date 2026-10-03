@@ -11,7 +11,7 @@
   min-width: 0;
 }
 
-/* Робоча панель: «Назад», хто зайшов, оновлення, вихід.
+/* Робоча панель: хто зайшов і «Назад» ліворуч, оновлення, вихід і меню праворуч.
    Закріплена під шапкою сайту — у майстра ці кнопки мають бути під рукою
    на будь-якій глибині списку заявок, без прокручування вгору. */
 .topbar {
@@ -22,7 +22,6 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  justify-content: flex-end;
   flex-wrap: wrap;
   margin-bottom: 16px;
   padding: 10px 0;
@@ -32,9 +31,38 @@
   border-bottom: 1px solid var(--border);
 }
 
-/* «Назад» ліворуч, решта — праворуч */
-.back {
-  margin-inline-end: auto;
+/* Розсуває панель: ліва група — хто зайшов і «Назад», права — дії */
+.spacer {
+  flex: 1;
+}
+
+/* Вихід у панелі. Власний стиль, не .btn: глобальний .btn підключається
+   пізніше за модуль і перебивав би розмір кружка на телефоні */
+.signOut {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 255, 255, .22);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+
+.signOut:hover {
+  background: var(--surface-hover);
+  border-color: rgba(255, 255, 255, .34);
+}
+
+/* Вихід у шухляді — лише на телефоні, на широкому екрані він у панелі */
+.drawerSignOut {
+  display: none;
 }
 
 /* Хто зайшов: кружечок з першою літерою + імʼя */
@@ -246,14 +274,6 @@
     padding-top: 18px;
   }
 
-  .topbar {
-    justify-content: flex-end;
-  }
-
-  .drawerButton {
-    margin-inline-end: 0;
-  }
-
   /* На телефоні меню виїжджає збоку і перекриває вміст */
   .nav {
     --nav-width: min(280px, 82vw);
@@ -317,6 +337,46 @@
     display: inline-flex;
   }
 
+  .drawerSignOut {
+    display: block;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .drawerSignOut button {
+    width: 100%;
+  }
+
+  /* Аватар, вихід і меню — однакові кружки 44×44: аватар у лівому куті,
+     меню в правому, вихід поруч із ним лише іконкою */
+  .who,
+  .signOut,
+  .drawerButton {
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+    padding: 0;
+    justify-content: center;
+    flex: none;
+  }
+
+  .who {
+    border: 0;
+    background: none;
+  }
+
+  .whoMark {
+    width: 44px;
+    height: 44px;
+    font-size: 17px;
+  }
+
+  .whoName,
+  .signOutLabel {
+    display: none;
+  }
+
   .scrim {
     display: block;
     position: fixed;
@@ -335,16 +395,6 @@
   }
 }
 
-@media (max-width: 560px) {
-  .whoName {
-    display: none;
-  }
-
-  .who {
-    padding: 4px;
-  }
-}
-
 /* Закріплена панель не має з'їдати екран: на телефоні лишаємо самі іконки,
    підписи ховаємо — зміст кнопок і так очевидний зі стрілки та дверей */
 @media (max-width: 560px) {
@@ -353,13 +403,11 @@
     padding: 8px 0;
   }
 
-  .drawerButton > span,
   .back > span {
     display: none;
   }
 
   /* Іконка без підпису стискає кнопку — тримаємо палець у нормі */
-  .drawerButton,
   .back {
     min-height: 44px;
   }

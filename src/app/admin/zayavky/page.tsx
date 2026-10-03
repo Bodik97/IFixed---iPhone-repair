@@ -24,7 +24,7 @@ const PER_PAGE = 20;
 export default async function LeadsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; q?: string; status?: string; shipping?: string }>;
+  searchParams: Promise<{ page?: string; q?: string; status?: string; shipping?: string; open?: string }>;
 }) {
   if (!(await isAdmin())) redirect("/admin/vhid");
 
@@ -79,6 +79,7 @@ export default async function LeadsPage({
               lead={r}
               events={eventsByLead.get(r.id) ?? []}
               unread={unread.get(r.id) ?? 0}
+              defaultOpen={r.id === params.open}
               orders={orderCounts.get(phoneKey(r.phone) ?? "") ?? 1}
               /* Заявки без ціни не входять у власну статистику, тож підказка
                  завжди про інші ремонти. Там, де ціна вже стоїть, вона зайва. */

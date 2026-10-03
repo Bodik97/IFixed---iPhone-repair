@@ -24,7 +24,7 @@ function chain(): unknown {
     get: (_t, key) => {
       if (key === "then") {
         m.dbTouched++;
-        const row = m.review ?? { leads: 3, updated: new Date(1000), unread: 2 };
+        const row = m.review ?? { leads: 3, updated: new Date(1000), unread: 2, pending: 1 };
         return (resolve: (v: unknown) => void) => resolve([row]);
       }
       return chain();
@@ -154,9 +154,9 @@ describe("GET /api/state", () => {
     expect(m.dbTouched).toBe(0);
   });
 
-  it("майстер — відбиток із кількості, часу й непрочитаних", async () => {
+  it("майстер — відбиток із кількості, часу, непрочитаних і відгуків на модерації", async () => {
     m.admin = true;
-    expect(await (await state()).json()).toEqual({ version: "3:1000:2" });
+    expect(await (await state()).json()).toEqual({ version: "3:1000:2:1" });
   });
 
   it("клієнт — свій відбиток", async () => {
