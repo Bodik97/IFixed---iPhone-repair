@@ -6,12 +6,13 @@ import { revalidatePath } from "next/cache";
 import { del, put } from "@vercel/blob";
 import { eq } from "drizzle-orm";
 import { getDb } from "@/db";
-import { leadMessages, leads, reviews } from "@/db/schema";
+import { leadMessages, leads, pushSubscriptions, reviews } from "@/db/schema";
 import { STATUS_OPTIONS } from "@/db/leads";
 import { addEvent, getLeadById, registerDevice } from "@/db/events";
 import { addExpense, EXPENSE_CATEGORIES, removeExpense } from "@/db/expenses";
 import { addPart, removePart, shiftPartQty } from "@/db/parts";
 import { rateLimit, release } from "@/lib/rateLimit";
+import { sendPush } from "@/lib/push";
 import { checkCredentials, createSession, currentAdmin, destroySession, isAdmin } from "@/lib/admin";
 
 /** Адреса, з якої прийшов запит — за нею теж рахуємо спроби входу */
@@ -158,6 +159,44 @@ export async function createLead(_prev: string | null, formData: FormData): Prom
 
   revalidatePath("/admin");
   redirect(`/admin/zayavky?q=${row.orderNo}&open=${row.id}`);
+}
+
+/** Підписка браузера на push — те, що віддає PushSubscription.toJSON() */
+export type PushKeys = { endpoint: string; keys: { p256dh: string; auth: string } };
+
+/**
+ * Майстер увімкнув сповіщення на цьому телефоні. Повторне ввімкнення на тому
+ * ж пристрої оновлює запис (endpoint унікальний) — дублікатів немає.
+ */
+export async function savePushSubscription(sub: PushKeys, userAgent: string): Promise<void> {
+  const me = await currentAdmin();
+  if (!me) redirect("/admin/vhid");
+
+  const endpoint = String(sub?.endpoint ?? "");
+  const p256dh = String(sub?.keys?.p256dh ?? "");
+  const auth = String(sub?.keys?.auth ?? "");
+  // Endpoint видає браузер, і це завжди https-адреса push-сервісу
+  if (!/^https:\/\//.test(endpoint) || !p256dh || !auth) return;
+
+  await getDb()
+    .insert(pushSubscriptions)
+    .values({ adminEmail: me.email, endpoint, p256dh, auth, userAgent: String(userAgent ?? "").slice(0, 300) })
+    .onConflictDoUpdate({
+      target: pushSubscriptions.endpoint,
+      set: { adminEmail: me.email, p256dh, auth },
+    });
+}
+
+export async function removePushSubscription(endpoint: string): Promise<void> {
+  if (!(await isAdmin())) redirect("/admin/vhid");
+  await getDb().delete(pushSubscriptions).where(eq(pushSubscriptions.endpoint, String(endpoint ?? "")));
+}
+
+/** Перевірка з телефона: push лише на пристрої того, хто натиснув */
+export async function sendTestPush(): Promise<number> {
+  const me = await currentAdmin();
+  if (!me) redirect("/admin/vhid");
+  return sendPush({ title: "Сповіщення працюють", body: "Так виглядатиме нова заявка.", url: "/admin", tag: "test" }, [me.email]);
 }
 
 /** Майстер дописує подію в хроніку своїми словами */

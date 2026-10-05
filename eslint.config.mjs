@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Дизайн-макети .dc.html і їх рантайм — референс, не наш код.
     "design/**",
+    // Маршрути, які Workflow генерує під час збірки
+    "src/app/.well-known/workflow/**",
   ]),
 ]);
 

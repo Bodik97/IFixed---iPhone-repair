@@ -6,6 +6,8 @@ import { getSignals, getWorkload } from "@/db/signals";
 import { STATUS_OPTIONS } from "@/data/leadStatus";
 import { adminDirectory, currentAdmin } from "@/lib/admin";
 import Age from "./Age";
+import PushToggle from "./PushToggle";
+import { leadLink } from "@/lib/adminLinks";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -18,8 +20,7 @@ export const dynamic = "force-dynamic";
 /** Сайт обіцяє передзвонити протягом 15 хвилин — довше нова заявка вже прострочена */
 const CALLBACK_MIN = 15;
 
-/** Відкрити заявку в списку одразу розгорнутою */
-const openLead = (orderNo: number, id: string) => `/admin/zayavky?q=${orderNo}&open=${id}`;
+const openLead = leadLink;
 
 const tel = (phone: string) => `tel:${phone.replace(/[^\d+]/g, "")}`;
 
@@ -59,6 +60,9 @@ export default async function AdminOverview() {
           Нова заявка
         </Link>
       </div>
+
+      {/* Сповіщення на цей телефон — без них сигнали видно, лише коли адмінка відкрита */}
+      <PushToggle />
 
       {/* Сигнали — те, що чекає на майстра зараз. Найстаріше в кожній групі першим */}
       <div className={styles.sectionHead}>

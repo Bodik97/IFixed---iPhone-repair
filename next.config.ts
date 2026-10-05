@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withWorkflow } from "workflow/next";
 
 /**
  * Домен Frontend API Clerk — з publishable-ключа, а не з коду: ключ має вигляд
@@ -71,4 +72,5 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// withWorkflow — директиви "use workflow" / "use step" (ескалація нових заявок)
+export default withWorkflow(nextConfig);

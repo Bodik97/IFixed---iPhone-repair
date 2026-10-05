@@ -50,3 +50,8 @@ next-env.d.ts
 # playwright
 /test-results/
 /playwright-report/
+/.swc
+
+# workflow: маршрути генеруються під час збірки
+/src/app/.well-known/workflow/
+/.workflow-data/

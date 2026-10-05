@@ -347,3 +347,29 @@ export const rateHits = pgTable(
   },
   (t) => [index("rate_hits_subject_idx").on(t.subject, t.at)],
 );
+
+/**
+ * Телефони майстрів, на які йдуть push-сповіщення.
+ *
+ * Один рядок — один пристрій одного майстра: браузер видає endpoint і ключі,
+ * ми ними підписуємо повідомлення. Endpoint унікальний — повторне ввімкнення
+ * на тому ж телефоні оновлює запис, а не плодить дублікати. Запис, на який
+ * push-сервіс відповів «вже не існує», видаляється одразу при відправці.
+ */
+export const pushSubscriptions = pgTable(
+  "push_subscriptions",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    /** Пошта майстра з ADMIN_EMAIL / ADMIN_EMAIL_2 */
+    adminEmail: text("admin_email").notNull(),
+    endpoint: text("endpoint").notNull(),
+    p256dh: text("p256dh").notNull(),
+    auth: text("auth").notNull(),
+    /** Щоб у списку пристроїв було видно, що це за телефон */
+    userAgent: text("user_agent"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("push_subscriptions_endpoint_idx").on(t.endpoint)],
+);
+
+export type PushSubscriptionRow = typeof pushSubscriptions.$inferSelect;

@@ -1,0 +1,137 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { fake } from "./helpers/fakeDb";
+import { leads, pushSubscriptions } from "@/db/schema";
+
+/**
+ * Push на телефони майстрів і нагадування про нічиї заявки. Головне — щоб
+ * сповіщення не губилось: немає підписок → Telegram; телефон відписався →
+ * запис прибирається; заявку взяли → нагадування припиняються.
+ */
+
+const m = vi.hoisted(() => ({
+  sent: [] as { endpoint: string; body: string }[],
+  failWith: {} as Record<string, number>,
+  telegram: [] as string[],
+}));
+
+vi.mock("@/db", async () => {
+  const { fake } = await import("./helpers/fakeDb");
+  return { getDb: () => fake.db };
+});
+
+vi.mock("web-push", () => ({
+  default: {
+    setVapidDetails: () => {},
+    sendNotification: async (sub: { endpoint: string }, body: string) => {
+      const code = m.failWith[sub.endpoint];
+      if (code) throw Object.assign(new Error("push failed"), { statusCode: code });
+      m.sent.push({ endpoint: sub.endpoint, body });
+    },
+  },
+}));
+
+vi.mock("@/lib/telegram", async (orig) => ({
+  ...(await orig<typeof import("@/lib/telegram")>()),
+  notifyMaster: async (html: string) => {
+    m.telegram.push(html);
+  },
+}));
+
+import { sendPush } from "@/lib/push";
+import { alertMasters } from "@/lib/notify";
+import { remindByPush, stillWaiting } from "@/workflows/escalate-lead";
+
+const sub = (id: string, endpoint: string) => ({
+  id,
+  adminEmail: "b@ifix.ua",
+  endpoint,
+  p256dh: "k",
+  auth: "a",
+  userAgent: null,
+  createdAt: new Date(),
+});
+
+const PAYLOAD = { title: "Нова заявка №1", body: "Олег", url: "/admin" };
+
+beforeEach(() => {
+  fake.reset();
+  m.sent = [];
+  m.failWith = {};
+  m.telegram = [];
+  vi.stubEnv("NEXT_PUBLIC_VAPID_PUBLIC_KEY", "pub");
+  vi.stubEnv("VAPID_PRIVATE_KEY", "priv");
+  vi.stubEnv("ADMIN_EMAIL", "b@ifix.ua");
+  vi.spyOn(console, "error").mockImplementation(() => {});
+});
+
+describe("sendPush", () => {
+  it("на кожен телефон, повертає скільки прийняли", async () => {
+    fake.onSelect(pushSubscriptions, () => [sub("s1", "https://push/1"), sub("s2", "https://push/2")]);
+    expect(await sendPush(PAYLOAD)).toBe(2);
+    expect(JSON.parse(m.sent[0].body)).toEqual(PAYLOAD);
+  });
+
+  it("телефон відписався (410) — запис видаляється, решта доходить", async () => {
+    fake.onSelect(pushSubscriptions, () => [sub("s1", "https://push/1"), sub("s2", "https://push/2")]);
+    m.failWith["https://push/1"] = 410;
+    expect(await sendPush(PAYLOAD)).toBe(1);
+    const del = fake.writes().find((q) => q.sql.startsWith('delete from "push_subscriptions"'));
+    expect(del?.params).toEqual(["s1"]);
+  });
+
+  it("тимчасовий збій (500) — запис не чіпаємо", async () => {
+    fake.onSelect(pushSubscriptions, () => [sub("s1", "https://push/1")]);
+    m.failWith["https://push/1"] = 500;
+    expect(await sendPush(PAYLOAD)).toBe(0);
+    expect(fake.writes()).toEqual([]);
+  });
+
+  it("без ключів VAPID — нічого не шлемо й у базу не йдемо", async () => {
+    vi.stubEnv("VAPID_PRIVATE_KEY", "");
+    expect(await sendPush(PAYLOAD)).toBe(0);
+    expect(fake.queries).toEqual([]);
+  });
+});
+
+describe("alertMasters", () => {
+  it("push дійшов — Telegram мовчить", async () => {
+    fake.onSelect(pushSubscriptions, () => [sub("s1", "https://push/1")]);
+    expect(await alertMasters(PAYLOAD, "<b>tg</b>")).toBe("push");
+    expect(m.telegram).toEqual([]);
+  });
+
+  it("жоден телефон не підписаний — Telegram, щоб заявка не загубилась", async () => {
+    expect(await alertMasters(PAYLOAD, "<b>tg</b>")).toBe("telegram");
+    expect(m.telegram).toEqual(["<b>tg</b>"]);
+  });
+});
+
+describe("ескалація: stillWaiting і нагадування", () => {
+  const LEAD = { id: "l1", orderNo: 1054, name: "Олег", model: "iPhone 13", service: null, phone: "0733150238", status: "new", assignee: null };
+
+  it("нова й нічия — досі чекає", async () => {
+    fake.onSelect(leads, () => [LEAD]);
+    expect(await stillWaiting("l1")).toEqual({ id: "l1", orderNo: 1054, name: "Олег", what: "iPhone 13", phone: "0733150238" });
+  });
+
+  it("хтось узяв або статус змінився — нагадувань більше немає", async () => {
+    fake.onSelect(leads, () => [{ ...LEAD, assignee: "b@ifix.ua" }]);
+    expect(await stillWaiting("l1")).toBeNull();
+    fake.reset();
+    fake.onSelect(leads, () => [{ ...LEAD, status: "in_progress" }]);
+    expect(await stillWaiting("l1")).toBeNull();
+    fake.reset();
+    expect(await stillWaiting("видалена")).toBeNull();
+  });
+
+  it("нагадування веде на заявку й замінює попереднє сповіщення про неї", async () => {
+    fake.onSelect(pushSubscriptions, () => [sub("s1", "https://push/1")]);
+    await remindByPush({ id: "l1", orderNo: 1054, name: "Олег", what: "iPhone 13", phone: null }, 5);
+    expect(JSON.parse(m.sent[0].body)).toEqual({
+      title: "Заявка №1054 чекає 5 хв",
+      body: "Олег · iPhone 13 — ніхто ще не взяв",
+      url: "/admin/zayavky?q=1054&open=l1",
+      tag: "lead-l1",
+    });
+  });
+});

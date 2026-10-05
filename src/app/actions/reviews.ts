@@ -5,6 +5,8 @@ import { currentUser } from "@clerk/nextjs/server";
 import { getDb } from "@/db";
 import { reviews } from "@/db/schema";
 import { getReviewByUser } from "@/db/reviews";
+import { alertMasters } from "@/lib/notify";
+import { esc } from "@/lib/telegram";
 
 export type ReviewResult = { ok: true } | { ok: false; error: string };
 
@@ -53,6 +55,18 @@ export async function submitReview(_prev: ReviewResult | null, formData: FormDat
 
   revalidatePath("/");
   revalidatePath("/admin");
+
+  // Новий відгук чекає модерації — без сигналу він пролежав би непоміченим
+  const author = user.firstName?.trim() || "Клієнт";
+  await alertMasters(
+    {
+      title: `Новий відгук ${"★".repeat(rating)}`,
+      body: `${author}: ${text.slice(0, 140)}`,
+      url: "/admin/vidhuky",
+      tag: "review",
+    },
+    `<b>Новий відгук ${"★".repeat(rating)}</b>\n${esc(author)}: ${esc(text.slice(0, 300))}`,
+  );
 
   return { ok: true };
 }

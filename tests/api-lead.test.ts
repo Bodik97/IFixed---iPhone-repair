@@ -13,6 +13,9 @@ const m = vi.hoisted(() => ({
   inserted: [] as Record<string, unknown>[],
   insertFails: false,
   notified: [] as string[],
+  pushed: [] as { title: string; body: string; url: string }[],
+  escalated: [] as string[],
+  startFails: false,
 }));
 
 vi.mock("@/lib/rateLimit", () => ({
@@ -33,7 +36,7 @@ vi.mock("@/db", () => ({
         returning: async () => {
           if (m.insertFails) throw new Error("db down");
           m.inserted.push(v);
-          return [{ orderNo: 42 }];
+          return [{ id: "lead-42", orderNo: 42 }];
         },
       }),
     }),
@@ -44,6 +47,22 @@ vi.mock("@/lib/telegram", async (orig) => ({
   ...(await orig<typeof import("@/lib/telegram")>()),
   notifyMaster: async (html: string) => {
     m.notified.push(html);
+  },
+}));
+
+// Збережену заявку — push на телефони (з Telegram як запасом) і ескалація
+vi.mock("@/lib/notify", () => ({
+  alertMasters: async (push: { title: string; body: string; url: string }, html: string) => {
+    m.pushed.push(push);
+    m.notified.push(html);
+    return "push";
+  },
+}));
+vi.mock("@/workflows/escalate-lead", () => ({ escalateLead: () => {} }));
+vi.mock("workflow/api", () => ({
+  start: async (_fn: unknown, args: string[]) => {
+    if (m.startFails) throw new Error("workflow down");
+    m.escalated.push(args[0]);
   },
 }));
 
@@ -65,6 +84,9 @@ beforeEach(() => {
   m.inserted = [];
   m.insertFails = false;
   m.notified = [];
+  m.pushed = [];
+  m.escalated = [];
+  m.startFails = false;
   vi.spyOn(console, "error").mockImplementation(() => {});
 });
 
@@ -84,6 +106,20 @@ describe("POST /api/lead: що приймаємо", () => {
       clerkUserId: null,
     });
     expect(m.notified[0]).toContain("Нова заявка №42");
+    expect(m.pushed[0]).toEqual({
+      title: "Нова заявка №42",
+      body: "Олег · iPhone 13 · 073 315 02 38",
+      url: "/admin/zayavky?q=42&open=lead-42",
+      tag: "lead-lead-42",
+    });
+    expect(m.escalated).toEqual(["lead-42"]);
+  });
+
+  it("ескалація не запустилась — заявка все одно прийнята", async () => {
+    m.startFails = true;
+    const res = await post({ name: "Олег", phone: "0733150238" });
+    expect(res.status).toBe(200);
+    expect(m.inserted).toHaveLength(1);
   });
 
   it("ім'я + пошта без телефону — теж приймаємо", async () => {

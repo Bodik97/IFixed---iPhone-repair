@@ -115,8 +115,8 @@ describe("без входу майстра жодна дія не змінює �
     expect(guarded.map(([n]) => n).sort()).toEqual(
       [
         "addNote", "addReview", "createExpense", "createLead", "createPart", "deleteExpense", "deleteLead",
-        "deletePart", "deleteReview", "setAssignee", "setMoney", "setReviewPublished", "setStatus",
-        "setTtn", "shiftPart",
+        "deletePart", "deleteReview", "removePushSubscription", "savePushSubscription", "sendTestPush",
+        "setAssignee", "setMoney", "setReviewPublished", "setStatus", "setTtn", "shiftPart",
       ].sort(),
     );
   });
@@ -227,6 +227,24 @@ describe("createLead — заявка, яку заводить майстер", 
     fake.onInsert(leads, () => [{ id: "new-id", orderNo: 1078 }]);
     await expect(create({ name: "Олег", phone: "0733150238", handedOver: "on" })).rejects.toThrow(/REDIRECT/);
     expect(fake.writes()[0].params).toContain("in_progress");
+  });
+});
+
+describe("savePushSubscription", () => {
+  const KEYS = { endpoint: "https://push.example/abc", keys: { p256dh: "p", auth: "a" } };
+
+  it("підписка — за майстром, який увімкнув; повторне ввімкнення оновлює, а не дублює", async () => {
+    await actions.savePushSubscription(KEYS, "iPhone");
+    const [q] = fake.writes();
+    expect(q.sql).toMatch(/^insert into "push_subscriptions"/);
+    expect(q.sql).toMatch(/on conflict \("endpoint"\) do update/);
+    expect(q.params).toEqual(expect.arrayContaining(["b@ifix.ua", "https://push.example/abc", "p", "a", "iPhone"]));
+  });
+
+  it("не https-адреса чи без ключів — нічого не пишемо", async () => {
+    await actions.savePushSubscription({ endpoint: "javascript:alert(1)", keys: { p256dh: "p", auth: "a" } }, "x");
+    await actions.savePushSubscription({ endpoint: "https://push.example/abc", keys: { p256dh: "", auth: "a" } }, "x");
+    expect(fake.writes()).toEqual([]);
   });
 });
 

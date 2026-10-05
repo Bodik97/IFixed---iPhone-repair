@@ -3,7 +3,11 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
 import { getDb } from "@/db";
 import { leads } from "@/db/schema";
+import { start } from "workflow/api";
 import { esc, notifyMaster } from "@/lib/telegram";
+import { alertMasters } from "@/lib/notify";
+import { leadLink } from "@/lib/adminLinks";
+import { escalateLead } from "@/workflows/escalate-lead";
 import { siteUrl } from "@/lib/siteUrl";
 
 const SOURCES = ["landing", "model", "services", "mail-in"] as const;
@@ -22,7 +26,7 @@ export type Lead = {
   source: Source;
 };
 
-async function notifyTelegram(lead: Lead, orderNo?: number) {
+function telegramText(lead: Lead, orderNo?: number): string {
   const head = orderNo ? `<b>Нова заявка №${orderNo}</b>` : "<b>Нова заявка</b>";
 
   const rows: [string, string | undefined][] = [
@@ -41,7 +45,7 @@ async function notifyTelegram(lead: Lead, orderNo?: number) {
     .map(([k, v]) => `${k}: ${esc(v)}`)
     .join("\n");
 
-  await notifyMaster(`${head}\n${body}\n\n${siteUrl()}/admin/zayavky`);
+  return `${head}\n${body}\n\n${siteUrl()}/admin/zayavky`;
 }
 
 /** Порожній рядок у базі не потрібен — краще NULL */
@@ -87,6 +91,7 @@ export async function POST(request: Request) {
   const source: Source = SOURCES.includes(lead.source) ? lead.source : "landing";
 
   let orderNo: number | undefined;
+  let leadId: string | undefined;
 
   try {
     const [row] = await getDb()
@@ -103,21 +108,42 @@ export async function POST(request: Request) {
         clerkUserId: userId ?? null,
         source,
       })
-      .returning({ orderNo: leads.orderNo });
+      .returning({ id: leads.id, orderNo: leads.orderNo });
 
     orderNo = row?.orderNo;
+    leadId = row?.id;
   } catch (e) {
     // Заявку втрачати не можна: лишаємо слід у логах і пробуємо сповістити майстра
     console.error("[lead] не вдалося записати в базу:", e);
     try {
-      await notifyTelegram(lead);
+      await notifyMaster(telegramText(lead));
     } catch {}
     return NextResponse.json({ error: "Не вдалося зберегти заявку" }, { status: 500 });
   }
 
   // Сповіщаємо про кожну заявку, не лише анонімну: заявка о 21:00 інакше
   // пролежить до ранку, бо майстер не тримає адмінку відкритою.
-  await notifyTelegram(lead, orderNo);
+  // Push на телефони; ніхто не прийняв — Telegram, як раніше.
+  if (orderNo !== undefined && leadId) {
+    const what = [lead.model, lead.service].map((v) => clean(v)).find(Boolean);
+    await alertMasters(
+      {
+        title: `Нова заявка №${orderNo}`,
+        body: [lead.name.trim(), what, hasPhone ? clean(lead.phone) : null].filter(Boolean).join(" · "),
+        url: leadLink(orderNo, leadId),
+        tag: `lead-${leadId}`,
+      },
+      telegramText(lead, orderNo),
+    );
+
+    // Нагадування, доки заявку не візьмуть. Збій тут не має зачіпати клієнта:
+    // заявка вже збережена, майстри вже сповіщені.
+    try {
+      await start(escalateLead, [leadId]);
+    } catch (e) {
+      console.error("[lead] ескалацію не запущено:", e);
+    }
+  }
 
   return NextResponse.json({ ok: true });
 }
