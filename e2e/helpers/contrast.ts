@@ -5,6 +5,9 @@
  * серед предків є фонове зображення (банер із фото), елемент пропускаємо:
  * колір під текстом там визначає картинка, а не CSS.
  *
+ * Декоративне (aria-hidden) пропускаємо: його зміст уже переданий інакше,
+ * наприклад, згаслі зірочки рейтингу — оцінкою в aria-label.
+ *
  * Виконується в браузері: page.evaluate(lowContrastTexts).
  */
 export function lowContrastTexts(): string[] {
@@ -57,6 +60,7 @@ export function lowContrastTexts(): string[] {
 
     const rect = el.getBoundingClientRect();
     if (!rect.width || !rect.height) continue;
+    if (el.closest('[aria-hidden="true"]')) continue;
 
     const cs = getComputedStyle(el);
     if (cs.visibility === "hidden" || Number(cs.opacity) === 0) continue;

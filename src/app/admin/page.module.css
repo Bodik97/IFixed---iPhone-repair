@@ -449,7 +449,7 @@
 }
 
 .starsOff {
-  color: rgb(var(--fg-rgb) / .16);
+  color: var(--rating-off);
 }
 
 .deleteBtn {
@@ -731,7 +731,7 @@
   padding: 0 8px;
   border-radius: var(--r-pill);
   background: var(--danger);
-  color: #160707;
+  color: var(--on-danger);
   font-size: 15px;
   vertical-align: middle;
   font-variant-numeric: tabular-nums;
@@ -891,6 +891,11 @@
   border: 1px solid rgba(220, 243, 90, .45);
   background: rgba(220, 243, 90, .08);
   color: var(--accent-text);
+}
+
+/* На білій картці салатова рамка зникає — у світлій темі темніша */
+:global([data-theme="light"]) .assign {
+  border-color: var(--accent-edge);
 }
 
 .assign:hover {

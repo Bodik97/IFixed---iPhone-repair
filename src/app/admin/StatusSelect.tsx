@@ -61,7 +61,7 @@ export default function StatusSelect({
   return (
     <div className={styles.statusControl}>
       {next && (
-        <button type="button" className={styles.nextStep} onClick={() => change(next.to)}>
+        <button type="button" className={`${styles.nextStep} accent-edge`} onClick={() => change(next.to)}>
           {next.label}
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 12h14" />

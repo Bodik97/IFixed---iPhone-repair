@@ -96,7 +96,7 @@ export default function BottomNav() {
         {/* Головна дія завжди під рукою — за нею сюди й приходять.
             Вікно замість переходу: людина не втрачає сторінку, на якій була. */}
         <li className={styles.ctaCell}>
-          <button type="button" className={styles.cta} onClick={() => openBooking()}>
+          <button type="button" className={`${styles.cta} accent-edge`} onClick={() => openBooking()}>
             Записатись
           </button>
         </li>

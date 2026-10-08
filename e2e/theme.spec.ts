@@ -49,3 +49,21 @@ for (const theme of ["dark", "light"] as const) {
     expect(problems).toEqual([]);
   });
 }
+
+test("контраст у світлій темі — адмінка", async ({ page }) => {
+  test.skip(!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD, "немає облікових даних майстра");
+  test.setTimeout(120_000);
+  await page.addInitScript(() => localStorage.setItem("gf-theme", "light"));
+  await page.goto("/admin/vhid");
+  await page.locator('input[name="email"]').fill(process.env.ADMIN_EMAIL!);
+  await page.locator('input[name="password"]').fill(process.env.ADMIN_PASSWORD!);
+  await page.locator('button[type="submit"]').click();
+  await page.waitForURL(/\/admin$/);
+
+  const problems: string[] = [];
+  for (const path of ["/admin", "/admin/zayavky", "/admin/arhiv", "/admin/sklad", "/admin/kliyenty", "/admin/vidhuky", "/admin/groshi", "/admin/nova"]) {
+    await page.goto(path, { waitUntil: "networkidle" });
+    for (const p of await page.evaluate(lowContrastTexts)) problems.push(`${path}: ${p}`);
+  }
+  expect(problems).toEqual([]);
+});

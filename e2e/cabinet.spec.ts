@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { setupClerkTestingToken } from "@clerk/testing/playwright";
 import { E2E_EMAIL } from "./global-setup";
+import { lowContrastTexts } from "./helpers/contrast";
 
 /**
  * Кабінет клієнта: справжній вхід через нашу форму на /vhid, порожній кабінет,
@@ -42,6 +43,13 @@ test("вхід → порожній кабінет → вихід", async ({ pag
 
   await expect(page).toHaveURL(/\/moi-remonty/, { timeout: 20_000 });
   await expect(page.getByRole("heading", { name: "Мої ремонти" })).toBeVisible();
+
+  // Кабінет у світлій темі: жоден текст не губиться на тлі
+  await page.evaluate(() => document.documentElement.setAttribute("data-theme", "light"));
+  // У посилань і кнопок плавна зміна кольору — даємо їй завершитись
+  await page.waitForTimeout(500);
+  expect(await page.evaluate(lowContrastTexts)).toEqual([]);
+  await page.evaluate(() => document.documentElement.removeAttribute("data-theme"));
 
   // Залогіненого /vhid одразу веде в кабінет
   await page.goto("/vhid");

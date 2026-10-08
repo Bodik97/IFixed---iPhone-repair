@@ -76,9 +76,9 @@ export default function ReviewSlider({ reviews }: { reviews: ReviewCard[] }) {
       <div className={styles.track} ref={trackRef} tabIndex={0} aria-label="Відгуки клієнтів">
         {reviews.map((r) => (
           <figure key={r.id} className={styles.card}>
-            <div className={styles.stars} aria-label={`${r.rating} з 5`}>
+            <div className={styles.stars} role="img" aria-label={`${r.rating} з 5`}>
               {"★".repeat(r.rating)}
-              <span className={styles.starsOff}>{"★".repeat(5 - r.rating)}</span>
+              <span className={styles.starsOff} aria-hidden="true">{"★".repeat(5 - r.rating)}</span>
             </div>
 
             {r.image && (

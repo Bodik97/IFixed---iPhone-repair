@@ -25,9 +25,9 @@ export default function ReviewList({ reviews }: { reviews: Review[] }) {
             <div className={styles.cardTop}>
               <span className={styles.name}>{r.authorName}</span>
               {r.device && <span className={styles.source}>{r.device}</span>}
-              <span className={styles.stars} aria-label={`${r.rating} з 5`}>
+              <span className={styles.stars} role="img" aria-label={`${r.rating} з 5`}>
                 {"★".repeat(r.rating)}
-                <span className={styles.starsOff}>{"★".repeat(5 - r.rating)}</span>
+                <span className={styles.starsOff} aria-hidden="true">{"★".repeat(5 - r.rating)}</span>
               </span>
               <span className={styles.when}>{dateFormat.format(r.createdAt)}</span>
               {r.published ? (

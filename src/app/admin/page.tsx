@@ -166,9 +166,9 @@ export default async function AdminOverview() {
                 <div key={rv.id} className={styles.signal}>
                   <div className={styles.signalBody}>
                     <div className={styles.signalTitle}>
-                      <span className={styles.stars} aria-label={`Оцінка ${rv.rating} з 5`}>
+                      <span className={styles.stars} role="img" aria-label={`Оцінка ${rv.rating} з 5`}>
                         {"★".repeat(rv.rating)}
-                        <span className={styles.starsOff}>{"★".repeat(5 - rv.rating)}</span>
+                        <span className={styles.starsOff} aria-hidden="true">{"★".repeat(5 - rv.rating)}</span>
                       </span>
                       {rv.author}
                       <Age at={rv.at.toISOString()} />

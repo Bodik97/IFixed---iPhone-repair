@@ -111,7 +111,7 @@
 .lowTag {
   padding: 3px 9px;
   border-radius: var(--r-pill);
-  background: rgb(var(--fg-rgb) / .06);
+  background: var(--danger-bg);
   color: var(--danger);
   font-size: 11px;
   letter-spacing: .04em;

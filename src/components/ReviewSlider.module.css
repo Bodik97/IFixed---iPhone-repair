@@ -46,7 +46,7 @@
 }
 
 .starsOff {
-  color: rgb(var(--fg-rgb) / .16);
+  color: var(--rating-off);
 }
 
 .photo {

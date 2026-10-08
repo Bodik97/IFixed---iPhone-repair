@@ -35,6 +35,12 @@
   --danger: #FF6B6B;
   --danger-bg: rgba(255, 107, 107, .1);
   --danger-border: rgba(255, 107, 107, .38);
+  /* Текст на суцільному червоному */
+  --on-danger: #160707;
+  /* Межа салатових заливок: на темному тлі зайва, тож той самий салатовий */
+  --accent-edge: #DCF35A;
+  /* Згаслі зірочки рейтингу */
+  --rating-off: rgb(var(--fg-rgb) / .16);
 
   color-scheme: dark;
 }
@@ -62,12 +68,17 @@
   --info-bg: rgba(220, 243, 90, .32);
   --info-border: rgba(110, 128, 0, .45);
   --info-text: #3A4500;
-  --header-bg: rgb(var(--bg-rgb) / .86);
+  --header-bg: rgb(var(--bg-rgb) / .95);
   --shadow-color: rgb(17 19 17 / .14);
 
-  --danger: #C62828;
-  --danger-bg: rgba(198, 40, 40, .08);
-  --danger-border: rgba(198, 40, 40, .4);
+  --danger: #B3261E;
+  --danger-bg: rgba(179, 38, 30, .07);
+  --danger-border: rgba(179, 38, 30, .4);
+  --on-danger: #FFFFFF;
+  /* На світлому тлі салатова кнопка відрізняється лише відтінком —
+     тонка темніша межа дає їй чіткий край */
+  --accent-edge: #A9BF22;
+  --rating-off: rgb(var(--fg-rgb) / .3);
 
   color-scheme: light;
 }
@@ -311,6 +322,14 @@ button,
 .btn-accent {
   background: var(--accent);
   color: var(--on-accent);
+  /* Рамка в .btn уже є (прозора) — розмір не змінюється */
+  border-color: var(--accent-edge);
+}
+
+/* Салатові заливки без рамки: контур усередині, щоб не міняти розмір */
+.accent-edge {
+  outline: 1px solid var(--accent-edge);
+  outline-offset: -1px;
 }
 
 .btn-accent:hover {
