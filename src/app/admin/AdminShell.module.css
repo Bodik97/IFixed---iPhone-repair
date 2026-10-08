@@ -119,6 +119,7 @@
   border-radius: 22px;
   border: 1px solid var(--border);
   background: var(--surface);
+  box-shadow: var(--card-shadow);
   transition: width .18s ease;
 }
 

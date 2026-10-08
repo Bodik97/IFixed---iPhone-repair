@@ -8,6 +8,7 @@
   border-radius: 30px;
   border: 1px solid rgb(var(--fg-rgb) / .1);
   background: var(--surface);
+  box-shadow: var(--card-shadow);
   padding: clamp(24px, 3.4vw, 42px);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));

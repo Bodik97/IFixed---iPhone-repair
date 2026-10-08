@@ -22,6 +22,12 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
   const toggle = () => {
     const root = document.documentElement;
     const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+
+    // Кольори перетікають, а не стрибають — якщо людина не просила менше руху
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      root.classList.add("theme-switching");
+      window.setTimeout(() => root.classList.remove("theme-switching"), 350);
+    }
     root.setAttribute("data-theme", next);
     try {
       localStorage.setItem(THEME_KEY, next);

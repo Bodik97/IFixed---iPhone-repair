@@ -103,6 +103,7 @@
   border-radius: 16px;
   border: 1px solid var(--border);
   background: var(--surface);
+  box-shadow: var(--card-shadow);
 }
 
 .mine .bubble {
@@ -194,7 +195,7 @@
 }
 
 .photo:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -279,7 +280,7 @@
 
 .attach:focus-visible,
 .draftDrop:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 

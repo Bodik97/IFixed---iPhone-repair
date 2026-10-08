@@ -5,6 +5,7 @@
   border-radius: 26px;
   border: 1px solid var(--border-active);
   background: var(--surface);
+  box-shadow: var(--card-shadow);
 }
 
 .head {

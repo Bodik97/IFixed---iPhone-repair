@@ -42,6 +42,19 @@
   --accent-edge: #DCF35A;
   /* Згаслі зірочки рейтингу */
   --rating-off: rgb(var(--fg-rgb) / .16);
+  /* Рамка фокусу з клавіатури */
+  --focus-ring: #DCF35A;
+  /* Світіння салатових кнопок: наведення й «пульс» головної */
+  --shadow-accent: 0 16px 40px rgba(220, 243, 90, .26);
+  --halo-1: rgba(220, 243, 90, .18);
+  --halo-2: rgba(220, 243, 90, .34);
+  /* Поле у фокусі */
+  --field-focus-bg: rgb(var(--fg-rgb) / .07);
+  --field-ring: transparent;
+  /* Картки: на темному глибину дають рамки, тіні зайві */
+  --card-hover-bg: var(--surface-hover);
+  --card-shadow: none;
+  --card-shadow-hover: none;
 
   color-scheme: dark;
 }
@@ -54,14 +67,13 @@
   --fg-rgb: 17 19 17;
   --text: #111311;
   --text-rgb: 17 19 17;
-  --text-2: rgb(var(--text-rgb) / .78);
-  --text-3: rgb(var(--text-rgb) / .64);
+  --text-2: rgb(var(--text-rgb) / .8);
+  --text-3: rgb(var(--text-rgb) / .66);
   --accent: #DCF35A;
   --accent-text: #4D5C00;
   --accent-light: #364100;
   --on-accent: #111311;
   --surface: #FFFFFF;
-  --surface-hover: #FAFAF6;
   --border: rgb(var(--fg-rgb) / .12);
   --border-active: #8FA300;
   --field-bg: #FFFFFF;
@@ -79,6 +91,21 @@
      тонка темніша межа дає їй чіткий край */
   --accent-edge: #A9BF22;
   --rating-off: rgb(var(--fg-rgb) / .3);
+  /* Салатовий фокус на світлому не видно — темний оливковий */
+  --focus-ring: #3F4A00;
+  /* Салатове світіння на кремовому брудно-жовте — мʼяка оливкова тінь */
+  --shadow-accent: 0 12px 28px rgba(110, 128, 0, .22);
+  --halo-1: rgba(110, 128, 0, .14);
+  --halo-2: rgba(110, 128, 0, .26);
+  /* Поле у фокусі лишається білим (раніше сіріло й виглядало вимкненим) */
+  --field-focus-bg: #FFFFFF;
+  --field-ring: transparent;
+  /* Наведення — трохи темніше за те, що під ним (раніше світлішало) */
+  --surface-hover: rgb(var(--fg-rgb) / .05);
+  --card-hover-bg: #FFFFFF;
+  /* Білі картки на кремовому — з легкою тінню, інакше пласкі */
+  --card-shadow: 0 1px 2px rgb(17 19 17 / .04), 0 4px 16px rgb(17 19 17 / .04);
+  --card-shadow-hover: 0 2px 4px rgb(17 19 17 / .05), 0 14px 32px rgb(17 19 17 / .09);
 
   color-scheme: light;
 }
@@ -90,9 +117,6 @@
   --r-block: 32px;
   --r-field: 18px;
   --r-icon: 16px;
-
-  /* Тінь акцентної кнопки */
-  --shadow-accent: 0 16px 40px rgba(220, 243, 90, .26);
 
   /* Сітка */
   --container: 1280px;
@@ -211,8 +235,35 @@ summary::-webkit-details-marker {
   color: var(--on-accent);
 }
 
+/* Згладжування antialiased — для світлого тексту на темному. Темний текст
+   на світлому воно робить тоншим і блідішим, тож у світлій темі — звичайне
+   (крім темних блоків: шапки, банерів) */
+:root[data-theme="light"] body {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+
+:root[data-theme="light"] [data-theme="dark"] {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Плавне перемикання теми: клас ставить ThemeToggle на мить переходу */
+.theme-switching,
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition:
+    background-color .3s ease,
+    color .3s ease,
+    border-color .3s ease,
+    fill .3s ease,
+    stroke .3s ease,
+    box-shadow .3s ease !important;
+}
+
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
@@ -239,8 +290,8 @@ summary::-webkit-details-marker {
 }
 
 @keyframes nHalo {
-  0%, 100% { box-shadow: 0 10px 30px rgba(220, 243, 90, .18); }
-  50% { box-shadow: 0 16px 46px rgba(220, 243, 90, .34); }
+  0%, 100% { box-shadow: 0 10px 30px var(--halo-1); }
+  50% { box-shadow: 0 16px 46px var(--halo-2); }
 }
 
 @keyframes nDot {
@@ -259,7 +310,10 @@ summary::-webkit-details-marker {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * {
+  /* Псевдоелементи теж: відблиск головної кнопки намальований через ::after */
+  *,
+  *::before,
+  *::after {
     animation: none !important;
     transition: none !important;
   }
@@ -370,7 +424,7 @@ button,
   top: 0;
   bottom: 0;
   width: 34%;
-  background: linear-gradient(90deg, transparent, rgb(var(--fg-rgb) / .6), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .6), transparent);
   animation: nShine 4.5s ease-in-out 1s infinite;
   pointer-events: none;
 }
@@ -380,13 +434,15 @@ button,
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-card);
-  transition: transform .3s var(--ease), background .3s, border-color .3s;
+  box-shadow: var(--card-shadow);
+  transition: transform .3s var(--ease), background .3s, border-color .3s, box-shadow .3s;
 }
 
 .card:hover {
   transform: translateY(-4px);
-  background: var(--surface-hover);
+  background: var(--card-hover-bg);
   border-color: var(--border-active);
+  box-shadow: var(--card-shadow-hover);
 }
 
 /* Чипи-фільтри */
@@ -425,7 +481,12 @@ button,
   background: var(--field-bg);
   border: 1px solid var(--field-border);
   color: var(--text);
-  transition: border-color .2s, background .2s;
+  transition: border-color .2s, background .2s, box-shadow .2s;
+}
+
+/* Фокус поля — одна чітка рамка, ближче до краю */
+.field:focus-visible {
+  outline-offset: 2px;
 }
 
 .field::placeholder {
@@ -434,7 +495,8 @@ button,
 
 .field:focus {
   border-color: var(--border-active);
-  background: rgb(var(--fg-rgb) / .07);
+  background: var(--field-focus-bg);
+  box-shadow: 0 0 0 3px var(--field-ring);
 }
 
 /* Інфо / успіх */

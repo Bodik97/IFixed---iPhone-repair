@@ -46,7 +46,8 @@
 
 .searchInput:focus {
   border-color: var(--border-active);
-  background: rgb(var(--fg-rgb) / .08);
+  background: var(--field-focus-bg);
+  box-shadow: 0 0 0 3px var(--field-ring);
 }
 
 .searchIcon {
@@ -71,6 +72,7 @@
   border-radius: var(--r-card);
   border: 1px solid var(--border);
   background: var(--surface);
+  box-shadow: var(--card-shadow);
   display: flex;
   flex-direction: column;
   transition: transform .25s, border-color .25s, background .25s;

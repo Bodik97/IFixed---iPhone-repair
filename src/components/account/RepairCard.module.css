@@ -5,6 +5,7 @@
   border-radius: 26px;
   border: 1px solid var(--border);
   background: var(--surface);
+  box-shadow: var(--card-shadow);
 }
 
 /* Стан підсвічує рамку — але сам статус завжди дублюється іконкою й підписом */

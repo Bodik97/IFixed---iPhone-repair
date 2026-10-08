@@ -164,6 +164,7 @@
   border-radius: 16px;
   border: 1px solid var(--border);
   background: var(--surface);
+  box-shadow: var(--card-shadow);
   font-size: 15px;
   line-height: 1.45;
 }
@@ -265,6 +266,7 @@
   border-radius: 18px;
   border: 1px solid var(--border);
   background: var(--surface);
+  box-shadow: var(--card-shadow);
   text-decoration: none;
   color: var(--text);
   transition: border-color .15s, background .15s;

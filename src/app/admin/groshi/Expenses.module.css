@@ -27,6 +27,7 @@
   border: 1px solid var(--border);
   border-radius: 20px;
   background: var(--surface);
+  box-shadow: var(--card-shadow);
 }
 
 .field,

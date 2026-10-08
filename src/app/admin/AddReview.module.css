@@ -5,6 +5,7 @@
   border-radius: 24px;
   border: 1px solid var(--border-active);
   background: var(--surface);
+  box-shadow: var(--card-shadow);
 }
 
 .head {
@@ -89,7 +90,7 @@
 
 .star:focus-visible,
 .starOn:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 

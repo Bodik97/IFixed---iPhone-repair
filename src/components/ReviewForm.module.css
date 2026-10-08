@@ -2,6 +2,7 @@
   border-radius: var(--r-block);
   border: 1px solid rgb(var(--fg-rgb) / .1);
   background: var(--surface);
+  box-shadow: var(--card-shadow);
   padding: clamp(24px, 3.2vw, 36px);
   align-self: start;
 }

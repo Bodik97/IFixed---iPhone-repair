@@ -169,6 +169,7 @@
   border-radius: 22px;
   border: 1px solid var(--border);
   background: var(--surface);
+  box-shadow: var(--card-shadow);
 }
 
 .bigItemAccent {
@@ -227,6 +228,7 @@
   border: 1px solid var(--border);
   border-radius: 22px;
   background: var(--surface);
+  box-shadow: var(--card-shadow);
   overflow: hidden;
 }
 
