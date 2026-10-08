@@ -16,7 +16,7 @@ test("перемикач: світла тема, вибір переживає �
 
   await page.reload({ waitUntil: "networkidle" });
   await expect(html).toHaveAttribute("data-theme", "light");
-  await expect(page.locator('header img[src$="gadgetfix-logo-light.svg"]')).toBeVisible();
+  await expect(page.locator('header img[src$="gadgetfix-logo-on-light.svg"]')).toBeVisible();
   await expect(page.locator('header img[src$="gadgetfix-logo-dark.svg"]')).toBeHidden();
 
   await page.getByRole("button", { name: "Світла / темна тема" }).click();
