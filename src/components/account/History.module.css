@@ -22,7 +22,7 @@
 }
 
 .row:hover {
-  border-color: rgba(220, 243, 90, .4);
+  border-color: rgb(var(--lime-rgb) / .4);
   background: rgb(var(--fg-rgb) / .05);
   transform: translateX(4px);
 }

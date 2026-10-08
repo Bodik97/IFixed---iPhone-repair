@@ -36,7 +36,7 @@
   right: -180px;
   top: -240px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(220, 243, 90, .2), transparent 65%);
+  background: radial-gradient(circle, rgb(var(--lime-rgb) / .2), transparent 65%);
 }
 
 .heroInner {
@@ -310,11 +310,6 @@
   background-size: contain;
   background-position: 50% 50%;
   background-repeat: no-repeat;
-  transition: transform .45s var(--ease);
-}
-
-.popularCard:hover .popularPhoto {
-  transform: scale(1.06) translateY(-2px);
 }
 
 /* Легке затемнення знизу, щоб назва читалась поверх знімка */

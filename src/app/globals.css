@@ -14,6 +14,8 @@
   /* Нижня межа: дрібний текст має лишатись читабельним (WCAG 4.5:1) */
   --text-3: rgb(var(--text-rgb) / .62);
   --accent: #DCF35A;
+  /* Канали салатового для відтінків і рамок: rgb(var(--lime-rgb) / .12) */
+  --lime-rgb: 220 243 90;
   /* Акцент для тексту й іконок: на темному — сам салатовий, на світлому він
      нечитабельний, тож там темніший оливковий того ж тону */
   --accent-text: #DCF35A;
@@ -69,17 +71,20 @@
   --text-rgb: 17 19 17;
   --text-2: rgb(var(--text-rgb) / .8);
   --text-3: rgb(var(--text-rgb) / .66);
-  --accent: #DCF35A;
+  /* Неоновий салатовий на білому ріже око — приглушений оливково-салатовий
+     того ж тону: заливки кнопок, бейджів, смуг прогресу */
+  --accent: #ADC739;
+  --lime-rgb: 159 183 31;
   --accent-text: #4D5C00;
   --accent-light: #364100;
   --on-accent: #111311;
   --surface: #FFFFFF;
   --border: rgb(var(--fg-rgb) / .12);
-  --border-active: #8FA300;
+  --border-active: #8BA21C;
   --field-bg: #FFFFFF;
   --field-border: rgb(var(--fg-rgb) / .2);
-  --info-bg: rgba(220, 243, 90, .32);
-  --info-border: rgba(110, 128, 0, .45);
+  --info-bg: rgb(var(--lime-rgb) / .16);
+  --info-border: rgb(var(--lime-rgb) / .5);
   --info-text: #3A4500;
   --shadow-color: rgb(17 19 17 / .14);
 
@@ -89,7 +94,7 @@
   --on-danger: #FFFFFF;
   /* На світлому тлі салатова кнопка відрізняється лише відтінком —
      тонка темніша межа дає їй чіткий край */
-  --accent-edge: #A9BF22;
+  --accent-edge: #8BA21C;
   --rating-off: rgb(var(--fg-rgb) / .3);
   /* Салатовий фокус на світлому не видно — темний оливковий */
   --focus-ring: #3F4A00;
@@ -527,7 +532,9 @@ button,
   animation: nDot 2.4s ease-out infinite;
 }
 
-/* Медіа з hover-зумом */
+/* Медіа робіт: фото телефона видно повністю — вписане, без зуму
+   (на телефоні дотик залипав як наведення, і краї обрізались).
+   При наведенні фото лише набуває кольору. */
 .zoom {
   overflow: hidden;
 }
@@ -535,13 +542,12 @@ button,
 .zoom img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   filter: grayscale(.55);
-  transition: transform .5s var(--ease), filter .5s;
+  transition: filter .5s;
 }
 
 .zoom:hover img {
-  transform: scale(1.07);
   filter: grayscale(0);
 }
 
@@ -549,7 +555,7 @@ button,
 .glow {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(220, 243, 90, .16), transparent 70%);
+  background: radial-gradient(circle, rgb(var(--lime-rgb) / .16), transparent 70%);
   filter: blur(40px);
   animation: nDrift 22s ease-in-out infinite;
   pointer-events: none;

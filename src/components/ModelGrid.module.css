@@ -103,12 +103,9 @@
   max-height: 100%;
   width: auto;
   height: auto;
+  /* Телефон видно повністю: без зуму при наведенні — на телефоні дотик
+     «залипав» як наведення, і збільшене фото обрізалось рамкою */
   object-fit: contain;
-  transition: transform .45s var(--ease);
-}
-
-.card:hover .photo {
-  transform: scale(1.06) translateY(-2px);
 }
 
 .noPhoto {

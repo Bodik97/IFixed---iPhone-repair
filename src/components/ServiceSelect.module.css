@@ -112,7 +112,7 @@
 }
 
 .optionOn {
-  background: rgba(220, 243, 90, .12);
+  background: rgb(var(--lime-rgb) / .12);
   color: var(--accent-text);
 }
 
@@ -130,7 +130,7 @@
   height: 34px;
   flex: none;
   border-radius: 11px;
-  background: rgba(220, 243, 90, .1);
+  background: rgb(var(--lime-rgb) / .1);
   color: var(--accent-text);
 }
 
@@ -154,7 +154,7 @@
 }
 
 .optionOn .optionTime {
-  color: rgba(220, 243, 90, .7);
+  color: rgb(var(--lime-rgb) / .7);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -36,7 +36,7 @@
   right: -170px;
   top: -230px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(220, 243, 90, .2), transparent 65%);
+  background: radial-gradient(circle, rgb(var(--lime-rgb) / .2), transparent 65%);
 }
 
 .heroInner {

@@ -67,7 +67,7 @@
   height: 42px;
   flex: none;
   border-radius: 14px;
-  background: rgba(220, 243, 90, .14);
+  background: rgb(var(--lime-rgb) / .14);
   color: var(--accent-text);
 }
 

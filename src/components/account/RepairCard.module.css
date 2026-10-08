@@ -11,8 +11,8 @@
 /* Стан підсвічує рамку — але сам статус завжди дублюється іконкою й підписом */
 .ready,
 .shipped {
-  border-color: rgba(220, 243, 90, .38);
-  background: rgba(220, 243, 90, .05);
+  border-color: rgb(var(--lime-rgb) / .38);
+  background: rgb(var(--lime-rgb) / .05);
 }
 
 .closed {
@@ -61,7 +61,7 @@
 
 .ready .badge,
 .shipped .badge {
-  border-color: rgba(220, 243, 90, .45);
+  border-color: rgb(var(--lime-rgb) / .45);
   color: var(--accent-text);
 }
 
@@ -157,8 +157,8 @@
 
 /* Чекаємо на передоплату — це дія клієнта, тож підсвічуємо */
 .payWait {
-  border-color: rgba(220, 243, 90, .35);
-  background: rgba(220, 243, 90, .07);
+  border-color: rgb(var(--lime-rgb) / .35);
+  background: rgb(var(--lime-rgb) / .07);
 }
 
 .payDone {
@@ -173,7 +173,7 @@
   height: 34px;
   flex: none;
   border-radius: 11px;
-  background: rgba(220, 243, 90, .14);
+  background: rgb(var(--lime-rgb) / .14);
   color: var(--accent-text);
 }
 

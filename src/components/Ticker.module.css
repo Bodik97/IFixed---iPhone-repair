@@ -45,7 +45,7 @@
   width: 30px;
   height: 30px;
   border-radius: 9px;
-  background: rgba(220, 243, 90, .12);
+  background: rgb(var(--lime-rgb) / .12);
 }
 
 .dot {

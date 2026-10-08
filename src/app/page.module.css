@@ -37,7 +37,7 @@
   right: -120px;
   top: -180px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(220, 243, 90, .2), transparent 65%);
+  background: radial-gradient(circle, rgb(var(--lime-rgb) / .2), transparent 65%);
 }
 
 .heroInner {
@@ -236,7 +236,7 @@
   width: 44px;
   height: 44px;
   border-radius: var(--r-icon);
-  background: rgba(220, 243, 90, .1);
+  background: rgb(var(--lime-rgb) / .1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -244,7 +244,7 @@
 }
 
 .serviceCard:hover .serviceIcon {
-  background: rgba(220, 243, 90, .22);
+  background: rgb(var(--lime-rgb) / .22);
   transform: rotate(-6deg) scale(1.06);
 }
 
@@ -513,7 +513,7 @@
 .mailBox {
   border-radius: var(--r-block);
   border: 1px solid rgb(var(--fg-rgb) / .1);
-  background: linear-gradient(150deg, rgba(220, 243, 90, .1), rgb(var(--fg-rgb) / .02));
+  background: linear-gradient(150deg, rgb(var(--lime-rgb) / .1), rgb(var(--fg-rgb) / .02));
   padding: clamp(28px, 4vw, 56px);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
@@ -716,8 +716,8 @@
   gap: 9px;
   padding: 9px 14px;
   border-radius: var(--r-pill);
-  border: 1px solid rgba(220, 243, 90, .28);
-  background: rgba(220, 243, 90, .07);
+  border: 1px solid rgb(var(--lime-rgb) / .28);
+  background: rgb(var(--lime-rgb) / .07);
   color: var(--info-text);
   font-size: 13.5px;
   line-height: 1.4;

@@ -35,7 +35,7 @@
 }
 
 .now::before {
-  background: linear-gradient(90deg, var(--accent) 55%, rgba(220, 243, 90, .22) 55%);
+  background: linear-gradient(90deg, var(--accent) 55%, rgb(var(--lime-rgb) / .22) 55%);
 }
 
 .mark {

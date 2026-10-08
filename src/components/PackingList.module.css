@@ -23,8 +23,8 @@
 }
 
 .itemOn {
-  border: 1px solid rgba(220, 243, 90, .45);
-  background: rgba(220, 243, 90, .08);
+  border: 1px solid rgb(var(--lime-rgb) / .45);
+  background: rgb(var(--lime-rgb) / .08);
   color: var(--text);
 }
 

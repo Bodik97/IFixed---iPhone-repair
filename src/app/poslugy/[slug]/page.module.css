@@ -54,7 +54,7 @@
   width: 54px;
   height: 54px;
   border-radius: 17px;
-  background: rgba(220, 243, 90, .12);
+  background: rgb(var(--lime-rgb) / .12);
   color: var(--accent-text);
 }
 
@@ -85,8 +85,8 @@
 .time {
   padding: 7px 14px;
   border-radius: var(--r-pill);
-  border: 1px solid rgba(220, 243, 90, .35);
-  background: rgba(220, 243, 90, .1);
+  border: 1px solid rgb(var(--lime-rgb) / .35);
+  background: rgb(var(--lime-rgb) / .1);
   color: var(--accent-text);
   font-size: 13.5px;
   white-space: nowrap;

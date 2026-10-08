@@ -65,8 +65,8 @@
   align-items: center;
   padding: 5px 13px;
   border-radius: var(--r-pill);
-  border: 1px solid rgba(220, 243, 90, .35);
-  background: rgba(220, 243, 90, .1);
+  border: 1px solid rgb(var(--lime-rgb) / .35);
+  background: rgb(var(--lime-rgb) / .1);
   color: var(--accent-text);
   font-size: 13px;
   white-space: nowrap;
@@ -97,7 +97,7 @@
   width: 56px;
   height: 56px;
   border-radius: 18px;
-  background: rgba(220, 243, 90, .1);
+  background: rgb(var(--lime-rgb) / .1);
   color: var(--accent-text);
 }
 

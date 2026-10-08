@@ -54,7 +54,7 @@
   gap: 10px;
   padding: 15px 16px;
   border-bottom: 1px solid var(--border);
-  background: rgba(220, 243, 90, .07);
+  background: rgb(var(--lime-rgb) / .07);
 }
 
 .title {
@@ -122,8 +122,8 @@
 
 .me {
   justify-self: end;
-  background: rgba(220, 243, 90, .14);
-  border: 1px solid rgba(220, 243, 90, .3);
+  background: rgb(var(--lime-rgb) / .14);
+  border: 1px solid rgb(var(--lime-rgb) / .3);
   color: var(--text);
 }
 
@@ -184,7 +184,7 @@
 
 .chip:hover {
   border-color: var(--accent-text);
-  background: rgba(220, 243, 90, .09);
+  background: rgb(var(--lime-rgb) / .09);
 }
 
 .chip:focus-visible {

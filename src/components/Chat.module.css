@@ -107,8 +107,8 @@
 }
 
 .mine .bubble {
-  border-color: rgba(220, 243, 90, .32);
-  background: rgba(220, 243, 90, .1);
+  border-color: rgb(var(--lime-rgb) / .32);
+  background: rgb(var(--lime-rgb) / .1);
 }
 
 .author {
