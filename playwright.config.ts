@@ -21,6 +21,8 @@ export default defineConfig({
   projects: [
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },
     { name: "mobile", use: { ...devices["Pixel 7"] } },
+    // Safari (WebKit) — лише перевірки, де він поводиться інакше за Chromium
+    { name: "safari", use: { ...devices["iPhone 13"] }, testMatch: /photos\.spec\.ts/ },
   ],
   webServer: {
     command: `npm run build && npm run start -- -p ${PORT}`,

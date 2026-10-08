@@ -98,13 +98,14 @@
   border-bottom: 1px solid rgb(var(--fg-rgb) / .08);
 }
 
+/* Телефон видно повністю: вписаний у рамку з полем 18px, без зуму при
+   наведенні. Явні розміри — Safari не рахує max-height: 100% у блоці
+   з aspect-ratio і показував фото завеликим */
 .photo {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  /* Телефон видно повністю: без зуму при наведенні — на телефоні дотик
-     «залипав» як наведення, і збільшене фото обрізалось рамкою */
+  position: absolute;
+  inset: 18px;
+  width: calc(100% - 36px);
+  height: calc(100% - 36px);
   object-fit: contain;
 }
 
