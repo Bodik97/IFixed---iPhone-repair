@@ -52,7 +52,7 @@ export default function ServicesPage() {
             </span>
 
             <h1 className={`${styles.h1} nUp nUp-1`}>
-              Послуги <span className={styles.accent}>сервісу</span> iFix
+              Послуги <span className={styles.accent}>сервісу</span> GadgetFix
             </h1>
 
             <p className={`${styles.heroLead} nUp nUp-2`}>
@@ -129,7 +129,7 @@ export default function ServicesPage() {
 
             <div className={styles.contacts}>
               <div className={styles.contact}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DCF35A" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
                   <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z" />
                 </svg>
                 <span>
@@ -145,7 +145,7 @@ export default function ServicesPage() {
               </div>
 
               <div className={styles.contact}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DCF35A" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
                   <circle cx="12" cy="12" r="9" />
                   <path d="M12 7v5l3.5 2" />
                 </svg>

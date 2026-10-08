@@ -41,7 +41,7 @@
 
 .presetOn {
   border-color: var(--accent);
-  background: rgba(218, 255, 61, .12);
+  background: rgba(220, 243, 90, .12);
   color: var(--accent);
 }
 
@@ -91,13 +91,13 @@
 /* Поки дати не змінили, застосовувати нічого — кнопка це показує */
 .applyOn {
   border-color: var(--accent);
-  background: rgba(218, 255, 61, .12);
+  background: rgba(220, 243, 90, .12);
   color: var(--accent);
   cursor: pointer;
 }
 
 .applyOn:hover {
-  background: rgba(218, 255, 61, .2);
+  background: rgba(220, 243, 90, .2);
 }
 
 /* Борги: окремо від каси, бо це ще не гроші, а обіцянка */
@@ -172,8 +172,8 @@
 }
 
 .bigItemAccent {
-  border-color: rgba(218, 255, 61, .4);
-  background: rgba(218, 255, 61, .07);
+  border-color: rgba(220, 243, 90, .4);
+  background: rgba(220, 243, 90, .07);
 }
 
 .bigLabel {
@@ -208,7 +208,7 @@
 
 .up {
   color: var(--accent);
-  background: rgba(218, 255, 61, .14);
+  background: rgba(220, 243, 90, .14);
 }
 
 .down {

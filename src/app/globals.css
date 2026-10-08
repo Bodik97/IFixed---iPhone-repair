@@ -5,17 +5,17 @@
   --text-2: rgba(241, 243, 239, .76);
   /* Нижня межа: дрібний текст має лишатись читабельним (WCAG 4.5:1) */
   --text-3: rgba(241, 243, 239, .62);
-  --accent: #DAFF3D;
-  --accent-light: #EEFF9E;
+  --accent: #DCF35A;
+  --accent-light: #EFFAB5;
   --on-accent: #0B0C0E;
   --surface: rgba(255, 255, 255, .03);
   --surface-hover: rgba(255, 255, 255, .06);
   --border: rgba(255, 255, 255, .09);
-  --border-active: rgba(218, 255, 61, .5);
+  --border-active: rgba(220, 243, 90, .5);
   --field-bg: rgba(255, 255, 255, .05);
   --field-border: rgba(255, 255, 255, .16);
-  --info-bg: rgba(218, 255, 61, .12);
-  --info-border: rgba(218, 255, 61, .3);
+  --info-bg: rgba(220, 243, 90, .12);
+  --info-border: rgba(220, 243, 90, .3);
   --info-text: #EFFFC4;
 
   /* Помилка — єдиний неакцентний колір у палітрі: має читатись як «щось не так» */
@@ -31,7 +31,7 @@
   --r-icon: 16px;
 
   /* Тінь акцентної кнопки */
-  --shadow-accent: 0 16px 40px rgba(218, 255, 61, .26);
+  --shadow-accent: 0 16px 40px rgba(220, 243, 90, .26);
 
   /* Сітка */
   --container: 1280px;
@@ -165,8 +165,8 @@ summary::-webkit-details-marker {
 }
 
 @keyframes nHalo {
-  0%, 100% { box-shadow: 0 10px 30px rgba(218, 255, 61, .18); }
-  50% { box-shadow: 0 16px 46px rgba(218, 255, 61, .34); }
+  0%, 100% { box-shadow: 0 10px 30px rgba(220, 243, 90, .18); }
+  50% { box-shadow: 0 16px 46px rgba(220, 243, 90, .34); }
 }
 
 @keyframes nDot {
@@ -405,7 +405,7 @@ button,
 .glow {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(218, 255, 61, .16), transparent 70%);
+  background: radial-gradient(circle, rgba(220, 243, 90, .16), transparent 70%);
   filter: blur(40px);
   animation: nDrift 22s ease-in-out infinite;
   pointer-events: none;

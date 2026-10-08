@@ -23,7 +23,7 @@ import {
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "iFix — ремонт iPhone у Львові та Новому Роздолі",
+  title: "GadgetFix — ремонт iPhone у Львові та Новому Роздолі",
   description:
     "Безкоштовна діагностика, фіксована ціна після неї, гарантія 30 днів. Екран чи акумулятор міняємо того ж дня, як телефон потрапляє до майстра. Приймаємо й Новою Поштою.",
   alternates: { canonical: "/" },
@@ -146,7 +146,7 @@ export default async function Home() {
                         height="22"
                         viewBox="0 0 24 24"
                         fill="none"
-                        stroke="#DAFF3D"
+                        stroke="#DCF35A"
                         strokeWidth="1.5"
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -363,7 +363,7 @@ export default async function Home() {
 
             <div className={styles.contacts}>
               <div className={styles.contact}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DCF35A" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
                   <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z" />
                 </svg>
                 <span>
@@ -379,7 +379,7 @@ export default async function Home() {
               </div>
 
               <div className={styles.contact}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DCF35A" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
                   <circle cx="12" cy="12" r="9" />
                   <path d="M12 7v5l3.5 2" />
                 </svg>
@@ -389,7 +389,7 @@ export default async function Home() {
               </div>
 
               <div className={styles.contact}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DCF35A" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
                   <path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z" />
                   <circle cx="12" cy="10" r="2.5" />
                 </svg>

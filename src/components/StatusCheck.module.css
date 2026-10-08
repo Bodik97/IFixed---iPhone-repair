@@ -62,14 +62,14 @@
 .stageDone {
   padding: 4px 12px;
   border-radius: var(--r-pill);
-  border: 1px solid rgba(218, 255, 61, .28);
+  border: 1px solid rgba(220, 243, 90, .28);
   color: rgba(239, 255, 196, .55);
 }
 
 .stageDone {
-  background: rgba(218, 255, 61, .18);
+  background: rgba(220, 243, 90, .18);
   color: var(--info-text);
-  border-color: rgba(218, 255, 61, .5);
+  border-color: rgba(220, 243, 90, .5);
 }
 
 /* Хроніка ремонту під шкалою етапів */

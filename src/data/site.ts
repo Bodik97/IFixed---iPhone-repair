@@ -1,5 +1,5 @@
 export const site = {
-  name: "iFix",
+  name: "GadgetFix",
   tagline: "Ремонт iPhone, iPad, Apple Watch та Android-смартфонів у Львові й Новому Роздолі.",
   phones: [
     { label: "073 315 02 38", href: "tel:+380733150238" },

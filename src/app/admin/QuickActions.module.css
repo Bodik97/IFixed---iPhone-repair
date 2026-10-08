@@ -34,13 +34,13 @@
 
 /* Дзвінок — найчастіша дія, тому єдина виділена */
 .actionCall {
-  border-color: rgba(218, 255, 61, .35);
-  background: rgba(218, 255, 61, .1);
+  border-color: rgba(220, 243, 90, .35);
+  background: rgba(220, 243, 90, .1);
   color: var(--accent);
 }
 
 .actionCall:hover {
-  background: rgba(218, 255, 61, .18);
+  background: rgba(220, 243, 90, .18);
   color: var(--accent);
 }
 

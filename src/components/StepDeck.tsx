@@ -231,7 +231,7 @@ function StepArt({ no }: { no: string }) {
     height: "100%",
     viewBox: "0 0 160 100",
     fill: "none",
-    stroke: "#DAFF3D",
+    stroke: "#DCF35A",
     strokeWidth: 2,
     strokeLinecap: "round" as const,
     strokeLinejoin: "round" as const,
@@ -244,10 +244,10 @@ function StepArt({ no }: { no: string }) {
         <svg {...common}>
           <rect x="34" y="12" width="44" height="78" rx="9" opacity=".9" />
           <path d="M44 32h24M44 44h24M44 56h16" opacity=".5" />
-          <rect x="44" y="66" width="24" height="10" rx="5" fill="#DAFF3D" stroke="none" />
+          <rect x="44" y="66" width="24" height="10" rx="5" fill="#DCF35A" stroke="none" />
           <g className={styles.pop}>
             <path d="M92 26h44a8 8 0 0 1 8 8v14a8 8 0 0 1-8 8h-30l-10 9v-9h-4a8 8 0 0 1-8-8V34a8 8 0 0 1 8-8z" />
-            <text x="114" y="46" fill="#DAFF3D" stroke="none" fontSize="12" textAnchor="middle" fontFamily="inherit">SMS</text>
+            <text x="114" y="46" fill="#DCF35A" stroke="none" fontSize="12" textAnchor="middle" fontFamily="inherit">SMS</text>
           </g>
         </svg>
       );
@@ -282,7 +282,7 @@ function StepArt({ no }: { no: string }) {
           <rect x="26" y="14" width="40" height="72" rx="9" opacity=".9" />
           <path d="M74 36a14 14 0 0 1 0 22M82 30a24 24 0 0 1 0 34" className={styles.ring} />
           <g className={styles.pop}>
-            <rect x="98" y="34" width="46" height="28" rx="14" fill="#DAFF3D" stroke="none" />
+            <rect x="98" y="34" width="46" height="28" rx="14" fill="#DCF35A" stroke="none" />
             <path d="M110 48l6 6 12-12" stroke="#0B0C0E" strokeWidth="3" />
           </g>
         </svg>
@@ -294,7 +294,7 @@ function StepArt({ no }: { no: string }) {
           <rect x="44" y="52" width="72" height="34" rx="8" />
           <path d="M64 52h32" strokeWidth="4" />
           <g className={styles.drop}>
-            <circle cx="80" cy="26" r="13" fill="#DAFF3D" stroke="none" />
+            <circle cx="80" cy="26" r="13" fill="#DCF35A" stroke="none" />
             <text x="80" y="31" fill="#0B0C0E" stroke="none" fontSize="14" fontWeight="700" textAnchor="middle" fontFamily="inherit">₴</text>
           </g>
         </svg>

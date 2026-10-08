@@ -22,8 +22,8 @@
 
 /* Підтвердження, що дані щойно приїхали — щоб зміна не пройшла непоміченою */
 .updated {
-  border-color: rgba(218, 255, 61, .45);
-  background: rgba(218, 255, 61, .12);
+  border-color: rgba(220, 243, 90, .45);
+  background: rgba(220, 243, 90, .12);
   color: var(--accent);
 }
 

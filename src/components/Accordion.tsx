@@ -24,7 +24,7 @@ export default function Accordion({ items }: { items: { q: string; a: string }[]
                 height="18"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#DAFF3D"
+                stroke="#DCF35A"
                 strokeWidth="1.5"
                 strokeLinecap="round"
                 aria-hidden="true"

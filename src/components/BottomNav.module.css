@@ -58,7 +58,7 @@
   /* Поточний розділ: і колір, і заливка — не лише колір */
   .itemActive {
     color: var(--accent);
-    background: rgba(218, 255, 61, .13);
+    background: rgba(220, 243, 90, .13);
   }
 
   .label {

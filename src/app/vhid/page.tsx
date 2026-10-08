@@ -6,7 +6,7 @@ import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Вхід",
-  description: "Вхід для клієнтів iFix — статус ремонту, посилка та історія заявок.",
+  description: "Вхід для клієнтів GadgetFix — статус ремонту, посилка та історія заявок.",
   robots: { index: false, follow: false },
 };
 
@@ -59,7 +59,7 @@ export default async function SignInPage() {
           <div className={styles.perks}>
             {perks.map((p) => (
               <div key={p.text} className={styles.perk}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DCF35A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   {icons[p.icon]}
                 </svg>
                 <span>{p.text}</span>

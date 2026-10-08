@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 /** Адмінку можна додати на головний екран як окремий застосунок */
 export const metadata: Metadata = {
   manifest: "/admin/manifest.webmanifest",
-  appleWebApp: { capable: true, title: "iFix Адмін", statusBarStyle: "black" },
+  appleWebApp: { capable: true, title: "GadgetFix Адмін", statusBarStyle: "black" },
   icons: { apple: "/admin-icons/icon-180.png" },
 };
 

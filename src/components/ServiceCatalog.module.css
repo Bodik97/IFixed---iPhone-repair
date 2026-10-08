@@ -59,7 +59,7 @@
   width: 44px;
   height: 44px;
   border-radius: var(--r-icon);
-  background: rgba(218, 255, 61, .12);
+  background: rgba(220, 243, 90, .12);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -67,7 +67,7 @@
 }
 
 .card:hover .icon {
-  background: rgba(218, 255, 61, .22);
+  background: rgba(220, 243, 90, .22);
   transform: rotate(-6deg);
 }
 

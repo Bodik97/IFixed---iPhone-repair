@@ -8,8 +8,8 @@
 export function GET() {
   return Response.json(
     {
-      name: "iFix — адміністрування",
-      short_name: "iFix Адмін",
+      name: "GadgetFix — адміністрування",
+      short_name: "GadgetFix Адмін",
       start_url: "/admin",
       scope: "/admin",
       display: "standalone",

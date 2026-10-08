@@ -3,8 +3,8 @@
   gap: 14px;
   padding: 18px;
   border-radius: 18px;
-  border: 1px solid rgba(218, 255, 61, .3);
-  background: rgba(218, 255, 61, .07);
+  border: 1px solid rgba(220, 243, 90, .3);
+  background: rgba(220, 243, 90, .07);
 }
 
 .head {
@@ -21,7 +21,7 @@
   height: 34px;
   flex: none;
   border-radius: 11px;
-  background: rgba(218, 255, 61, .16);
+  background: rgba(220, 243, 90, .16);
   color: var(--accent);
 }
 

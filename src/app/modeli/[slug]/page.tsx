@@ -153,7 +153,7 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
               {related.map((r) => (
                 <Link key={r.slug} href={`/modeli/${r.slug}`} className={styles.relatedLink}>
                   <span>{r.name}</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DCF35A" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
                     <path d="M5 12h13" />
                     <path d="M13 6l6 6-6 6" />
                   </svg>
@@ -161,7 +161,7 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
               ))}
               <Link href={section.href} className={styles.relatedLink}>
                 <span>Усі моделі: {section.tab}</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DAFF3D" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DCF35A" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
                   <path d="M5 12h13" />
                   <path d="M13 6l6 6-6 6" />
                 </svg>
