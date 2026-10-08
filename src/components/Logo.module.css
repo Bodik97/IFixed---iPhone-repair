@@ -5,6 +5,11 @@
   text-decoration: none;
 }
 
+.plate {
+  display: inline-flex;
+  align-items: center;
+}
+
 /* Мінімальна висота логотипа за брендбуком — 24 px */
 .img {
   display: block;
@@ -12,15 +17,14 @@
   width: auto;
 }
 
-.onLight {
-  display: none;
+/* Світла тема: ті самі кольори логотипа, але на графітовій плашці —
+   салатовий на світлому тлі не читається */
+:global([data-theme="light"]) .plate {
+  padding: 7px 13px;
+  border-radius: 14px;
+  background: #111311;
 }
 
-/* Найближчий предок із темою вирішує: банер із фото лишається темним */
-:global([data-theme="light"]) .onLight {
-  display: block;
-}
-
-:global([data-theme="light"]) .onDark {
-  display: none;
+:global([data-theme="light"]) .img {
+  height: 24px;
 }
