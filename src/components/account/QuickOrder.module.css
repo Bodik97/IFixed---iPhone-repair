@@ -67,7 +67,7 @@
   flex: none;
   border-radius: 14px;
   background: rgba(220, 243, 90, .14);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .doneTitle {

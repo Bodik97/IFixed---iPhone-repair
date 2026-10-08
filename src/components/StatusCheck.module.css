@@ -6,7 +6,7 @@
 
 .box {
   border-radius: 30px;
-  border: 1px solid rgba(255, 255, 255, .1);
+  border: 1px solid rgb(var(--fg-rgb) / .1);
   background: var(--surface);
   padding: clamp(24px, 3.4vw, 42px);
   display: grid;
@@ -23,7 +23,7 @@
 
 .lead {
   font-size: 15px;
-  color: rgba(241, 243, 239, .66);
+  color: rgb(var(--text-rgb) / .66);
   max-width: 40ch;
 }
 
@@ -63,7 +63,7 @@
   padding: 4px 12px;
   border-radius: var(--r-pill);
   border: 1px solid rgba(220, 243, 90, .28);
-  color: rgba(239, 255, 196, .55);
+  color: var(--text-3);
 }
 
 .stageDone {
@@ -77,7 +77,7 @@
   list-style: none;
   margin: 12px 0 0;
   padding: 12px 0 0;
-  border-top: 1px solid rgba(255, 255, 255, .1);
+  border-top: 1px solid rgb(var(--fg-rgb) / .1);
   display: grid;
   gap: 8px;
   font-size: 13.5px;

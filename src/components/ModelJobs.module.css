@@ -23,8 +23,8 @@
   display: inline-flex;
   padding: 5px;
   border-radius: var(--r-pill);
-  border: 1px solid rgba(255, 255, 255, .14);
-  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgb(var(--fg-rgb) / .14);
+  background: rgb(var(--fg-rgb) / .04);
   gap: 4px;
 }
 
@@ -40,7 +40,7 @@
 
 .tab {
   background: transparent;
-  color: rgba(241, 243, 239, .8);
+  color: rgb(var(--text-rgb) / .8);
 }
 
 .tab:hover {
@@ -56,7 +56,7 @@
 .note {
   margin-bottom: 26px;
   font-size: 15px;
-  color: rgba(241, 243, 239, .62);
+  color: rgb(var(--text-rgb) / .62);
   max-width: 60ch;
 }
 
@@ -79,7 +79,7 @@
 
 .job:hover {
   border-color: var(--border-active);
-  background: rgba(255, 255, 255, .055);
+  background: rgb(var(--fg-rgb) / .055);
   transform: translateX(4px);
 }
 
@@ -92,7 +92,7 @@
 .jobBody {
   font-size: 14.5px;
   line-height: 1.55;
-  color: rgba(241, 243, 239, .66);
+  color: rgb(var(--text-rgb) / .66);
 }
 
 /* Третя колонка: термін зверху, ціна під ним і крупніше — її шукають очима */
@@ -105,7 +105,7 @@
 
 .jobTime {
   font-size: 13.5px;
-  color: var(--accent);
+  color: var(--accent-text);
   white-space: nowrap;
 }
 

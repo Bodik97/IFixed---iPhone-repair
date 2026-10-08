@@ -32,10 +32,10 @@
   gap: 14px;
   padding: 26px 28px 28px;
   border-radius: var(--r-block);
-  border: 1px solid rgba(255, 255, 255, .1);
+  border: 1px solid rgb(var(--fg-rgb) / .1);
   /* Непрозоре тло: картки лежать одна на одній */
   background: linear-gradient(165deg, #1a1d21, #121418 70%);
-  box-shadow: 0 24px 50px rgba(0, 0, 0, .45);
+  box-shadow: 0 24px 50px var(--shadow-color);
   /* Масштаб від верхнього краю: картки позаду виглядають над верхньою
      смужками, як край колоди, а не ховаються за нею */
   transform-origin: 50% 0;
@@ -87,7 +87,7 @@
 .no {
   font-family: var(--font-unbounded), sans-serif;
   font-size: 15px;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* Хто діє на цьому кроці */
@@ -116,8 +116,8 @@
   height: 112px;
   margin: 4px -6px 6px;
   border-radius: 20px;
-  background: radial-gradient(120% 120% at 50% 0%, rgba(220, 243, 90, .09), rgba(255, 255, 255, .015) 70%);
-  border: 1px solid rgba(255, 255, 255, .05);
+  background: radial-gradient(120% 120% at 50% 0%, rgba(220, 243, 90, .09), rgb(var(--fg-rgb) / .015) 70%);
+  border: 1px solid rgb(var(--fg-rgb) / .05);
   padding: 8px;
 }
 
@@ -147,7 +147,7 @@
   align-items: center;
   gap: 8px;
   font-size: 13.5px;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .next {
@@ -189,7 +189,7 @@
 
 .hint svg {
   flex: none;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .hintTouch {
@@ -262,7 +262,7 @@
 }
 
 .arrow:hover {
-  border-color: var(--accent);
+  border-color: var(--accent-text);
   background: rgba(220, 243, 90, .1);
 }
 
@@ -307,7 +307,7 @@
   bottom: 30px;
   width: 2px;
   border-radius: 2px;
-  background: rgba(255, 255, 255, .1);
+  background: rgb(var(--fg-rgb) / .1);
 }
 
 .route::after {
@@ -352,7 +352,7 @@
   border-radius: 50%;
   border: 1px solid var(--field-border);
   /* Непрозоре тло, щоб лінія маршруту не просвічувала крізь кружок */
-  background: #121418;
+  background: var(--bg-elevated);
   font-family: var(--font-unbounded), sans-serif;
   font-size: 12.5px;
   color: var(--text-3);
@@ -389,8 +389,8 @@
 }
 
 .stop[data-state="now"] .dot {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--accent-text);
+  color: var(--accent-text);
   box-shadow: 0 0 0 6px rgba(220, 243, 90, .12);
 }
 

@@ -3,11 +3,11 @@
 }
 
 .item {
-  border-top: 1px solid rgba(255, 255, 255, .1);
+  border-top: 1px solid rgb(var(--fg-rgb) / .1);
 }
 
 .item:last-child {
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  border-bottom: 1px solid rgb(var(--fg-rgb) / .1);
 }
 
 .q {
@@ -29,7 +29,7 @@
 }
 
 .q:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .q svg {
@@ -50,6 +50,6 @@
   padding-bottom: 22px;
   font-size: 15px;
   line-height: 1.6;
-  color: rgba(241, 243, 239, .68);
+  color: rgb(var(--text-rgb) / .68);
   max-width: 62ch;
 }

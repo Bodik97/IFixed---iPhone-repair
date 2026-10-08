@@ -48,7 +48,7 @@
 }
 
 .profit {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* Деталь дорожча за озвучену ціну — майстер має це помітити одразу */
@@ -71,7 +71,7 @@
 .paid input {
   width: 17px;
   height: 17px;
-  accent-color: var(--accent);
+  accent-color: var(--accent-text);
   cursor: pointer;
 }
 
@@ -136,9 +136,9 @@
 }
 
 .hint:hover {
-  border-color: var(--accent);
+  border-color: var(--accent-text);
   border-style: solid;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .hintRange,

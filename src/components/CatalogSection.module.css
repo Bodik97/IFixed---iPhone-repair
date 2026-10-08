@@ -24,8 +24,8 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(100deg, rgba(11, 12, 14, .93) 0%, rgba(11, 12, 14, .82) 45%, rgba(11, 12, 14, .4) 78%),
-    linear-gradient(180deg, rgba(11, 12, 14, .4) 0%, transparent 30%, rgba(11, 12, 14, .95) 100%);
+    linear-gradient(100deg, rgb(var(--bg-rgb) / .93) 0%, rgb(var(--bg-rgb) / .82) 45%, rgb(var(--bg-rgb) / .4) 78%),
+    linear-gradient(180deg, rgb(var(--bg-rgb) / .4) 0%, transparent 30%, rgb(var(--bg-rgb) / .95) 100%);
 }
 
 .heroGlow {
@@ -51,11 +51,11 @@
   padding: 7px 14px 7px 11px;
   border-radius: var(--r-pill);
   border: 1px solid var(--field-border);
-  background: rgba(11, 12, 14, .7);
+  background: rgb(var(--bg-rgb) / .7);
   backdrop-filter: blur(8px);
   font-size: 12.5px;
   letter-spacing: .04em;
-  color: rgba(241, 243, 239, .82);
+  color: rgb(var(--text-rgb) / .82);
 }
 
 .h1 {
@@ -67,7 +67,7 @@
 }
 
 .accent {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .heroLead {
@@ -86,8 +86,8 @@
   position: relative;
   overflow: hidden;
   border-radius: var(--r-block);
-  border: 1px solid rgba(255, 255, 255, .1);
-  background: linear-gradient(150deg, rgba(220, 243, 90, .1), rgba(255, 255, 255, .02));
+  border: 1px solid rgb(var(--fg-rgb) / .1);
+  background: linear-gradient(150deg, rgba(220, 243, 90, .1), rgb(var(--fg-rgb) / .02));
   padding: clamp(28px, 4vw, 54px);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
@@ -137,8 +137,8 @@
 
 .tab {
   border: 1px solid var(--field-border);
-  background: rgba(255, 255, 255, .04);
-  color: rgba(241, 243, 239, .82);
+  background: rgb(var(--fg-rgb) / .04);
+  color: rgb(var(--text-rgb) / .82);
 }
 
 .tab:hover {

@@ -35,7 +35,7 @@
 }
 
 .searchBtn:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .status {
@@ -62,7 +62,7 @@
 }
 
 .reset {
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 13.5px;
 }
 

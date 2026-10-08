@@ -53,7 +53,7 @@
   padding: 8px 15px;
   border-radius: var(--r-pill);
   border: 1px solid var(--border);
-  background: rgba(11, 12, 14, .5);
+  background: rgb(var(--bg-rgb) / .5);
   font-size: 14.5px;
   white-space: nowrap;
 }
@@ -61,7 +61,7 @@
 .ready .badge,
 .shipped .badge {
   border-color: rgba(220, 243, 90, .45);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .closed .badge {
@@ -173,7 +173,7 @@
   flex: none;
   border-radius: 11px;
   background: rgba(220, 243, 90, .14);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .payBody {

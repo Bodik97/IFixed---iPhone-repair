@@ -25,8 +25,8 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(100deg, rgba(11, 12, 14, .94) 0%, rgba(11, 12, 14, .8) 40%, rgba(11, 12, 14, .32) 72%),
-    linear-gradient(180deg, rgba(11, 12, 14, .45) 0%, transparent 25%, rgba(11, 12, 14, .9) 100%);
+    linear-gradient(100deg, rgb(var(--bg-rgb) / .94) 0%, rgb(var(--bg-rgb) / .8) 40%, rgb(var(--bg-rgb) / .32) 72%),
+    linear-gradient(180deg, rgb(var(--bg-rgb) / .45) 0%, transparent 25%, rgb(var(--bg-rgb) / .9) 100%);
 }
 
 .heroGlow {
@@ -60,10 +60,10 @@
   padding: 7px 14px 7px 11px;
   border-radius: var(--r-pill);
   border: 1px solid var(--field-border);
-  background: rgba(11, 12, 14, .7);
+  background: rgb(var(--bg-rgb) / .7);
   backdrop-filter: blur(8px);
   font-size: 12.5px;
-  color: rgba(241, 243, 239, .82);
+  color: rgb(var(--text-rgb) / .82);
 }
 
 .h1 {
@@ -73,7 +73,7 @@
 }
 
 .accent {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .heroLead {
@@ -95,7 +95,7 @@
   position: relative;
   border-radius: 30px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, .1);
+  border: 1px solid rgb(var(--fg-rgb) / .1);
   aspect-ratio: 4 / 3;
 }
 
@@ -111,7 +111,7 @@
 .shotVeil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(11, 12, 14, .1), rgba(11, 12, 14, .6));
+  background: linear-gradient(180deg, rgb(var(--bg-rgb) / .1), rgb(var(--bg-rgb) / .6));
 }
 
 .shotCaption {
@@ -119,14 +119,14 @@
   left: 20px;
   bottom: 18px;
   font-size: 14px;
-  color: rgba(241, 243, 239, .9);
+  color: rgb(var(--text-rgb) / .9);
 }
 
 /* ---------- Процес ---------- */
 .process {
-  border-top: 1px solid rgba(255, 255, 255, .08);
-  border-bottom: 1px solid rgba(255, 255, 255, .08);
-  background: rgba(255, 255, 255, .02);
+  border-top: 1px solid rgb(var(--fg-rgb) / .08);
+  border-bottom: 1px solid rgb(var(--fg-rgb) / .08);
+  background: rgb(var(--fg-rgb) / .02);
 }
 
 .processInner {
@@ -154,13 +154,13 @@
 .flowNo {
   font-family: var(--font-unbounded), sans-serif;
   font-size: 15px;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .bar {
   height: 3px;
   border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, .1);
+  background: rgb(var(--fg-rgb) / .1);
   margin: 14px 0 18px;
   overflow: hidden;
 }
@@ -179,7 +179,7 @@
 .flowBody {
   font-size: 14.5px;
   line-height: 1.6;
-  color: rgba(241, 243, 239, .66);
+  color: rgb(var(--text-rgb) / .66);
 }
 
 /* ---------- Показники ---------- */
@@ -209,7 +209,7 @@
 .promiseNote {
   font-size: 14.5px;
   line-height: 1.55;
-  color: rgba(241, 243, 239, .66);
+  color: rgb(var(--text-rgb) / .66);
 }
 
 /* ---------- Запис ---------- */
@@ -244,7 +244,7 @@
   display: grid;
   gap: 14px;
   font-size: 15px;
-  color: rgba(241, 243, 239, .82);
+  color: rgb(var(--text-rgb) / .82);
 }
 
 .contact {
@@ -263,5 +263,5 @@
 }
 
 .contactLink:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }

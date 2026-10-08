@@ -48,7 +48,7 @@ export default function ServiceCatalog() {
                     height="21"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#DCF35A"
+                    style={{ stroke: "var(--accent-text)" }}
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"

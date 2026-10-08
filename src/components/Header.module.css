@@ -2,9 +2,9 @@
   position: sticky;
   top: 0;
   z-index: 30;
-  background: rgba(11, 12, 14, .72);
+  background: rgb(var(--bg-rgb) / .72);
   backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  border-bottom: 1px solid rgb(var(--fg-rgb) / .08);
 }
 
 .nav {
@@ -39,7 +39,7 @@
 }
 
 .link {
-  color: rgba(241, 243, 239, .72);
+  color: rgb(var(--text-rgb) / .72);
   text-decoration: none;
   transition: color .2s;
 }
@@ -49,7 +49,7 @@
 }
 
 .active {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .active:hover {
@@ -72,7 +72,7 @@
 }
 
 .phone:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* Кнопка-дзвінок показується лише на вузьких екранах */
@@ -85,8 +85,8 @@
   height: 46px;
   flex: none;
   border-radius: var(--r-pill);
-  border: 1px solid rgba(255, 255, 255, .14);
-  background: rgba(255, 255, 255, .07);
+  border: 1px solid rgb(var(--fg-rgb) / .14);
+  background: rgb(var(--fg-rgb) / .07);
   color: var(--text);
   transition: background .2s, border-color .2s;
 }

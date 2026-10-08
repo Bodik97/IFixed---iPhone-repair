@@ -24,7 +24,7 @@
 .updated {
   border-color: rgba(220, 243, 90, .45);
   background: rgba(220, 243, 90, .12);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .dot {

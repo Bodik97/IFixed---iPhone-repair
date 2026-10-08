@@ -6,7 +6,7 @@
   border: 1px solid var(--border-active);
   border-radius: 26px;
   /* Непрозоре тло: вікно лежить поверх сторінки */
-  background: #14161a;
+  background: var(--bg-elevated);
   color: var(--text);
   overflow: auto;
   overscroll-behavior: contain;
@@ -35,7 +35,7 @@
   height: 44px;
   border-radius: 50%;
   border: 1px solid var(--border);
-  background: rgba(11, 12, 14, .6);
+  background: rgb(var(--bg-rgb) / .6);
   color: var(--text-2);
   cursor: pointer;
 }

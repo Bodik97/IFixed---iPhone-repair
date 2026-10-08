@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import AccountButton from "./AccountButton";
 import Logo from "./Logo";
+import ThemeToggle from "./ThemeToggle";
 import { nav, site } from "@/data/site";
 import styles from "./Header.module.css";
 
@@ -64,6 +65,8 @@ export default function Header() {
               <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z" />
             </svg>
           </a>
+
+          <ThemeToggle />
 
           <AccountButton />
 

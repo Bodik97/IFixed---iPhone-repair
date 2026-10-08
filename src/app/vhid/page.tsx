@@ -59,7 +59,7 @@ export default async function SignInPage() {
           <div className={styles.perks}>
             {perks.map((p) => (
               <div key={p.text} className={styles.perk}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DCF35A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style={{ stroke: "var(--accent-text)" }} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   {icons[p.icon]}
                 </svg>
                 <span>{p.text}</span>

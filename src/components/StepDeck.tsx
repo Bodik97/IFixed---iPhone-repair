@@ -115,6 +115,8 @@ export default function StepDeck({ steps }: { steps: DeckStep[] }) {
               <article
                 key={s.no}
                 className={`${styles.card} ${i === leaving ? styles.leaving : ""}`}
+                // Ілюстрації намальовані під темну картку — вона темна в обох темах
+                data-theme="dark"
                 data-active={offset === 0 || undefined}
                 aria-hidden={offset !== 0}
                 onAnimationEnd={() => setLeaving(null)}

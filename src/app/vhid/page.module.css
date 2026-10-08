@@ -59,7 +59,7 @@
   display: grid;
   gap: 14px;
   font-size: 15px;
-  color: rgba(241, 243, 239, .82);
+  color: rgb(var(--text-rgb) / .82);
 }
 
 .perk {

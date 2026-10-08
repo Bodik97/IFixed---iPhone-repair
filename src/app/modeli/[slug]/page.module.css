@@ -45,7 +45,7 @@
 }
 
 .crumbs a {
-  color: rgba(241, 243, 239, .6);
+  color: rgb(var(--text-rgb) / .6);
   text-decoration: none;
 }
 
@@ -58,7 +58,7 @@
 }
 
 .current {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .heroGrid {
@@ -81,7 +81,7 @@
   font-size: 12.5px;
   border: 1px solid var(--field-border);
   background: var(--field-bg);
-  color: rgba(241, 243, 239, .82);
+  color: rgb(var(--text-rgb) / .82);
 }
 
 .h1 {
@@ -111,10 +111,10 @@
   justify-content: center;
   border-radius: 30px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, .1);
+  border: 1px solid rgb(var(--fg-rgb) / .1);
   aspect-ratio: 4 / 3;
   padding: 28px;
-  background: radial-gradient(120% 90% at 50% 20%, rgba(255, 255, 255, .1), rgba(255, 255, 255, .02) 70%);
+  background: radial-gradient(120% 90% at 50% 20%, rgb(var(--fg-rgb) / .1), rgb(var(--fg-rgb) / .02) 70%);
 }
 
 .shotPhoto {
@@ -134,9 +134,9 @@
 
 /* ---------- Гарантії ---------- */
 .warranty {
-  border-top: 1px solid rgba(255, 255, 255, .08);
-  border-bottom: 1px solid rgba(255, 255, 255, .08);
-  background: rgba(255, 255, 255, .02);
+  border-top: 1px solid rgb(var(--fg-rgb) / .08);
+  border-bottom: 1px solid rgb(var(--fg-rgb) / .08);
+  background: rgb(var(--fg-rgb) / .02);
 }
 
 .warrantyGrid {
@@ -149,13 +149,13 @@
 .wNo {
   font-family: var(--font-unbounded), sans-serif;
   font-size: 15px;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .wLine {
   display: block;
   height: 1px;
-  background: rgba(255, 255, 255, .12);
+  background: rgb(var(--fg-rgb) / .12);
   margin: 14px 0 18px;
   transform-origin: left;
 }
@@ -168,7 +168,7 @@
 .wBody {
   font-size: 14.5px;
   line-height: 1.6;
-  color: rgba(241, 243, 239, .66);
+  color: rgb(var(--text-rgb) / .66);
 }
 
 /* ---------- Запис ---------- */
@@ -211,16 +211,16 @@
   gap: 14px;
   padding: 15px 20px;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, .1);
+  border: 1px solid rgb(var(--fg-rgb) / .1);
   text-decoration: none;
-  color: rgba(241, 243, 239, .86);
+  color: rgb(var(--text-rgb) / .86);
   font-size: 15px;
   transition: border-color .2s, background .2s, transform .2s;
 }
 
 .relatedLink:hover {
-  color: rgba(241, 243, 239, .86);
+  color: rgb(var(--text-rgb) / .86);
   border-color: var(--border-active);
-  background: rgba(255, 255, 255, .05);
+  background: rgb(var(--fg-rgb) / .05);
   transform: translateX(4px);
 }

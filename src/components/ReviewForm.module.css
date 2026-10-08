@@ -1,6 +1,6 @@
 .box {
   border-radius: var(--r-block);
-  border: 1px solid rgba(255, 255, 255, .1);
+  border: 1px solid rgb(var(--fg-rgb) / .1);
   background: var(--surface);
   padding: clamp(24px, 3.2vw, 36px);
   align-self: start;
@@ -78,11 +78,11 @@
 }
 
 .star {
-  color: rgba(255, 255, 255, .18);
+  color: rgb(var(--fg-rgb) / .18);
 }
 
 .starOn {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .star:hover,

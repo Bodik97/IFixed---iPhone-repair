@@ -67,7 +67,7 @@
   border-radius: var(--r-pill);
   border: 1px solid rgba(220, 243, 90, .35);
   background: rgba(220, 243, 90, .1);
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 13px;
   white-space: nowrap;
 }
@@ -97,7 +97,7 @@
   height: 56px;
   border-radius: 18px;
   background: rgba(220, 243, 90, .1);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .emptyTitle {

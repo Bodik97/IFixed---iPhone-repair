@@ -17,7 +17,7 @@
 
 .back:hover {
   border-color: var(--border-active);
-  background: rgba(255, 255, 255, .04);
+  background: rgb(var(--fg-rgb) / .04);
   color: var(--text);
 }
 

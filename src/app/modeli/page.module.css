@@ -23,7 +23,7 @@
 .heroVeil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(11, 12, 14, .9), rgba(11, 12, 14, .98));
+  background: linear-gradient(180deg, rgb(var(--bg-rgb) / .9), rgb(var(--bg-rgb) / .98));
 }
 
 .heroGlow {
@@ -52,7 +52,7 @@
   background: var(--field-bg);
   font-size: 12.5px;
   letter-spacing: .04em;
-  color: rgba(241, 243, 239, .82);
+  color: rgb(var(--text-rgb) / .82);
 }
 
 .h1 {
@@ -64,7 +64,7 @@
 }
 
 .accent {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .heroLead {
@@ -83,8 +83,8 @@
   position: relative;
   overflow: hidden;
   border-radius: var(--r-block);
-  border: 1px solid rgba(255, 255, 255, .1);
-  background: linear-gradient(150deg, rgba(220, 243, 90, .1), rgba(255, 255, 255, .02));
+  border: 1px solid rgb(var(--fg-rgb) / .1);
+  background: linear-gradient(150deg, rgba(220, 243, 90, .1), rgb(var(--fg-rgb) / .02));
   padding: clamp(28px, 4vw, 54px);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));

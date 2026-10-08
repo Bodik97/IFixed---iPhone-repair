@@ -27,7 +27,7 @@
   inset: 0 0 auto 0;
   height: 4px;
   border-radius: 3px;
-  background: rgba(255, 255, 255, .1);
+  background: rgb(var(--fg-rgb) / .1);
 }
 
 .done::before {
@@ -58,7 +58,7 @@
 }
 
 .todo .mark {
-  border: 1.5px solid rgba(255, 255, 255, .16);
+  border: 1.5px solid rgb(var(--fg-rgb) / .16);
 }
 
 .pulse {
@@ -79,7 +79,7 @@
 }
 
 .now .label {
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
 }
 

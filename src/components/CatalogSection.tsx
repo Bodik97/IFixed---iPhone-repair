@@ -14,7 +14,7 @@ const tickerItems = [
 export default function CatalogSection({ section }: { section: Section }) {
   return (
     <>
-      <section className={styles.hero}>
+      <section className={styles.hero} data-theme="dark">
         <span aria-hidden="true" className={styles.heroBg}>
           <span className={styles.heroPhoto} />
           <span className={styles.heroVeil} />

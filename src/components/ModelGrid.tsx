@@ -111,7 +111,7 @@ export default function ModelGrid({
 
               <span className={styles.foot}>
                 <span>{m.time}</span>
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#DCF35A" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" style={{ stroke: "var(--accent-text)" }} strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
                   <path d="M5 12h13" />
                   <path d="M13 6l6 6-6 6" />
                 </svg>

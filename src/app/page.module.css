@@ -26,8 +26,8 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(100deg, rgba(11, 12, 14, .94) 0%, rgba(11, 12, 14, .84) 38%, rgba(11, 12, 14, .52) 68%, rgba(11, 12, 14, .62) 100%),
-    linear-gradient(180deg, rgba(11, 12, 14, .5) 0%, transparent 22%, transparent 72%, rgba(11, 12, 14, .92) 100%);
+    linear-gradient(100deg, rgb(var(--bg-rgb) / .94) 0%, rgb(var(--bg-rgb) / .84) 38%, rgb(var(--bg-rgb) / .52) 68%, rgb(var(--bg-rgb) / .62) 100%),
+    linear-gradient(180deg, rgb(var(--bg-rgb) / .5) 0%, transparent 22%, transparent 72%, rgb(var(--bg-rgb) / .92) 100%);
 }
 
 .heroGlow {
@@ -61,11 +61,11 @@
   padding: 7px 14px 7px 11px;
   border-radius: var(--r-pill);
   border: 1px solid var(--field-border);
-  background: rgba(11, 12, 14, .7);
+  background: rgb(var(--bg-rgb) / .7);
   backdrop-filter: blur(8px);
   font-size: 12.5px;
   letter-spacing: .04em;
-  color: rgba(241, 243, 239, .82);
+  color: rgb(var(--text-rgb) / .82);
 }
 
 .h1 {
@@ -76,7 +76,7 @@
 }
 
 .accent {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .heroLead {
@@ -101,9 +101,9 @@
 
 .statsCard {
   border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, .14);
+  border: 1px solid rgb(var(--fg-rgb) / .14);
   /* Щільна підкладка: картка лежить поверх фото, текст має читатись */
-  background: linear-gradient(160deg, rgba(17, 19, 22, .92), rgba(11, 12, 14, .88));
+  background: linear-gradient(160deg, rgb(var(--bg-rgb) / .92), rgb(var(--bg-rgb) / .88));
   backdrop-filter: blur(12px);
   padding: 26px;
   display: grid;
@@ -124,7 +124,7 @@
 .divider {
   grid-column: 1 / -1;
   height: 1px;
-  background: rgba(255, 255, 255, .08);
+  background: rgb(var(--fg-rgb) / .08);
 }
 
 .stat {
@@ -146,7 +146,7 @@
   font-family: var(--font-unbounded), sans-serif;
   white-space: nowrap;
   font-size: 17px;
-  color: rgba(241, 243, 239, .6);
+  color: rgb(var(--text-rgb) / .6);
 }
 
 .statNote {
@@ -154,7 +154,7 @@
   align-self: center;
   margin-left: 18px;
   font-size: 13.5px;
-  color: rgba(241, 243, 239, .62);
+  color: rgb(var(--text-rgb) / .62);
   line-height: 1.45;
   text-wrap: pretty;
 }
@@ -191,7 +191,7 @@
 .sectionNote {
   font-size: 15px;
   max-width: 32ch;
-  color: rgba(241, 243, 239, .62);
+  color: rgb(var(--text-rgb) / .62);
 }
 
 .sectionLink {
@@ -261,14 +261,14 @@
 .serviceBody {
   font-size: 14.5px;
   line-height: 1.55;
-  color: rgba(241, 243, 239, .66);
+  color: rgb(var(--text-rgb) / .66);
 }
 
 .serviceMeta {
   margin-top: auto;
   padding-top: 10px;
   font-size: 13px;
-  color: var(--accent);
+  color: var(--accent-text);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -299,8 +299,8 @@
 .reputation {
   position: relative;
   overflow: hidden;
-  border-top: 1px solid rgba(255, 255, 255, .08);
-  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  border-top: 1px solid rgb(var(--fg-rgb) / .08);
+  border-bottom: 1px solid rgb(var(--fg-rgb) / .08);
 }
 
 .repBg {
@@ -322,7 +322,7 @@
 .repVeil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(96deg, rgba(11, 12, 14, .93) 0%, rgba(11, 12, 14, .84) 46%, rgba(11, 12, 14, .38) 100%);
+  background: linear-gradient(96deg, rgb(var(--bg-rgb) / .93) 0%, rgb(var(--bg-rgb) / .84) 46%, rgb(var(--bg-rgb) / .38) 100%);
 }
 
 .repInner {
@@ -346,7 +346,7 @@
 .repText {
   font-size: clamp(16px, 1.5vw, 18.5px);
   line-height: 1.65;
-  color: rgba(241, 243, 239, .74);
+  color: rgb(var(--text-rgb) / .74);
   max-width: 46ch;
 }
 
@@ -372,13 +372,13 @@
 .stepNo {
   font-family: var(--font-unbounded), sans-serif;
   font-size: 15px;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .stepLine {
   display: block;
   height: 1px;
-  background: rgba(255, 255, 255, .12);
+  background: rgb(var(--fg-rgb) / .12);
   margin: 16px 0 20px;
   transform-origin: left;
 }
@@ -390,12 +390,12 @@
 
 .stepBody {
   font-size: 15px;
-  color: rgba(241, 243, 239, .66);
+  color: rgb(var(--text-rgb) / .66);
 }
 
 /* ---------- Моделі ---------- */
 .models {
-  border-top: 1px solid rgba(255, 255, 255, .08);
+  border-top: 1px solid rgb(var(--fg-rgb) / .08);
 }
 
 .modelsInner {
@@ -408,7 +408,7 @@
 
 .group {
   padding: 18px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, .07);
+  border-bottom: 1px solid rgb(var(--fg-rgb) / .07);
   display: grid;
   grid-template-columns: minmax(120px, 190px) 1fr;
   gap: 20px;
@@ -416,7 +416,7 @@
 }
 
 .group:first-child {
-  border-top: 1px solid rgba(255, 255, 255, .07);
+  border-top: 1px solid rgb(var(--fg-rgb) / .07);
 }
 
 .groupLabel {
@@ -435,7 +435,7 @@
 
 .modelChip {
   font-size: 14.5px;
-  color: rgba(241, 243, 239, .82);
+  color: rgb(var(--text-rgb) / .82);
   white-space: nowrap;
 }
 
@@ -443,13 +443,13 @@
 .modelChip:not(:last-child)::after {
   content: "·";
   margin-left: 9px;
-  color: rgba(255, 255, 255, .25);
+  color: rgb(var(--fg-rgb) / .25);
 }
 
 .modelsNote {
   margin-top: 20px;
   font-size: 14.5px;
-  color: rgba(241, 243, 239, .62);
+  color: rgb(var(--text-rgb) / .62);
 }
 
 @media (max-width: 620px) {
@@ -462,7 +462,7 @@
 /* ---------- До і після ---------- */
 .worksSection,
 .reviewsSection {
-  border-top: 1px solid rgba(255, 255, 255, .08);
+  border-top: 1px solid rgb(var(--fg-rgb) / .08);
 }
 
 .worksInner {
@@ -486,7 +486,7 @@
 
 .workMedia {
   border-radius: var(--r-card);
-  border: 1px solid rgba(255, 255, 255, .1);
+  border: 1px solid rgb(var(--fg-rgb) / .1);
   aspect-ratio: 4 / 3;
 }
 
@@ -497,7 +497,7 @@
 .workCaption {
   margin-top: 12px;
   font-size: 14px;
-  color: rgba(241, 243, 239, .62);
+  color: rgb(var(--text-rgb) / .62);
 }
 
 /* ---------- Відгуки ---------- */
@@ -512,8 +512,8 @@
 
 .mailBox {
   border-radius: var(--r-block);
-  border: 1px solid rgba(255, 255, 255, .1);
-  background: linear-gradient(150deg, rgba(220, 243, 90, .1), rgba(255, 255, 255, .02));
+  border: 1px solid rgb(var(--fg-rgb) / .1);
+  background: linear-gradient(150deg, rgba(220, 243, 90, .1), rgb(var(--fg-rgb) / .02));
   padding: clamp(28px, 4vw, 56px);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
@@ -554,12 +554,12 @@
 .mailNo {
   font-family: var(--font-unbounded), sans-serif;
   font-size: 13px;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .mailText {
   font-size: 15.5px;
-  color: rgba(241, 243, 239, .86);
+  color: rgb(var(--text-rgb) / .86);
 }
 
 /* ---------- FAQ ---------- */
@@ -580,12 +580,12 @@
 }
 
 .faqItem {
-  border-top: 1px solid rgba(255, 255, 255, .1);
+  border-top: 1px solid rgb(var(--fg-rgb) / .1);
   padding: 22px 0;
 }
 
 .faqItem:last-child {
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  border-bottom: 1px solid rgb(var(--fg-rgb) / .1);
 }
 
 .faqQ {
@@ -600,7 +600,7 @@
 
 .faqQ::after {
   content: "+";
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 22px;
   line-height: 1;
   transition: transform .3s var(--ease);
@@ -615,7 +615,7 @@
   margin-top: 14px;
   font-size: 15px;
   line-height: 1.6;
-  color: rgba(241, 243, 239, .68);
+  color: rgb(var(--text-rgb) / .68);
   max-width: 60ch;
 }
 
@@ -653,7 +653,7 @@
   display: grid;
   gap: 16px;
   font-size: 15.5px;
-  color: rgba(241, 243, 239, .86);
+  color: rgb(var(--text-rgb) / .86);
 }
 
 .contact {
@@ -672,7 +672,7 @@
 }
 
 .contactLink:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* ---------- Форма відгуку ---------- */
@@ -726,6 +726,6 @@
 
 .reviewsProof svg {
   flex: none;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 

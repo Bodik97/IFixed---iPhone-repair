@@ -4,6 +4,7 @@ import { useCallback, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import BackButton from "@/components/BackButton";
 import Logo from "@/components/Logo";
+import ThemeToggle from "@/components/ThemeToggle";
 import { usePathname } from "next/navigation";
 import styles from "./AdminShell.module.css";
 
@@ -278,6 +279,8 @@ export default function AdminShell({
           <span className={styles.spacer} />
 
           {actions}
+
+          <ThemeToggle className={styles.theme} />
 
           <form action={signOut}>
             <button type="submit" className={styles.signOut} aria-label="Вийти">

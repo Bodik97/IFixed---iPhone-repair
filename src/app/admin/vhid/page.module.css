@@ -10,8 +10,8 @@
   width: 100%;
   max-width: 420px;
   border-radius: var(--r-block);
-  border: 1px solid rgba(255, 255, 255, .1);
-  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgb(var(--fg-rgb) / .1);
+  background: rgb(var(--fg-rgb) / .04);
   padding: clamp(24px, 3.2vw, 38px);
 }
 

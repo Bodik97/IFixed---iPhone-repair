@@ -75,16 +75,16 @@
 }
 
 .star {
-  color: rgba(255, 255, 255, .18);
+  color: rgb(var(--fg-rgb) / .18);
 }
 
 .starOn {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .star:hover,
 .starOn:hover {
-  background: rgba(255, 255, 255, .05);
+  background: rgb(var(--fg-rgb) / .05);
 }
 
 .star:focus-visible,
@@ -127,7 +127,7 @@
   height: 26px;
   border-radius: 50%;
   border: 1px solid var(--border-active);
-  background: #16181c;
+  background: var(--bg-elevated);
   color: var(--text-2);
   font-size: 17px;
   line-height: 1;

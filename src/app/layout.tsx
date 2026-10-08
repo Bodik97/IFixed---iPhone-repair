@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import BookingProviderWrap from "@/components/BookingModal";
 import BottomNav from "@/components/BottomNav";
 import HideOnAdmin from "@/components/HideOnAdmin";
+import { THEME_SCRIPT } from "@/components/ThemeToggle";
 import ChatBot from "@/components/ChatBot";
 import Footer from "@/components/Footer";
 import { site } from "@/data/site";
@@ -62,7 +63,16 @@ const localBusiness = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="uk" data-scroll-behavior="smooth" className={`${unbounded.variable} ${manrope.variable}`}>
+    <html
+      lang="uk"
+      data-scroll-behavior="smooth"
+      className={`${unbounded.variable} ${manrope.variable}`}
+      // Тему ставить скрипт нижче ще до гідратації — атрибут на <html> різнитиметься
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body>
         <ClerkProvider>
           <BookingProviderWrap>

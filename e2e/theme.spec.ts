@@ -1,0 +1,51 @@
+import { expect, test } from "@playwright/test";
+import { lowContrastTexts } from "./helpers/contrast";
+
+/**
+ * Світла й темна тема: перемикач працює й запамʼятовує вибір, тема стоїть
+ * ще до гідратації, і жоден текст на жодній сторінці не губиться на тлі.
+ */
+
+test("перемикач: світла тема, вибір переживає перезавантаження, логотип графітовий", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  const html = page.locator("html");
+  await expect(html).not.toHaveAttribute("data-theme", "light");
+
+  await page.getByRole("button", { name: "Світла / темна тема" }).click();
+  await expect(html).toHaveAttribute("data-theme", "light");
+
+  await page.reload({ waitUntil: "networkidle" });
+  await expect(html).toHaveAttribute("data-theme", "light");
+  await expect(page.locator('header img[src$="gadgetfix-logo-light.svg"]')).toBeVisible();
+  await expect(page.locator('header img[src$="gadgetfix-logo-dark.svg"]')).toBeHidden();
+
+  await page.getByRole("button", { name: "Світла / темна тема" }).click();
+  await expect(html).toHaveAttribute("data-theme", "dark");
+});
+
+test("тема стоїть на <html> ще до гідратації — без спалаху темної", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("gf-theme", "light"));
+  await page.addInitScript(() => {
+    document.addEventListener("DOMContentLoaded", () => {
+      (window as unknown as { __themeAtDcl: string | null }).__themeAtDcl =
+        document.documentElement.getAttribute("data-theme");
+    });
+  });
+  await page.goto("/");
+  expect(await page.evaluate(() => (window as unknown as { __themeAtDcl: string | null }).__themeAtDcl)).toBe("light");
+});
+
+const PAGES = ["/", "/poslugy", "/poslugy/zamina-ekrana", "/modeli", "/modeli/iphone-16-pro-max", "/android", "/planshety", "/godynnyky", "/poshtoyu", "/personalni-dani", "/vhid"];
+
+for (const theme of ["dark", "light"] as const) {
+  test(`контраст тексту — ${theme === "light" ? "світла" : "темна"} тема`, async ({ page }) => {
+    test.setTimeout(120_000);
+    await page.addInitScript((t) => localStorage.setItem("gf-theme", t), theme);
+    const problems: string[] = [];
+    for (const path of PAGES) {
+      await page.goto(path, { waitUntil: "networkidle" });
+      for (const p of await page.evaluate(lowContrastTexts)) problems.push(`${path}: ${p}`);
+    }
+    expect(problems).toEqual([]);
+  });
+}

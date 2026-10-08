@@ -11,9 +11,9 @@
     inset: auto 0 0 0;
     z-index: 40;
     /* Непрозоре тло: смуга лежить поверх контенту, напівпрозоре просвічувало б */
-    background: rgba(13, 14, 17, .94);
+    background: rgb(var(--bg-rgb) / .94);
     backdrop-filter: blur(18px);
-    border-top: 1px solid rgba(255, 255, 255, .1);
+    border-top: 1px solid rgb(var(--fg-rgb) / .1);
     /* Жест-бар на iPhone не має накривати кнопки */
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
@@ -52,12 +52,12 @@
   }
 
   .item:active {
-    background: rgba(255, 255, 255, .06);
+    background: rgb(var(--fg-rgb) / .06);
   }
 
   /* Поточний розділ: і колір, і заливка — не лише колір */
   .itemActive {
-    color: var(--accent);
+    color: var(--accent-text);
     background: rgba(220, 243, 90, .13);
   }
 

@@ -24,11 +24,10 @@ export default function Accordion({ items }: { items: { q: string; a: string }[]
                 height="18"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#DCF35A"
                 strokeWidth="1.5"
                 strokeLinecap="round"
                 aria-hidden="true"
-                style={{ transform: on ? "rotate(180deg)" : "rotate(0deg)" }}
+                style={{ stroke: "var(--accent-text)", transform: on ? "rotate(180deg)" : "rotate(0deg)" }}
               >
                 <path d="M6 9l6 6 6-6" />
               </svg>

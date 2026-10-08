@@ -74,7 +74,7 @@
 .no {
   font-family: var(--font-unbounded), sans-serif;
   font-size: 12.5px;
-  color: rgba(241, 243, 239, .35);
+  color: rgb(var(--text-rgb) / .35);
 }
 
 /* Ціна на місці номера: те, заради чого картку й читають */
@@ -85,7 +85,7 @@
   font-family: var(--font-unbounded), sans-serif;
   font-size: 17px;
   letter-spacing: -.02em;
-  color: var(--accent);
+  color: var(--accent-text);
   white-space: nowrap;
 }
 
@@ -105,7 +105,7 @@
 .body {
   font-size: 14.5px;
   line-height: 1.55;
-  color: rgba(241, 243, 239, .66);
+  color: rgb(var(--text-rgb) / .66);
 }
 
 .tags {
@@ -117,15 +117,15 @@
 .tag {
   padding: 6px 11px;
   border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, .06);
+  background: rgb(var(--fg-rgb) / .06);
   font-size: 12.5px;
-  color: rgba(241, 243, 239, .75);
+  color: rgb(var(--text-rgb) / .75);
 }
 
 .foot {
   margin-top: auto;
   padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, .08);
+  border-top: 1px solid rgb(var(--fg-rgb) / .08);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -134,7 +134,7 @@
 }
 
 .time {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .book {
@@ -147,7 +147,7 @@
 }
 
 .book:hover {
-  color: var(--accent);
+  color: var(--accent-text);
   gap: 11px;
 }
 

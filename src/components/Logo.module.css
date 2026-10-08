@@ -11,3 +11,16 @@
   height: 28px;
   width: auto;
 }
+
+.onLight {
+  display: none;
+}
+
+/* Найближчий предок із темою вирішує: банер із фото лишається темним */
+:global([data-theme="light"]) .onLight {
+  display: block;
+}
+
+:global([data-theme="light"]) .onDark {
+  display: none;
+}

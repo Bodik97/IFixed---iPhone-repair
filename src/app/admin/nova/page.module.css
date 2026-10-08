@@ -46,5 +46,5 @@
 .check input {
   width: 20px;
   height: 20px;
-  accent-color: var(--accent);
+  accent-color: var(--accent-text);
 }

@@ -1,9 +1,9 @@
 .wrap {
   position: relative;
   overflow: hidden;
-  border-top: 1px solid rgba(255, 255, 255, .08);
-  border-bottom: 1px solid rgba(255, 255, 255, .08);
-  background: rgba(255, 255, 255, .02);
+  border-top: 1px solid rgb(var(--fg-rgb) / .08);
+  border-bottom: 1px solid rgb(var(--fg-rgb) / .08);
+  background: rgb(var(--fg-rgb) / .02);
 }
 
 .track {
@@ -49,5 +49,5 @@
 }
 
 .dot {
-  color: var(--accent);
+  color: var(--accent-text);
 }

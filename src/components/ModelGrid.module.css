@@ -46,7 +46,7 @@
 
 .searchInput:focus {
   border-color: var(--border-active);
-  background: rgba(255, 255, 255, .08);
+  background: rgb(var(--fg-rgb) / .08);
 }
 
 .searchIcon {
@@ -92,8 +92,8 @@
   overflow: hidden;
   padding: 18px;
   /* Підкладка світліша за картку: фото товарів здебільшого темні */
-  background: radial-gradient(120% 90% at 50% 20%, rgba(255, 255, 255, .09), rgba(255, 255, 255, .02) 70%);
-  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  background: radial-gradient(120% 90% at 50% 20%, rgb(var(--fg-rgb) / .09), rgb(var(--fg-rgb) / .02) 70%);
+  border-bottom: 1px solid rgb(var(--fg-rgb) / .08);
 }
 
 .photo {
@@ -110,7 +110,7 @@
 }
 
 .noPhoto {
-  color: rgba(241, 243, 239, .25);
+  color: rgb(var(--text-rgb) / .25);
 }
 
 .body {
@@ -142,9 +142,9 @@
 .job {
   padding: 5px 10px;
   border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, .06);
+  background: rgb(var(--fg-rgb) / .06);
   font-size: 12px;
-  color: rgba(241, 243, 239, .75);
+  color: rgb(var(--text-rgb) / .75);
 }
 
 .foot {
@@ -155,13 +155,13 @@
   justify-content: space-between;
   gap: 10px;
   font-size: 13px;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .empty {
   margin-top: 24px;
   border-radius: var(--r-card);
-  border: 1px dashed rgba(255, 255, 255, .18);
+  border: 1px dashed rgb(var(--fg-rgb) / .18);
   padding: 34px;
   text-align: center;
   color: var(--text-2);

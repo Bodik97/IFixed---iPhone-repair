@@ -22,7 +22,7 @@
 
 .row:hover {
   border-color: rgba(220, 243, 90, .4);
-  background: rgba(255, 255, 255, .05);
+  background: rgb(var(--fg-rgb) / .05);
   transform: translateX(4px);
 }
 
@@ -41,7 +41,7 @@
 .work {
   font-size: 14.5px;
   line-height: 1.5;
-  color: rgba(241, 243, 239, .68);
+  color: rgb(var(--text-rgb) / .68);
 }
 
 .ttn {
@@ -69,8 +69,8 @@
 }
 
 .tone_progress {
-  border: 1px solid rgba(255, 255, 255, .2);
-  color: rgba(241, 243, 239, .82);
+  border: 1px solid rgb(var(--fg-rgb) / .2);
+  color: rgb(var(--text-rgb) / .82);
 }
 
 .tone_ready,
@@ -80,12 +80,12 @@
 }
 
 .tone_done {
-  border: 1px solid rgba(255, 255, 255, .18);
+  border: 1px solid rgb(var(--fg-rgb) / .18);
   color: var(--text-2);
 }
 
 .tone_closed {
-  border: 1px solid rgba(255, 255, 255, .12);
+  border: 1px solid rgb(var(--fg-rgb) / .12);
   color: var(--text-3);
 }
 
@@ -97,10 +97,10 @@
 
 .empty {
   border-radius: 22px;
-  border: 1px dashed rgba(255, 255, 255, .18);
+  border: 1px dashed rgb(var(--fg-rgb) / .18);
   padding: 30px;
   text-align: center;
-  color: rgba(241, 243, 239, .65);
+  color: rgb(var(--text-rgb) / .65);
   font-size: 15px;
 }
 
@@ -135,5 +135,5 @@
   font-size: 12px;
   letter-spacing: .04em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
 }

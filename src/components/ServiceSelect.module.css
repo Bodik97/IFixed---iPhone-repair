@@ -27,7 +27,7 @@
 }
 
 .triggerOpen {
-  border-color: var(--accent);
+  border-color: var(--accent-text);
 }
 
 .trigger:focus-visible,
@@ -49,7 +49,7 @@
 .chosenIcon {
   display: inline-flex;
   flex: none;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .placeholder {
@@ -64,7 +64,7 @@
 
 .triggerOpen .caret {
   transform: rotate(180deg);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* ---------- Список ---------- */
@@ -84,8 +84,8 @@
   border-radius: 18px;
   border: 1px solid var(--border-active);
   /* Непрозоре тло: список лежить поверх форми */
-  background: #16181c;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, .5);
+  background: var(--bg-elevated);
+  box-shadow: 0 16px 40px var(--shadow-color);
 }
 
 .option,
@@ -108,12 +108,12 @@
 }
 
 .option:hover {
-  background: rgba(255, 255, 255, .06);
+  background: rgb(var(--fg-rgb) / .06);
 }
 
 .optionOn {
   background: rgba(220, 243, 90, .12);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .option:focus-visible,
@@ -131,7 +131,7 @@
   flex: none;
   border-radius: 11px;
   background: rgba(220, 243, 90, .1);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .optionText {

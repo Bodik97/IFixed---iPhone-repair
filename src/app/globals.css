@@ -1,28 +1,78 @@
-:root {
-  /* Кольори */
+:root,
+[data-theme="dark"] {
+  /* Кольори. Дві теми: темна (типова) і світла — перемикач у шапці.
+     *-rgb — канали для напівпрозорих відтінків: rgb(var(--fg-rgb) / .06)
+     дає «трохи світліше за фон» у темній темі і «трохи темніше» у світлій. */
   --bg: #0B0C0E;
+  --bg-rgb: 11 12 14;
+  /* Підняті поверхні: вікна, шухляди, випадні списки */
+  --bg-elevated: #14161A;
+  --fg-rgb: 255 255 255;
   --text: #F1F3EF;
-  --text-2: rgba(241, 243, 239, .76);
+  --text-rgb: 241 243 239;
+  --text-2: rgb(var(--text-rgb) / .76);
   /* Нижня межа: дрібний текст має лишатись читабельним (WCAG 4.5:1) */
-  --text-3: rgba(241, 243, 239, .62);
+  --text-3: rgb(var(--text-rgb) / .62);
   --accent: #DCF35A;
+  /* Акцент для тексту й іконок: на темному — сам салатовий, на світлому він
+     нечитабельний, тож там темніший оливковий того ж тону */
+  --accent-text: #DCF35A;
   --accent-light: #EFFAB5;
   --on-accent: #0B0C0E;
-  --surface: rgba(255, 255, 255, .03);
-  --surface-hover: rgba(255, 255, 255, .06);
-  --border: rgba(255, 255, 255, .09);
+  --surface: rgb(var(--fg-rgb) / .03);
+  --surface-hover: rgb(var(--fg-rgb) / .06);
+  --border: rgb(var(--fg-rgb) / .09);
   --border-active: rgba(220, 243, 90, .5);
-  --field-bg: rgba(255, 255, 255, .05);
-  --field-border: rgba(255, 255, 255, .16);
+  --field-bg: rgb(var(--fg-rgb) / .05);
+  --field-border: rgb(var(--fg-rgb) / .16);
   --info-bg: rgba(220, 243, 90, .12);
   --info-border: rgba(220, 243, 90, .3);
   --info-text: #EFFFC4;
+  --header-bg: rgb(var(--bg-rgb) / .72);
+  --shadow-color: rgb(0 0 0 / .45);
 
   /* Помилка — єдиний неакцентний колір у палітрі: має читатись як «щось не так» */
   --danger: #FF6B6B;
   --danger-bg: rgba(255, 107, 107, .1);
   --danger-border: rgba(255, 107, 107, .38);
 
+  color-scheme: dark;
+}
+
+/* Світла тема — фон і графіт із брендбука GadgetFix */
+[data-theme="light"] {
+  --bg: #F2F2EC;
+  --bg-rgb: 242 242 236;
+  --bg-elevated: #FFFFFF;
+  --fg-rgb: 17 19 17;
+  --text: #111311;
+  --text-rgb: 17 19 17;
+  --text-2: rgb(var(--text-rgb) / .78);
+  --text-3: rgb(var(--text-rgb) / .64);
+  --accent: #DCF35A;
+  --accent-text: #4D5C00;
+  --accent-light: #364100;
+  --on-accent: #111311;
+  --surface: #FFFFFF;
+  --surface-hover: #FAFAF6;
+  --border: rgb(var(--fg-rgb) / .12);
+  --border-active: #8FA300;
+  --field-bg: #FFFFFF;
+  --field-border: rgb(var(--fg-rgb) / .2);
+  --info-bg: rgba(220, 243, 90, .32);
+  --info-border: rgba(110, 128, 0, .45);
+  --info-text: #3A4500;
+  --header-bg: rgb(var(--bg-rgb) / .86);
+  --shadow-color: rgb(17 19 17 / .14);
+
+  --danger: #C62828;
+  --danger-bg: rgba(198, 40, 40, .08);
+  --danger-border: rgba(198, 40, 40, .4);
+
+  color-scheme: light;
+}
+
+:root {
   /* Радіуси */
   --r-pill: 999px;
   --r-card: 26px;
@@ -52,6 +102,18 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Блок із власною темою (фото-банери лишаються темними й у світлій темі) має
+   перерахувати колір тексту: успадковане значення вже обчислене від body */
+[data-theme] {
+  color: var(--text);
+}
+
+/* …і власне тло: якщо фото банера не завантажиться, світлий текст не
+   опиниться на світлому тлі сторінки. У темній темі колір той самий. */
+[data-theme]:not(html) {
+  background-color: var(--bg);
 }
 
 body {
@@ -98,7 +160,7 @@ p {
 }
 
 a {
-  color: var(--accent);
+  color: var(--accent-text);
   text-decoration: none;
 }
 
@@ -220,7 +282,7 @@ button,
   font-size: 12.5px;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
 }
 
@@ -258,7 +320,7 @@ button,
 }
 
 .btn-ghost {
-  border-color: rgba(255, 255, 255, .22);
+  border-color: rgb(var(--fg-rgb) / .22);
   color: var(--text);
   background: transparent;
 }
@@ -266,7 +328,7 @@ button,
 .btn-ghost:hover {
   color: var(--text);
   background: var(--surface-hover);
-  border-color: rgba(255, 255, 255, .34);
+  border-color: rgb(var(--fg-rgb) / .34);
 }
 
 .btn-lg {
@@ -288,7 +350,7 @@ button,
   top: 0;
   bottom: 0;
   width: 34%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .6), transparent);
+  background: linear-gradient(90deg, transparent, rgb(var(--fg-rgb) / .6), transparent);
   animation: nShine 4.5s ease-in-out 1s infinite;
   pointer-events: none;
 }
@@ -315,8 +377,8 @@ button,
   padding: 10px 18px;
   border-radius: var(--r-pill);
   border: 1px solid var(--field-border);
-  background: rgba(255, 255, 255, .04);
-  color: rgba(241, 243, 239, .82);
+  background: rgb(var(--fg-rgb) / .04);
+  color: rgb(var(--text-rgb) / .82);
   font-size: 14.5px;
   transition: background .2s, color .2s, border-color .2s;
 }
@@ -329,7 +391,7 @@ button,
 .chip[aria-pressed="true"],
 .chip.is-active {
   background: var(--accent);
-  border-color: var(--accent);
+  border-color: var(--accent-text);
   color: var(--on-accent);
   font-weight: 600;
 }
@@ -352,7 +414,7 @@ button,
 
 .field:focus {
   border-color: var(--border-active);
-  background: rgba(255, 255, 255, .07);
+  background: rgb(var(--fg-rgb) / .07);
 }
 
 /* Інфо / успіх */

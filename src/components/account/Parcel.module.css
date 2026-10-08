@@ -22,7 +22,7 @@
   flex: none;
   border-radius: 11px;
   background: rgba(220, 243, 90, .16);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .title {
@@ -44,7 +44,7 @@
   flex-wrap: wrap;
   padding: 12px 14px;
   border-radius: 13px;
-  background: rgba(11, 12, 14, .5);
+  background: rgb(var(--bg-rgb) / .5);
   border: 1px solid var(--border);
 }
 

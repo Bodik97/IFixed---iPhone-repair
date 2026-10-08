@@ -37,7 +37,7 @@
   padding: 3px 9px;
   border-radius: var(--r-pill);
   background: rgba(220, 243, 90, .14);
-  color: var(--accent);
+  color: var(--accent-text);
   font-size: 11px;
   letter-spacing: .04em;
   text-transform: uppercase;

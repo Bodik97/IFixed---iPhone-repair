@@ -19,7 +19,7 @@ export default function Ticker({ items }: { items: Item[] }) {
                   height="16"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#DCF35A"
+                  style={{ stroke: "var(--accent-text)" }}
                   strokeWidth="1.6"
                   strokeLinecap="round"
                   strokeLinejoin="round"

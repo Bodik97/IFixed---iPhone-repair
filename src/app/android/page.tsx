@@ -58,7 +58,7 @@ export default function AndroidPage() {
   return (
     <>
       {/* Герой */}
-      <section className={styles.hero}>
+      <section className={styles.hero} data-theme="dark">
         <span aria-hidden="true" className={styles.heroBg}>
           <span className={styles.heroPhoto} />
           <span className={styles.heroVeil} />

@@ -17,7 +17,7 @@
   font-size: 14.5px;
   letter-spacing: -.01em;
   cursor: pointer;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
+  box-shadow: 0 10px 30px var(--shadow-color);
 }
 
 .launcher:active {
@@ -42,9 +42,9 @@
   border-radius: 24px;
   border: 1px solid var(--border-active);
   /* Непрозоре тло: вікно лежить поверх сторінки */
-  background: #14161a;
+  background: var(--bg-elevated);
   overflow: hidden;
-  box-shadow: 0 18px 50px rgba(0, 0, 0, .5);
+  box-shadow: 0 18px 50px var(--shadow-color);
 }
 
 .head {
@@ -182,7 +182,7 @@
 }
 
 .chip:hover {
-  border-color: var(--accent);
+  border-color: var(--accent-text);
   background: rgba(220, 243, 90, .09);
 }
 

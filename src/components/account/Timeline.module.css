@@ -1,7 +1,7 @@
 .wrap {
   margin-top: 22px;
   padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, .09);
+  border-top: 1px solid rgb(var(--fg-rgb) / .09);
 }
 
 .list {
@@ -30,7 +30,7 @@
 }
 
 .dot {
-  background: rgba(255, 255, 255, .28);
+  background: rgb(var(--fg-rgb) / .28);
 }
 
 .dotNow {
@@ -50,7 +50,7 @@
 .text {
   font-size: 14.5px;
   line-height: 1.5;
-  color: rgba(241, 243, 239, .88);
+  color: rgb(var(--text-rgb) / .88);
 }
 
 .time {
@@ -72,5 +72,5 @@
 }
 
 .toggle:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }

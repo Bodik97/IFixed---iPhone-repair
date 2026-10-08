@@ -13,7 +13,7 @@
 
 .offerText {
   font-size: 15px;
-  color: rgba(241, 243, 239, .88);
+  color: rgb(var(--text-rgb) / .88);
   max-width: 42ch;
 }
 
