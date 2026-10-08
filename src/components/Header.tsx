@@ -8,6 +8,10 @@ import ThemeToggle from "./ThemeToggle";
 import { nav, site } from "@/data/site";
 import styles from "./Header.module.css";
 
+/**
+ * Шапка сайту — темна в обох темах (data-theme="dark"): це обличчя бренду,
+ * і логотип із салатовим знаком читається саме на темному.
+ */
 export default function Header() {
   const pathname = usePathname();
 
@@ -17,7 +21,7 @@ export default function Header() {
 
   if (pathname.startsWith("/admin")) {
     return (
-      <header className={styles.header}>
+      <header className={styles.header} data-theme="dark">
         <nav className={`${styles.nav} ${styles.navPlain}`}>
           <Logo />
           <span className={styles.adminMark}>Адміністрування</span>
@@ -27,7 +31,7 @@ export default function Header() {
   }
 
   return (
-    <header className={styles.header}>
+    <header className={styles.header} data-theme="dark">
       <nav className={styles.nav}>
         <Logo />
 

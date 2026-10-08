@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import SignInForm from "./SignInForm";
 import styles from "./AuthModal.module.css";
 
@@ -33,7 +34,12 @@ export default function AuthModal({ open, onClose }: { open: boolean; onClose: (
     };
   }, [open]);
 
-  return (
+  // Кнопка входу живе в шапці, а шапка завжди темна (data-theme="dark").
+  // Вікно виносимо в body — щоб воно йшло за темою сторінки, а не шапки.
+  // На сервері вікна немає: кнопка зʼявляється лише після завантаження Clerk.
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
     <dialog
       ref={ref}
       className={styles.dialog}
@@ -82,6 +88,7 @@ export default function AuthModal({ open, onClose }: { open: boolean; onClose: (
             з тими самими id (v-email, clerk-captcha), що й сторінка /vhid */}
         {open && <SignInForm onDone={onClose} bare />}
       </div>
-    </dialog>
+    </dialog>,
+    document.body,
   );
 }

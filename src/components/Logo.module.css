@@ -28,3 +28,14 @@
 :global([data-theme="light"]) .img {
   height: 24px;
 }
+
+/* …але в темному блоці світлої сторінки (шапка) плашка зайва */
+:global([data-theme="light"]) :global([data-theme="dark"]) .plate {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+}
+
+:global([data-theme="light"]) :global([data-theme="dark"]) .img {
+  height: 28px;
+}

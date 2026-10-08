@@ -16,10 +16,13 @@ test("перемикач: світла тема, вибір переживає �
 
   await page.reload({ waitUntil: "networkidle" });
   await expect(html).toHaveAttribute("data-theme", "light");
-  // Кольори логотипа не змінюються — у світлій темі він на графітовій плашці
-  const logo = page.locator('header img[src$="gadgetfix-logo-dark.svg"]');
-  await expect(logo).toBeVisible();
-  expect(await logo.evaluate((img) => getComputedStyle(img.parentElement!).backgroundColor)).toBe("rgb(17, 19, 17)");
+  // Шапка темна в обох темах — логотип там без плашки
+  await expect(page.locator("header")).toHaveAttribute("data-theme", "dark");
+  const plate = (sel: string) =>
+    page.locator(sel).evaluate((img) => getComputedStyle(img.parentElement!).backgroundColor);
+  expect(await plate('header img[src$="gadgetfix-logo-dark.svg"]')).toBe("rgba(0, 0, 0, 0)");
+  // …а на світлому підвалі кольори логотипа ті самі, на графітовій плашці
+  expect(await plate('footer img[src$="gadgetfix-logo-dark.svg"]')).toBe("rgb(17, 19, 17)");
 
   await page.getByRole("button", { name: "Світла / темна тема" }).click();
   await expect(html).toHaveAttribute("data-theme", "dark");
