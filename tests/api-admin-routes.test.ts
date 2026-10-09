@@ -49,6 +49,7 @@ import { GET as reviewImage } from "@/app/api/reviews/[id]/image/route";
 import { GET as csv } from "@/app/admin/groshi/csv/route";
 import { GET as receipt } from "@/app/admin/zayavky/[id]/kvytantsiya/route";
 import { GET as state } from "@/app/api/state/route";
+import { GET as testAlert } from "@/app/admin/test-zboyu/route";
 
 const okBlob = { statusCode: 200, stream: new ReadableStream(), blob: { contentType: "image/webp" } };
 
@@ -162,5 +163,21 @@ describe("GET /api/state", () => {
   it("клієнт — свій відбиток", async () => {
     m.user = { id: "u1", primaryEmailAddress: { emailAddress: "a@b.cc" } };
     expect(await (await state()).json()).toEqual({ version: "3:1000:2", unread: 2 });
+  });
+});
+
+describe("GET /admin/test-zboyu", () => {
+  it("не майстру — 403, без помилки", async () => {
+    expect((await testAlert()).status).toBe(403);
+  });
+
+  it("майстру — кидає помилку, щоразу з новим текстом", async () => {
+    m.admin = true;
+    const first = await testAlert().catch((e: Error) => e.message);
+    await new Promise((r) => setTimeout(r, 2));
+    const second = await testAlert().catch((e: Error) => e.message);
+
+    expect(first).toMatch(/^Тестовий збій/);
+    expect(second).not.toBe(first);
   });
 });
