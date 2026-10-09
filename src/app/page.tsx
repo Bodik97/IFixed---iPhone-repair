@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import BookingForm from "@/components/BookingForm";
+import CountUp from "@/components/CountUp";
 import PhoneStrip from "@/components/PhoneStrip";
 import Reveal from "@/components/Reveal";
 import ReviewSlider from "@/components/ReviewSlider";
@@ -83,13 +84,15 @@ export default async function Home() {
             </a>
           </div>
 
-          <div aria-hidden="true" className={`${styles.heroShot} nUp nUp-3`} />
+          <div aria-hidden="true" className={`${styles.heroShot} nUp nUp-3`}>
+            <span className={styles.heroShotImg} />
+          </div>
 
           <dl className={styles.stats}>
             {heroStats.map((s) => (
               <div key={s.note} className={styles.stat}>
                 <dt className={styles.statValue}>
-                  {s.value}
+                  <CountUp value={s.value} />
                   <span className={styles.statUnit}>{s.unit}</span>
                 </dt>
                 <dd className={styles.statNote}>{s.note}</dd>

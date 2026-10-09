@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import CountUp from "@/components/CountUp";
 import BookingForm from "@/components/BookingForm";
 import PriceSummary from "@/components/PriceSummary";
 import Reveal from "@/components/Reveal";
@@ -103,7 +104,9 @@ export default function ServicesPage() {
         <div className={styles.promiseGrid}>
           {promises.map((p) => (
             <div key={p.note} className={`card ${styles.promise}`}>
-              <div className={styles.promiseValue}>{p.value}</div>
+              <div className={styles.promiseValue}>
+                <CountUp value={p.value} />
+              </div>
               <div className={styles.promiseNote}>{p.note}</div>
             </div>
           ))}

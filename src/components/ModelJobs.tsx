@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import CountUp from "./CountUp";
 import { boardPrices, PRICES_PUBLISHED, uah, type ModelPrice } from "@/data/prices";
 import styles from "./ModelJobs.module.css";
 
@@ -95,7 +96,8 @@ export default function ModelJobs({ prices }: { prices?: ModelPrice }) {
                 <span className={styles.jobTime}>{j.time}</span>
                 {PRICES_PUBLISHED && price && (
                   <span className={price.exact ? styles.price : styles.priceFrom}>
-                    {price.exact ? price.text : `від ${price.text}`}
+                    {!price.exact && "від "}
+                    <CountUp value={price.text} />
                   </span>
                 )}
               </div>

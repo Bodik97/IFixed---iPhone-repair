@@ -9,6 +9,7 @@ import { THEME_SCRIPT } from "@/components/ThemeToggle";
 import ChatBot from "@/components/ChatBot";
 import Footer from "@/components/Footer";
 import Analytics from "@/components/Analytics";
+import ScrollReveal from "@/components/ScrollReveal";
 import { site } from "@/data/site";
 import { siteUrl } from "@/lib/siteUrl";
 import "./globals.css";
@@ -86,6 +87,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <BottomNav />
           <ChatBot />
           <Analytics />
+          <ScrollReveal />
           </BookingProviderWrap>
         </ClerkProvider>
         <script

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import CountUp from "@/components/CountUp";
 import Reveal from "@/components/Reveal";
 import Accordion from "@/components/Accordion";
 import BookingForm from "@/components/BookingForm";
@@ -91,7 +92,9 @@ export default function AndroidPage() {
                 <div key={s.note} className={styles.statRow}>
                   {i > 0 && <span className={styles.divider} />}
                   <div className={styles.stat}>
-                    <span className={styles.statValue}>{s.value}</span>
+                    <span className={styles.statValue}>
+                      <CountUp value={s.value} />
+                    </span>
                     <span className={styles.statUnit}>{s.unit}</span>
                     <span className={styles.statNote}>{s.note}</span>
                   </div>

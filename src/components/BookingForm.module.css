@@ -67,3 +67,30 @@
 .boxBare {
   min-width: 0;
 }
+
+/* Галочка після заявки малюється: спершу коло, потім сама позначка */
+.doneMark circle,
+.doneMark path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: doneDraw .5s var(--ease) forwards;
+}
+
+.doneMark path {
+  animation-duration: .3s;
+  animation-delay: .4s;
+}
+
+@keyframes doneDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Без руху галочка має бути просто намальована, а не невидима */
+@media (prefers-reduced-motion: reduce) {
+  .doneMark circle,
+  .doneMark path {
+    stroke-dashoffset: 0;
+  }
+}

@@ -81,9 +81,9 @@ function BookingFormInner({
     return (
       <div className={bare ? styles.boxBare : styles.box}>
         <div className={styles.done}>
-          <svg width="42" height="42" viewBox="0 0 24 24" fill="none" style={{ stroke: "var(--accent-text)" }} strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="9" />
-            <path d="M8 12.5l2.5 2.5L16 9.5" />
+          <svg className={styles.doneMark} width="42" height="42" viewBox="0 0 24 24" fill="none" style={{ stroke: "var(--accent-text)" }} strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" pathLength="1" />
+            <path d="M8 12.5l2.5 2.5L16 9.5" pathLength="1" />
           </svg>
           <h3>Заявку прийнято</h3>
           <p className={styles.doneText}>

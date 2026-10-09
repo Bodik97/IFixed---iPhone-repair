@@ -716,3 +716,29 @@ div.band {
 .band-flat::after {
   display: none;
 }
+
+/* ---------- Рух ----------
+   Стримано: короткі плавні рухи, нічого не крутиться постійно. */
+
+/* Поява при прокрутці — класи ставить ScrollReveal */
+.rv {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease);
+}
+
+.rv.rv-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Натискання: кнопка й картка ледь піддаються під пальцем */
+.btn:active {
+  transform: scale(.97);
+  transition-duration: .08s;
+}
+
+.card:active {
+  transform: scale(.985);
+  transition-duration: .08s;
+}

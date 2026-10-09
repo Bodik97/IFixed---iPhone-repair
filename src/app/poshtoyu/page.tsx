@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import CountUp from "@/components/CountUp";
 import Accordion from "@/components/Accordion";
 import MailInForm from "@/components/MailInForm";
 import PackingList from "@/components/PackingList";
@@ -62,7 +63,9 @@ export default function MailInPage() {
                 <div key={s.note} className={styles.statRow}>
                   {i > 0 && <span className={styles.divider} />}
                   <div className={styles.stat}>
-                    <span className={styles.statValue}>{s.value}</span>
+                    <span className={styles.statValue}>
+                      <CountUp value={s.value} />
+                    </span>
                     <span className={styles.statUnit}>{s.unit.trim()}</span>
                     <span className={styles.statNote}>{s.note}</span>
                   </div>
