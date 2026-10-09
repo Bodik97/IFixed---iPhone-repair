@@ -14,13 +14,7 @@ const tickerItems = [
 export default function CatalogSection({ section }: { section: Section }) {
   return (
     <>
-      <section className={styles.hero} data-theme="dark">
-        <span aria-hidden="true" className={styles.heroBg}>
-          <span className={styles.heroPhoto} />
-          <span className={styles.heroVeil} />
-          <span className={`${styles.heroGlow} anim-drift`} />
-        </span>
-
+      <section className={`band ${styles.hero}`} data-theme="dark">
         <div className={styles.heroInner}>
           <span className={`${styles.badge} nUp`}>
             <span className="pulse" />
@@ -50,6 +44,7 @@ export default function CatalogSection({ section }: { section: Section }) {
         </div>
       </section>
 
+      <div className="band stripe-alt">
       <Ticker items={tickerItems.map((label) => ({ label }))} />
 
       <ModelGrid
@@ -63,7 +58,9 @@ export default function CatalogSection({ section }: { section: Section }) {
               : "Пошук: Series 8, SE, Ultra…"
         }
       />
+      </div>
 
+      <div className="band" data-theme="dark">
       <section className={`container ${styles.cta}`}>
         <div className={styles.ctaBox}>
           <div>
@@ -84,6 +81,7 @@ export default function CatalogSection({ section }: { section: Section }) {
           </div>
         </div>
       </section>
+      </div>
     </>
   );
 }

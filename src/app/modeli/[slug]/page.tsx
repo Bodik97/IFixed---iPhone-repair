@@ -71,11 +71,7 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
 
   return (
     <>
-      <section className={styles.hero}>
-        <span aria-hidden="true" className={styles.heroBg}>
-          <span className={`${styles.heroGlow} anim-drift`} />
-        </span>
-
+      <section className={`band ${styles.hero}`} data-theme="dark">
         <div className={styles.heroInner}>
           <div className={styles.navRow}>
             <BackButton fallback={section.href} />
@@ -125,8 +121,11 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
         </div>
       </section>
 
-      <ModelJobs prices={getModelPrice(model.slug)} />
+      <div className="band stripe-alt">
+        <ModelJobs prices={getModelPrice(model.slug)} />
+      </div>
 
+      <div className="band" data-theme="dark">
       <section className={styles.warranty}>
         <div className={`container ${styles.warrantyGrid}`}>
           {warranty.map((w) => (
@@ -143,7 +142,6 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
       <section id="book" className={`container ${styles.book}`}>
         <div className={styles.bookGrid}>
           <div>
-            <div className="kicker">Запис</div>
             <h2 className={styles.bookTitle}>Записатись на {model.name}</h2>
             <p className={styles.bookLead}>
               Залиште телефон — передзвонимо за 25 хвилин і скажемо орієнтир по вашій ситуації.
@@ -172,6 +170,7 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
           <BookingForm source="model" model={model.name} submitLabel="Записатись" />
         </div>
       </section>
+      </div>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
     </>

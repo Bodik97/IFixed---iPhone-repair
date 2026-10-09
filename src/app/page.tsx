@@ -9,6 +9,7 @@ import StatusCheck from "@/components/StatusCheck";
 import { getPublishedReviews, getReviewByUser } from "@/db/reviews";
 import { services } from "@/data/services";
 import { site } from "@/data/site";
+import { popular as popularModels } from "@/data/mailIn";
 import {
   bookingModels,
   faq,
@@ -58,84 +59,67 @@ export default async function Home() {
   return (
     <>
       {/* Герой */}
-      <section className={styles.hero} data-theme="dark">
-        <span aria-hidden="true" className={styles.heroBg}>
-          <span className={styles.heroPhoto} />
-          <span className={styles.heroVeil} />
-          <span className={`${styles.heroGlow} anim-drift`} />
-        </span>
-
+      <section className={`band ${styles.hero}`} data-theme="dark">
         <div className={styles.heroInner}>
-          <div className={styles.heroCopy}>
-            <span className={`${styles.badge} nUp`}>
-              <span className="pulse" />
-              Відкрито · відповідь за 25 хвилин
-            </span>
+          <p className={`${styles.heroStatus} nUp`}>
+            <span className="pulse" />
+            Відкрито · відповідь за 25 хвилин
+          </p>
 
-            <h1 className={`${styles.h1} nUp nUp-1`}>
-              Ремонт iPhone <span className={styles.accent}>без сюрпризів</span> у ціні
-            </h1>
+          <h1 className={`${styles.h1} nUp nUp-1`}>Ремонт iPhone без сюрпризів у ціні</h1>
 
-            <p className={`${styles.heroLead} nUp nUp-2`}>
-              Безкоштовна діагностика, потім фіксована ціна — і вона вже не змінюється. На екран чи
-              акумулятор іде до 2 днів разом із замовленням деталі.
-            </p>
+          <p className={`${styles.heroLead} nUp nUp-2`}>
+            Безкоштовна діагностика, потім фіксована ціна — і вона вже не змінюється. На екран чи
+            акумулятор іде до 2 днів разом із замовленням деталі.
+          </p>
 
-            <div className={`${styles.heroCta} nUp nUp-3`}>
-              <Link href="#book" className="btn btn-accent btn-lg btn-hero">
-                Безкоштовна діагностика
-              </Link>
-              <a href={site.phones[0].href} className="btn btn-ghost btn-lg">
-                Подзвонити
-              </a>
-            </div>
+          <div className={`${styles.heroCta} nUp nUp-3`}>
+            <Link href="#book" className="btn btn-accent btn-lg btn-hero">
+              Безкоштовна діагностика
+            </Link>
+            <a href={site.phones[0].href} className="btn btn-ghost btn-lg">
+              Подзвонити
+            </a>
           </div>
 
-          <div className={`${styles.heroSide} nUp nUp-2`}>
-            <div className={`${styles.heroShot} anim-float`} />
-            <div className={styles.statsCard}>
-              {heroStats.map((s, i) => (
-                <div key={s.note} className={styles.statRow}>
-                  {i > 0 && <span className={styles.divider} />}
-                  <div className={styles.stat}>
-                    <span className={styles.statValue}>{s.value}</span>
-                    <span className={styles.statUnit}>{s.unit.trim()}</span>
-                    <span className={styles.statNote}>{s.note}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <div aria-hidden="true" className={`${styles.heroShot} nUp nUp-3`} />
+
+          <dl className={styles.stats}>
+            {heroStats.map((s) => (
+              <div key={s.note} className={styles.stat}>
+                <dt className={styles.statValue}>
+                  {s.value}
+                  <span className={styles.statUnit}>{s.unit}</span>
+                </dt>
+                <dd className={styles.statNote}>{s.note}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 
       {/* Послуги */}
-      <section id="services" className={`container ${styles.services}`}>
-        <div className={styles.sectionHead}>
-          <div>
-            <div className="kicker">Що ремонтуємо</div>
+      <section id="services" className="band stripe-alt">
+        <div className={`container ${styles.block}`}>
+          <div className={styles.head}>
             <h2 className={styles.h2}>Усе, що трапляється з iPhone</h2>
+            <p className={styles.headNote}>
+              Оригінальні дисплеї або якісні аналоги — показуємо обидва варіанти й різницю в ціні.
+            </p>
           </div>
-          <p className={styles.sectionNote}>
-            Оригінальні дисплеї або якісні аналоги — показуємо обидва варіанти й різницю в ціні.
-          </p>
-        </div>
 
-        <div className={styles.serviceGrid}>
-          {topServices.map((s) => {
-            const icon = services.find((x) => x.slug === s.slug)?.icon;
-            return (
-              <Link key={s.no} href="/poslugy" className={`card ${styles.serviceCard}`}>
-                <div className={styles.serviceHead}>
+          <div className={styles.serviceGrid}>
+            {topServices.map((s) => {
+              const icon = services.find((x) => x.slug === s.slug)?.icon;
+              return (
+                <Link key={s.slug} href={`/poslugy/${s.slug}`} className={`card ${styles.serviceCard}`}>
                   <span className={styles.serviceIcon}>
                     {icon && (
                       <svg
-                        width="22"
-                        height="22"
                         viewBox="0 0 24 24"
                         fill="none"
                         style={{ stroke: "var(--accent-text)" }}
-                        strokeWidth="1.5"
+                        strokeWidth="1.4"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         aria-hidden="true"
@@ -143,38 +127,26 @@ export default async function Home() {
                       />
                     )}
                   </span>
-                  <span className={styles.serviceNo}>{s.no}</span>
-                </div>
 
-                <h3>{s.title}</h3>
-                <p className={styles.serviceBody}>{s.body}</p>
+                  <h3>{s.title}</h3>
+                  <p className={styles.serviceBody}>{s.body}</p>
+                  <span className={styles.serviceMeta}>{s.meta}</span>
+                </Link>
+              );
+            })}
+          </div>
 
-                <div className={styles.serviceMeta}>
-                  <span>{s.meta}</span>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true" className={styles.serviceArrow}>
-                    <path d="M5 12h13" />
-                    <path d="M13 6l6 6-6 6" />
-                  </svg>
-                </div>
-              </Link>
-            );
-          })}
+          <p className={styles.blockLink}>
+            <Link href="/poslugy">Усі 12 послуг детально</Link>
+          </p>
         </div>
-
-        <p className={styles.sectionLink}>
-          <Link href="/poslugy">Усі 12 послуг детально →</Link>
-        </p>
       </section>
 
       {/* Репутація */}
-      <section className={styles.reputation} data-theme="dark">
-        <span aria-hidden="true" className={styles.repBg}>
-          <span className={styles.repPhoto} />
-          <span className={styles.repVeil} />
-        </span>
-        <div className={styles.repInner}>
-          <h2 className={styles.repTitle}>Кожен ремонт — це наша репутація в місті</h2>
-          <p className={styles.repText}>
+      <section className="band" data-theme="dark">
+        <div className={`container ${styles.statement}`}>
+          <h2 className={styles.statementTitle}>Кожен ремонт — це наша репутація в місті</h2>
+          <p className={styles.statementText}>
             Ми невеликий сервіс. Простіше зробити добре з першого разу, ніж потім комусь дивитися в
             очі. Тому показуємо зняті деталі, ємність акумулятора до і після — і не міняємо ціну на
             ходу.
@@ -183,34 +155,49 @@ export default async function Home() {
       </section>
 
       {/* Як це працює */}
-      <section id="how" className={`container ${styles.how}`}>
-        <div className="kicker">Як це працює</div>
-        <h2 className={`${styles.h2} ${styles.howTitle}`}>Три кроки — і телефон знову ваш</h2>
+      <section id="how" className="band stripe-alt">
+        <div className={`container ${styles.block}`}>
+          <div className={styles.head}>
+            <h2 className={styles.h2}>Три кроки — і телефон знову ваш</h2>
+          </div>
 
-        <div className={styles.steps}>
-          {howItWorks.map((s, i) => (
-            <Reveal key={s.no} delay={i * 110}>
-              <div className={styles.stepNo}>{s.no}</div>
-              <span className={`${styles.stepLine} anim-grow`} />
-              <h3 className={styles.stepTitle}>{s.title}</h3>
-              <p className={styles.stepBody}>{s.body}</p>
-            </Reveal>
-          ))}
+          <ol className={styles.steps}>
+            {howItWorks.map((s, i) => (
+              <li key={s.no} className={styles.step}>
+                <Reveal delay={i * 110}>
+                  <span aria-hidden="true" className={styles.stepNo}>
+                    {i + 1}
+                  </span>
+                  <h3 className={styles.stepTitle}>{s.title}</h3>
+                  <p className={styles.stepBody}>{s.body}</p>
+                </Reveal>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
       {/* Моделі */}
-      <section id="models" className={styles.models}>
-        <div className={`container ${styles.modelsInner}`}>
-          <div className={styles.sectionHead}>
-            <div>
-              <div className="kicker">Моделі</div>
-              <h2 className={styles.h2}>Які пристрої беремо</h2>
-            </div>
-            <p className={styles.sectionNote}>
-              Деталь під вашу модель підбираємо одразу після заявки.
-            </p>
+      <section id="models" className="band" data-theme="dark">
+        <div className={`container ${styles.block}`}>
+          <div className={styles.head}>
+            <h2 className={styles.h2}>Які пристрої беремо</h2>
+            <p className={styles.headNote}>Деталь під вашу модель підбираємо одразу після заявки.</p>
           </div>
+
+          <ul className={styles.phones}>
+            {popularModels.map((m) => (
+              <li key={m.slug}>
+                <Link href={`/modeli/${m.slug}`} className={styles.phone}>
+                  <span className={styles.phoneShot}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={m.img} alt="" loading="lazy" />
+                  </span>
+                  <span className={styles.phoneName}>{m.name}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
 
           <div className={styles.groupList}>
             {modelGroups.map((g) => (
@@ -236,11 +223,10 @@ export default async function Home() {
       </section>
 
       {/* Відгуки */}
-      <section className={styles.reviewsSection}>
-        <div className={`container ${styles.reviewsInner}`}>
+      <section className="band stripe-alt">
+        <div className={`container ${styles.block}`}>
           <div className={styles.reviewsHead}>
             <div>
-              <div className="kicker">Відгуки</div>
               <h2 className={styles.h2}>Що кажуть клієнти</h2>
             </div>
 
@@ -272,11 +258,10 @@ export default async function Home() {
       </section>
 
       {/* Поштою */}
-      <section className={`container ${styles.mailSection}`}>
-        <div className={styles.mailBox}>
+      <section className="band" data-theme="dark">
+        <div className={`container ${styles.block} ${styles.mail}`}>
           <div>
-            <div className="kicker">Ремонт поштою</div>
-            <h2 className={styles.mailTitle}>Не у Львові? Надішліть Новою Поштою</h2>
+            <h2 className={styles.h2}>Не у Львові? Надішліть Новою Поштою</h2>
             <p className={styles.mailLead}>
               Діагностуємо, телефонуємо з ціною, ремонтуємо. Назад надсилаємо за свій кошт.
             </p>
@@ -285,44 +270,45 @@ export default async function Home() {
             </Link>
           </div>
 
-          <div className={styles.mailSteps}>
+          <ol className={styles.mailSteps}>
             {mailInSteps.map((s, i) => (
-              <div key={s.no}>
-                {i > 0 && <span className={styles.divider} />}
-                <div className={styles.mailStep}>
-                  <span className={styles.mailNo}>{s.no}</span>
-                  <span className={styles.mailText}>{s.text}</span>
-                </div>
-              </div>
+              <li key={s.no} className={styles.mailStep}>
+                <span aria-hidden="true" className={styles.mailNo}>
+                  {i + 1}
+                </span>
+                <span className={styles.mailText}>{s.text}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="band stripe-alt">
+        <div className={`container ${styles.block} ${styles.faqSection}`}>
+          <h2 className={styles.h2}>Коротко про головне</h2>
+
+          <div className={styles.faqList}>
+            {faq.map((f) => (
+              <details key={f.q} className={styles.faqItem}>
+                <summary className={styles.faqQ}>{f.q}</summary>
+                <p className={styles.faqA}>{f.a}</p>
+              </details>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section id="faq" className={`container ${styles.faqSection}`}>
-        <div>
-          <div className="kicker">Часті питання</div>
-          <h2 className={styles.h2}>Коротко про головне</h2>
+      {/* Статус і запис — одна темна смуга перед підвалом */}
+      <div className="band" data-theme="dark">
+        <div className={styles.statusWrap}>
+          <StatusCheck />
         </div>
-
-        <div className={styles.faqList}>
-          {faq.map((f) => (
-            <details key={f.q} className={styles.faqItem}>
-              <summary className={styles.faqQ}>{f.q}</summary>
-              <p className={styles.faqA}>{f.a}</p>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      <StatusCheck />
 
       {/* Запис */}
-      <section id="book" className={`container ${styles.book}`}>
+        <section id="book" className={`container ${styles.book}`}>
         <div className={styles.bookGrid}>
           <div className={styles.bookCopy}>
-            <div className="kicker">Запис на діагностику</div>
             <h2 className={styles.h2}>Опишіть проблему — відповімо за 25 хвилин</h2>
             <p className={styles.bookLead}>
               Достатньо моделі та кількох слів про симптом. Передзвонимо, скажемо орієнтовну ціну й
@@ -371,7 +357,8 @@ export default async function Home() {
             select={{ name: "model", label: "Модель", placeholder: "Оберіть модель", options: [...bookingModels] }}
           />
         </div>
-      </section>
+        </section>
+      </div>
 
       <script
         type="application/ld+json"

@@ -14,7 +14,6 @@ export default function ServiceCatalog() {
     <section className={`container ${styles.section}`}>
       <div className={styles.head}>
         <div>
-          <div className="kicker">Каталог послуг</div>
           <h2 className={styles.title}>Оберіть, що потрібно зробити</h2>
         </div>
 

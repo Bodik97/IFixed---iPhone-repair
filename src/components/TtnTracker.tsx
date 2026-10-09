@@ -23,7 +23,6 @@ export default function TtnTracker() {
     <section id="track" className={styles.section}>
       <div className={styles.box}>
         <div>
-          <div className="kicker">Трекінг</div>
           <h2 className={styles.title}>Де моя посилка</h2>
           <p className={styles.lead}>
             Введіть ТТН Нової Пошти або номер замовлення — покажемо, на якому етапі ремонт.

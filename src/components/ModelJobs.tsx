@@ -55,7 +55,6 @@ export default function ModelJobs({ prices }: { prices?: ModelPrice }) {
     <section className={`container ${styles.section}`}>
       <div className={styles.head}>
         <div>
-          <div className="kicker">{PRICES_PUBLISHED ? "Роботи й ціни" : "Роботи"}</div>
           <h2 className={styles.title}>Що робимо для цієї моделі</h2>
         </div>
 

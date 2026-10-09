@@ -1,220 +1,179 @@
+/* Головна складена зі смуг (.band у globals.css): темна, альтернативна,
+   темна… Тут — лише вміст смуг. Багато повітря, один стовпчик заголовка
+   по центру, мінімум рамок. */
+
+/* ---------- Спільне для смуг ---------- */
+.block {
+  padding-block: clamp(64px, 9vw, 136px);
+}
+
+.h2 {
+  font-size: clamp(30px, 4.2vw, 56px);
+  font-weight: 300;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.head {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  text-align: center;
+  margin-bottom: clamp(36px, 5vw, 68px);
+}
+
+.head .h2 {
+  max-width: 20ch;
+}
+
+.headNote {
+  font-size: clamp(15.5px, 1.4vw, 18px);
+  line-height: 1.55;
+  max-width: 46ch;
+  color: var(--text-2);
+}
+
+.blockLink {
+  margin-top: clamp(28px, 3vw, 40px);
+  text-align: center;
+  font-size: 16px;
+}
+
 /* ---------- Герой ---------- */
 .hero {
-  position: relative;
   overflow: hidden;
-  padding: clamp(56px, 8vw, 130px) var(--gutter) clamp(40px, 5vw, 80px);
-}
-
-.heroBg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.heroPhoto {
-  position: absolute;
-  inset: 0;
-  background-image: url("/assets/bg-tech.webp");
-  background-size: cover;
-  background-position: 62% 58%;
-  opacity: .82;
-  filter: grayscale(.25) contrast(1.06) brightness(.92);
-}
-
-/* Затемнення під текстом, а не по всьому кадру — фон лишається видимим */
-.heroVeil {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(100deg, rgb(var(--bg-rgb) / .94) 0%, rgb(var(--bg-rgb) / .84) 38%, rgb(var(--bg-rgb) / .52) 68%, rgb(var(--bg-rgb) / .62) 100%),
-    linear-gradient(180deg, rgb(var(--bg-rgb) / .5) 0%, transparent 22%, transparent 72%, rgb(var(--bg-rgb) / .92) 100%);
-}
-
-.heroGlow {
-  position: absolute;
-  width: 620px;
-  height: 620px;
-  right: -120px;
-  top: -180px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgb(var(--lime-rgb) / .2), transparent 65%);
 }
 
 .heroInner {
   position: relative;
   max-width: var(--container);
   margin: 0 auto;
+  padding: clamp(52px, 7vw, 112px) var(--gutter) clamp(40px, 5vw, 72px);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
-  gap: clamp(32px, 4vw, 72px);
-  align-items: center;
+  justify-items: center;
+  text-align: center;
 }
 
-.heroCopy {
-  min-width: 0;
-}
-
-.badge {
+.heroStatus {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 7px 14px 7px 11px;
-  border-radius: var(--r-pill);
-  border: 1px solid var(--field-border);
-  background: rgb(var(--bg-rgb) / .7);
-  backdrop-filter: blur(8px);
-  font-size: 12.5px;
-  letter-spacing: .04em;
-  color: rgb(var(--text-rgb) / .82);
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-2);
 }
 
 .h1 {
-  font-size: clamp(38px, 5.6vw, 76px);
-  margin-top: 24px;
-  max-width: 17ch;
+  font-size: clamp(38px, 6.6vw, 92px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -.04em;
+  margin-top: 22px;
+  max-width: 14ch;
   text-wrap: balance;
 }
 
-.accent {
-  color: var(--accent-text);
-}
-
 .heroLead {
-  font-size: clamp(16.5px, 1.5vw, 19px);
-  max-width: 46ch;
-  margin-top: 22px;
+  font-size: clamp(16.5px, 1.6vw, 21px);
+  line-height: 1.5;
+  max-width: 48ch;
+  margin-top: clamp(20px, 2.4vw, 30px);
   color: var(--text-2);
+  text-wrap: pretty;
 }
 
 .heroCta {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
-  margin-top: 34px;
-}
-
-.heroSide {
-  min-width: 0;
-  display: grid;
-  gap: 14px;
-}
-
-.statsCard {
-  border-radius: 28px;
-  border: 1px solid rgb(var(--fg-rgb) / .14);
-  /* Щільна підкладка: картка лежить поверх фото, текст має читатись */
-  background: linear-gradient(160deg, rgb(var(--bg-rgb) / .92), rgb(var(--bg-rgb) / .88));
-  backdrop-filter: blur(12px);
-  padding: 26px;
-  display: grid;
-  /* Три колонки на всі рядки (через subgrid): цифри й одиниці вирівняні
-     по лівому краю, тож «день», «днів», «міста» стоять рівним стовпчиком */
-  grid-template-columns: auto auto 1fr;
-  column-gap: 8px;
-  row-gap: 18px;
-}
-
-.statRow {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: subgrid;
-  row-gap: 18px;
-}
-
-.divider {
-  grid-column: 1 / -1;
-  height: 1px;
-  background: rgb(var(--fg-rgb) / .08);
-}
-
-.stat {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: subgrid;
-  align-items: baseline;
-}
-
-.statValue {
-  font-variant-numeric: tabular-nums;
-  font-family: var(--font-unbounded), sans-serif;
-  font-size: 34px;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.statUnit {
-  font-family: var(--font-unbounded), sans-serif;
-  white-space: nowrap;
-  font-size: 17px;
-  color: rgb(var(--text-rgb) / .6);
-}
-
-.statNote {
-  /* Підпис у два рядки центруємо навпроти цифри, а не по базовій лінії */
-  align-self: center;
-  margin-left: 18px;
-  font-size: 13.5px;
-  color: rgb(var(--text-rgb) / .62);
-  line-height: 1.45;
-  text-wrap: pretty;
+  margin-top: clamp(28px, 3vw, 40px);
 }
 
 /* Знімок без рамки й підкладки: краї кадру розчинені в альфу
    (scripts/cut-hero-background.mjs), тож межа зображення не читається. */
 .heroShot {
+  width: min(100%, 1040px);
   aspect-ratio: 1200 / 670;
+  margin-top: clamp(20px, 3vw, 44px);
   background-image: url("/assets/hero-exploded.webp");
   background-size: contain;
   background-position: 50% 50%;
   background-repeat: no-repeat;
+  /* Залишки тла по краях кадру гасимо маскою — на чистому чорному їх видно */
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 68%, transparent 100%);
 }
 
-/* ---------- Спільне для секцій ---------- */
-.h2 {
-  font-size: clamp(30px, 3.8vw, 50px);
-  max-width: 22ch;
+.stats {
+  width: 100%;
+  max-width: 980px;
+  margin: clamp(12px, 2vw, 28px) 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
 
-.sectionHead {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 28px;
-  flex-wrap: wrap;
-  margin-bottom: 44px;
+.stat {
+  padding: 6px clamp(12px, 2.4vw, 32px);
+  display: grid;
+  gap: 10px;
+  align-content: start;
 }
 
-.sectionHead .kicker {
-  margin-bottom: 14px;
+.stat + .stat {
+  border-left: 1px solid rgb(var(--fg-rgb) / .12);
 }
 
-.sectionNote {
-  font-size: 15px;
-  max-width: 32ch;
-  color: rgb(var(--text-rgb) / .62);
+.statValue {
+  font-family: var(--font-unbounded), sans-serif;
+  font-weight: 300;
+  font-size: clamp(30px, 4vw, 52px);
+  line-height: 1;
+  letter-spacing: -.03em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
-.sectionLink {
-  margin-top: 24px;
-  font-size: 15px;
+.statUnit {
+  font-size: .42em;
+  letter-spacing: 0;
+  color: var(--text-2);
 }
 
-/* ---------- Послуги ---------- */
-.services {
-  padding-block: clamp(52px, 7vw, 110px);
+.statNote {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-3);
+  text-wrap: pretty;
 }
 
+@media (max-width: 620px) {
+  .stats {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    max-width: 320px;
+  }
+
+  .stat + .stat {
+    border-left: 0;
+    border-top: 1px solid rgb(var(--fg-rgb) / .12);
+    padding-top: 22px;
+  }
+}
+
+/* ---------- Послуги ----------
+   Дві найчастіші роботи — великими плитками, решта — меншими під ними */
 .serviceGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(252px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(12px, 1.4vw, 20px);
 }
 
 .serviceCard {
-  padding: 26px;
+  grid-column: span 3;
+  padding: clamp(22px, 2.2vw, 32px);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   text-decoration: none;
   color: inherit;
 }
@@ -223,183 +182,195 @@
   color: inherit;
 }
 
-.serviceHead {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 2px;
+.serviceCard:nth-child(-n + 2) {
+  grid-column: span 6;
+  padding: clamp(26px, 3.4vw, 52px);
+  min-height: clamp(240px, 24vw, 340px);
 }
 
-/* Іконка легко повертається й яскравішає при наведенні — картка відгукується */
 .serviceIcon {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--r-icon);
-  background: rgb(var(--lime-rgb) / .1);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background .3s var(--ease), transform .3s var(--ease);
+  width: 30px;
+  height: 30px;
+  margin-bottom: auto;
 }
 
-.serviceCard:hover .serviceIcon {
-  background: rgb(var(--lime-rgb) / .22);
-  transform: rotate(-6deg) scale(1.06);
+.serviceIcon svg {
+  width: 100%;
+  height: 100%;
 }
 
-.serviceNo {
-  font-family: var(--font-unbounded), sans-serif;
-  font-size: 13px;
-  color: var(--text-3);
+.serviceCard:nth-child(-n + 2) .serviceIcon {
+  width: 46px;
+  height: 46px;
 }
 
 .serviceCard h3 {
-  font-size: 21px;
+  margin-top: 26px;
+  font-size: 19px;
+}
+
+.serviceCard:nth-child(-n + 2) h3 {
+  font-size: clamp(24px, 2.6vw, 36px);
+  font-weight: 300;
 }
 
 .serviceBody {
   font-size: 14.5px;
   line-height: 1.55;
-  color: rgb(var(--text-rgb) / .66);
+  color: var(--text-2);
+  max-width: 44ch;
+}
+
+.serviceCard:nth-child(-n + 2) .serviceBody {
+  font-size: 16px;
 }
 
 .serviceMeta {
-  margin-top: auto;
-  padding-top: 10px;
-  font-size: 13px;
+  margin-top: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
   color: var(--accent-text);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
 }
 
-.serviceArrow {
-  flex: none;
-  opacity: 0;
-  transform: translateX(-6px);
-  transition: opacity .25s, transform .25s var(--ease);
-}
-
-.serviceCard:hover .serviceArrow {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* На дотику стрілку видно завжди — наведення там не буває */
-@media (hover: none) {
-  .serviceArrow {
-    opacity: .6;
-    transform: none;
+@media (max-width: 1040px) {
+  .serviceCard {
+    grid-column: span 6;
   }
 }
 
-/* ---------- Репутація ---------- */
-.reputation {
-  position: relative;
-  overflow: hidden;
-  border-top: 1px solid rgb(var(--fg-rgb) / .08);
-  border-bottom: 1px solid rgb(var(--fg-rgb) / .08);
+@media (max-width: 620px) {
+  .serviceCard,
+  .serviceCard:nth-child(-n + 2) {
+    grid-column: 1 / -1;
+    min-height: 0;
+  }
 }
 
-.repBg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.repPhoto {
-  position: absolute;
-  inset: 0;
-  background-image: url("/assets/bg-circuit.webp");
-  background-size: cover;
-  background-position: 40% 50%;
-  opacity: .7;
-  filter: grayscale(.3) brightness(.95);
-}
-
-.repVeil {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(96deg, rgb(var(--bg-rgb) / .93) 0%, rgb(var(--bg-rgb) / .84) 46%, rgb(var(--bg-rgb) / .38) 100%);
-}
-
-.repInner {
-  position: relative;
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: clamp(56px, 7vw, 108px) var(--gutter);
+/* ---------- Репутація: одна думка на всю смугу ---------- */
+.statement {
+  padding-block: clamp(80px, 11vw, 168px);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
-  gap: clamp(28px, 4vw, 64px);
-  align-items: center;
+  justify-items: center;
+  gap: clamp(22px, 2.6vw, 36px);
+  text-align: center;
 }
 
-.repTitle {
+.statementTitle {
   font-weight: 300;
-  font-size: clamp(28px, 3.6vw, 46px);
-  line-height: 1.1;
-  max-width: 20ch;
+  font-size: clamp(30px, 5.2vw, 72px);
+  line-height: 1.04;
+  letter-spacing: -.035em;
+  max-width: 18ch;
+  text-wrap: balance;
 }
 
-.repText {
-  font-size: clamp(16px, 1.5vw, 18.5px);
-  line-height: 1.65;
-  color: rgb(var(--text-rgb) / .74);
-  max-width: 46ch;
+.statementText {
+  font-size: clamp(16.5px, 1.6vw, 20px);
+  line-height: 1.6;
+  color: var(--text-2);
+  max-width: 54ch;
+  text-wrap: pretty;
 }
 
 /* ---------- Як це працює ---------- */
-.how {
-  padding-block: clamp(52px, 7vw, 108px);
-}
-
-.how .kicker {
-  margin-bottom: 14px;
-}
-
-.howTitle {
-  margin-bottom: 48px;
-}
-
 .steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 28px;
+  gap: clamp(28px, 4vw, 64px);
+}
+
+.step {
+  border-top: 1px solid rgb(var(--fg-rgb) / .16);
+  padding-top: 22px;
 }
 
 .stepNo {
-  font-family: var(--font-unbounded), sans-serif;
-  font-size: 15px;
-  color: var(--accent-text);
-}
-
-.stepLine {
   display: block;
-  height: 1px;
-  background: rgb(var(--fg-rgb) / .12);
-  margin: 16px 0 20px;
-  transform-origin: left;
+  font-family: var(--font-unbounded), sans-serif;
+  font-weight: 300;
+  font-size: clamp(56px, 7vw, 96px);
+  line-height: 1;
+  letter-spacing: -.04em;
+  color: var(--accent-text);
 }
 
 .stepTitle {
   font-size: 23px;
-  margin-bottom: 10px;
+  margin: 22px 0 10px;
 }
 
 .stepBody {
-  font-size: 15px;
-  color: rgb(var(--text-rgb) / .66);
+  font-size: 15.5px;
+  color: var(--text-2);
+  max-width: 38ch;
 }
 
 /* ---------- Моделі ---------- */
-.models {
-  border-top: 1px solid rgb(var(--fg-rgb) / .08);
+.phones {
+  list-style: none;
+  margin: 0 0 clamp(40px, 5vw, 72px);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: clamp(10px, 1.2vw, 18px);
 }
 
-.modelsInner {
-  padding-block: clamp(52px, 7vw, 108px);
+.phone {
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.phone:hover {
+  color: var(--accent-text);
+}
+
+/* Фото моделей зняті на білому — плитка теж біла в обох темах */
+.phoneShot {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--r-card);
+  background: #FFFFFF;
+  padding: 12%;
+  transition: transform .4s var(--ease);
+}
+
+.phone:hover .phoneShot {
+  transform: translateY(-6px);
+}
+
+.phoneShot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.phoneName {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  /* Стрічка, яку гортають пальцем: край наступної плитки підказує, що далі є ще */
+  .phones {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: min(42%, 190px);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+
+  .phones > li {
+    scroll-snap-align: start;
+  }
 }
 
 .groupList {
@@ -408,15 +379,15 @@
 
 .group {
   padding: 18px 0;
-  border-bottom: 1px solid rgb(var(--fg-rgb) / .07);
+  border-bottom: 1px solid rgb(var(--fg-rgb) / .1);
   display: grid;
-  grid-template-columns: minmax(120px, 190px) 1fr;
+  grid-template-columns: minmax(120px, 210px) 1fr;
   gap: 20px;
   align-items: baseline;
 }
 
 .group:first-child {
-  border-top: 1px solid rgb(var(--fg-rgb) / .07);
+  border-top: 1px solid rgb(var(--fg-rgb) / .1);
 }
 
 .groupLabel {
@@ -435,7 +406,7 @@
 
 .modelChip {
   font-size: 14.5px;
-  color: rgb(var(--text-rgb) / .82);
+  color: rgb(var(--text-rgb) / .86);
   white-space: nowrap;
 }
 
@@ -443,136 +414,129 @@
 .modelChip:not(:last-child)::after {
   content: "·";
   margin-left: 9px;
-  color: rgb(var(--fg-rgb) / .25);
+  color: rgb(var(--fg-rgb) / .3);
 }
 
 .modelsNote {
-  margin-top: 20px;
+  margin-top: 22px;
   font-size: 14.5px;
-  color: rgb(var(--text-rgb) / .62);
+  color: var(--text-3);
 }
 
 @media (max-width: 620px) {
   .group {
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 10px;
   }
 }
 
-/* ---------- До і після ---------- */
-.worksSection,
-.reviewsSection {
-  border-top: 1px solid rgb(var(--fg-rgb) / .08);
-}
-
-.worksInner {
-  padding-block: clamp(52px, 7vw, 108px);
-}
-
-.worksInner .kicker,
-.reviewsInner .kicker {
-  margin-bottom: 14px;
-}
-
-.worksTitle {
-  margin-bottom: 44px;
-}
-
-.worksGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
-  gap: 24px;
-}
-
-.workMedia {
-  border-radius: var(--r-card);
-  border: 1px solid rgb(var(--fg-rgb) / .1);
-  aspect-ratio: 4 / 3;
-}
-
-.work {
-  margin: 0;
-}
-
-.workCaption {
-  margin-top: 12px;
-  font-size: 14px;
-  color: rgb(var(--text-rgb) / .62);
-}
-
 /* ---------- Відгуки ---------- */
-.reviewsInner {
-  padding-block: clamp(52px, 7vw, 100px);
+.reviewsHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(32px, 4vw, 52px);
+}
+
+.reviewsProof {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgb(var(--lime-rgb) / .28);
+  background: rgb(var(--lime-rgb) / .07);
+  color: var(--info-text);
+  font-size: 13.5px;
+  line-height: 1.4;
+  max-width: 42ch;
+}
+
+.reviewsProof svg {
+  flex: none;
+  color: var(--accent-text);
+}
+
+.reviewFormWrap {
+  margin-top: clamp(28px, 4vw, 48px);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
+  gap: clamp(24px, 3vw, 48px);
+  align-items: start;
+}
+
+.reviewFormTitle {
+  font-size: clamp(22px, 2.4vw, 30px);
+  margin-bottom: 12px;
+}
+
+.reviewFormText {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--text-2);
+  max-width: 42ch;
 }
 
 /* ---------- Поштою ---------- */
-.mailSection {
-  padding-block: clamp(24px, 4vw, 60px);
-}
-
-.mailBox {
-  border-radius: var(--r-block);
-  border: 1px solid rgb(var(--fg-rgb) / .1);
-  background: linear-gradient(150deg, rgb(var(--lime-rgb) / .1), rgb(var(--fg-rgb) / .02));
-  padding: clamp(28px, 4vw, 56px);
+.mail {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
-  gap: clamp(26px, 3.4vw, 56px);
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: clamp(32px, 5vw, 88px);
   align-items: center;
 }
 
-.mailTitle {
-  font-size: clamp(26px, 3vw, 40px);
-  line-height: 1.08;
-  margin: 14px 0 16px;
-}
-
 .mailLead {
-  font-size: 16px;
-  line-height: 1.65;
-  margin-bottom: 24px;
+  font-size: clamp(16px, 1.5vw, 19px);
+  line-height: 1.6;
+  margin: 22px 0 30px;
   color: var(--text-2);
-  max-width: 44ch;
+  max-width: 42ch;
 }
 
 .mailSteps {
-  display: grid;
-  gap: 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .mailStep {
   display: flex;
-  gap: 16px;
-  align-items: baseline;
-  padding-top: 14px;
+  gap: 22px;
+  align-items: center;
+  padding: 20px 0;
+  border-top: 1px solid rgb(var(--fg-rgb) / .12);
 }
 
-.mailSteps > div:first-child .mailStep {
-  padding-top: 0;
+.mailStep:last-child {
+  border-bottom: 1px solid rgb(var(--fg-rgb) / .12);
 }
 
 .mailNo {
   font-family: var(--font-unbounded), sans-serif;
-  font-size: 13px;
+  font-weight: 300;
+  font-size: 34px;
+  line-height: 1;
+  min-width: 1.2ch;
   color: var(--accent-text);
 }
 
 .mailText {
-  font-size: 15.5px;
-  color: rgb(var(--text-rgb) / .86);
+  font-size: 16.5px;
+  color: rgb(var(--text-rgb) / .9);
 }
 
 /* ---------- FAQ ---------- */
 .faqSection {
-  padding-block: clamp(52px, 7vw, 104px);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: clamp(28px, 4vw, 64px);
   align-items: start;
 }
 
-.faqSection .kicker {
-  margin-bottom: 14px;
+.faqSection .h2 {
+  max-width: 12ch;
 }
 
 .faqList {
@@ -580,12 +544,12 @@
 }
 
 .faqItem {
-  border-top: 1px solid rgb(var(--fg-rgb) / .1);
+  border-top: 1px solid rgb(var(--fg-rgb) / .14);
   padding: 22px 0;
 }
 
 .faqItem:last-child {
-  border-bottom: 1px solid rgb(var(--fg-rgb) / .1);
+  border-bottom: 1px solid rgb(var(--fg-rgb) / .14);
 }
 
 .faqQ {
@@ -613,15 +577,19 @@
 
 .faqA {
   margin-top: 14px;
-  font-size: 15px;
+  font-size: 15.5px;
   line-height: 1.6;
-  color: rgb(var(--text-rgb) / .68);
+  color: var(--text-2);
   max-width: 60ch;
 }
 
-/* ---------- Запис ---------- */
+/* ---------- Статус і запис ---------- */
+.statusWrap {
+  padding-top: clamp(20px, 3vw, 44px);
+}
+
 .book {
-  padding-block: clamp(44px, 6vw, 96px);
+  padding-block: clamp(36px, 5vw, 80px) clamp(56px, 7vw, 112px);
 }
 
 .bookGrid {
@@ -634,12 +602,9 @@
   min-width: 0;
 }
 
-.bookCopy .kicker {
-  margin-bottom: 14px;
-}
-
 .bookCopy .h2 {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
+  max-width: 16ch;
 }
 
 .bookLead {
@@ -674,58 +639,3 @@
 .contactLink:hover {
   color: var(--accent-text);
 }
-
-/* ---------- Форма відгуку ---------- */
-.reviewFormWrap {
-  margin-top: clamp(28px, 4vw, 48px);
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
-  gap: clamp(24px, 3vw, 48px);
-  align-items: start;
-}
-
-.reviewFormTitle {
-  font-size: clamp(22px, 2.4vw, 30px);
-  margin-bottom: 12px;
-}
-
-.reviewFormText {
-  font-size: 15.5px;
-  line-height: 1.6;
-  color: var(--text-2);
-  max-width: 42ch;
-}
-
-/* ---------- Відгуки: доказ справжності ---------- */
-.reviewsHead {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
-  margin-bottom: 44px;
-}
-
-.reviewsHead .kicker {
-  margin-bottom: 14px;
-}
-
-.reviewsProof {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 9px 14px;
-  border-radius: var(--r-pill);
-  border: 1px solid rgb(var(--lime-rgb) / .28);
-  background: rgb(var(--lime-rgb) / .07);
-  color: var(--info-text);
-  font-size: 13.5px;
-  line-height: 1.4;
-  max-width: 42ch;
-}
-
-.reviewsProof svg {
-  flex: none;
-  color: var(--accent-text);
-}
-

@@ -15,7 +15,7 @@ const serviceLinks = [
 
 export default function Footer() {
   return (
-    <footer className={styles.footer}>
+    <footer className={`stripe-alt ${styles.footer}`}>
       <div className={styles.grid}>
         <div>
           <Logo as="text" />

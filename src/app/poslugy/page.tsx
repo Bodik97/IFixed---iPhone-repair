@@ -37,13 +37,7 @@ export default function ServicesPage() {
   return (
     <>
       {/* Герой */}
-      <section className={styles.hero} data-theme="dark">
-        <span aria-hidden="true" className={styles.heroBg}>
-          <span className={styles.heroPhoto} />
-          <span className={styles.heroVeil} />
-          <span className={`${styles.heroGlow} anim-drift`} />
-        </span>
-
+      <section className={`band ${styles.hero}`} data-theme="dark">
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
             <span className={`${styles.badge} nUp`}>
@@ -52,7 +46,7 @@ export default function ServicesPage() {
             </span>
 
             <h1 className={`${styles.h1} nUp nUp-1`}>
-              Послуги <span className={styles.accent}>сервісу</span> GadgetFix
+              Послуги сервісу GadgetFix
             </h1>
 
             <p className={`${styles.heroLead} nUp nUp-2`}>
@@ -70,24 +64,22 @@ export default function ServicesPage() {
             </div>
           </div>
 
-          <div className={`${styles.heroShot} nUp nUp-2 anim-float`}>
-            <span className={styles.shotPhoto} />
-            <span className={styles.shotVeil} />
-            <span className={styles.shotCaption}>Пайка й мікроелектроніка — наш профіль</span>
-          </div>
         </div>
       </section>
 
-      <Ticker items={tickerItems} />
+      <div className="band stripe-alt">
+        <Ticker items={tickerItems} />
 
-      <ServiceCatalog />
+        <ServiceCatalog />
+      </div>
 
-      <PriceSummary />
+      <div className="band" data-theme="dark">
+        <PriceSummary />
+      </div>
 
       {/* Процес */}
-      <section className={styles.process}>
+      <section className={`band stripe-alt ${styles.process}`}>
         <div className={`container ${styles.processInner}`}>
-          <div className="kicker">Процес</div>
           <h2 className={styles.processTitle}>Як проходить будь-яка робота</h2>
 
           <div className={styles.flowGrid}>
@@ -105,6 +97,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
+      <div className="band" data-theme="dark">
       {/* Показники */}
       <section className={`container ${styles.promises}`}>
         <div className={styles.promiseGrid}>
@@ -121,7 +114,6 @@ export default function ServicesPage() {
       <section id="book" className={`container ${styles.book}`}>
         <div className={styles.bookGrid}>
           <div>
-            <div className="kicker">Запис</div>
             <h2 className={styles.bookTitle}>Оберіть послугу — решту з&apos;ясуємо в розмові</h2>
             <p className={styles.bookLead}>
               Передзвонимо за 25 хвилин у робочі години й одразу скажемо орієнтир по ціні та терміну.
@@ -168,6 +160,7 @@ export default function ServicesPage() {
           />
         </div>
       </section>
+      </div>
 
       <script
         type="application/ld+json"

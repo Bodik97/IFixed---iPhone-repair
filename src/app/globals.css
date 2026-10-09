@@ -641,3 +641,78 @@ button,
     padding-bottom: calc(66px + env(safe-area-inset-bottom, 0px));
   }
 }
+
+/* ---------- Смуги («зебра») ----------
+   Публічні сторінки складені з повноширинних смуг, що чергуються: темна
+   (data-theme="dark") і «альтернативна» (.stripe-alt). У світлій темі
+   альтернативна — кремова, у темній — графітово-сіра: перемикач міняє
+   контраст смуг, а не їхній порядок.
+
+   Межу між смугами малює клин ::after кольором НАСТУПНОЇ смуги — так він
+   лишається всередині своєї секції й не обрізається її overflow: hidden. */
+:root {
+  --stripe-dark: #0B0C0E;
+  --stripe-alt: #17191D;
+  --stripe-alt-rgb: 23 25 29;
+  --skew: clamp(20px, 4.4vw, 76px);
+}
+
+:root[data-theme="light"] {
+  --stripe-alt: #F2F2EC;
+  --stripe-alt-rgb: 242 242 236;
+}
+
+.stripe-alt {
+  --bg: var(--stripe-alt);
+  --bg-rgb: var(--stripe-alt-rgb);
+  background: var(--bg);
+}
+
+.band {
+  position: relative;
+  padding-bottom: var(--skew);
+}
+
+.band::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px 0;
+  height: calc(var(--skew) + 1px);
+  background: var(--stripe-next);
+  clip-path: polygon(0 100%, 100% 0, 100% 100%);
+  pointer-events: none;
+}
+
+/* Напрямок скосу чергується: після темної межа підіймається праворуч,
+   після альтернативної — ліворуч */
+.band.stripe-alt::after {
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+}
+
+/* Заголовки секцій у смугах — тонкі, як на головній */
+.band h2 {
+  font-weight: 300;
+}
+
+/* Смуга-обгортка над готовими секціями: ті не розраховані починатись
+   одразу під скосом, тож даємо їм повітря згори */
+div.band {
+  padding-top: clamp(24px, 3.4vw, 56px);
+}
+
+.band[data-theme="dark"] {
+  --stripe-next: var(--stripe-alt);
+}
+
+.band.stripe-alt {
+  --stripe-next: var(--stripe-dark);
+}
+
+/* Остання смуга перед підвалом того самого кольору — без клина */
+.band-flat {
+  padding-bottom: 0;
+}
+
+.band-flat::after {
+  display: none;
+}

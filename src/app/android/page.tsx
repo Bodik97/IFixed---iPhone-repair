@@ -58,13 +58,7 @@ export default function AndroidPage() {
   return (
     <>
       {/* Герой */}
-      <section className={styles.hero} data-theme="dark">
-        <span aria-hidden="true" className={styles.heroBg}>
-          <span className={styles.heroPhoto} />
-          <span className={styles.heroVeil} />
-          <span className={`${styles.heroGlow} anim-drift`} />
-        </span>
-
+      <section className={`band ${styles.hero}`} data-theme="dark">
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
             <span className={`${styles.badge} nUp`}>
@@ -73,7 +67,7 @@ export default function AndroidPage() {
             </span>
 
             <h1 className={`${styles.h1} nUp nUp-1`}>
-              Ремонт <span className={styles.accent}>Android</span>-смартфонів
+              Ремонт Android-смартфонів
             </h1>
 
             <p className={`${styles.heroLead} nUp nUp-2`}>
@@ -108,9 +102,9 @@ export default function AndroidPage() {
         </div>
       </section>
 
+      <div className="band stripe-alt">
       {/* Кроки */}
       <section className={`container ${styles.steps}`}>
-        <div className="kicker">Як це працює</div>
         <h2 className={styles.stepsTitle}>Спершу деталь — потім ціна</h2>
 
         <div className={styles.stepGrid}>
@@ -126,11 +120,13 @@ export default function AndroidPage() {
         </div>
       </section>
 
+      </div>
+
+      <div className="band" data-theme="dark">
       {/* Заявка */}
       <section id="zayavka" className={`container ${styles.send}`}>
         <div className={styles.sendGrid}>
           <div>
-            <div className="kicker">Заявка</div>
             <h2 className={styles.sendTitle}>Напишіть модель — пошукаємо деталь</h2>
             <p className={styles.sendLead}>
               Вкажіть у описі марку й модель телефона, наприклад «Samsung A54, розбитий екран».
@@ -145,13 +141,13 @@ export default function AndroidPage() {
       {/* FAQ */}
       <section className={`container ${styles.faqSection}`}>
         <div>
-          <div className="kicker">Часті питання</div>
           <h2 className={styles.faqTitle}>Про ремонт Android</h2>
         </div>
         <div className={styles.faqList}>
           <Accordion items={faq} />
         </div>
       </section>
+      </div>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     </>

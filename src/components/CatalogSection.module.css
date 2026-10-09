@@ -4,40 +4,6 @@
   padding: clamp(46px, 6vw, 96px) var(--gutter) clamp(26px, 3vw, 44px);
 }
 
-.heroBg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.heroPhoto {
-  position: absolute;
-  inset: 0;
-  background-image: url("/assets/bg-circuit.webp");
-  background-size: cover;
-  background-position: 50% 40%;
-  opacity: .72;
-  filter: grayscale(.3) brightness(.9);
-}
-
-.heroVeil {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(100deg, rgb(var(--bg-rgb) / .93) 0%, rgb(var(--bg-rgb) / .82) 45%, rgb(var(--bg-rgb) / .4) 78%),
-    linear-gradient(180deg, rgb(var(--bg-rgb) / .4) 0%, transparent 30%, rgb(var(--bg-rgb) / .95) 100%);
-}
-
-.heroGlow {
-  position: absolute;
-  width: 560px;
-  height: 560px;
-  left: -140px;
-  top: -200px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgb(var(--lime-rgb) / .18), transparent 65%);
-}
-
 .heroInner {
   position: relative;
   max-width: var(--container);
@@ -162,4 +128,15 @@
   font-size: 12px;
   opacity: .65;
   font-variant-numeric: tabular-nums;
+}
+
+/* Герой каталогу — по центру, як на головній */
+.heroInner {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.tabs {
+  justify-content: center;
 }

@@ -11,10 +11,6 @@
   margin-bottom: 26px;
 }
 
-.head .kicker {
-  margin-bottom: 12px;
-}
-
 .title {
   font-size: clamp(27px, 3.4vw, 44px);
 }

@@ -18,7 +18,6 @@ export default function PriceSummary() {
     <section id="tsiny" className={`container ${styles.section}`}>
       <div className={styles.head}>
         <div>
-          <div className="kicker">Ціни</div>
           <h2 className={styles.title}>Скільки коштує</h2>
           <p className={styles.lead}>
             Вилка по всьому каталогу — від найстаршої моделі до найновішої. Точна ціна вашої

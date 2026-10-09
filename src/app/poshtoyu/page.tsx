@@ -29,13 +29,7 @@ export default function MailInPage() {
   return (
     <>
       {/* Герой */}
-      <section className={styles.hero} data-theme="dark">
-        <span aria-hidden="true" className={styles.heroBg}>
-          <span className={styles.heroPhoto} />
-          <span className={styles.heroVeil} />
-          <span className={`${styles.heroGlow} anim-drift`} />
-        </span>
-
+      <section className={`band ${styles.hero}`} data-theme="dark">
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
             <span className={`${styles.badge} nUp`}>
@@ -44,7 +38,7 @@ export default function MailInPage() {
             </span>
 
             <h1 className={`${styles.h1} nUp nUp-1`}>
-              Ремонт <span className={styles.accent}>поштою</span> — без поїздки до Львова
+              Ремонт поштою — без поїздки до Львова
             </h1>
 
             <p className={`${styles.heroLead} nUp nUp-2`}>
@@ -95,19 +89,20 @@ export default function MailInPage() {
         </div>
       </section>
 
+      <div className="band stripe-alt">
       {/* Кроки */}
       <section className={`container ${styles.steps}`}>
-        <div className="kicker">Як це працює</div>
         <h2 className={styles.stepsTitle}>Шість кроків від відправки до повернення</h2>
 
         <StepDeck steps={steps} />
       </section>
 
+      </div>
+
       {/* Пам'ятка */}
-      <section className={styles.packing}>
+      <section className={`band ${styles.packing}`} data-theme="dark">
         <div className={`container ${styles.packingGrid}`}>
           <div>
-            <div className="kicker">Пам&apos;ятка</div>
             <h2 className={styles.packingTitle}>Як спакувати, щоб доїхало цілим</h2>
             <p className={styles.packingLead}>
               Відмітьте пункти — це той самий список, який ми диктуємо телефоном.
@@ -118,11 +113,11 @@ export default function MailInPage() {
         </div>
       </section>
 
+      <div className="band stripe-alt">
       {/* Популярні моделі */}
       <section className={`container ${styles.popular}`}>
         <div className={styles.popularHead}>
           <div>
-            <div className="kicker">Що надсилають найчастіше</div>
             <h2 className={styles.popularTitle}>Оберіть модель — і одразу до деталей</h2>
           </div>
           <Link href="/modeli" className={styles.allLink}>
@@ -145,13 +140,15 @@ export default function MailInPage() {
         </div>
       </section>
 
+      </div>
+
+      <div className="band" data-theme="dark">
       <TtnTracker />
 
       {/* Оформлення */}
       <section id="send" className={`container ${styles.send}`}>
         <div className={styles.sendGrid}>
           <div>
-            <div className="kicker">Оформлення</div>
             <h2 className={styles.sendTitle}>Заповніть — надішлемо адресу відділення</h2>
             <p className={styles.sendLead}>
               Після заявки приходить SMS з адресою, отримувачем і номером замовлення. Далі просто
@@ -192,13 +189,13 @@ export default function MailInPage() {
       {/* FAQ */}
       <section className={`container ${styles.faqSection}`}>
         <div>
-          <div className="kicker">Часті питання</div>
           <h2 className={styles.faqTitle}>Про доставку й оплату</h2>
         </div>
         <div className={styles.faqList}>
           <Accordion items={faq} />
         </div>
       </section>
+      </div>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     </>

@@ -53,7 +53,6 @@ export default function StatusCheck() {
     <section id="status" className={styles.section}>
       <div className={styles.box}>
         <div>
-          <div className="kicker">Статус ремонту</div>
           <h2 className={styles.title}>Телефон уже в нас? Перевірте етап</h2>
           <p className={styles.lead}>
             Номер замовлення з квитанції та останні 4 цифри вашого телефону — і побачите, що

@@ -46,6 +46,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   const others = services.filter((s) => s.slug !== slug && serviceDetails[s.slug]).slice(0, 4);
 
   return (
+    <>
+    <div className="band" data-theme="dark">
     <div className={styles.page}>
       <div className={styles.navRow}>
         <BackButton fallback="/poslugy" />
@@ -111,6 +113,11 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </aside>
       )}
 
+    </div>
+    </div>
+
+    <div className="band stripe-alt">
+    <div className={styles.page}>
       <section className={styles.section} aria-labelledby="oznaky">
         <h2 id="oznaky" className={styles.h2}>
           Коли це до нас
@@ -161,6 +168,11 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </p>
       </section>
 
+    </div>
+    </div>
+
+    <div className="band" data-theme="dark">
+    <div className={styles.page}>
       {range && <ServicePrices job={slug as (typeof PRICED_JOBS)[number]} />}
 
       <section className={styles.section} aria-labelledby="inshi">
@@ -177,5 +189,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </div>
       </section>
     </div>
+    </div>
+    </>
   );
 }
