@@ -50,6 +50,7 @@ import { GET as csv } from "@/app/admin/groshi/csv/route";
 import { GET as receipt } from "@/app/admin/zayavky/[id]/kvytantsiya/route";
 import { GET as state } from "@/app/api/state/route";
 import { GET as testAlert } from "@/app/admin/test-zboyu/route";
+import { GET as testTelegram } from "@/app/admin/test-telegram/route";
 
 const okBlob = { statusCode: 200, stream: new ReadableStream(), blob: { contentType: "image/webp" } };
 
@@ -179,5 +180,46 @@ describe("GET /admin/test-zboyu", () => {
 
     expect(first).toMatch(/^Тестовий збій/);
     expect(second).not.toBe(first);
+  });
+});
+
+describe("GET /admin/test-telegram", () => {
+  it("не майстру — 403, до Telegram не йдемо", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+
+    expect((await testTelegram()).status).toBe(403);
+    expect(fetchMock).not.toHaveBeenCalled();
+    vi.unstubAllGlobals();
+  });
+
+  it("майстру — стан змінних, імʼя бота й відмова Telegram дослівно, без токена", async () => {
+    m.admin = true;
+    vi.stubEnv("TELEGRAM_BOT_TOKEN", "123:secret");
+    vi.stubEnv("TELEGRAM_CHAT_ID", "111");
+    vi.stubEnv("TELEGRAM_ALERT_CHAT_ID", " -5 ");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) => ({
+        json: async () =>
+          url.endsWith("/getMe")
+            ? { ok: true, result: { username: "some_bot" } }
+            : url.endsWith("/getChat")
+              ? { ok: true, result: {} }
+              : { ok: false, description: "Bad Request: chat not found" },
+      })),
+    );
+
+    const text = await (await testTelegram()).text();
+
+    expect(text).toContain("TELEGRAM_BOT_TOKEN: задано");
+    expect(text).toContain('TELEGRAM_ALERT_CHAT_ID (збої): " -5 "');
+    expect(text).toContain("Бот за токеном: @some_bot");
+    expect(text).toContain("Бачить чат майстра 111: так");
+    expect(text).toContain("Тестове повідомлення в чат збоїв: НІ — Bad Request: chat not found");
+    expect(text).not.toContain("secret");
+
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
   });
 });
