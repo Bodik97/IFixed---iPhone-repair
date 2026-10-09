@@ -57,6 +57,12 @@
   background: rgb(var(--lime-rgb) / .07);
 }
 
+.who {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
 .title {
   font-family: var(--font-unbounded), sans-serif;
   font-size: 16px;
@@ -113,22 +119,42 @@
   line-height: 1.5;
 }
 
-.bot {
+/* Репліка Івана: аватар ліворуч, бульбашка поруч */
+.botRow {
   justify-self: start;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 92%;
+}
+
+.avatar {
+  flex: none;
+  border-radius: 50%;
+}
+
+.avatarGap {
+  flex: none;
+  width: 30px;
+}
+
+.bot {
+  max-width: none;
   border: 1px solid var(--border);
+  border-bottom-left-radius: 5px;
   background: var(--surface);
-  color: var(--text-2);
+  color: var(--text);
 }
 
 .me {
   justify-self: end;
-  background: rgb(var(--lime-rgb) / .14);
-  border: 1px solid rgb(var(--lime-rgb) / .3);
-  color: var(--text);
+  border-bottom-right-radius: 5px;
+  background: var(--accent);
+  border: 1px solid var(--accent-edge);
+  color: var(--on-accent);
 }
 
 .typing {
-  justify-self: start;
   display: inline-flex;
   gap: 4px;
   padding: 13px 15px;

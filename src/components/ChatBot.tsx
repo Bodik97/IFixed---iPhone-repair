@@ -18,6 +18,23 @@ const modelChips = bookingModels.filter((m) => m !== "Інше / не знаю")
 /** Пауза перед відповіддю помічника — щоб репліки не з'являлись усі разом */
 const TYPING_MS = 550;
 
+/** Іван — намальований робот у кольорах бренду: одразу видно, що відповідає не людина */
+function BotAvatar({ size }: { size: number }) {
+  return (
+    <svg className={styles.avatar} width={size} height={size} viewBox="0 0 40 40" aria-hidden="true">
+      <circle cx="20" cy="20" r="20" fill="#111311" />
+      <path d="M20 6.5v4" stroke="#DCF35A" strokeWidth="1.8" strokeLinecap="round" />
+      <circle cx="20" cy="5.8" r="1.9" fill="#DCF35A" />
+      <rect x="9.5" y="11" width="21" height="17" rx="6" fill="#DCF35A" />
+      <rect x="6.6" y="16.5" width="2.4" height="6" rx="1.2" fill="#DCF35A" />
+      <rect x="31" y="16.5" width="2.4" height="6" rx="1.2" fill="#DCF35A" />
+      <circle cx="15.8" cy="18.6" r="2.3" fill="#111311" />
+      <circle cx="24.2" cy="18.6" r="2.3" fill="#111311" />
+      <path d="M15.6 23.6c1.3 1.3 2.8 1.9 4.4 1.9s3.1-.6 4.4-1.9" fill="none" stroke="#111311" strokeWidth="1.7" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export default function ChatBot() {
   const pathname = usePathname();
 
@@ -177,10 +194,13 @@ export default function ChatBot() {
   return (
     <section className={styles.panel} aria-label="Консультація">
       <header className={styles.head}>
-        <div>
-          <div className={styles.title}>Консультація</div>
-          {/* Чесно кажемо, що це не людина */}
-          <div className={styles.subtitle}>Відповідає автоматично · майстер передзвонить</div>
+        <div className={styles.who}>
+          <BotAvatar size={42} />
+          <div>
+            <div className={styles.title}>Іван</div>
+            {/* Чесно кажемо, що це не людина */}
+            <div className={styles.subtitle}>Бот-помічник · майстер передзвонить</div>
+          </div>
         </div>
 
         <div className={styles.headActions}>
@@ -199,17 +219,28 @@ export default function ChatBot() {
       </header>
 
       <div className={styles.list} ref={listRef}>
-        {lines.map((l, i) => (
-          <div key={i} className={l.from === "me" ? styles.me : styles.bot}>
-            {l.text}
-          </div>
-        ))}
+        {lines.map((l, i) =>
+          l.from === "me" ? (
+            <div key={i} className={styles.me}>
+              {l.text}
+            </div>
+          ) : (
+            <div key={i} className={styles.botRow}>
+              {/* Аватар — лише біля першої репліки з кількох поспіль, як у месенджерах */}
+              {lines[i - 1]?.from === "bot" ? <span className={styles.avatarGap} /> : <BotAvatar size={30} />}
+              <div className={styles.bot}>{l.text}</div>
+            </div>
+          ),
+        )}
 
         {typing && (
-          <div className={styles.typing} aria-label="Помічник друкує">
-            <span />
-            <span />
-            <span />
+          <div className={styles.botRow}>
+            {lines[lines.length - 1]?.from === "bot" ? <span className={styles.avatarGap} /> : <BotAvatar size={30} />}
+            <div className={styles.typing} aria-label="Іван друкує">
+              <span />
+              <span />
+              <span />
+            </div>
           </div>
         )}
       </div>

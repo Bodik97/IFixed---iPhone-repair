@@ -66,5 +66,7 @@ export async function GET() {
 
   return NextResponse.json({
     version: `${row.leads}:${row.updated?.getTime() ?? 0}:${msg.unread}`,
+    // Для значка в шапці: скільки повідомлень майстра клієнт ще не бачив
+    unread: msg.unread,
   });
 }

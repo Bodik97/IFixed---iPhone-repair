@@ -161,6 +161,6 @@ describe("GET /api/state", () => {
 
   it("клієнт — свій відбиток", async () => {
     m.user = { id: "u1", primaryEmailAddress: { emailAddress: "a@b.cc" } };
-    expect(await (await state()).json()).toEqual({ version: "3:1000:2" });
+    expect(await (await state()).json()).toEqual({ version: "3:1000:2", unread: 2 });
   });
 });

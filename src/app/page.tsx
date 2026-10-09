@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import BookingForm from "@/components/BookingForm";
+import PhoneStrip from "@/components/PhoneStrip";
 import Reveal from "@/components/Reveal";
 import ReviewSlider from "@/components/ReviewSlider";
 import ReviewForm from "@/components/ReviewForm";
@@ -185,19 +186,7 @@ export default async function Home() {
             <p className={styles.headNote}>Деталь під вашу модель підбираємо одразу після заявки.</p>
           </div>
 
-          <ul className={styles.phones}>
-            {popularModels.map((m) => (
-              <li key={m.slug}>
-                <Link href={`/modeli/${m.slug}`} className={styles.phone}>
-                  <span className={styles.phoneShot}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={m.img} alt="" loading="lazy" />
-                  </span>
-                  <span className={styles.phoneName}>{m.name}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <PhoneStrip models={popularModels} />
 
           <div className={styles.groupList}>
             {modelGroups.map((g) => (
@@ -290,7 +279,7 @@ export default async function Home() {
 
           <div className={styles.faqList}>
             {faq.map((f) => (
-              <details key={f.q} className={styles.faqItem}>
+              <details key={f.q} name="faq" className={styles.faqItem}>
                 <summary className={styles.faqQ}>{f.q}</summary>
                 <p className={styles.faqA}>{f.a}</p>
               </details>

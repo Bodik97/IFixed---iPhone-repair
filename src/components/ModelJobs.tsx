@@ -27,7 +27,7 @@ const restJobs = [
 const boardFrom = new Map(boardPrices.map((b) => [b.slug, b.from]));
 
 export default function ModelJobs({ prices }: { prices?: ModelPrice }) {
-  const [part, setPart] = useState<"original" | "analog">("original");
+  const [part, setPart] = useState<"original" | "analog">("analog");
 
   // Перемикач має сенс лише там, де деталь буває двох рівнів — тобто де є екран
   const screen = prices?.["zamina-ekrana"];
