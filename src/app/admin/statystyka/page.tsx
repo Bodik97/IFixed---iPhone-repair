@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getSiteStats } from "@/db/siteStats";
+import { getSiteStats, type SiteStats } from "@/db/siteStats";
 import { isAdmin } from "@/lib/admin";
 import PeriodFilter from "../groshi/PeriodFilter";
 import { resolveRange } from "../groshi/period";
+import { CLICK_LABELS, DEVICE_LABELS, DIRECT } from "./labels";
 import shared from "../page.module.css";
 import styles from "./page.module.css";
 
@@ -13,22 +14,6 @@ export const metadata: Metadata = {
 };
 
 export const dynamic = "force-dynamic";
-
-/** Назви кнопок із data-track — людською мовою */
-const CLICK_LABELS: Record<string, string> = {
-  "hero-book": "Головна: «Безкоштовна діагностика»",
-  "hero-call": "Головна: «Подзвонити»",
-  "header-book": "Шапка: «Записатись»",
-  "header-call": "Шапка: телефон",
-  "nav-book": "Нижнє меню: «Записатись»",
-  "book-link": "«Записатись» біля послуги чи моделі",
-  login: "Шапка: «Вхід»",
-  "chat-open": "«Консультація» (бот)",
-  "footer-call": "Підвал: телефон",
-  "footer-viber": "Підвал: Viber",
-};
-
-const DEVICE_LABELS: Record<string, string> = { mobile: "Телефон", desktop: "Комп'ютер" };
 
 const num = (n: number) => n.toLocaleString("uk-UA");
 
@@ -43,7 +28,28 @@ export default async function SiteStatsPage({
   if (!(await isAdmin())) redirect("/admin/vhid");
 
   const range = resolveRange(await searchParams);
-  const stats = await getSiteStats(range.from, range.to);
+
+  let stats: SiteStats;
+  try {
+    stats = await getSiteStats(range.from, range.to);
+  } catch (error) {
+    // 42P01 — таблиці site_events ще немає: код виїхав раніше за зміну бази
+    const code = (error as { code?: string; cause?: { code?: string } }).cause?.code ?? (error as { code?: string }).code;
+    if (code !== "42P01") throw error;
+
+    return (
+      <section className={shared.wrap}>
+        <div className={shared.head}>
+          <h1 className={shared.title}>Статистика сайту</h1>
+        </div>
+        <div className={shared.empty}>
+          Таблицю статистики ще не створено в базі, тож відвідування поки не записуються.
+          Запустіть <code>npm run db:push</code> — після цього сторінка запрацює.
+        </div>
+      </section>
+    );
+  }
+
   const { funnel } = stats;
 
   const steps = [
@@ -66,7 +72,22 @@ export default async function SiteStatsPage({
         </div>
       </div>
 
-      <PeriodFilter range={range} base="/admin/statystyka" />
+      <div className={styles.tools}>
+        <PeriodFilter key={`${range.fromDay}:${range.toDay}`} range={range} base="/admin/statystyka" />
+
+        <a
+          href={`/admin/statystyka/csv?from=${range.fromDay}&to=${range.toDay}`}
+          className="btn btn-ghost"
+          download
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 4v11" />
+            <path d="M8 11l4 4 4-4" />
+            <path d="M5 19h14" />
+          </svg>
+          Вивантажити таблицю
+        </a>
+      </div>
 
       {stats.views === 0 ? (
         <div className={shared.empty}>За цей період відвідувань ще не записано.</div>
@@ -164,7 +185,7 @@ export default async function SiteStatsPage({
               <tbody>
                 {stats.sources.map((s) => (
                   <tr key={s.source}>
-                    <th scope="row">{s.source || "Прямий захід або перехід усередині сайту"}</th>
+                    <th scope="row">{s.source || DIRECT}</th>
                     <td>{num(s.visitors)}</td>
                   </tr>
                 ))}

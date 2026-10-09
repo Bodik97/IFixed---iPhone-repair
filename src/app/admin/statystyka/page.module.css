@@ -96,3 +96,11 @@
   line-height: 1.5;
   color: var(--text-3);
 }
+
+.tools {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
