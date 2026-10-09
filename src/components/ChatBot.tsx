@@ -165,7 +165,7 @@ export default function ChatBot() {
 
   if (!open) {
     return (
-      <button type="button" className={`${styles.launcher} accent-edge`} onClick={() => setOpen(true)} aria-label="Консультація">
+      <button type="button" className={`${styles.launcher} accent-edge`} onClick={() => setOpen(true)} aria-label="Консультація" data-track="chat-open">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M4 5h16v11H9l-5 4z" />
         </svg>

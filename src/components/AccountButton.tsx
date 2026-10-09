@@ -36,7 +36,7 @@ export default function AccountButton() {
 
   return (
     <>
-      <button type="button" className={styles.button} onClick={() => setOpen(true)} aria-label="Вхід">
+      <button type="button" className={styles.button} onClick={() => setOpen(true)} aria-label="Вхід" data-track="login">
         <UserIcon />
         <span className={styles.label}>Вхід</span>
       </button>

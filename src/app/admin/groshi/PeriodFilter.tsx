@@ -13,7 +13,7 @@ import styles from "./page.module.css";
  *
  * Пресети лишаються миттєвими — там вибір уже завершений одним дотиком.
  */
-export default function PeriodFilter({ range }: { range: Range }) {
+export default function PeriodFilter({ range, base = "/admin/groshi" }: { range: Range; base?: string }) {
   const router = useRouter();
 
   const [from, setFrom] = useState(range.fromDay);
@@ -27,7 +27,7 @@ export default function PeriodFilter({ range }: { range: Range }) {
     const params = new URLSearchParams();
     if (from) params.set("from", from);
     if (to) params.set("to", to);
-    router.push(params.toString() ? `/admin/groshi?${params}` : "/admin/groshi");
+    router.push(params.toString() ? `${base}?${params}` : base);
   };
 
   return (
@@ -38,7 +38,7 @@ export default function PeriodFilter({ range }: { range: Range }) {
             key={p.value}
             type="button"
             className={range.label === p.label ? styles.presetOn : styles.preset}
-            onClick={() => router.push(`/admin/groshi?period=${p.value}`)}
+            onClick={() => router.push(`${base}?period=${p.value}`)}
           >
             {p.label}
           </button>

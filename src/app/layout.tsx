@@ -8,6 +8,7 @@ import HideOnAdmin from "@/components/HideOnAdmin";
 import { THEME_SCRIPT } from "@/components/ThemeToggle";
 import ChatBot from "@/components/ChatBot";
 import Footer from "@/components/Footer";
+import Analytics from "@/components/Analytics";
 import { site } from "@/data/site";
 import { siteUrl } from "@/lib/siteUrl";
 import "./globals.css";
@@ -84,6 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </HideOnAdmin>
           <BottomNav />
           <ChatBot />
+          <Analytics />
           </BookingProviderWrap>
         </ClerkProvider>
         <script

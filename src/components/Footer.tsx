@@ -25,7 +25,7 @@ export default function Footer() {
         <div className={styles.col}>
           <div className={styles.colTitle}>Контакти</div>
           {site.phones.map((p) => (
-            <a key={p.href} href={p.href} className={styles.link}>
+            <a key={p.href} href={p.href} className={styles.link} data-track="footer-call">
               {p.label}
             </a>
           ))}
@@ -39,6 +39,7 @@ export default function Footer() {
               key={m.label}
               href={m.href}
               className={styles.link}
+              data-track={`footer-${m.label.toLowerCase()}`}
               {...(m.href.startsWith("http") ? { target: "_blank", rel: "noopener" } : {})}
             >
               {m.label}

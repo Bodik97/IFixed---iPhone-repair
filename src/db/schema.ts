@@ -373,3 +373,32 @@ export const pushSubscriptions = pgTable(
 );
 
 export type PushSubscriptionRow = typeof pushSubscriptions.$inferSelect;
+
+/**
+ * Анонімна статистика сайту: перегляди сторінок і кліки на головні кнопки.
+ *
+ * Без cookie й без персональних даних. Відвідувача розрізняємо за `visitor` —
+ * хешем від адреси, браузера й дати з секретом: сама адреса не зберігається,
+ * а наступного дня хеш уже інший, тож простежити людину між днями неможливо.
+ * Через це «відвідувачі» за період — сума денних, а не унікальні люди.
+ */
+export const siteEvents = pgTable(
+  "site_events",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    /** view — відкрили сторінку, click — натиснули кнопку з data-track */
+    kind: text("kind").notNull(),
+    path: text("path").notNull(),
+    /** Назва кнопки з data-track; для переглядів порожньо */
+    name: text("name"),
+    visitor: text("visitor").notNull(),
+    /** Чужий сайт, з якого прийшли (google.com); свій і прямий захід — NULL */
+    referrer: text("referrer"),
+    /** utm_source з адреси — для реклами й постів */
+    utm: text("utm"),
+    /** mobile | desktop */
+    device: text("device").notNull(),
+    at: timestamp("at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("site_events_at_idx").on(t.at)],
+);

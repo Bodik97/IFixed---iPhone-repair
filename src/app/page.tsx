@@ -74,10 +74,10 @@ export default async function Home() {
           </p>
 
           <div className={`${styles.heroCta} nUp nUp-3`}>
-            <Link href="#book" className="btn btn-accent btn-lg btn-hero">
+            <Link href="#book" className="btn btn-accent btn-lg btn-hero" data-track="hero-book">
               Безкоштовна діагностика
             </Link>
-            <a href={site.phones[0].href} className="btn btn-ghost btn-lg">
+            <a href={site.phones[0].href} className="btn btn-ghost btn-lg" data-track="hero-call">
               Подзвонити
             </a>
           </div>

@@ -93,6 +93,19 @@ const items = [
       </>
     ),
   },
+  {
+    href: "/admin/statystyka",
+    label: "Статистика",
+    badge: null,
+    icon: (
+      <>
+        <path d="M4 20V10" />
+        <path d="M10 20V4" />
+        <path d="M16 20v-7" />
+        <path d="M22 20H2" />
+      </>
+    ),
+  },
 ] as const;
 
 function SignOutIcon() {

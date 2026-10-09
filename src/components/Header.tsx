@@ -56,7 +56,7 @@ export default function Header() {
 
         <div className={styles.actions}>
           {/* На великому екрані — номер текстом, на малому — кнопка-дзвінок */}
-          <a href={site.phones[0].href} className={styles.phone}>
+          <a href={site.phones[0].href} className={styles.phone} data-track="header-call">
             {site.phones[0].label}
           </a>
 
@@ -74,7 +74,7 @@ export default function Header() {
 
           <AccountButton />
 
-          <Link href="/#book" className={`btn btn-accent ${styles.cta}`}>
+          <Link href="/#book" className={`btn btn-accent ${styles.cta}`} data-track="header-book">
             Записатись
           </Link>
         </div>

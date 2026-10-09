@@ -33,7 +33,7 @@ export default function BookLink({ service, model, className, children }: Props)
     : `${pathname}${query ? `?${query}` : ""}#book`;
 
   return (
-    <Link href={href} className={className} scroll={!isSignedIn}>
+    <Link href={href} className={className} scroll={!isSignedIn} data-track="book-link">
       {children}
     </Link>
   );
