@@ -60,7 +60,7 @@ export default function MailInForm() {
           </svg>
           <h3>Заявку прийнято</h3>
           <p className={styles.doneText}>
-            Надішлемо SMS з адресою відділення та номером замовлення протягом 15 хвилин.
+            Надішлемо SMS з адресою відділення та номером замовлення протягом 25 хвилин.
           </p>
           <button type="button" onClick={reset} className="btn btn-ghost">
             Оформити ще одну

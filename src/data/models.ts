@@ -28,7 +28,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Камера"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": false,
     "image": "/models/iphone-16-pro-max.webp"
   },
@@ -41,7 +41,7 @@ export const iphones: Model[] = [
       "Екран",
       "АКБ"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": false,
     "image": "/models/iphone-16-pro.webp"
   },
@@ -54,7 +54,7 @@ export const iphones: Model[] = [
       "Екран",
       "АКБ"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": false,
     "image": "/models/iphone-16-plus.webp"
   },
@@ -68,7 +68,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Роз'єм"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-16.webp"
   },
@@ -82,7 +82,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Камера"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-15-pro-max.webp"
   },
@@ -96,7 +96,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Роз'єм"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-15-pro.webp"
   },
@@ -109,7 +109,7 @@ export const iphones: Model[] = [
       "Екран",
       "АКБ"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-15-plus.webp"
   },
@@ -123,7 +123,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Камера"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-15.webp"
   },
@@ -137,7 +137,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Плата"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-14-pro-max.webp"
   },
@@ -151,7 +151,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Face ID"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-14-pro.webp"
   },
@@ -164,7 +164,7 @@ export const iphones: Model[] = [
       "Екран",
       "АКБ"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-14-plus.webp"
   },
@@ -178,7 +178,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Камера"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-14.webp"
   },
@@ -192,7 +192,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Камера"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-13-pro-max.webp"
   },
@@ -206,7 +206,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Face ID"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-13-pro.webp"
   },
@@ -220,7 +220,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Роз'єм"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-13.webp"
   },
@@ -233,7 +233,7 @@ export const iphones: Model[] = [
       "Екран",
       "АКБ"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-13-mini.webp"
   },
@@ -247,7 +247,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Камера"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-12-pro-max.webp"
   },
@@ -261,7 +261,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Роз'єм"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-12-pro.webp"
   },
@@ -275,7 +275,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Роз'єм"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-12.webp"
   },
@@ -288,7 +288,7 @@ export const iphones: Model[] = [
       "Екран",
       "АКБ"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-12-mini.webp"
   },
@@ -302,7 +302,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Камера"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-11-pro-max.webp"
   },
@@ -315,7 +315,7 @@ export const iphones: Model[] = [
       "Екран",
       "АКБ"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-11-pro.webp"
   },
@@ -329,7 +329,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Роз'єм"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-11.webp"
   },
@@ -342,7 +342,7 @@ export const iphones: Model[] = [
       "Екран",
       "АКБ"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-xs-max.webp"
   },
@@ -356,7 +356,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Роз'єм"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-xs.webp"
   },
@@ -370,7 +370,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Роз'єм"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-xr.webp"
   },
@@ -384,7 +384,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Face ID"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-x.webp"
   },
@@ -398,7 +398,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Кнопка Home"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-8-plus.webp"
   },
@@ -412,7 +412,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Роз'єм"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-8.webp"
   },
@@ -426,7 +426,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Мікрофон"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-7-plus.webp"
   },
@@ -439,7 +439,7 @@ export const iphones: Model[] = [
       "Екран",
       "АКБ"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-7.webp"
   },
@@ -452,7 +452,7 @@ export const iphones: Model[] = [
       "Екран",
       "АКБ"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-se-3.webp"
   },
@@ -465,7 +465,7 @@ export const iphones: Model[] = [
       "Екран",
       "АКБ"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-se-2.webp"
   },
@@ -479,7 +479,7 @@ export const iphones: Model[] = [
       "АКБ",
       "Роз'єм"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-6s-6s-plus.webp"
   },
@@ -492,7 +492,7 @@ export const iphones: Model[] = [
       "Екран",
       "АКБ"
     ],
-    "time": "того ж дня",
+    "time": "до 2 днів",
     "inStock": true,
     "image": "/models/iphone-6-6-plus.webp"
   }

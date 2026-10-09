@@ -16,16 +16,14 @@ import {
   howItWorks,
   mailInSteps,
   modelGroups,
-  reviews as fallbackReviews,
   topServices,
-  works,
 } from "@/data/landing";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "GadgetFix — ремонт iPhone у Львові та Новому Роздолі",
   description:
-    "Безкоштовна діагностика, фіксована ціна після неї, гарантія 30 днів. Екран чи акумулятор міняємо того ж дня, як телефон потрапляє до майстра. Приймаємо й Новою Поштою.",
+    "Безкоштовна діагностика, фіксована ціна після неї, гарантія 30 днів. Екран чи акумулятор міняємо до 2 днів разом із замовленням деталі. Приймаємо й Новою Поштою.",
   alternates: { canonical: "/" },
 };
 
@@ -40,27 +38,17 @@ const faqSchema = {
 };
 
 export default async function Home() {
-  // Справжні відгуки клієнтів; поки їх немає — показуємо початкові з макета
   const published = await getPublishedReviews(6);
-  const shownReviews = published.length
-    ? published.map((r) => ({
-        id: r.id,
-        text: r.text,
-        author: [r.authorName, r.city, r.device].filter(Boolean).join(" · "),
-        viaGoogle: r.viaGoogle,
-        avatar: r.avatarUrl,
-        rating: r.rating,
-        // Фото роботи лежить у приватному сховищі — віддаємо своїм маршрутом
-        image: r.imagePath ? `/api/reviews/${r.id}/image` : null,
-      }))
-    : fallbackReviews.map((r, i) => ({
-        ...r,
-        id: `fallback-${i}`,
-        viaGoogle: false,
-        avatar: null,
-        rating: 5,
-        image: null,
-      }));
+  const shownReviews = published.map((r) => ({
+    id: r.id,
+    text: r.text,
+    author: [r.authorName, r.city, r.device].filter(Boolean).join(" · "),
+    viaGoogle: r.viaGoogle,
+    avatar: r.avatarUrl,
+    rating: r.rating,
+    // Фото роботи лежить у приватному сховищі — віддаємо своїм маршрутом
+    image: r.imagePath ? `/api/reviews/${r.id}/image` : null,
+  }));
 
   const hasRealReviews = published.length > 0;
 
@@ -81,7 +69,7 @@ export default async function Home() {
           <div className={styles.heroCopy}>
             <span className={`${styles.badge} nUp`}>
               <span className="pulse" />
-              Відкрито · відповідь за 15 хвилин
+              Відкрито · відповідь за 25 хвилин
             </span>
 
             <h1 className={`${styles.h1} nUp nUp-1`}>
@@ -89,8 +77,8 @@ export default async function Home() {
             </h1>
 
             <p className={`${styles.heroLead} nUp nUp-2`}>
-              Безкоштовна діагностика, потім фіксована ціна — і вона вже не змінюється. Екран чи
-              акумулятор міняємо того ж дня, як телефон потрапляє до майстра.
+              Безкоштовна діагностика, потім фіксована ціна — і вона вже не змінюється. На екран чи
+              акумулятор іде до 2 днів разом із замовленням деталі.
             </p>
 
             <div className={`${styles.heroCta} nUp nUp-3`}>
@@ -247,26 +235,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* До і після */}
-      <section className={styles.worksSection}>
-        <div className={`container ${styles.worksInner}`}>
-          <div className="kicker">Наші роботи</div>
-          <h2 className={`${styles.h2} ${styles.worksTitle}`}>До і після</h2>
-
-          <div className={styles.worksGrid}>
-            {works.map((w) => (
-              <figure key={w.caption} className={styles.work}>
-                <div className={`zoom ${styles.workMedia}`}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={w.img} alt="" loading="lazy" />
-                </div>
-                <figcaption className={styles.workCaption}>{w.caption}</figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Відгуки */}
       <section className={styles.reviewsSection}>
         <div className={`container ${styles.reviewsInner}`}>
@@ -287,7 +255,7 @@ export default async function Home() {
             )}
           </div>
 
-          <ReviewSlider reviews={shownReviews} />
+          {hasRealReviews && <ReviewSlider reviews={shownReviews} />}
 
 
           <div className={styles.reviewFormWrap}>
@@ -355,7 +323,7 @@ export default async function Home() {
         <div className={styles.bookGrid}>
           <div className={styles.bookCopy}>
             <div className="kicker">Запис на діагностику</div>
-            <h2 className={styles.h2}>Опишіть проблему — відповімо за 15 хвилин</h2>
+            <h2 className={styles.h2}>Опишіть проблему — відповімо за 25 хвилин</h2>
             <p className={styles.bookLead}>
               Достатньо моделі та кількох слів про симптом. Передзвонимо, скажемо орієнтовну ціну й
               термін.

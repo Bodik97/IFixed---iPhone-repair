@@ -10,9 +10,7 @@ export const site = {
   cities: ["Львів", "Новий Розділ"],
   warrantyDays: 30,
   messengers: [
-    { label: "Telegram", href: "https://t.me/" },
     { label: "Viber", href: "viber://chat?number=%2B380733150238" },
-    { label: "Instagram", href: "https://instagram.com/" },
   ],
 } as const;
 

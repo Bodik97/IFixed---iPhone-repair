@@ -8,7 +8,7 @@ const tickerItems = [
   "Акумулятори з ємністю 100%",
   "Гарантія 30 днів",
   "Діагностика безкоштовна",
-  "Екран і акумулятор — того ж дня",
+  "Екран і акумулятор — до 2 днів",
 ];
 
 export default function CatalogSection({ section }: { section: Section }) {
@@ -69,7 +69,7 @@ export default function CatalogSection({ section }: { section: Section }) {
           <div>
             <h2 className={styles.ctaTitle}>Не бачите своєї моделі?</h2>
             <p className={styles.ctaLead}>
-              Напишіть модель і симптом — відповімо за 15 хвилин, разом із орієнтиром по ціні й
+              Напишіть модель і симптом — відповімо за 25 хвилин, разом із орієнтиром по ціні й
               терміну.
             </p>
           </div>

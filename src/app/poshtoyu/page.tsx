@@ -172,7 +172,7 @@ export default function MailInPage() {
                   <path d="M4 6h16v12H4z" />
                   <path d="M4 7l8 6 8-6" />
                 </svg>
-                <span>Пишемо в Telegram чи Viber, якщо так зручніше</span>
+                <span>Пишемо у Viber, якщо так зручніше</span>
               </div>
 
               <div className={styles.note}>

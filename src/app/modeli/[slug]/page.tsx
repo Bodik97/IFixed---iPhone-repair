@@ -99,7 +99,7 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
               <h1 className={`${styles.h1} nUp nUp-1`}>Ремонт {model.name}</h1>
 
               <p className={`${styles.heroLead} nUp nUp-2`}>
-                Найчастіші роботи робимо того ж дня, як телефон потрапляє до майстра. Ціну називаємо після безкоштовної
+                На найчастіші роботи йде до 2 днів разом із замовленням деталі. Ціну називаємо після безкоштовної
                 діагностики — і вона вже не змінюється.
               </p>
 
@@ -146,7 +146,7 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
             <div className="kicker">Запис</div>
             <h2 className={styles.bookTitle}>Записатись на {model.name}</h2>
             <p className={styles.bookLead}>
-              Залиште телефон — передзвонимо за 15 хвилин і скажемо орієнтир по вашій ситуації.
+              Залиште телефон — передзвонимо за 25 хвилин і скажемо орієнтир по вашій ситуації.
             </p>
 
             <div className={styles.related}>

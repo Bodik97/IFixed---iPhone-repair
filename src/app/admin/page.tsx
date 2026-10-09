@@ -17,8 +17,8 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-/** Сайт обіцяє передзвонити протягом 15 хвилин — довше нова заявка вже прострочена */
-const CALLBACK_MIN = 15;
+/** Сайт обіцяє передзвонити протягом 25 хвилин — довше нова заявка вже прострочена */
+const CALLBACK_MIN = 25;
 
 const openLead = leadLink;
 

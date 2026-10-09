@@ -87,7 +87,7 @@ function BookingFormInner({
           </svg>
           <h3>Заявку прийнято</h3>
           <p className={styles.doneText}>
-            Передзвонимо протягом 15 хвилин у робочі години. Якщо терміново — {site.phones[0].label}.
+            Передзвонимо протягом 25 хвилин у робочі години. Якщо терміново — {site.phones[0].label}.
           </p>
           <button type="button" onClick={reset} className="btn btn-ghost">
             Надіслати ще одну

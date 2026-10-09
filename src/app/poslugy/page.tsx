@@ -13,7 +13,7 @@ import styles from "./page.module.css";
 export const metadata: Metadata = {
   title: "Послуги сервісу",
   description:
-    "12 видів ремонту iPhone, iPad і Apple Watch: екран, акумулятор, роз'єм, камера, залив водою, мікропайка. Безкоштовна діагностика, фіксована ціна, гарантія 30 днів.",
+    "12 видів ремонту iPhone, iPad і Apple Watch: екран, акумулятор, роз'єм, камера, кнопки, діагностика складних випадків. Безкоштовна діагностика, фіксована ціна, гарантія 30 днів.",
   alternates: { canonical: "/poslugy" },
 };
 
@@ -56,7 +56,7 @@ export default function ServicesPage() {
             </h1>
 
             <p className={`${styles.heroLead} nUp nUp-2`}>
-              Від заміни екрана за один день до пайки на платі. Оберіть послугу — покажемо, як вона
+              Від заміни екрана до діагностики складних випадків. Оберіть послугу — покажемо, як вона
               проходить і скільки триває.
             </p>
 
@@ -124,7 +124,7 @@ export default function ServicesPage() {
             <div className="kicker">Запис</div>
             <h2 className={styles.bookTitle}>Оберіть послугу — решту з&apos;ясуємо в розмові</h2>
             <p className={styles.bookLead}>
-              Передзвонимо за 15 хвилин у робочі години й одразу скажемо орієнтир по ціні та терміну.
+              Передзвонимо за 25 хвилин у робочі години й одразу скажемо орієнтир по ціні та терміну.
             </p>
 
             <div className={styles.contacts}>

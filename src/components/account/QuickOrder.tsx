@@ -76,7 +76,7 @@ export default function QuickOrder({ compact }: { compact?: boolean }) {
           <div>
             <div className={styles.doneTitle}>Заявку прийнято</div>
             <p className={styles.doneText}>
-              Зв&apos;яжемося {contact ? <>з вами ({contact})</> : "з вами"} протягом 15 хвилин.
+              Зв&apos;яжемося {contact ? <>з вами ({contact})</> : "з вами"} протягом 25 хвилин.
               Заявка вже вгорі цієї сторінки — там буде видно кожен етап.
             </p>
           </div>
