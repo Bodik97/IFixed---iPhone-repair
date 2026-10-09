@@ -1,7 +1,7 @@
-# iFix — специфікація для розробки сайту
+# GadgetFix — специфікація для розробки сайту
 
-Дизайн-макети (відкриваються в браузері як є): `iFix Landing.dc.html`, `iFix-Services.dc.html`,
-`iFix-Catalog-iPhone.dc.html`, `iFix-Model.dc.html`, `iFix-Mail-in.dc.html`, `iFix-Account v2.dc.html`.
+Дизайн-макети (відкриваються в браузері як є): `GadgetFix Landing.dc.html`, `GadgetFix-Services.dc.html`,
+`GadgetFix-Catalog-iPhone.dc.html`, `GadgetFix-Model.dc.html`, `GadgetFix-Mail-in.dc.html`, `GadgetFix-Account v2.dc.html`.
 Розмітка й стилі всередині — робочий референс: можна копіювати значення 1:1.
 
 ---
@@ -72,12 +72,12 @@
 
 | Сторінка | Файл-макет | URL (пропозиція) |
 | --- | --- | --- |
-| Головна | `iFix Landing.dc.html` | `/` |
-| Послуги | `iFix-Services.dc.html` | `/poslugy` |
-| Каталог моделей | `iFix-Catalog-iPhone.dc.html` | `/modeli` |
-| Сторінка моделі | `iFix-Model.dc.html` | `/modeli/{slug}` |
-| Ремонт поштою | `iFix-Mail-in.dc.html` | `/poshtoyu` |
-| Кабінет клієнта | `iFix-Account v2.dc.html` | `/kabinet` |
+| Головна | `GadgetFix Landing.dc.html` | `/` |
+| Послуги | `GadgetFix-Services.dc.html` | `/poslugy` |
+| Каталог моделей | `GadgetFix-Catalog-iPhone.dc.html` | `/modeli` |
+| Сторінка моделі | `GadgetFix-Model.dc.html` | `/modeli/{slug}` |
+| Ремонт поштою | `GadgetFix-Mail-in.dc.html` | `/poshtoyu` |
+| Кабінет клієнта | `GadgetFix-Account v2.dc.html` | `/kabinet` |
 
 Шапка (sticky, `blur(16px)`, фон `rgba(11,12,14,.72)`) однакова всюди: логотип → Послуги, Моделі, Поштою, Кабінет, телефон, CTA «Записатись». Активний пункт — колір акценту.
 Підвал: копірайт зліва, гарантія справа, розділювальна лінія зверху.
@@ -90,7 +90,7 @@
 
 ### Каталог
 Герой (лічильник моделей) → бігуча стрічка → фільтри (Усі / Нові / Популярні / Старші / iPad·Watch) + пошук по назві → сітка з 42 карток: фото 4:3, бейдж наявності, назва, рік, теги робіт, термін → CTA-блок «не бачите моделі».
-Клік по картці → сторінка моделі: `iFix-Model.dc.html?m={encodeURIComponent(name)}`. У продакшені — ЧПУ `/modeli/{slug}`.
+Клік по картці → сторінка моделі: `GadgetFix-Model.dc.html?m={encodeURIComponent(name)}`. У продакшені — ЧПУ `/modeli/{slug}`.
 
 ### Сторінка моделі
 Хлібні крихти → герой (назва з URL, бейдж наявності, фото) → перемикач Оригінал/Аналог (змінює опис і текст першої роботи) → перелік 6 робіт із термінами → 3 гарантійні блоки → форма запису + список пов'язаних моделей.
@@ -105,8 +105,8 @@
 
 ## 4. Дані та інтеграції (що треба з бекенду)
 
-- **Моделі:** `{ name, year, group: new|popular|old|other, jobs[], time, inStock, image, slug }` — 42 записи в `iFix-Catalog-iPhone.dc.html`.
-- **Послуги:** `{ no, cat: quick|board|body, title, body, tags[], time, icon }` — 12 записів у `iFix-Services.dc.html`.
+- **Моделі:** `{ name, year, group: new|popular|old|other, jobs[], time, inStock, image, slug }` — 42 записи в `GadgetFix-Catalog-iPhone.dc.html`.
+- **Послуги:** `{ no, cat: quick|board|body, title, body, tags[], time, icon }` — 12 записів у `GadgetFix-Services.dc.html`.
 - **Заявка:** `{ name, phone, model|service, problem, source: landing|model|services|mail-in }` → CRM + Telegram-повідомлення майстру.
 - **Ремонт поштою:** додатково `{ city, branch }`; відповідь — номер замовлення + адреса відділення в SMS.
 - **Статус замовлення:** `GET /orders/{no}` → `{ device, work, stage, stages[], eta, log[] }` (зараз макет із заглушкою).

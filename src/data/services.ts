@@ -1,4 +1,4 @@
-// Згенеровано з design/iFix-Services.dc.html — scripts/extract-services.mjs
+// Згенеровано з design/GadgetFix-Services.dc.html — scripts/extract-services.mjs
 
 export type ServiceCat = "quick" | "board" | "body";
 

@@ -105,7 +105,7 @@ function SignOutIcon() {
   );
 }
 
-const STORAGE_KEY = "ifix-admin-nav";
+const STORAGE_KEY = "gadgetfix-admin-nav";
 
 /**
  * Згорнутість меню живе в localStorage, а не в стані React: її треба пам'ятати

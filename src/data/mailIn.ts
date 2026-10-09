@@ -1,4 +1,4 @@
-// Контент сторінки /poshtoyu — перенесено з design/iFix-Mail-in.dc.html
+// Контент сторінки /poshtoyu — перенесено з design/GadgetFix-Mail-in.dc.html
 
 export const heroStats = [
   { value: "2–3", unit: " дні", note: "на ремонт; дорога залежить від Нової Пошти" },

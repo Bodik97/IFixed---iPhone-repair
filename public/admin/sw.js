@@ -10,11 +10,11 @@ self.addEventListener("push", (event) => {
   try {
     data = event.data ? event.data.json() : {};
   } catch {
-    data = { title: "iFix", body: event.data ? event.data.text() : "" };
+    data = { title: "GadgetFix", body: event.data ? event.data.text() : "" };
   }
 
   event.waitUntil(
-    self.registration.showNotification(data.title || "iFix", {
+    self.registration.showNotification(data.title || "GadgetFix", {
       body: data.body || "",
       tag: data.tag,
       // Нагадування з тим самим tag має знову привернути увагу, а не тихо замінити

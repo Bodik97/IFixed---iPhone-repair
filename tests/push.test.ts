@@ -43,7 +43,7 @@ import { remindByPush, stillWaiting } from "@/workflows/escalate-lead";
 
 const sub = (id: string, endpoint: string) => ({
   id,
-  adminEmail: "b@ifix.ua",
+  adminEmail: "b@gadgetfix.ua",
   endpoint,
   p256dh: "k",
   auth: "a",
@@ -60,7 +60,7 @@ beforeEach(() => {
   m.telegram = [];
   vi.stubEnv("NEXT_PUBLIC_VAPID_PUBLIC_KEY", "pub");
   vi.stubEnv("VAPID_PRIVATE_KEY", "priv");
-  vi.stubEnv("ADMIN_EMAIL", "b@ifix.ua");
+  vi.stubEnv("ADMIN_EMAIL", "b@gadgetfix.ua");
   vi.spyOn(console, "error").mockImplementation(() => {});
 });
 
@@ -115,7 +115,7 @@ describe("ескалація: stillWaiting і нагадування", () => {
   });
 
   it("хтось узяв або статус змінився — нагадувань більше немає", async () => {
-    fake.onSelect(leads, () => [{ ...LEAD, assignee: "b@ifix.ua" }]);
+    fake.onSelect(leads, () => [{ ...LEAD, assignee: "b@gadgetfix.ua" }]);
     expect(await stillWaiting("l1")).toBeNull();
     fake.reset();
     fake.onSelect(leads, () => [{ ...LEAD, status: "in_progress" }]);

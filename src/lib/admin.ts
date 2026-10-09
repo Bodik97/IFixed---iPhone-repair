@@ -2,7 +2,7 @@ import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 
-const COOKIE = "ifix_admin";
+const COOKIE = "gadgetfix_admin";
 const MAX_AGE = 60 * 60 * 12; // 12 годин
 
 function requireEnv(name: string): string {

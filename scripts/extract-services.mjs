@@ -1,7 +1,7 @@
-// Одноразовий витяг послуг із макета design/iFix-Services.dc.html у src/data/services.ts
+// Одноразовий витяг послуг із макета design/GadgetFix-Services.dc.html у src/data/services.ts
 import { readFileSync, writeFileSync } from "node:fs";
 
-const html = readFileSync("design/iFix-Services.dc.html", "utf8");
+const html = readFileSync("design/GadgetFix-Services.dc.html", "utf8");
 const start = html.indexOf("all = [");
 const body = html.slice(start, html.indexOf("\n  ];", start) + 4);
 const rows = eval(body.replace("all =", ""));
@@ -27,7 +27,7 @@ const services = rows.map((s) => {
   return { no: s.no, slug, cat: s.cat, title: s.title, body: s.body, tags: s.tags, time: s.time, icon: s.icon.__html };
 });
 
-const out = `// Згенеровано з design/iFix-Services.dc.html — scripts/extract-services.mjs
+const out = `// Згенеровано з design/GadgetFix-Services.dc.html — scripts/extract-services.mjs
 
 export type ServiceCat = "quick" | "board" | "body";
 

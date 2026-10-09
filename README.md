@@ -1,6 +1,6 @@
-# iFix — сайт сервісу ремонту Apple
+# GadgetFix — сайт сервісу ремонту Apple
 
-Next.js 16 (App Router) + TypeScript. Реалізовано за `design/iFix-Handoff.md` і макетами `design/*.dc.html`.
+Next.js 16 (App Router) + TypeScript. Реалізовано за `design/GadgetFix-Handoff.md` і макетами `design/*.dc.html`.
 
 ## Запуск
 

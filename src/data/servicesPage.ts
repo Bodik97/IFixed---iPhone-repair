@@ -1,4 +1,4 @@
-// Контент сторінки /poslugy — перенесено з design/iFix-Services.dc.html
+// Контент сторінки /poslugy — перенесено з design/GadgetFix-Services.dc.html
 
 import { services } from "./services";
 

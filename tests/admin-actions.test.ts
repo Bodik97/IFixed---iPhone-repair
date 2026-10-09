@@ -54,7 +54,7 @@ vi.mock("@/lib/rateLimit", () => ({
 
 vi.mock("@/lib/admin", () => ({
   isAdmin: async () => m.admin,
-  currentAdmin: async () => (m.admin ? { name: "Богдан", email: "b@ifix.ua" } : null),
+  currentAdmin: async () => (m.admin ? { name: "Богдан", email: "b@gadgetfix.ua" } : null),
   checkCredentials: () => {
     if (m.credentials === "throw") throw new Error("no env");
     return m.credentials;
@@ -220,7 +220,7 @@ describe("createLead — заявка, яку заводить майстер", 
     );
     const [q] = fake.writes();
     expect(q.sql).toMatch(/^insert into "leads"/);
-    expect(q.params).toEqual(expect.arrayContaining(["Олег", "073 315 02 38", "iPhone 13", "b@ifix.ua", "manual", "new"]));
+    expect(q.params).toEqual(expect.arrayContaining(["Олег", "073 315 02 38", "iPhone 13", "b@gadgetfix.ua", "manual", "new"]));
   });
 
   it("пристрій уже в сервісі — одразу «У роботі»", async () => {
@@ -238,7 +238,7 @@ describe("savePushSubscription", () => {
     const [q] = fake.writes();
     expect(q.sql).toMatch(/^insert into "push_subscriptions"/);
     expect(q.sql).toMatch(/on conflict \("endpoint"\) do update/);
-    expect(q.params).toEqual(expect.arrayContaining(["b@ifix.ua", "https://push.example/abc", "p", "a", "iPhone"]));
+    expect(q.params).toEqual(expect.arrayContaining(["b@gadgetfix.ua", "https://push.example/abc", "p", "a", "iPhone"]));
   });
 
   it("не https-адреса чи без ключів — нічого не пишемо", async () => {
@@ -254,7 +254,7 @@ describe("setAssignee", () => {
     const w = fake.writes();
     expect(w).toHaveLength(1);
     expect(w[0].sql).toMatch(/^update "leads" set "assignee" = \$1/);
-    expect(w[0].params[0]).toBe("b@ifix.ua");
+    expect(w[0].params[0]).toBe("b@gadgetfix.ua");
   });
 
   it("«Відпустити» — поле очищається", async () => {

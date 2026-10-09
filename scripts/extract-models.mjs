@@ -1,7 +1,7 @@
-// Одноразовий витяг моделей із макета design/iFix-Catalog-iPhone.dc.html у src/data/models.ts
+// Одноразовий витяг моделей із макета design/GadgetFix-Catalog-iPhone.dc.html у src/data/models.ts
 import { readFileSync, writeFileSync } from "node:fs";
 
-const html = readFileSync("design/iFix-Catalog-iPhone.dc.html", "utf8");
+const html = readFileSync("design/GadgetFix-Catalog-iPhone.dc.html", "utf8");
 const body = html.slice(html.indexOf("models = ["), html.indexOf("];", html.indexOf("models = [")) + 2);
 const rows = eval(body.replace("models =", ""));
 
@@ -30,7 +30,7 @@ const models = rows.map(([name, year, group, jobs, time, inStock], i) => ({
 const dupes = models.map((m) => m.slug).filter((s, i, a) => a.indexOf(s) !== i);
 if (dupes.length) throw new Error("Дублікати slug: " + dupes.join(", "));
 
-const out = `// Згенеровано з design/iFix-Catalog-iPhone.dc.html — scripts/extract-models.mjs
+const out = `// Згенеровано з design/GadgetFix-Catalog-iPhone.dc.html — scripts/extract-models.mjs
 
 export type ModelGroup = "new" | "popular" | "old" | "other";
 

@@ -1,4 +1,4 @@
-// iPhone — перенесено з design/iFix-Catalog-iPhone.dc.html (scripts/extract-models.mjs).
+// iPhone — перенесено з design/GadgetFix-Catalog-iPhone.dc.html (scripts/extract-models.mjs).
 // Планшети й годинники живуть у devices.ts.
 
 export type ModelGroup = "new" | "popular" | "old" | "other";

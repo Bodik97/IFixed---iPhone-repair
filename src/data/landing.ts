@@ -1,4 +1,4 @@
-// Контент головної — перенесено з design/iFix Landing.dc.html
+// Контент головної — перенесено з design/GadgetFix Landing.dc.html
 
 export const heroStats = [
   { value: "1", unit: " день", note: "заміна екрана чи акумулятора — в день отримання" },

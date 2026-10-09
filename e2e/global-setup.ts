@@ -13,7 +13,7 @@ import { clerkSetup } from "@clerk/testing/playwright";
  * у репозиторії його немає. Заявок у такого клієнта немає, тож кабінет
  * порожній і в базу ніхто не пише.
  */
-export const E2E_EMAIL = "ifix-e2e+clerk_test@example.com";
+export const E2E_EMAIL = "gadgetfix-e2e+clerk_test@example.com";
 
 export default async function globalSetup() {
   if (existsSync(".env.local")) process.loadEnvFile(".env.local");
