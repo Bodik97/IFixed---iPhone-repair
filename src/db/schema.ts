@@ -375,6 +375,25 @@ export const pushSubscriptions = pgTable(
 export type PushSubscriptionRow = typeof pushSubscriptions.$inferSelect;
 
 /**
+ * Чати клієнтів у Telegram, куди бот пише про зміну статусу.
+ *
+ * Клієнт натискає «Start» у боті за особистим посиланням — так зʼявляється
+ * рядок. `subject` — за ким закріплений чат: телефон (тоді статуси приходять
+ * і за наступними заявками з цього номера), акаунт або одна заявка, якщо
+ * телефону немає. Формат — у src/lib/clientBot.ts.
+ */
+export const telegramChats = pgTable(
+  "telegram_chats",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    subject: text("subject").notNull(),
+    chatId: text("chat_id").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("telegram_chats_subject_idx").on(t.subject)],
+);
+
+/**
  * Анонімна статистика сайту: перегляди сторінок і кліки на головні кнопки.
  *
  * Без cookie й без персональних даних. Відвідувача розрізняємо за `visitor` —

@@ -7,6 +7,7 @@ import { askContacts, askModel, done, greeting, symptoms, type Symptom } from "@
 import { site } from "@/data/site";
 import FormError from "./FormError";
 import styles from "./ChatBot.module.css";
+import TelegramConnect from "@/components/TelegramConnect";
 
 type Line = { from: "bot" | "me"; text: string };
 
@@ -50,6 +51,7 @@ export default function ChatBot() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
+  const [telegram, setTelegram] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
 
   const listRef = useRef<HTMLDivElement>(null);
@@ -169,6 +171,7 @@ export default function ChatBot() {
         }),
       });
       if (!res.ok) throw new Error(String(res.status));
+      setTelegram((await res.json().catch(() => null))?.telegram ?? null);
 
       mine(`${cleanName}, ${phone.trim()}`);
       setStep("sent");
@@ -336,6 +339,8 @@ export default function ChatBot() {
             </button>
           </form>
         )}
+
+        {step === "sent" && <TelegramConnect href={telegram} />}
 
         {step === "sent" && (
           <a href={site.phones[0].href} className="btn btn-ghost">

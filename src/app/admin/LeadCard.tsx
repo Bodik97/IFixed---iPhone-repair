@@ -47,6 +47,7 @@ export default function LeadCard({
   orders = 1,
   priceHint = null,
   defaultOpen = false,
+  telegram = null,
   team,
 }: {
   lead: Lead;
@@ -59,6 +60,8 @@ export default function LeadCard({
   priceHint?: { count: number; last: number; min: number; max: number } | null;
   /** Відкрити розгорнутою — коли майстер прийшов сюди із сигналу */
   defaultOpen?: boolean;
+  /** Чи підключив клієнт бота зі статусами; null — бот не налаштований, позначки немає */
+  telegram?: boolean | null;
   /** Хто дивиться і як звати майстрів — щоб показати, хто взяв заявку */
   team: Team;
 }) {
@@ -97,6 +100,16 @@ export default function LeadCard({
                 {orders}-е звернення
               </Link>
             )}
+            {telegram !== null &&
+              (telegram ? (
+                <span className={styles.tagAccount} title="Клієнт підключив бота — статуси приходять йому в Telegram">
+                  Telegram
+                </span>
+              ) : (
+                <span className={styles.tagAnon} title="Бота не підключено — про зміну статусу клієнт сам не дізнається, варто подзвонити">
+                  без Telegram
+                </span>
+              ))}
             {assigneeName &&
               (mine ? (
                 <span className={styles.tagMine}>ваша</span>

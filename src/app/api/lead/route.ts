@@ -9,6 +9,7 @@ import { alertMasters } from "@/lib/notify";
 import { leadLink } from "@/lib/adminLinks";
 import { escalateLead } from "@/workflows/escalate-lead";
 import { siteUrl } from "@/lib/siteUrl";
+import { connectLink } from "@/lib/clientBot";
 
 const SOURCES = ["landing", "model", "services", "mail-in"] as const;
 type Source = (typeof SOURCES)[number];
@@ -145,5 +146,10 @@ export async function POST(request: Request) {
     }
   }
 
-  return NextResponse.json({ ok: true });
+  // Посилання на бота — форма покаже кнопку «Отримувати статус у Telegram»
+  const telegram = leadId
+    ? connectLink({ id: leadId, phone: hasPhone ? clean(lead.phone) : null, clerkUserId: userId ?? null })
+    : null;
+
+  return NextResponse.json({ ok: true, telegram });
 }

@@ -6,6 +6,7 @@ import { ARCHIVED, findLeads, STATUS_OPTIONS } from "@/db/leads";
 import { getOrderCounts, phoneKey } from "@/db/clients";
 import { getPriceHints, hintKey } from "@/db/priceHistory";
 import { currentTeam } from "@/lib/admin";
+import { clientBotReady, linkedLeads } from "@/lib/clientBot";
 import LeadCard from "./LeadCard";
 import Search, { adminHref, type ListKind, type Query } from "./Search";
 import styles from "./page.module.css";
@@ -53,12 +54,14 @@ export default async function LeadList({ kind, params }: { kind: ListKind; param
 
   const pages = Math.max(1, Math.ceil(found / PER_PAGE));
   const ids = rows.map((r) => r.id);
-  const [eventsByLead, unread, orderCounts, priceHints] = await Promise.all([
+  const [eventsByLead, unread, orderCounts, priceHints, withBot] = await Promise.all([
     getEventsFor(ids),
     unreadByLead(ids, "client"),
     getOrderCounts(rows.map((r) => r.phone)),
     getPriceHints(),
+    linkedLeads(rows),
   ]);
+  const botReady = clientBotReady();
 
   const filtered = Boolean(params.q || status || shipping);
 
@@ -102,6 +105,7 @@ export default async function LeadList({ kind, params }: { kind: ListKind; param
               unread={unread.get(r.id) ?? 0}
               defaultOpen={r.id === params.open}
               team={team}
+              telegram={botReady ? withBot.has(r.id) : null}
               orders={orderCounts.get(phoneKey(r.phone) ?? "") ?? 1}
               /* Заявки без ціни не входять у власну статистику, тож підказка
                  завжди про інші ремонти. Там, де ціна вже стоїть, вона зайва. */

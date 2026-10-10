@@ -5,6 +5,7 @@ import { bookingModels } from "@/data/landing";
 import { site } from "@/data/site";
 import FormError from "./FormError";
 import styles from "./BookingForm.module.css";
+import TelegramConnect from "@/components/TelegramConnect";
 
 export default function MailInForm() {
   const [name, setName] = useState("");
@@ -15,6 +16,7 @@ export default function MailInForm() {
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [telegram, setTelegram] = useState<string | null>(null);
 
   const reset = () => {
     setName("");
@@ -42,6 +44,7 @@ export default function MailInForm() {
         body: JSON.stringify({ name, phone, city, model, problem, source: "mail-in" }),
       });
       if (!res.ok) throw new Error(String(res.status));
+      setTelegram((await res.json().catch(() => null))?.telegram ?? null);
       setSent(true);
     } catch {
       setError("Не вдалося надіслати. Зателефонуйте, будь ласка: " + site.phones[0].label);
@@ -62,6 +65,7 @@ export default function MailInForm() {
           <p className={styles.doneText}>
             Надішлемо SMS з адресою відділення та номером замовлення протягом 25 хвилин.
           </p>
+          <TelegramConnect href={telegram} />
           <button type="button" onClick={reset} className="btn btn-ghost">
             Оформити ще одну
           </button>

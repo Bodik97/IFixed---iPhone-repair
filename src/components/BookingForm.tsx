@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { site } from "@/data/site";
 import FormError from "./FormError";
 import styles from "./BookingForm.module.css";
+import TelegramConnect from "@/components/TelegramConnect";
 
 export type LeadSource = "landing" | "model" | "services" | "mail-in";
 
@@ -36,6 +37,7 @@ function BookingFormInner({
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [telegram, setTelegram] = useState<string | null>(null);
 
   const reset = () => {
     setName("");
@@ -69,6 +71,7 @@ function BookingFormInner({
         }),
       });
       if (!res.ok) throw new Error(String(res.status));
+      setTelegram((await res.json().catch(() => null))?.telegram ?? null);
       setSent(true);
     } catch {
       setError("Не вдалося надіслати. Зателефонуйте, будь ласка: " + site.phones[0].label);
@@ -89,6 +92,7 @@ function BookingFormInner({
           <p className={styles.doneText}>
             Передзвонимо протягом 25 хвилин у робочі години. Якщо терміново — {site.phones[0].label}.
           </p>
+          <TelegramConnect href={telegram} />
           <button type="button" onClick={reset} className="btn btn-ghost">
             Надіслати ще одну
           </button>

@@ -1,6 +1,8 @@
 import { describeStatus } from "@/db/leads";
 import type { Lead, LeadEvent } from "@/db/schema";
 import Chat from "@/components/Chat";
+import TelegramConnect from "@/components/TelegramConnect";
+import { connectLink } from "@/lib/clientBot";
 import { site } from "@/data/site";
 import DeliveryRequest from "./DeliveryRequest";
 import Parcel from "./Parcel";
@@ -183,6 +185,8 @@ export default function RepairCard({
         </a>
 
         <Chat leadId={lead.id} side="client" unread={unread} />
+
+        <TelegramConnect href={connectLink(lead)} className={styles.action} />
       </div>
     </article>
   );

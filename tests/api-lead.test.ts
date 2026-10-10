@@ -94,7 +94,8 @@ describe("POST /api/lead: що приймаємо", () => {
   it("ім'я + телефон — заявка в базі й сповіщення з номером", async () => {
     const res = await post({ name: " Олег ", phone: "073 315 02 38", source: "model", model: "iPhone 13" });
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ ok: true });
+    // telegram: null — клієнтський бот у тестах не налаштований
+    expect(await res.json()).toEqual({ ok: true, telegram: null });
 
     expect(m.inserted).toHaveLength(1);
     expect(m.inserted[0]).toMatchObject({

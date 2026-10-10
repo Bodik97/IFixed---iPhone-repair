@@ -13,6 +13,7 @@ import { addExpense, EXPENSE_CATEGORIES, removeExpense } from "@/db/expenses";
 import { addPart, removePart, shiftPartQty } from "@/db/parts";
 import { rateLimit, release } from "@/lib/rateLimit";
 import { sendPush } from "@/lib/push";
+import { notifyClientStatus } from "@/lib/clientBot";
 import { checkCredentials, createSession, currentAdmin, destroySession, isAdmin } from "@/lib/admin";
 
 /** Адреса, з якої прийшов запит — за нею теж рахуємо спроби входу */
@@ -89,11 +90,13 @@ export async function setStatus(formData: FormData): Promise<void> {
   // Хроніка: клієнт бачить, що саме сталося, а не лише підсвічену стадію
   await addEvent(id, { status: next });
 
+  const lead = await getLeadById(id);
+
   // Ремонт завершено — пристрій потрапляє в список клієнта з гарантією
-  if (next === "done") {
-    const lead = await getLeadById(id);
-    if (lead) await registerDevice(lead);
-  }
+  if (next === "done" && lead) await registerDevice(lead);
+
+  // Клієнт із підключеним ботом дізнається про новий етап одразу, у Telegram
+  if (lead) await notifyClientStatus(lead);
 
   revalidatePath("/admin");
   revalidatePath("/moi-remonty");
@@ -232,6 +235,9 @@ export async function setTtn(formData: FormData): Promise<void> {
 
   if (ttn) {
     await addEvent(id, { text: `Відправлено Новою Поштою, накладна ${ttn}`, status: "shipped" });
+
+    const lead = await getLeadById(id);
+    if (lead) await notifyClientStatus(lead);
   }
 
   revalidatePath("/admin");
