@@ -49,6 +49,12 @@ export async function GET(): Promise<Response> {
     const set = await call(token, "setWebhook", { url, secret_token: secret, allowed_updates: ["message"] });
     lines.push(`Адреса для повідомлень ${url}: ${verdict(set)}`);
 
+    // Пункт у меню бота поруч із полем вводу — те саме, що кнопка «Перевірити статус»
+    const menu = await call(token, "setMyCommands", {
+      commands: [{ command: "status", description: "Перевірити статус ремонту" }],
+    });
+    lines.push(`Команда /status у меню бота: ${verdict(menu)}`);
+
     const info = await call(token, "getWebhookInfo");
     if (info.result?.last_error_message) lines.push(`Остання помилка доставки: ${info.result.last_error_message}`);
   }

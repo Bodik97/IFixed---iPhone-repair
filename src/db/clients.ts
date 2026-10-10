@@ -14,6 +14,9 @@ import { leads } from "./schema";
  */
 const key = sql<string>`right(regexp_replace(${leads.phone}, '\\D', '', 'g'), 9)`;
 
+/** Той самий ключ для запитів поза цим файлом — бот шукає заявки клієнта за ним */
+export { key as phoneKeySql };
+
 export type Client = {
   key: string;
   name: string;

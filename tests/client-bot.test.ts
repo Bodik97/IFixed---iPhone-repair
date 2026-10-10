@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fake } from "./helpers/fakeDb";
-import { telegramChats, type Lead } from "@/db/schema";
+import { leads, telegramChats, type Lead } from "@/db/schema";
 
 /**
  * Бот для клієнтів. Головне: чат закріплюється лише за посиланням із нашим
@@ -156,6 +156,36 @@ describe("webhook бота", () => {
     await POST(update("/start t501234567-00000000000000000000"));
     expect(fake.writes()).toHaveLength(0);
     expect(sent).toHaveLength(2);
+  });
+
+  it("«Перевірити статус» показує незакриті ремонти того, хто пише", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [
+      { ...LEAD, orderNo: 1003, status: "in_progress", createdAt: new Date() },
+      { ...LEAD, orderNo: 1002, status: "done", createdAt: new Date() },
+    ]);
+
+    await POST(update(bot.CHECK_BUTTON));
+
+    expect(sent).toHaveLength(1);
+    expect(sent[0].text).toContain("№1003 — У роботі");
+    expect(sent[0].text).not.toContain("№1002");
+    // Шукаємо лише заявки з телефону, за яким закріплений чат
+    expect(fake.queries.some((q) => /from "leads"/.test(q.sql) && q.params.includes("733150238"))).toBe(true);
+  });
+
+  it("усе закрито — показує останню заявку", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [{ ...LEAD, orderNo: 1002, status: "done", createdAt: new Date() }]);
+
+    await POST(update("/status"));
+    expect(sent[0].text).toContain("№1002 — Завершено");
+  });
+
+  it("чат не підключений — чужих заявок не шукаємо, пояснюємо, як підключити", async () => {
+    await POST(update(bot.CHECK_BUTTON));
+    expect(fake.queries.some((q) => /from "leads"/.test(q.sql))).toBe(false);
+    expect(sent[0].text).toContain("QR-кодом із квитанції");
   });
 
   it("у групі бот мовчить", async () => {

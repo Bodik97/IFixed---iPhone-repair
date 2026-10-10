@@ -1,10 +1,10 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { eq, inArray } from "drizzle-orm";
+import { desc, eq, inArray, or, type SQL } from "drizzle-orm";
 import { getDb } from "@/db";
-import { phoneKey } from "@/db/clients";
-import { telegramChats, type Lead } from "@/db/schema";
-import { describeStatus } from "@/data/leadStatus";
+import { phoneKey, phoneKeySql } from "@/db/clients";
+import { leads, telegramChats, type Lead } from "@/db/schema";
+import { ARCHIVED, describeStatus } from "@/data/leadStatus";
 import { esc } from "./telegram";
 
 /**
@@ -93,6 +93,9 @@ export async function linkedLeads(rows: Who[]): Promise<Set<string>> {
   return new Set(rows.filter((r) => linked.has(bySubject.get(r.id)!)).map((r) => r.id));
 }
 
+/** Підпис кнопки в боті: натиснув — отримав поточний стан своїх ремонтів */
+export const CHECK_BUTTON = "Перевірити статус";
+
 export async function sendToChat(chatId: string, html: string): Promise<number> {
   const cfg = config();
   if (!cfg) return 0;
@@ -105,6 +108,8 @@ export async function sendToChat(chatId: string, html: string): Promise<number> 
         text: html,
         parse_mode: "HTML",
         link_preview_options: { is_disabled: true },
+        // Кнопка під полем вводу — завжди під рукою, з кожним повідомленням бота
+        reply_markup: { keyboard: [[{ text: CHECK_BUTTON }]], resize_keyboard: true, is_persistent: true },
       }),
     });
     if (!res.ok) console.error("[client-bot] відмова:", res.status, await res.text().catch(() => ""));
@@ -129,6 +134,40 @@ export function statusText(lead: Pick<Lead, "orderNo" | "model" | "service" | "s
   ]
     .filter((line, i) => line || i === 2)
     .join("\n");
+}
+
+/** Заявки, за якими закріплений цей запис: за телефоном, акаунтом чи одна конкретна */
+function leadsOf(subject: string): SQL | undefined {
+  const value = subject.slice(1);
+  if (subject[0] === "t") return eq(phoneKeySql, value);
+  if (subject[0] === "u") return eq(leads.clerkUserId, value);
+  if (subject[0] === "l" && /^[0-9a-f]{32}$/.test(value)) {
+    return eq(leads.id, value.replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/, "$1-$2-$3-$4-$5"));
+  }
+  return undefined;
+}
+
+/**
+ * Відповідь на «Перевірити статус»: що зараз із ремонтами того, хто пише.
+ * Показуємо незакриті заявки; якщо таких немає — останню закриту.
+ * null — цей чат бота ще не підключав.
+ */
+export async function statusReport(chatId: string): Promise<string | null> {
+  const chats = await getDb().select().from(telegramChats).where(eq(telegramChats.chatId, chatId));
+  const filters = chats.map((c) => leadsOf(c.subject)).filter((f): f is SQL => Boolean(f));
+  if (filters.length === 0) return null;
+
+  const rows = await getDb()
+    .select()
+    .from(leads)
+    .where(or(...filters))
+    .orderBy(desc(leads.createdAt))
+    .limit(10);
+
+  if (rows.length === 0) return "Заявок за вашим номером зараз немає.";
+
+  const open = rows.filter((r) => !ARCHIVED.includes(r.status));
+  return (open.length > 0 ? open : rows.slice(0, 1)).map(statusText).join("\n\n");
 }
 
 /**
