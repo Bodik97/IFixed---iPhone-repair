@@ -95,8 +95,20 @@ export async function linkedLeads(rows: Who[]): Promise<Set<string>> {
 
 /** Підпис кнопки в боті: натиснув — отримав поточний стан своїх ремонтів */
 export const CHECK_BUTTON = "Перевірити статус";
+/** Кнопка для того, хто ще не підключився: Telegram сам передає боту його номер */
+export const SHARE_BUTTON = "Поділитися номером";
 
-export async function sendToChat(chatId: string, html: string): Promise<number> {
+/** Чат за номером із Telegram — той самий ключ, що й у заявок із цим телефоном */
+export function subjectOfPhone(phone: string): string | null {
+  const key = phoneKey(phone);
+  return key ? `t${key}` : null;
+}
+
+/**
+ * `keyboard` — яка кнопка лишається під полем вводу: «Перевірити статус» для
+ * підключеного чату чи «Поділитися номером» для того, кого ще не впізнали.
+ */
+export async function sendToChat(chatId: string, html: string, keyboard: "check" | "share" = "check"): Promise<number> {
   const cfg = config();
   if (!cfg) return 0;
   try {
@@ -109,7 +121,11 @@ export async function sendToChat(chatId: string, html: string): Promise<number> 
         parse_mode: "HTML",
         link_preview_options: { is_disabled: true },
         // Кнопка під полем вводу — завжди під рукою, з кожним повідомленням бота
-        reply_markup: { keyboard: [[{ text: CHECK_BUTTON }]], resize_keyboard: true, is_persistent: true },
+        reply_markup: {
+          keyboard: [[keyboard === "share" ? { text: SHARE_BUTTON, request_contact: true } : { text: CHECK_BUTTON }]],
+          resize_keyboard: true,
+          is_persistent: true,
+        },
       }),
     });
     if (!res.ok) console.error("[client-bot] відмова:", res.status, await res.text().catch(() => ""));
@@ -164,7 +180,7 @@ export async function statusReport(chatId: string): Promise<string | null> {
     .orderBy(desc(leads.createdAt))
     .limit(10);
 
-  if (rows.length === 0) return "Заявок за вашим номером зараз немає.";
+  if (rows.length === 0) return "Заявок за вашим номером зараз немає. Щойно зʼявиться — напишемо сюди.";
 
   const open = rows.filter((r) => !ARCHIVED.includes(r.status));
   return (open.length > 0 ? open : rows.slice(0, 1)).map(statusText).join("\n\n");

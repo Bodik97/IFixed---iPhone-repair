@@ -30,7 +30,7 @@ const LEAD = {
 
 const CHAT = { id: "c1", subject: "t733150238", chatId: "555", createdAt: new Date() };
 
-let sent: { chat_id: string; text: string }[] = [];
+let sent: { chat_id: string; text: string; reply_markup: { keyboard: { text: string; request_contact?: boolean }[][] } }[] = [];
 let telegramStatus = 200;
 
 beforeEach(() => {
@@ -182,10 +182,39 @@ describe("webhook бота", () => {
     expect(sent[0].text).toContain("№1002 — Завершено");
   });
 
-  it("чат не підключений — чужих заявок не шукаємо, пояснюємо, як підключити", async () => {
+  it("чат не підключений — чужих заявок не шукаємо, просимо поділитися номером", async () => {
     await POST(update(bot.CHECK_BUTTON));
     expect(fake.queries.some((q) => /from "leads"/.test(q.sql))).toBe(false);
-    expect(sent[0].text).toContain("QR-кодом із квитанції");
+    expect(sent[0].reply_markup.keyboard[0][0]).toEqual({ text: bot.SHARE_BUTTON, request_contact: true });
+  });
+
+  const contact = (phone: string, owner: number) =>
+    new Request("http://localhost/api/telegram/client", {
+      method: "POST",
+      headers: { "x-telegram-bot-api-secret-token": bot.webhookSecret()! },
+      body: JSON.stringify({
+        message: { from: { id: 555 }, chat: { id: 555, type: "private" }, contact: { phone_number: phone, user_id: owner } },
+      }),
+    });
+
+  it("власний номер із Telegram закріплює чат за телефоном і одразу показує статус", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [{ ...LEAD, orderNo: 1003, status: "in_progress", createdAt: new Date() }]);
+
+    await POST(contact("380733150238", 555));
+
+    const [insert] = fake.writes();
+    expect(insert.sql).toMatch(/^insert into "telegram_chats"/);
+    expect(insert.params).toEqual(expect.arrayContaining(["t733150238", "555"]));
+    expect(sent[0].text).toContain("статуси підключено");
+    expect(sent[0].text).toContain("№1003 — У роботі");
+    expect(sent[0].reply_markup.keyboard[0][0]).toEqual({ text: bot.CHECK_BUTTON });
+  });
+
+  it("чужий контакт не закріплюється", async () => {
+    await POST(contact("380501234567", 999));
+    expect(fake.writes()).toHaveLength(0);
+    expect(sent[0].reply_markup.keyboard[0][0].request_contact).toBe(true);
   });
 
   it("у групі бот мовчить", async () => {
