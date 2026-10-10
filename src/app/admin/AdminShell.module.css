@@ -240,8 +240,9 @@
   min-width: 21px;
   padding: 1px 6px;
   border-radius: var(--r-pill);
-  background: var(--accent);
-  color: #101110;
+  /* Червоний, як сигнали на огляді: лічильник означає, що на майстра чекають */
+  background: var(--danger);
+  color: var(--on-danger);
   font-size: 12px;
   font-weight: 600;
   text-align: center;

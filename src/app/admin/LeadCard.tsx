@@ -23,6 +23,16 @@ const sourceLabel: Record<string, string> = {
   manual: "вручну",
 };
 
+/** Колір картки за статусом; закриті заявки — однаково сірі */
+const statusClass: Record<Lead["status"], string> = {
+  new: styles.statusNew,
+  in_progress: styles.statusInProgress,
+  ready: styles.statusReady,
+  shipped: styles.statusShipped,
+  done: styles.statusClosed,
+  rejected: styles.statusClosed,
+};
+
 const dateFormat = new Intl.DateTimeFormat("uk-UA", {
   day: "2-digit",
   month: "2-digit",
@@ -62,7 +72,7 @@ export default function LeadCard({
   return (
     <LeadCardFrame
       defaultOpen={defaultOpen}
-      className={`${styles.card} ${r.status === "new" ? styles.cardNew : ""} ${waitingShip ? styles.cardShip : ""}`}
+      className={`${styles.card} ${styles.cardTone} ${statusClass[r.status]} ${waitingShip ? styles.cardShip : ""}`}
       summary={
         <>
           <div className={styles.cardTop}>
@@ -168,21 +178,23 @@ export default function LeadCard({
       <div className={styles.chatRow}>
         <Chat leadId={r.id} side="master" unread={unread} />
 
-        <a
-          href={`/admin/zayavky/${r.id}/kvytantsiya`}
-          target="_blank"
-          rel="noopener"
-          className="btn btn-ghost"
-        >
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M6 9V3h12v6" />
-            <path d="M6 18H4v-6h16v6h-2" />
-            <path d="M6 14h12v7H6z" />
-          </svg>
-          Квитанція
-        </a>
+        <div className={styles.cardActions}>
+          <a
+            href={`/admin/zayavky/${r.id}/kvytantsiya`}
+            target="_blank"
+            rel="noopener"
+            className="btn btn-ghost"
+          >
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M6 9V3h12v6" />
+              <path d="M6 18H4v-6h16v6h-2" />
+              <path d="M6 14h12v7H6z" />
+            </svg>
+            Квитанція
+          </a>
 
-        <DeleteLead id={r.id} orderNo={r.orderNo} />
+          <DeleteLead id={r.id} orderNo={r.orderNo} />
+        </div>
       </div>
     </LeadCardFrame>
   );

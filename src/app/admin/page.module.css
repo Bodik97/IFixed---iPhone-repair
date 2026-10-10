@@ -116,6 +116,39 @@
   background: rgb(var(--lime-rgb) / .04);
 }
 
+/* Колір картки заявки за статусом — щоб стадію було видно, не читаючи.
+   Нова — червона, як сигнал на огляді: на неї ще ніхто не відповів. */
+.statusNew {
+  --tone: 205 60 52;
+}
+
+.statusInProgress {
+  --tone: 214 158 28;
+}
+
+.statusReady {
+  --tone: var(--lime-rgb);
+}
+
+.statusShipped {
+  --tone: 58 134 214;
+}
+
+.statusClosed {
+  --tone: 128 128 128;
+}
+
+.cardTone {
+  border-color: rgb(var(--tone) / .38);
+  border-inline-start: 4px solid rgb(var(--tone));
+  background: rgb(var(--tone) / .08);
+}
+
+.card.cardTone:hover {
+  border-color: rgb(var(--tone) / .6);
+  border-inline-start-color: rgb(var(--tone));
+}
+
 .cardShip {
   border-color: rgb(var(--lime-rgb) / .45);
 }
@@ -714,14 +747,29 @@
   margin: 34px 0 16px;
 }
 
-/* Чат із клієнтом — окремим рядком під грошима */
+/* Чат із клієнтом — окремим рядком під грошима, кнопки — рядком під ним:
+   поруч із розгорнутим чатом вони розтягувались на всю його висоту */
 .chatRow {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 10px;
   padding-top: 14px;
   margin-top: 14px;
   border-top: 1px solid var(--border);
+}
+
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 560px) {
+  /* На телефоні кнопки ділять рядок навпіл — у кожну легко влучити пальцем */
+  .cardActions > * {
+    flex: 1 1 140px;
+    justify-content: center;
+  }
 }
 
 /* ---------- Сигнали на головній ---------- */
