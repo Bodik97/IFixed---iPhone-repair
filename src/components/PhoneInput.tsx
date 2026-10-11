@@ -51,8 +51,15 @@ export default function PhoneInput({
       autoComplete="tel"
       value={formatPhone(localDigits(value))}
       onChange={(e) => {
-        const local = localDigits(e.target.value);
+        const el = e.target;
+        // Набирали в кінці — там курсор і має лишитись. Без цього після
+        // вставленого пробілу він опинявся перед останньою цифрою, і номер плутався
+        const typingAtEnd = el.selectionStart === el.value.length;
+
+        const local = localDigits(el.value);
         onChange(local ? `${PREFIX}${local}` : "");
+
+        if (typingAtEnd) requestAnimationFrame(() => el.setSelectionRange(el.value.length, el.value.length));
       }}
     />
   );

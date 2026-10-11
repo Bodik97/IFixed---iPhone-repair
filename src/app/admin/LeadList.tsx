@@ -67,6 +67,8 @@ export default async function LeadList({ kind, params }: { kind: ListKind; param
 
   return (
     <section className={styles.wrap}>
+      {/* Заголовок і пошук лишаються на місці — під ними прокручуються лише заявки */}
+      <div className={styles.listTop}>
       <div className={styles.head}>
         <div>
           <h1 className={styles.title}>{kind === "archive" ? "Архів" : "Заявки"}</h1>
@@ -86,6 +88,7 @@ export default async function LeadList({ kind, params }: { kind: ListKind; param
       </div>
 
       <Search query={query} found={found} kind={kind} />
+      </div>
 
       {rows.length === 0 ? (
         <div className={styles.empty}>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useId, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { site } from "@/data/site";
 import FormError from "./FormError";
@@ -31,6 +31,9 @@ function BookingFormInner({
   initialChoice = "",
   bare,
 }: Props & { initialChoice?: string }) {
+  // Форма буває на сторінці двічі — у тексті й у вікні запису; з однаковими id
+  // підпис поля у вікні вів би до поля під ним
+  const uid = useId();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [choice, setChoice] = useState(initialChoice);
@@ -109,9 +112,9 @@ function BookingFormInner({
     <div className={bare ? styles.boxBare : styles.box}>
       <form onSubmit={submit} className={styles.form} noValidate>
         <div className={styles.row}>
-          <label htmlFor="bf-name">Ім&apos;я</label>
+          <label htmlFor={`${uid}-name`}>Ім&apos;я</label>
           <input
-            id="bf-name"
+            id={`${uid}-name`}
             className="field"
             type="text"
             autoComplete="name"
@@ -125,9 +128,9 @@ function BookingFormInner({
         </div>
 
         <div className={styles.row}>
-          <label htmlFor="bf-phone">Телефон</label>
+          <label htmlFor={`${uid}-phone`}>Телефон</label>
           <PhoneInput
-            id="bf-phone"
+            id={`${uid}-phone`}
             value={phone}
             onChange={(v) => {
               setPhone(v);
@@ -144,9 +147,9 @@ function BookingFormInner({
 
         {details && select && (
           <div className={styles.row}>
-            <label htmlFor="bf-choice">{select.label}</label>
+            <label htmlFor={`${uid}-choice`}>{select.label}</label>
             <select
-              id="bf-choice"
+              id={`${uid}-choice`}
               className="field"
               value={choice}
               onChange={(e) => setChoice(e.target.value)}
@@ -163,9 +166,9 @@ function BookingFormInner({
 
         {details && (
           <div className={styles.row}>
-            <label htmlFor="bf-problem">Що трапилось</label>
+            <label htmlFor={`${uid}-problem`}>Що трапилось</label>
             <textarea
-              id="bf-problem"
+              id={`${uid}-problem`}
               className={`field ${styles.textarea}`}
               placeholder="Наприклад: розбитий екран, не тримає заряд"
               value={problem}

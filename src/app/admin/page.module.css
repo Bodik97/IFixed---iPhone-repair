@@ -15,6 +15,34 @@
   margin-bottom: 12px;
 }
 
+/* Заголовок списку й пошук закріплені під робочою панеллю. Непрозоре тло й
+   невеликий запас з боків — щоб картки, проїжджаючи знизу, не визирали */
+.listTop {
+  position: sticky;
+  /* Висота закріпленої панелі над ним: відступи 14 + 10, кнопки 44, лінія 1 */
+  top: 69px;
+  z-index: 20;
+  margin-inline: -6px;
+  padding: 14px 6px 0;
+  background: var(--bg);
+}
+
+.listTop .head {
+  margin-bottom: 14px;
+}
+
+@media (max-width: 560px) {
+  /* На телефоні панель нижча (відступи 8 + 8), а закріплений блок — щільніший */
+  .listTop {
+    top: 61px;
+    padding-top: 10px;
+  }
+
+  .listTop .head {
+    margin-bottom: 10px;
+  }
+}
+
 .title {
   font-size: clamp(26px, 3.2vw, 40px);
 }
@@ -253,7 +281,8 @@
 
 /* Прокрутка до картки не має ховати її під закріпленою шапкою й панеллю */
 .card {
-  scroll-margin-top: 84px;
+  /* Панель плюс закріплені заголовок і пошук */
+  scroll-margin-top: 260px;
 }
 
 .cardDetails {
