@@ -133,7 +133,11 @@ export default function Chat({ leadId, side, unread = 0 }: Props) {
 
   if (!open) {
     return (
-      <button type="button" className={`btn btn-ghost ${styles.opener}`} onClick={openChat}>
+      <button
+        type="button"
+        className={`btn ${side === "client" ? `btn-accent ${styles.openerMain}` : "btn-ghost"} ${styles.opener}`}
+        onClick={openChat}
+      >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M4 5h16v11H9l-5 4z" />
         </svg>
