@@ -28,6 +28,8 @@ type Props = {
   simple?: boolean;
   /** Підзаголовок над полями форми на сторінці: що вписати й що буде далі */
   subtitle?: string;
+  /** Скільки символів дозволено в «Що трапилось»; за замовчуванням — спільний ліміт */
+  problemMax?: number;
 };
 
 /** Що не так у кожному полі; порожньо — усе гаразд */
@@ -42,6 +44,7 @@ function BookingFormInner({
   bare,
   simple = false,
   subtitle = "Впишіть імʼя й телефон — передзвонимо за 25 хвилин. Модель і опис допоможуть одразу назвати ціну.",
+  problemMax = LIMITS.problem,
 }: Props & { initialChoice?: string }) {
   // Форма буває на сторінці двічі — у тексті й у вікні запису; з однаковими id
   // підпис поля у вікні вів би до поля під ним
@@ -219,20 +222,20 @@ function BookingFormInner({
             label="Що трапилось"
             hint="Необовʼязково. Кілька слів: що зламалось і коли."
             error={errors.problem}
-            counter={`${problem.length} / ${LIMITS.problem}`}
+            counter={`${problem.length} / ${problemMax}`}
           >
             <textarea
               {...fieldState(`${uid}-problem`, errors.problem)}
               className={`${fieldState(`${uid}-problem`, errors.problem).className} ${styles.textarea}`}
               placeholder="Наприклад: розбитий екран, не тримає заряд"
               value={problem}
-              maxLength={LIMITS.problem}
+              maxLength={problemMax}
               onChange={(e) => {
-                const clean = plainText(e.target.value, LIMITS.problem, true);
+                const clean = plainText(e.target.value, problemMax, true);
                 setProblem(clean);
                 fail({
                   problem:
-                    clean.length < e.target.value.trimStart().length && clean.length < LIMITS.problem
+                    clean.length < e.target.value.trimStart().length && clean.length < problemMax
                       ? "Спецсимволи й емодзі тут не потрібні — лишили звичайний текст."
                       : null,
                 });

@@ -348,6 +348,8 @@ export default async function Home() {
           <BookingForm
             source="landing"
             select={{ name: "model", label: "Модель", placeholder: "Оберіть модель", options: [...bookingModels] }}
+            // На головній досить кількох слів — деталі зʼясуємо по телефону
+            problemMax={150}
           />
         </div>
         </section>
