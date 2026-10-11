@@ -34,7 +34,9 @@ test.describe("форма запису на головній", () => {
     await open(page, "/");
     const book = page.locator("#book");
     await book.getByRole("button", { name: /записатись/i }).click();
-    await expect(book.getByText("Вкажіть ім'я та телефон")).toBeVisible();
+    // Помилка — під кожним полем, словами, що саме вписати
+    await expect(book.getByText("Впишіть імʼя — як до вас звертатись.")).toBeVisible();
+    await expect(book.getByText(/Впишіть номер телефону/)).toBeVisible();
     expect(lead.body).toBeNull();
   });
 

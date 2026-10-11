@@ -4,10 +4,12 @@ import { Suspense, useId, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { site } from "@/data/site";
 import FormError from "./FormError";
+import FormField, { fieldState } from "./FormField";
+import Logo from "./Logo";
+import PhoneInput from "./PhoneInput";
+import TelegramConnect from "./TelegramConnect";
+import { LIMITS, nameProblem, onlyLetters, phoneProblem, plainText } from "@/lib/validate";
 import styles from "./BookingForm.module.css";
-import TelegramConnect from "@/components/TelegramConnect";
-import PhoneInput, { phoneComplete } from "./PhoneInput";
-import { LIMITS, onlyLetters, plainText, validName } from "@/lib/validate";
 
 export type LeadSource = "landing" | "model" | "services" | "mail-in";
 
@@ -28,6 +30,9 @@ type Props = {
   subtitle?: string;
 };
 
+/** Що не так у кожному полі; порожньо — усе гаразд */
+type Errors = { name?: string | null; phone?: string | null; problem?: string | null };
+
 function BookingFormInner({
   source,
   select,
@@ -45,6 +50,7 @@ function BookingFormInner({
   const [phone, setPhone] = useState("");
   const [choice, setChoice] = useState(initialChoice);
   const [problem, setProblem] = useState("");
+  const [errors, setErrors] = useState<Errors>({});
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -53,27 +59,27 @@ function BookingFormInner({
   // лякати; відкрита одразу, коли послугу вже обрали кнопкою на сайті
   const [details, setDetails] = useState(!simple || Boolean(initialChoice));
 
+  const fail = (patch: Errors) => setErrors((e) => ({ ...e, ...patch }));
+
   const reset = () => {
     setName("");
     setPhone("");
     setChoice("");
     setProblem("");
+    setErrors({});
     setError("");
     setSent(false);
   };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const nameOk = validName(name);
-    const phoneOk = phoneComplete(phone);
-    if (!nameOk || !phoneOk) {
-      setError(
-        !nameOk && !phoneOk
-          ? "Вкажіть ім'я та телефон повністю — решту з'ясуємо в розмові."
-          : !nameOk
-            ? "Впишіть ім'я — лише літери, щонайменше дві."
-            : "Допишіть номер телефону: після +38 — десять цифр.",
-      );
+
+    const found: Errors = { name: nameProblem(name), phone: phoneProblem(phone) };
+    setErrors(found);
+    // Курсор — у перше поле з помилкою, щоб не шукати його очима
+    const first = found.name ? "name" : found.phone ? "phone" : null;
+    if (first) {
+      document.getElementById(`${uid}-${first}`)?.focus();
       return;
     }
 
@@ -102,9 +108,18 @@ function BookingFormInner({
     }
   };
 
+  // Логотип — над кожною формою: людина бачить, кому лишає номер.
+  // У вікні запису він стоїть над заголовком вікна, тож тут не повторюється
+  const brand = bare ? null : (
+    <div className={styles.brand}>
+      <Logo as="text" />
+    </div>
+  );
+
   if (sent) {
     return (
       <div className={bare ? styles.boxBare : styles.box}>
+        {brand}
         <div className={styles.done}>
           <svg className={styles.doneMark} width="42" height="42" viewBox="0 0 24 24" fill="none" style={{ stroke: "var(--accent-text)" }} strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
             <circle cx="12" cy="12" r="9" pathLength="1" />
@@ -125,37 +140,53 @@ function BookingFormInner({
 
   return (
     <div className={bare ? styles.boxBare : styles.box}>
+      {brand}
+
       <form onSubmit={submit} className={styles.form} noValidate>
         {!bare && <p className={styles.sub}>{subtitle}</p>}
 
-        <div className={styles.row}>
-          <label htmlFor={`${uid}-name`}>Ім&apos;я</label>
+        <FormField id={`${uid}-name`} label="Ім'я" hint="Лише літери — так, як до вас звертатись." error={errors.name}>
           <input
-            id={`${uid}-name`}
-            className="field"
+            {...fieldState(`${uid}-name`, errors.name)}
             type="text"
             autoComplete="name"
-            placeholder="Як до вас звертатись"
-            value={name}
+            placeholder="Наприклад: Олена"
             maxLength={LIMITS.name.max}
+            value={name}
             onChange={(e) => {
-              setName(onlyLetters(e.target.value));
-              setError("");
+              const clean = onlyLetters(e.target.value);
+              setName(clean);
+              // Набрали цифру чи знак — кажемо чому вони не зʼявились, а не мовчки ковтаємо
+              fail({
+                name:
+                  clean !== e.target.value
+                    ? "У цьому полі — лише літери, без цифр і знаків."
+                    : errors.name
+                      ? nameProblem(clean)
+                      : null,
+              });
             }}
+            onBlur={() => name && fail({ name: nameProblem(name) })}
           />
-        </div>
+        </FormField>
 
-        <div className={styles.row}>
-          <label htmlFor={`${uid}-phone`}>Телефон</label>
+        <FormField
+          id={`${uid}-phone`}
+          label="Телефон"
+          hint="Після +38 починайте з нуля: 073 123 45 67."
+          error={errors.phone}
+        >
           <PhoneInput
-            id={`${uid}-phone`}
+            {...fieldState(`${uid}-phone`, errors.phone)}
             value={phone}
             onChange={(v) => {
               setPhone(v);
-              setError("");
+              // Помилку прибираємо, щойно номер став правильним, — але не лаємо, поки людина ще набирає
+              if (errors.phone) fail({ phone: phoneProblem(v) });
             }}
+            onBlur={() => phone && fail({ phone: phoneProblem(phone) })}
           />
-        </div>
+        </FormField>
 
         {!details && (
           <button type="button" className={styles.more} onClick={() => setDetails(true)}>
@@ -183,17 +214,31 @@ function BookingFormInner({
         )}
 
         {details && (
-          <div className={styles.row}>
-            <label htmlFor={`${uid}-problem`}>Що трапилось</label>
+          <FormField
+            id={`${uid}-problem`}
+            label="Що трапилось"
+            hint="Необовʼязково. Кілька слів: що зламалось і коли."
+            error={errors.problem}
+            counter={`${problem.length} / ${LIMITS.problem}`}
+          >
             <textarea
-              id={`${uid}-problem`}
-              className={`field ${styles.textarea}`}
+              {...fieldState(`${uid}-problem`, errors.problem)}
+              className={`${fieldState(`${uid}-problem`, errors.problem).className} ${styles.textarea}`}
               placeholder="Наприклад: розбитий екран, не тримає заряд"
               value={problem}
               maxLength={LIMITS.problem}
-              onChange={(e) => setProblem(plainText(e.target.value, LIMITS.problem, true))}
+              onChange={(e) => {
+                const clean = plainText(e.target.value, LIMITS.problem, true);
+                setProblem(clean);
+                fail({
+                  problem:
+                    clean.length < e.target.value.trimStart().length && clean.length < LIMITS.problem
+                      ? "Спецсимволи й емодзі тут не потрібні — лишили звичайний текст."
+                      : null,
+                });
+              }}
             />
-          </div>
+          </FormField>
         )}
 
         <FormError>{error}</FormError>

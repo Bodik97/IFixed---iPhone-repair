@@ -6,8 +6,13 @@ import { site } from "@/data/site";
 import FormError from "./FormError";
 import styles from "./BookingForm.module.css";
 import TelegramConnect from "@/components/TelegramConnect";
-import PhoneInput, { phoneComplete } from "./PhoneInput";
-import { LIMITS, onlyLetters, plainText, validName } from "@/lib/validate";
+import PhoneInput from "./PhoneInput";
+import FormField, { fieldState } from "./FormField";
+import Logo from "./Logo";
+import { LIMITS, nameProblem, onlyLetters, phoneProblem, placeProblem, plainText } from "@/lib/validate";
+
+/** Що не так у кожному полі; порожньо — усе гаразд */
+type Errors = { name?: string | null; phone?: string | null; city?: string | null; problem?: string | null };
 
 export default function MailInForm() {
   const [name, setName] = useState("");
@@ -20,7 +25,11 @@ export default function MailInForm() {
   const [sent, setSent] = useState(false);
   const [telegram, setTelegram] = useState<string | null>(null);
 
+  const [errors, setErrors] = useState<Errors>({});
+  const fail = (patch: Errors) => setErrors((e) => ({ ...e, ...patch }));
+
   const reset = () => {
+    setErrors({});
     setName("");
     setPhone("");
     setCity("");
@@ -32,8 +41,12 @@ export default function MailInForm() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validName(name) || !phoneComplete(phone) || city.trim().length < LIMITS.place.min) {
-      setError("Вкажіть ім'я, телефон повністю і місто з відділенням — решту з'ясуємо в розмові.");
+    const found: Errors = { name: nameProblem(name), phone: phoneProblem(phone), city: placeProblem(city) };
+    setErrors(found);
+    // Курсор — у перше поле з помилкою, щоб не шукати його очима
+    const first = found.name ? "p-name" : found.phone ? "p-phone" : found.city ? "p-city" : null;
+    if (first) {
+      document.getElementById(first)?.focus();
       return;
     }
 
@@ -78,55 +91,76 @@ export default function MailInForm() {
 
   return (
     <div className={styles.box}>
+      <div className={styles.brand}>
+        <Logo as="text" />
+      </div>
+
       <form onSubmit={submit} className={styles.form} noValidate>
         <p className={styles.sub}>
           Потрібні імʼя, телефон і відділення Нової Пошти. Модель і опис — за бажанням.
         </p>
 
-        <div className={styles.row}>
-          <label htmlFor="p-name">Ім&apos;я та прізвище</label>
+        <FormField
+          id="p-name"
+          label="Ім'я та прізвище"
+          hint="Лише літери — як у документі, за яким забиратимете посилку."
+          error={errors.name}
+        >
           <input
-            id="p-name"
-            className="field"
+            {...fieldState("p-name", errors.name)}
             type="text"
             autoComplete="name"
-            placeholder="Для відправки Новою Поштою"
+            placeholder="Наприклад: Олена Коваль"
             value={name}
             maxLength={LIMITS.name.max}
             onChange={(e) => {
-              setName(onlyLetters(e.target.value));
-              setError("");
+              const clean = onlyLetters(e.target.value);
+              setName(clean);
+              // Набрали цифру чи знак — кажемо чому вони не зʼявились, а не мовчки ковтаємо
+              fail({
+                name:
+                  clean !== e.target.value
+                    ? "У цьому полі — лише літери, без цифр і знаків."
+                    : errors.name
+                      ? nameProblem(clean)
+                      : null,
+              });
             }}
+            onBlur={() => name && fail({ name: nameProblem(name) })}
           />
-        </div>
+        </FormField>
 
-        <div className={styles.row}>
-          <label htmlFor="p-phone">Телефон</label>
+        <FormField id="p-phone" label="Телефон" hint="Після +38 починайте з нуля: 073 123 45 67." error={errors.phone}>
           <PhoneInput
-            id="p-phone"
+            {...fieldState("p-phone", errors.phone)}
             value={phone}
             onChange={(v) => {
               setPhone(v);
-              setError("");
+              if (errors.phone) fail({ phone: phoneProblem(v) });
             }}
+            onBlur={() => phone && fail({ phone: phoneProblem(phone) })}
           />
-        </div>
+        </FormField>
 
-        <div className={styles.row}>
-          <label htmlFor="p-city">Місто й відділення</label>
+        <FormField
+          id="p-city"
+          label="Місто й відділення"
+          hint="Куди повернути пристрій після ремонту."
+          error={errors.city}
+        >
           <input
-            id="p-city"
-            className="field"
+            {...fieldState("p-city", errors.city)}
             type="text"
-            placeholder="Напр. Тернопіль, відділення 12"
+            placeholder="Наприклад: Тернопіль, відділення 12"
             value={city}
             maxLength={LIMITS.place.max}
             onChange={(e) => {
               setCity(plainText(e.target.value, LIMITS.place.max));
-              setError("");
+              if (errors.city) fail({ city: placeProblem(e.target.value) });
             }}
+            onBlur={() => city && fail({ city: placeProblem(city) })}
           />
-        </div>
+        </FormField>
 
         <div className={styles.row}>
           <label htmlFor="p-model">Модель</label>
@@ -140,17 +174,31 @@ export default function MailInForm() {
           </select>
         </div>
 
-        <div className={styles.row}>
-          <label htmlFor="p-issue">Що трапилось</label>
+        <FormField
+          id="p-issue"
+          label="Що трапилось"
+          hint="Необовʼязково. Кілька слів: що зламалось і коли."
+          error={errors.problem}
+          counter={`${problem.length} / ${LIMITS.problem}`}
+        >
           <textarea
-            id="p-issue"
-            className={`field ${styles.textarea}`}
+            {...fieldState("p-issue", errors.problem)}
+            className={`${fieldState("p-issue", errors.problem).className} ${styles.textarea}`}
             placeholder="Наприклад: не тримає заряд, розбите скло спинки"
             value={problem}
             maxLength={LIMITS.problem}
-            onChange={(e) => setProblem(plainText(e.target.value, LIMITS.problem, true))}
+            onChange={(e) => {
+              const clean = plainText(e.target.value, LIMITS.problem, true);
+              setProblem(clean);
+              fail({
+                problem:
+                  clean.length < e.target.value.trimStart().length && clean.length < LIMITS.problem
+                    ? "Спецсимволи й емодзі тут не потрібні — лишили звичайний текст."
+                    : null,
+              });
+            }}
           />
-        </div>
+        </FormField>
 
         <FormError>{error}</FormError>
 

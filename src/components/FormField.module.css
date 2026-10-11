@@ -1,0 +1,42 @@
+.row {
+  display: grid;
+  gap: 8px;
+}
+
+.row label {
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+/* Рядок під полем: ліворуч підказка або помилка, праворуч лічильник */
+.under {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  /* Висота зарезервована, щоб форма не стрибала, коли підказку змінює помилка */
+  min-height: 18px;
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.hint {
+  color: var(--text-3);
+}
+
+.error {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--danger);
+}
+
+.error svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+.counter {
+  flex: none;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}

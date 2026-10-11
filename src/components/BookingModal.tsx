@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import BookingForm from "./BookingForm";
+import Logo from "./Logo";
 import { services } from "@/data/services";
 import styles from "./BookingModal.module.css";
 
@@ -68,6 +69,7 @@ export default function BookingProvider({ children }: { children: React.ReactNod
           </button>
 
           <div className={styles.head}>
+            <Logo as="text" />
             <h2 id="booking-title" className={styles.title}>
               Залиште номер — передзвонимо
             </h2>

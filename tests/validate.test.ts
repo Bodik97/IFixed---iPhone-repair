@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { LIMITS, onlyLetters, plainText, validName } from "@/lib/validate";
+import { LIMITS, nameProblem, onlyLetters, phoneProblem, placeProblem, plainText, validName } from "@/lib/validate";
 
 /** Правила для полів форм — ті самі в браузері й на сервері */
 describe("імʼя", () => {
@@ -34,5 +34,30 @@ describe("вільний текст", () => {
     expect(plainText("а".repeat(700), LIMITS.problem)).toHaveLength(LIMITS.problem);
     expect(plainText("рядок\n\n\n\nдругий", 100, true)).toBe("рядок\n\nдругий");
     expect(plainText("рядок\nдругий", 100)).toBe("рядок другий");
+  });
+});
+
+describe("що форма каже людині під полем", () => {
+  it("імʼя: порожнє, закоротке, правильне", () => {
+    expect(nameProblem("")).toMatch(/Впишіть імʼя/);
+    expect(nameProblem("Я")).toMatch(/щонайменше дві літери/);
+    expect(nameProblem("Олена")).toBeNull();
+  });
+
+  it("телефон: скільки цифр бракує — з правильним відмінком", () => {
+    expect(phoneProblem("")).toMatch(/Впишіть номер/);
+    expect(phoneProblem("+38073123456")).toBe("Допишіть номер: бракує ще 1 цифру.");
+    expect(phoneProblem("+380731234")).toBe("Допишіть номер: бракує ще 3 цифри.");
+    expect(phoneProblem("+38073")).toBe("Допишіть номер: бракує ще 7 цифр.");
+    expect(phoneProblem("+380731234567")).toBeNull();
+  });
+
+  it("телефон: десять цифр, але такого коду оператора немає", () => {
+    expect(phoneProblem("+380001234567")).toMatch(/коду оператора/);
+  });
+
+  it("відділення: щонайменше три символи", () => {
+    expect(placeProblem("Ль")).toMatch(/місто й номер відділення/);
+    expect(placeProblem("Львів, 12")).toBeNull();
   });
 });
