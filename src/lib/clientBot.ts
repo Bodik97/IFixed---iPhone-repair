@@ -269,16 +269,50 @@ export async function offerPrice(lead: Lead): Promise<boolean> {
   );
 }
 
-/** Майстер відповів у чаті заявки — пересилаємо клієнту в Telegram */
-export async function forwardMasterMessage(leadId: string, text: string, hasPhoto: boolean): Promise<boolean> {
+/** Фото в чат клієнта. Файл іде напряму в Telegram — приватне сховище назовні не відкриваємо */
+async function sendPhoto(chatId: string, photo: File, caption: string): Promise<number> {
+  const cfg = config();
+  if (!cfg) return 0;
+  try {
+    const form = new FormData();
+    form.set("chat_id", chatId);
+    form.set("caption", caption);
+    form.set("parse_mode", "HTML");
+    form.set("photo", photo, "photo");
+    const res = await fetch(`https://api.telegram.org/bot${cfg.token}/sendPhoto`, { method: "POST", body: form });
+    if (!res.ok) console.error("[client-bot] фото не прийнято:", res.status, await res.text().catch(() => ""));
+    return res.status;
+  } catch (e) {
+    console.error("[client-bot] фото не надіслано:", e);
+    return 0;
+  }
+}
+
+/** Майстер відповів у чаті заявки — пересилаємо клієнту в Telegram, разом із фото */
+export async function forwardMasterMessage(leadId: string, text: string, photo: File | null): Promise<boolean> {
   if (!config()) return false;
 
-  const [lead] = await getDb().select().from(leads).where(eq(leads.id, leadId)).limit(1);
-  if (!lead) return false;
+  try {
+    const [lead] = await getDb().select().from(leads).where(eq(leads.id, leadId)).limit(1);
+    if (!lead) return false;
 
-  const body = [text ? esc(text) : "", hasPhoto ? "Майстер надіслав фото — воно в чаті заявки на сайті." : ""]
-    .filter(Boolean)
-    .join("\n\n");
+    const head = `<b>Майстер · замовлення №${lead.orderNo}</b>`;
+    let photoSent = false;
 
-  return tellClient(lead, `<b>Майстер · замовлення №${lead.orderNo}</b>\n${body}`);
+    if (photo) {
+      const [chat] = await getDb().select().from(telegramChats).where(eq(telegramChats.subject, subjectOf(lead))).limit(1);
+      if (!chat) return false;
+      photoSent = (await sendPhoto(chat.chatId, photo, head)) === 200;
+    }
+
+    // Формат, який Telegram не взяв як фото (наприклад HEIC), — хоча б кажемо, де його подивитись
+    const body = [text ? esc(text) : "", photo && !photoSent ? "Майстер надіслав фото — воно в чаті заявки на сайті." : ""]
+      .filter(Boolean)
+      .join("\n\n");
+
+    return body ? tellClient(lead, `${head}\n${body}`) : photoSent;
+  } catch (e) {
+    console.error("[client-bot] відповідь майстра не переслано:", e);
+    return false;
+  }
 }

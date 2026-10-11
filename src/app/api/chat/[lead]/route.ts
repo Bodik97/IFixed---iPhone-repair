@@ -132,7 +132,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ lea
   }
 
   // Пише майстер — клієнт із підключеним ботом отримує відповідь у Telegram
-  if (role === "master") await forwardMasterMessage(lead, text, Boolean(imagePath));
+  if (role === "master") await forwardMasterMessage(lead, text, imagePath && file instanceof File ? file : null);
 
   return NextResponse.json({ ok: true });
 }

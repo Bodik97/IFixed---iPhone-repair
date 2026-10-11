@@ -53,9 +53,10 @@ beforeEach(() => {
   vi.stubEnv("TELEGRAM_CLIENT_BOT_TOKEN", "123:token");
   vi.stubEnv("TELEGRAM_CLIENT_BOT_USERNAME", "@GadgetFixStatusBot");
   calls = [];
-  vi.stubGlobal("fetch", async (url: string, init: { body: string }) => {
+  vi.stubGlobal("fetch", async (url: string, init: { body: string | FormData }) => {
     const method = url.slice(url.lastIndexOf("/") + 1);
-    const body = JSON.parse(init.body);
+    // sendPhoto йде формою з файлом, решта — JSON
+    const body = typeof init.body === "string" ? JSON.parse(init.body) : Object.fromEntries(init.body as FormData);
     calls.push({ method, body });
     if (method === "sendMessage") sent.push(body);
     return new Response("{}", { status: telegramStatus });
@@ -326,8 +327,37 @@ describe("погодження ціни й чат через бота", () => {
     fake.onSelect(telegramChats, () => [CHAT]);
     fake.onSelect(leads, () => [PRICED]);
 
-    expect(await bot.forwardMasterMessage(PRICED.id, "Завтра до обіду", false)).toBe(true);
+    expect(await bot.forwardMasterMessage(PRICED.id, "Завтра до обіду", null)).toBe(true);
     expect(sent[0].chat_id).toBe("555");
     expect(sent[0].text).toContain("Завтра до обіду");
+  });
+
+  const PHOTO = new File([new Uint8Array([1, 2, 3])], "x.jpg", { type: "image/jpeg" });
+
+  it("фото майстра йде клієнту самим фото, без окремого тексту", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [PRICED]);
+
+    expect(await bot.forwardMasterMessage(PRICED.id, "", PHOTO)).toBe(true);
+
+    const photo = calls.find((c) => c.method === "sendPhoto")!;
+    expect(photo.body.chat_id).toBe("555");
+    expect(photo.body.photo).toBeInstanceOf(File);
+    expect(String(photo.body.caption)).toContain("№1001");
+    expect(sent).toHaveLength(0);
+  });
+
+  it("Telegram не взяв фото — клієнт дізнається, що воно чекає в чаті на сайті", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [PRICED]);
+    vi.stubGlobal("fetch", async (url: string, init: { body: string | FormData }) => {
+      if (url.endsWith("/sendPhoto")) return new Response("{}", { status: 400 });
+      sent.push(JSON.parse(init.body as string));
+      return new Response("{}", { status: 200 });
+    });
+
+    expect(await bot.forwardMasterMessage(PRICED.id, "Ось так виглядає", PHOTO)).toBe(true);
+    expect(sent[0].text).toContain("Ось так виглядає");
+    expect(sent[0].text).toContain("в чаті заявки на сайті");
   });
 });
