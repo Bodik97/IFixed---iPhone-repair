@@ -288,6 +288,27 @@ async function sendPhoto(chatId: string, photo: File, caption: string): Promise<
   }
 }
 
+/** Фото, яке клієнт надіслав боту: Telegram віддає його за file_id. null — не вдалося забрати */
+export async function downloadPhoto(fileId: string): Promise<Blob | null> {
+  const cfg = config();
+  if (!cfg) return null;
+  try {
+    const info = await fetch(`https://api.telegram.org/bot${cfg.token}/getFile`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ file_id: fileId }),
+    });
+    const path = ((await info.json()) as { result?: { file_path?: string } }).result?.file_path;
+    if (!path) return null;
+
+    const file = await fetch(`https://api.telegram.org/file/bot${cfg.token}/${path}`);
+    return file.ok ? await file.blob() : null;
+  } catch (e) {
+    console.error("[client-bot] фото не забрано:", e);
+    return null;
+  }
+}
+
 /** Майстер відповів у чаті заявки — пересилаємо клієнту в Telegram, разом із фото */
 export async function forwardMasterMessage(leadId: string, text: string, photo: File | null): Promise<boolean> {
   if (!config()) return false;

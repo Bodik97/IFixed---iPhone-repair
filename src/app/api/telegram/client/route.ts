@@ -3,6 +3,7 @@ import {
   SHARE_BUTTON,
   callBot,
   chatLeads,
+  downloadPhoto,
   linkChat,
   readStart,
   sendToChat,
@@ -11,7 +12,8 @@ import {
   webhookSecret,
 } from "@/lib/clientBot";
 import { addEvent } from "@/db/events";
-import { addMessage } from "@/db/messages";
+import { put } from "@vercel/blob";
+import { addMessage, MAX_MESSAGE } from "@/db/messages";
 import type { Lead } from "@/db/schema";
 import { ARCHIVED } from "@/data/leadStatus";
 import { site } from "@/data/site";
@@ -26,7 +28,9 @@ export const dynamic = "force-dynamic";
 type Update = {
   message?: {
     text?: unknown;
-    photo?: unknown;
+    caption?: unknown;
+    /** Те саме фото в кількох розмірах, найбільше — останнє */
+    photo?: { file_id: string; width?: number; height?: number; file_size?: number }[];
     from?: { id?: number };
     chat?: { id?: number; type?: string };
     contact?: { phone_number?: unknown; user_id?: number };
@@ -40,22 +44,40 @@ type Update = {
 
 const uah = (n: number) => `${n.toLocaleString("uk-UA")} ₴`;
 
+/** Та сама межа, що й для фото з чату на сайті */
+const MAX_IMAGE_BYTES = 6 * 1024 * 1024;
+
+type Image = { imagePath: string; imageWidth: number | null; imageHeight: number | null };
+
 /**
  * Те, що клієнт сказав боту, майстер має побачити так само, як повідомлення
  * з чату на сайті: запис у чаті заявки (звідси лічильник і сигнал на огляді)
  * плюс сповіщення на телефон.
  */
-async function passToMasters(lead: Lead, text: string): Promise<void> {
-  await addMessage(lead.id, "client", { text });
+async function passToMasters(lead: Lead, text: string, image?: Image): Promise<void> {
+  await addMessage(lead.id, "client", { text, ...image });
   await alertMasters(
     {
       title: `№${lead.orderNo} · ${lead.name} пише`,
-      body: text.slice(0, 160),
+      body: text ? text.slice(0, 160) : "Надіслав фото",
       url: leadLink(lead.orderNo, lead.id),
       tag: `chat-${lead.id}`,
     },
-    `<b>Повідомлення від клієнта (Telegram)</b>\n№${lead.orderNo} · ${esc(lead.name)}\n\n${esc(text)}\n\n${siteUrl()}/admin/zayavky`,
+    `<b>Повідомлення від клієнта (Telegram)</b>\n№${lead.orderNo} · ${esc(lead.name)}\n\n${text ? esc(text) : "надіслав фото"}\n\n${siteUrl()}/admin/zayavky`,
   );
+}
+
+/** Фото від клієнта — у те саме приватне сховище, що й фото з чату на сайті */
+async function savePhoto(lead: Lead, photo: NonNullable<NonNullable<Update["message"]>["photo"]>): Promise<Image | null> {
+  const best = photo[photo.length - 1];
+  if (!best?.file_id || (best.file_size ?? 0) > MAX_IMAGE_BYTES) return null;
+
+  const file = await downloadPhoto(best.file_id);
+  if (!file || file.size > MAX_IMAGE_BYTES) return null;
+
+  // Telegram перетискає фото в JPEG, хай що надіслав клієнт
+  const blob = await put(`chat/${lead.id}/${crypto.randomUUID()}`, file, { access: "private", contentType: "image/jpeg" });
+  return { imagePath: blob.pathname, imageWidth: best.width ?? null, imageHeight: best.height ?? null };
 }
 
 /** Відповідь на кнопки під ціною: «Погоджуюсь» / «Передзвоніть мені» */
@@ -189,18 +211,15 @@ export async function POST(request: Request): Promise<Response> {
     return new Response("ok");
   }
 
+  const photo = Array.isArray(message?.photo) && message.photo.length > 0 ? message.photo : null;
+
   // Кнопка чи команда — показуємо стан ремонтів
-  if (!text || text === CHECK_BUTTON || text.startsWith("/")) {
-    await sendToChat(
-      chatId,
-      message?.photo
-        ? "Фото через бота поки не приймаємо — опишіть словами або надішліть фото в чаті заявки на сайті."
-        : ((await report()) ?? ""),
-    );
+  if (!photo && (!text || text === CHECK_BUTTON || text.startsWith("/"))) {
+    await sendToChat(chatId, (await report()) ?? "");
     return new Response("ok");
   }
 
-  // Звичайний текст — це повідомлення майстру: у чат найсвіжішої незакритої заявки
+  // Звичайний текст чи фото — це повідомлення майстру: у чат найсвіжішої незакритої заявки
   const lead = mine.find((l) => !ARCHIVED.includes(l.status)) ?? mine[0];
   if (!lead) {
     await sendToChat(chatId, "Активних ремонтів за вашим номером зараз немає, тож передати повідомлення нікому.");
@@ -213,7 +232,24 @@ export async function POST(request: Request): Promise<Response> {
     return new Response("ok");
   }
 
-  await passToMasters(lead, text);
+  if (photo) {
+    const image = await savePhoto(lead, photo).catch((e) => {
+      console.error("[client-bot] фото не збережено:", e);
+      return null;
+    });
+
+    if (!image) {
+      await sendToChat(chatId, "Не вдалося прийняти фото. Спробуйте ще раз або надішліть його в чаті заявки на сайті.");
+      return new Response("ok");
+    }
+
+    // Підпис під фото — це текст того самого повідомлення
+    const caption = typeof message?.caption === "string" ? message.caption.trim().slice(0, MAX_MESSAGE) : "";
+    await passToMasters(lead, caption, image);
+  } else {
+    await passToMasters(lead, text);
+  }
+
   await sendToChat(chatId, `Передали майстру (замовлення №${lead.orderNo}). Відповідь прийде сюди.`);
 
   return new Response("ok");

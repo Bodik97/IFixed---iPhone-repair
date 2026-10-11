@@ -16,6 +16,14 @@ vi.mock("@/db", async () => {
 // Справжній обмежувач рахує рядки в базі — тут він лише заважав би
 vi.mock("@/lib/rateLimit", () => ({ rateLimit: async () => ({ ok: true }) }));
 
+const uploaded: { path: string; size: number }[] = [];
+vi.mock("@vercel/blob", () => ({
+  put: async (path: string, file: Blob) => {
+    uploaded.push({ path, size: file.size });
+    return { pathname: path };
+  },
+}));
+
 import * as bot from "@/lib/clientBot";
 import { POST } from "@/app/api/telegram/client/route";
 
@@ -330,6 +338,55 @@ describe("погодження ціни й чат через бота", () => {
     expect(await bot.forwardMasterMessage(PRICED.id, "Завтра до обіду", null)).toBe(true);
     expect(sent[0].chat_id).toBe("555");
     expect(sent[0].text).toContain("Завтра до обіду");
+  });
+
+  it("фото від клієнта зберігається в чаті заявки разом із підписом", async () => {
+    uploaded.length = 0;
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [PRICED]);
+    vi.stubGlobal("fetch", async (url: string, init?: { body: string }) => {
+      if (url.endsWith("/getFile")) return Response.json({ result: { file_path: "photos/a.jpg" } });
+      if (url.includes("/file/bot")) return new Response(new Uint8Array([1, 2, 3, 4]));
+      sent.push(JSON.parse(init!.body));
+      return new Response("{}");
+    });
+
+    await post({
+      message: {
+        caption: "Ось тріщина",
+        photo: [
+          { file_id: "small", width: 90, height: 60 },
+          { file_id: "big", width: 1280, height: 853 },
+        ],
+        from: { id: 555 },
+        chat: { id: 555, type: "private" },
+      },
+    });
+
+    expect(uploaded).toHaveLength(1);
+    expect(uploaded[0].path.startsWith(`chat/${PRICED.id}/`)).toBe(true);
+    expect(uploaded[0].size).toBe(4);
+
+    const [message] = inserted("lead_messages");
+    expect(message.params).toEqual(expect.arrayContaining([PRICED.id, "client", "Ось тріщина", uploaded[0].path, 1280, 853]));
+    expect(sent[0].text).toContain("Передали майстру");
+  });
+
+  it("фото не вдалося забрати з Telegram — у чат нічого не пишемо, клієнт про це знає", async () => {
+    uploaded.length = 0;
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [PRICED]);
+    vi.stubGlobal("fetch", async (url: string, init?: { body: string }) => {
+      if (url.endsWith("/getFile")) return Response.json({ ok: false });
+      sent.push(JSON.parse(init!.body));
+      return new Response("{}");
+    });
+
+    await post({ message: { photo: [{ file_id: "big" }], from: { id: 555 }, chat: { id: 555, type: "private" } } });
+
+    expect(uploaded).toHaveLength(0);
+    expect(inserted("lead_messages")).toHaveLength(0);
+    expect(sent[0].text).toContain("Не вдалося прийняти фото");
   });
 
   const PHOTO = new File([new Uint8Array([1, 2, 3])], "x.jpg", { type: "image/jpeg" });
