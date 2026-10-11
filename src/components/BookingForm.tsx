@@ -6,6 +6,7 @@ import { site } from "@/data/site";
 import FormError from "./FormError";
 import styles from "./BookingForm.module.css";
 import TelegramConnect from "@/components/TelegramConnect";
+import PhoneInput, { phoneComplete } from "./PhoneInput";
 
 export type LeadSource = "landing" | "model" | "services" | "mail-in";
 
@@ -38,6 +39,9 @@ function BookingFormInner({
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [telegram, setTelegram] = useState<string | null>(null);
+  // Обовʼязкові лише імʼя й телефон. Решта ховається, щоб форма не лякала;
+  // відкрита одразу, коли послугу вже обрали кнопкою на сайті
+  const [details, setDetails] = useState(Boolean(initialChoice));
 
   const reset = () => {
     setName("");
@@ -50,8 +54,8 @@ function BookingFormInner({
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim().length < 2 || phone.replace(/\D/g, "").length < 9) {
-      setError("Вкажіть ім'я та телефон — решту з'ясуємо в розмові.");
+    if (name.trim().length < 2 || !phoneComplete(phone)) {
+      setError("Вкажіть ім'я та телефон повністю — решту з'ясуємо в розмові.");
       return;
     }
 
@@ -122,21 +126,23 @@ function BookingFormInner({
 
         <div className={styles.row}>
           <label htmlFor="bf-phone">Телефон</label>
-          <input
+          <PhoneInput
             id="bf-phone"
-            className="field"
-            type="tel"
-            autoComplete="tel"
-            placeholder="+380 __ ___ __ __"
             value={phone}
-            onChange={(e) => {
-              setPhone(e.target.value);
+            onChange={(v) => {
+              setPhone(v);
               setError("");
             }}
           />
         </div>
 
-        {select && (
+        {!details && (
+          <button type="button" className={styles.more} onClick={() => setDetails(true)}>
+            Додати деталі — необов&apos;язково
+          </button>
+        )}
+
+        {details && select && (
           <div className={styles.row}>
             <label htmlFor="bf-choice">{select.label}</label>
             <select
@@ -155,16 +161,18 @@ function BookingFormInner({
           </div>
         )}
 
-        <div className={styles.row}>
-          <label htmlFor="bf-problem">Що трапилось</label>
-          <textarea
-            id="bf-problem"
-            className={`field ${styles.textarea}`}
-            placeholder="Наприклад: розбитий екран, не тримає заряд"
-            value={problem}
-            onChange={(e) => setProblem(e.target.value)}
-          />
-        </div>
+        {details && (
+          <div className={styles.row}>
+            <label htmlFor="bf-problem">Що трапилось</label>
+            <textarea
+              id="bf-problem"
+              className={`field ${styles.textarea}`}
+              placeholder="Наприклад: розбитий екран, не тримає заряд"
+              value={problem}
+              onChange={(e) => setProblem(e.target.value)}
+            />
+          </div>
+        )}
 
         <FormError>{error}</FormError>
 
@@ -173,12 +181,10 @@ function BookingFormInner({
         </button>
 
         <p className={styles.note}>
-          Телефон потрібен лише щоб передзвонити. Нікуди його не передаємо. Діагностика
-          безкоштовна; ремонт — за передоплатою за деталь після того, як погодимо ціну.{" "}
+          Передзвонимо за 25 хвилин у робочий час. Діагностика безкоштовна.{" "}
           <a href="/personalni-dani" target="_blank" rel="noopener">
-            Що ми робимо з вашими даними
+            Як ми зберігаємо дані
           </a>
-          .
         </p>
       </form>
     </div>

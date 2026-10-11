@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import AccountButton from "./AccountButton";
+import { useBooking } from "./BookingModal";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
 import { nav, site } from "@/data/site";
@@ -14,6 +15,7 @@ import styles from "./Header.module.css";
  */
 export default function Header() {
   const pathname = usePathname();
+  const openBooking = useBooking();
 
   // Усередині адмінки шапку замінює її власна панель — дві закріплені смуги
   // з'їдали чверть екрана телефона. Лишаємо лише на сторінці входу майстра.
@@ -74,9 +76,14 @@ export default function Header() {
 
           <AccountButton />
 
-          <Link href="/#book" className={`btn btn-accent ${styles.cta}`} data-track="header-book">
+          <button
+            type="button"
+            className={`btn btn-accent ${styles.cta}`}
+            data-track="header-book"
+            onClick={() => openBooking()}
+          >
             Записатись
-          </Link>
+          </button>
         </div>
       </nav>
     </header>

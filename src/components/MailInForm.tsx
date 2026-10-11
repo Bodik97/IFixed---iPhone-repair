@@ -6,6 +6,7 @@ import { site } from "@/data/site";
 import FormError from "./FormError";
 import styles from "./BookingForm.module.css";
 import TelegramConnect from "@/components/TelegramConnect";
+import PhoneInput, { phoneComplete } from "./PhoneInput";
 
 export default function MailInForm() {
   const [name, setName] = useState("");
@@ -17,6 +18,8 @@ export default function MailInForm() {
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [telegram, setTelegram] = useState<string | null>(null);
+  // Модель і опис — за бажанням: для відправки досить імені, телефону й відділення
+  const [details, setDetails] = useState(false);
 
   const reset = () => {
     setName("");
@@ -30,8 +33,8 @@ export default function MailInForm() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim().length < 2 || phone.replace(/\D/g, "").length < 9 || city.trim().length < 3) {
-      setError("Вкажіть ім'я, телефон і місто з відділенням — решту з'ясуємо в розмові.");
+    if (name.trim().length < 2 || !phoneComplete(phone) || city.trim().length < 3) {
+      setError("Вкажіть ім'я, телефон повністю і місто з відділенням — решту з'ясуємо в розмові.");
       return;
     }
 
@@ -95,15 +98,11 @@ export default function MailInForm() {
 
         <div className={styles.row}>
           <label htmlFor="p-phone">Телефон</label>
-          <input
+          <PhoneInput
             id="p-phone"
-            className="field"
-            type="tel"
-            autoComplete="tel"
-            placeholder="+380 __ ___ __ __"
             value={phone}
-            onChange={(e) => {
-              setPhone(e.target.value);
+            onChange={(v) => {
+              setPhone(v);
               setError("");
             }}
           />
@@ -124,6 +123,13 @@ export default function MailInForm() {
           />
         </div>
 
+        {!details && (
+          <button type="button" className={styles.more} onClick={() => setDetails(true)}>
+            Додати модель і опис — необов&apos;язково
+          </button>
+        )}
+
+        {details && (
         <div className={styles.row}>
           <label htmlFor="p-model">Модель</label>
           <select id="p-model" className="field" value={model} onChange={(e) => setModel(e.target.value)}>
@@ -135,7 +141,9 @@ export default function MailInForm() {
             ))}
           </select>
         </div>
+        )}
 
+        {details && (
         <div className={styles.row}>
           <label htmlFor="p-issue">Що трапилось</label>
           <textarea
@@ -146,6 +154,7 @@ export default function MailInForm() {
             onChange={(e) => setProblem(e.target.value)}
           />
         </div>
+        )}
 
         <FormError>{error}</FormError>
 
@@ -154,14 +163,11 @@ export default function MailInForm() {
         </button>
 
         <p className={styles.note}>
-          Телефон потрібен лише щоб передзвонити й надіслати SMS. Нікуди його не передаємо.
-          Діагностика безкоштовна; ремонт — за передоплатою за деталь після того, як
-          погодимо ціну.
-        {" "}
+          Передзвонимо за 25 хвилин у робочий час і підкажемо, як надіслати. Діагностика
+          безкоштовна.{" "}
           <a href="/personalni-dani" target="_blank" rel="noopener">
-            Що ми робимо з вашими даними
+            Як ми зберігаємо дані
           </a>
-          .
         </p>
       </form>
     </div>

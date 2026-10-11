@@ -34,6 +34,26 @@
   color: var(--text-3);
 }
 
+/* «Додати деталі» — тихе посилання, а не ще одна кнопка: головна дія одна */
+.more {
+  justify-self: start;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent-text);
+  font: inherit;
+  font-size: 14.5px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.more:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
 .form button[disabled] {
   opacity: .6;
   cursor: progress;

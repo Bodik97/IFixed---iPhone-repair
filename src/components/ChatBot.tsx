@@ -8,6 +8,7 @@ import { site } from "@/data/site";
 import FormError from "./FormError";
 import styles from "./ChatBot.module.css";
 import TelegramConnect from "@/components/TelegramConnect";
+import PhoneInput, { formatPhone, localDigits, phoneComplete } from "./PhoneInput";
 
 type Line = { from: "bot" | "me"; text: string };
 
@@ -144,13 +145,12 @@ export default function ChatBot() {
     e.preventDefault();
 
     const cleanName = name.trim();
-    const digits = phone.replace(/\D/g, "");
 
     if (cleanName.length < 2) {
       setError("Впишіть, будь ласка, імʼя — щоб майстер знав, як до вас звертатись.");
       return;
     }
-    if (digits.length < 9) {
+    if (!phoneComplete(phone)) {
       setError("Перевірте номер телефону — здається, у ньому бракує цифр.");
       return;
     }
@@ -173,7 +173,7 @@ export default function ChatBot() {
       if (!res.ok) throw new Error(String(res.status));
       setTelegram((await res.json().catch(() => null))?.telegram ?? null);
 
-      mine(`${cleanName}, ${phone.trim()}`);
+      mine(`${cleanName}, ${formatPhone(localDigits(phone))}`);
       setStep("sent");
       say(done);
     } catch {
@@ -318,16 +318,11 @@ export default function ChatBot() {
             <label htmlFor="bot-phone" className="visually-hidden">
               Телефон
             </label>
-            <input
+            <PhoneInput
               id="bot-phone"
-              className="field"
-              type="tel"
-              inputMode="tel"
-              placeholder="+380 __ ___ __ __"
-              autoComplete="tel"
               value={phone}
-              onChange={(e) => {
-                setPhone(e.target.value);
+              onChange={(v) => {
+                setPhone(v);
                 setError("");
               }}
             />

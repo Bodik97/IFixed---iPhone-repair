@@ -68,14 +68,10 @@ export default function BookingProvider({ children }: { children: React.ReactNod
           </button>
 
           <div className={styles.head}>
-            <div className="kicker">Запис</div>
             <h2 id="booking-title" className={styles.title}>
-              Запишемо на безкоштовну діагностику
+              Залиште номер — передзвонимо
             </h2>
-            <p className={styles.lead}>
-              Достатньо моделі та кількох слів про симптом. Передзвонимо за 25 хвилин, скажемо
-              орієнтовну ціну й термін.
-            </p>
+            <p className={styles.lead}>Підкажемо ціну й термін. Діагностика безкоштовна.</p>
           </div>
 
           {open && (

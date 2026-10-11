@@ -45,6 +45,8 @@ test.describe("форма запису на головній", () => {
 
     await book.getByLabel("Ім'я").fill("Тест");
     await book.getByLabel("Телефон").fill("073 315 02 38");
+    // Модель і опис сховані, доки людина сама не захоче їх додати
+    await book.getByRole("button", { name: /Додати деталі/ }).click();
     await book.getByLabel("Модель").selectOption({ index: 1 });
     await book.getByLabel("Що трапилось").fill("Розбитий екран");
     await book.getByRole("button", { name: /записатись/i }).click();
@@ -52,7 +54,8 @@ test.describe("форма запису на головній", () => {
     await expect(book.getByText("Заявку прийнято")).toBeVisible();
     expect(lead.body).toMatchObject({
       name: "Тест",
-      phone: "073 315 02 38",
+      // Хай як набрали — у заявку йде один вигляд
+      phone: "+380733150238",
       problem: "Розбитий екран",
       source: "landing",
     });

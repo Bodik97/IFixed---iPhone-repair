@@ -1,13 +1,15 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import FormError from "@/components/FormError";
+import PhoneInput from "@/components/PhoneInput";
 import { createLead } from "../actions";
 import styles from "./page.module.css";
 
 /** Три поля й галочка — заводиться за пів хвилини, поки клієнт на лінії */
 export default function NewLeadForm() {
   const [error, action, pending] = useActionState(createLead, null);
+  const [phone, setPhone] = useState("");
 
   return (
     <form action={action} className={styles.form}>
@@ -18,7 +20,7 @@ export default function NewLeadForm() {
 
       <div className={styles.row}>
         <label htmlFor="nl-phone">Телефон</label>
-        <input id="nl-phone" name="phone" type="tel" inputMode="tel" className="field" placeholder="0__ ___ __ __" required />
+        <PhoneInput id="nl-phone" name="phone" value={phone} onChange={setPhone} required />
       </div>
 
       <div className={styles.row}>
