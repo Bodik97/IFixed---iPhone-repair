@@ -1,5 +1,6 @@
+/* Заголовок сторінки — одразу під робочою панеллю, без порожнього екрана над ним */
 .wrap {
-  padding-block: clamp(32px, 5vw, 64px);
+  padding-block: 14px clamp(32px, 5vw, 64px);
 }
 
 .head {
@@ -541,7 +542,7 @@
 /* ---------- Мобільна адмінка ---------- */
 @media (max-width: 720px) {
   .wrap {
-    padding-block: 20px 40px;
+    padding-block: 10px 40px;
   }
 
   .head {

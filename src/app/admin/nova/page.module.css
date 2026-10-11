@@ -1,6 +1,6 @@
 .wrap {
   max-width: 560px;
-  padding-block: clamp(24px, 4vw, 48px);
+  padding-block: 14px clamp(24px, 4vw, 48px);
 }
 
 .title {
