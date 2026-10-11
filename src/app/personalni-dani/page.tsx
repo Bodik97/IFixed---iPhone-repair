@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import BackButton from "@/components/BackButton";
 import { site } from "@/data/site";
+import { WARRANTY_MAX } from "@/data/warranty";
 import { owner, ownerName } from "@/data/owner";
 import styles from "./page.module.css";
 
@@ -124,7 +125,7 @@ export default function PersonalDataPage() {
       <section className={styles.section}>
         <h2 className={styles.h2}>Скільки зберігаємо</h2>
         <p>
-          Дані про ремонт — поки триває гарантія {site.warrantyDays} днів і ще рік після неї:
+          Дані про ремонт — поки триває гарантія ({WARRANTY_MAX}) і ще рік після неї:
           за цей час зазвичай зʼясовується все, що може зʼясуватись. Далі вони потрібні лише
           для обліку.
         </p>

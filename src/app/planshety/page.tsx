@@ -6,7 +6,7 @@ const section = getSection("ipad");
 
 export const metadata: Metadata = {
   title: "Ремонт iPad у Львові",
-  description: `${section.models.length} моделей iPad: заміна скла, акумулятора та роз'єму заряджання. Безкоштовна діагностика, фіксована ціна, гарантія 30 днів.`,
+  description: `${section.models.length} моделей iPad: заміна скла, акумулятора та роз'єму заряджання. Безкоштовна діагностика, фіксована ціна, гарантія до 6 місяців.`,
   alternates: { canonical: "/planshety" },
 };
 

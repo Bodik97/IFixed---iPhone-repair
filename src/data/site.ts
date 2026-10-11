@@ -8,7 +8,6 @@ export const site = {
   hours: "Пн–Сб 8:00–18:00",
   hoursNote: "Нд за домовленістю",
   cities: ["Львів", "Новий Розділ"],
-  warrantyDays: 30,
   messengers: [
     { label: "Viber", href: "viber://chat?number=%2B380733150238" },
   ],

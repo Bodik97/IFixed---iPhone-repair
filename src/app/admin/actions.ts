@@ -6,8 +6,9 @@ import { revalidatePath } from "next/cache";
 import { del, put } from "@vercel/blob";
 import { eq } from "drizzle-orm";
 import { getDb } from "@/db";
-import { leadMessages, leads, pushSubscriptions, reviews } from "@/db/schema";
+import { devices, leadMessages, leads, pushSubscriptions, reviews } from "@/db/schema";
 import { STATUS_OPTIONS } from "@/db/leads";
+import { guessWarrantyDays, isWarrantyTerm, warrantyEnd } from "@/data/warranty";
 import { addEvent, getLeadById, registerDevice } from "@/db/events";
 import { addExpense, EXPENSE_CATEGORIES, removeExpense } from "@/db/expenses";
 import { addPart, removePart, shiftPartQty } from "@/db/parts";
@@ -85,21 +86,64 @@ export async function setStatus(formData: FormData): Promise<void> {
 
   const next = status as (typeof allowed)[number];
 
-  // «Відправлено» ставить лише збереження ТТН: без накладної клієнту нема що відстежувати
-  if (next === "shipped" && !(await getLeadById(id))?.ttn) return;
+  const before = await getLeadById(id);
 
-  await getDb().update(leads).set({ status: next, updatedAt: new Date() }).where(eq(leads.id, id));
+  // «Відправлено» ставить лише збереження ТТН: без накладної клієнту нема що відстежувати
+  if (next === "shipped" && !before?.ttn) return;
+
+  // Видача запускає гарантію. Дату ставимо раз: повторне «Видано» її не зсуває
+  const days = before ? (before.warrantyDays ?? guessWarrantyDays(before.service ?? before.problem)) : 0;
+  const warrantyUntil =
+    next === "done" && before ? (before.warrantyUntil ?? warrantyEnd(new Date(), days)) : (before?.warrantyUntil ?? null);
+
+  await getDb()
+    .update(leads)
+    .set({ status: next, ...(next === "done" && before ? { warrantyUntil } : {}), updatedAt: new Date() })
+    .where(eq(leads.id, id));
 
   // Хроніка: клієнт бачить, що саме сталося, а не лише підсвічену стадію
   await addEvent(id, { status: next });
 
-  const lead = await getLeadById(id);
+  const lead = before ? { ...before, status: next, warrantyUntil } : undefined;
 
   // Ремонт завершено — пристрій потрапляє в список клієнта з гарантією
-  if (next === "done" && lead) await registerDevice(lead);
+  if (next === "done" && lead && days > 0) await registerDevice(lead, days);
 
   // Клієнт із підключеним ботом дізнається про новий етап одразу, у Telegram
   if (lead) await notifyClientStatus(lead);
+
+  revalidatePath("/admin");
+  revalidatePath("/moi-remonty");
+}
+
+/**
+ * Строк гарантії для заявки. До видачі — просто запамʼятовуємо вибір;
+ * після — перераховуємо дату від того самого дня видачі, щоб майстер міг
+ * виправити помилку, не подарувавши й не забравши клієнту дні.
+ */
+export async function setWarranty(formData: FormData): Promise<void> {
+  if (!(await isAdmin())) redirect("/admin/vhid");
+
+  const id = String(formData.get("id") ?? "");
+  const days = Number(formData.get("days"));
+  if (!id || !isWarrantyTerm(days)) return;
+
+  const lead = await getLeadById(id);
+  if (!lead) return;
+
+  let warrantyUntil = lead.warrantyUntil;
+  if (lead.status === "done") {
+    // День видачі: кінець гарантії мінус попередній строк; для старих заявок без дати — остання зміна
+    const previous = lead.warrantyDays ?? guessWarrantyDays(lead.service ?? lead.problem);
+    const handedOver = lead.warrantyUntil ? new Date(lead.warrantyUntil) : new Date(lead.updatedAt);
+    if (lead.warrantyUntil) handedOver.setDate(handedOver.getDate() - previous);
+
+    warrantyUntil = warrantyEnd(handedOver, days);
+    // Клієнт з акаунтом бачить гарантію в кабінеті з таблиці пристроїв — тримаємо її в лад
+    if (warrantyUntil) await getDb().update(devices).set({ warrantyUntil }).where(eq(devices.leadId, id));
+  }
+
+  await getDb().update(leads).set({ warrantyDays: days, warrantyUntil, updatedAt: new Date() }).where(eq(leads.id, id));
 
   revalidatePath("/admin");
   revalidatePath("/moi-remonty");

@@ -92,6 +92,14 @@ export const leads = pgTable(
      */
     assignee: text("assignee"),
 
+    /**
+     * Строк гарантії в днях, який обрав майстер (див. src/data/warranty.ts).
+     * NULL — ще не обирав: строк береться за видом роботи.
+     */
+    warrantyDays: integer("warranty_days"),
+    /** До якої дати діє гарантія. Ставиться при видачі; NULL — ще не видано або без гарантії. */
+    warrantyUntil: timestamp("warranty_until", { withTimezone: true }),
+
     source: leadSource("source").notNull(),
     status: leadStatus("status").notNull().default("new"),
 
@@ -246,7 +254,7 @@ export const devices = pgTable(
     /** Що саме робили — показуємо поруч із гарантією */
     work: text("work"),
 
-    /** Гарантія 30 днів від дати видачі */
+    /** Кінець гарантії: від дати видачі, строк — за видом роботи */
     warrantyUntil: timestamp("warranty_until", { withTimezone: true }).notNull(),
 
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

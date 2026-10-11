@@ -40,7 +40,7 @@ export async function addEvent(
  * Ремонт завершено — заносимо пристрій у список клієнта з датою кінця гарантії.
  * Повторний виклик нічого не дублює: на одну заявку один пристрій.
  */
-export async function registerDevice(lead: Lead, warrantyDays = 30): Promise<void> {
+export async function registerDevice(lead: Lead, warrantyDays: number): Promise<void> {
   if (!lead.clerkUserId) return;
 
   const db = getDb();

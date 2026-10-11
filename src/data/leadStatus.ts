@@ -71,7 +71,7 @@ export function describeStatus(status: Lead["status"]): StatusInfo {
     case "done":
       return {
         label: "Завершено",
-        hint: "Пристрій у вас. Гарантія 30 днів від дати видачі.",
+        hint: "Пристрій у вас. Гарантія рахується від дати видачі.",
         stage: 3,
         percent: 100,
         active: false,

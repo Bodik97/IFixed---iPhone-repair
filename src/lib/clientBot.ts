@@ -152,7 +152,11 @@ export async function sendToChat(
 }
 
 /** Що бот пише клієнту про поточний статус заявки */
-export function statusText(lead: Pick<Lead, "orderNo" | "model" | "service" | "status" | "ttn">): string {
+const dateLong = new Intl.DateTimeFormat("uk-UA", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Kyiv" });
+
+export function statusText(
+  lead: Pick<Lead, "orderNo" | "model" | "service" | "status" | "ttn"> & { warrantyUntil?: Date | null },
+): string {
   const s = describeStatus(lead.status);
   const what = lead.model ?? lead.service;
 
@@ -162,6 +166,7 @@ export function statusText(lead: Pick<Lead, "orderNo" | "model" | "service" | "s
     "",
     esc(s.hint),
     lead.status === "shipped" && lead.ttn ? `Накладна Нової Пошти: <code>${esc(lead.ttn)}</code>` : "",
+    lead.status === "done" && lead.warrantyUntil ? `Гарантія діє до ${dateLong.format(new Date(lead.warrantyUntil))}.` : "",
   ]
     .filter((line, i) => line || i === 2)
     .join("\n");

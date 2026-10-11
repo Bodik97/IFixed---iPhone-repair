@@ -25,7 +25,7 @@ export async function generateMetadata({
 
   return {
     title: `Ремонт ${model.name}`,
-    description: `Ремонт ${model.name} у Львові та Новому Роздолі: ${model.jobs.join(", ").toLowerCase()}. ${model.time}. Безкоштовна діагностика, гарантія 30 днів.`,
+    description: `Ремонт ${model.name} у Львові та Новому Роздолі: ${model.jobs.join(", ").toLowerCase()}. ${model.time}. Безкоштовна діагностика, гарантія до 6 місяців.`,
     alternates: { canonical: `/modeli/${model.slug}` },
   };
 }
@@ -43,8 +43,8 @@ const warranty = [
   },
   {
     no: "03",
-    title: "Гарантія 30 днів",
-    body: "На роботу й на встановлену деталь. Щось пішло не так — повертайтесь без питань.",
+    title: "Гарантія до 6 місяців",
+    body: "На роботу й на встановлену деталь: 6 місяців на оригінальний екран, 3 — на аналог, акумулятор та інші деталі. Щось пішло не так — повертайтесь без питань.",
   },
 ];
 
@@ -89,7 +89,7 @@ export default async function ModelPage({ params }: { params: Promise<{ slug: st
             <div className={styles.heroCopy}>
               <span className={`${styles.badge} nUp`}>
                 <span className="pulse" />
-                Безкоштовна діагностика · гарантія 30 днів
+                Безкоштовна діагностика · гарантія до 6 місяців
               </span>
 
               <h1 className={`${styles.h1} nUp nUp-1`}>Ремонт {model.name}</h1>

@@ -9,6 +9,8 @@ import LeadCardFrame from "./LeadCardFrame";
 import QuickActions from "./QuickActions";
 import StatusSelect from "./StatusSelect";
 import TtnField from "./TtnField";
+import WarrantyField from "./WarrantyField";
+import { guessWarrantyDays, warrantyActive } from "@/data/warranty";
 import AssignButton from "./AssignButton";
 import styles from "./page.module.css";
 
@@ -32,6 +34,8 @@ const statusClass: Record<Lead["status"], string> = {
   done: styles.statusClosed,
   rejected: styles.statusClosed,
 };
+
+const dayFormat = new Intl.DateTimeFormat("uk-UA", { day: "2-digit", month: "2-digit", year: "numeric" });
 
 const dateFormat = new Intl.DateTimeFormat("uk-UA", {
   day: "2-digit",
@@ -118,6 +122,14 @@ export default function LeadCard({
                   {closed ? "виконав" : "бере"}: {assigneeName}
                 </span>
               ))}
+            {/* Видана заявка: чи ще діє гарантія — перше, що треба знати, коли клієнт повертається */}
+            {r.status === "done" &&
+              r.warrantyUntil &&
+              (warrantyActive(r.warrantyUntil) ? (
+                <span className={styles.tagAccount}>гарантія до {dayFormat.format(r.warrantyUntil)}</span>
+              ) : (
+                <span className={styles.tagAnon}>гарантія минула</span>
+              ))}
             {/* Чат і доставка ховаються в згорнутій картці — сигнал про них лишаємо зверху */}
             {unread > 0 && <span className={styles.tagHot}>{unread} нов. у чаті</span>}
             {waitingShip && <span className={styles.tagHot}>чекає ТТН</span>}
@@ -188,6 +200,16 @@ export default function LeadCard({
         hint={priceHint}
       />
 
+      {r.status !== "rejected" && (
+        <WarrantyField
+          id={r.id}
+          days={r.warrantyDays ?? guessWarrantyDays(r.service ?? r.problem)}
+          until={r.warrantyUntil}
+          active={r.warrantyUntil ? warrantyActive(r.warrantyUntil) : false}
+          handedOver={r.status === "done"}
+        />
+      )}
+
       <div className={styles.chatRow}>
         <Chat leadId={r.id} side="master" unread={unread} />
 
@@ -205,6 +227,12 @@ export default function LeadCard({
             </svg>
             Квитанція
           </a>
+
+          {r.status === "done" && r.warrantyUntil && (
+            <a href={`/admin/zayavky/${r.id}/garantiya`} target="_blank" rel="noopener" className="btn btn-ghost">
+              Гарантійний талон
+            </a>
+          )}
 
           <DeleteLead id={r.id} orderNo={r.orderNo} />
         </div>

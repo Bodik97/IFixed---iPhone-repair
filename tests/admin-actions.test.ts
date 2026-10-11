@@ -116,7 +116,8 @@ describe("без входу майстра жодна дія не змінює �
       [
         "addNote", "addReview", "createExpense", "createLead", "createPart", "deleteExpense", "deleteLead",
         "deletePart", "deleteReview", "removePushSubscription", "savePushSubscription", "sendTestPush",
-        "setAssignee", "setMoney", "setReviewPublished", "setStatus", "setTtn", "shiftPart",
+        "setAssignee", "setMoney", "setReviewPublished", "setStatus", "setTtn", "setWarranty",
+        "shiftPart",
       ].sort(),
     );
   });
@@ -213,6 +214,58 @@ describe("setStatus", () => {
     fake.onSelect(devices, () => [{ id: "d1", clerkUserId: "user_1", leadId: LEAD.id, name: "x", warrantyUntil: new Date(), createdAt: new Date() }]);
     await actions.setStatus(form({ id: LEAD.id, status: "done" }));
     expect(fake.writes().some((q) => q.sql.startsWith('insert into "devices"'))).toBe(false);
+  });
+});
+
+describe("гарантія", () => {
+  const daysBetween = (a: Date, b: Date) => Math.round((b.getTime() - a.getTime()) / 86_400_000);
+  const untilIn = (sqlStart: string) => {
+    const q = fake.writes().find((w) => w.sql.startsWith(sqlStart) && w.sql.includes('"warranty_until"'))!;
+    return new Date(q.params.find((p) => typeof p === "string" && /^\d{4}-\d\d-\d\dT/.test(p)) as string);
+  };
+
+  it("видача запускає гарантію на строк, який обрав майстер", async () => {
+    fake.onSelect(leads, () => [{ ...LEAD, warrantyDays: 180 }]);
+    fake.onSelect(devices, () => []);
+    await actions.setStatus(form({ id: LEAD.id, status: "done" }));
+    expect(daysBetween(new Date(), untilIn('update "leads"'))).toBe(180);
+  });
+
+  it("майстер не обирав — строк за видом роботи: після води 30 днів", async () => {
+    fake.onSelect(leads, () => [{ ...LEAD, service: "Відновлення після води" }]);
+    fake.onSelect(devices, () => []);
+    await actions.setStatus(form({ id: LEAD.id, status: "done" }));
+    expect(daysBetween(new Date(), untilIn('update "leads"'))).toBe(30);
+  });
+
+  it("діагностика — без гарантії: дати немає, пристрій у гарантійний список не потрапляє", async () => {
+    fake.onSelect(leads, () => [{ ...LEAD, service: "Діагностика" }]);
+    await actions.setStatus(form({ id: LEAD.id, status: "done" }));
+    expect(fake.writes().some((q) => q.sql.startsWith('insert into "devices"'))).toBe(false);
+  });
+
+  it("повторне «Видано» не зсуває дату гарантії", async () => {
+    const until = new Date("2026-12-01T10:00:00Z");
+    fake.onSelect(leads, () => [{ ...LEAD, status: "done", warrantyUntil: until }]);
+    fake.onSelect(devices, () => [{ id: "d1" }]);
+    await actions.setStatus(form({ id: LEAD.id, status: "done" }));
+    expect(untilIn('update "leads"').toISOString()).toBe(until.toISOString());
+  });
+
+  it("строк, змінений після видачі, рахується від того самого дня видачі", async () => {
+    const handedOver = new Date("2026-10-01T10:00:00Z");
+    const until = new Date(handedOver);
+    until.setDate(until.getDate() + 90);
+    fake.onSelect(leads, () => [{ ...LEAD, status: "done", warrantyDays: 90, warrantyUntil: until }]);
+
+    await actions.setWarranty(form({ id: LEAD.id, days: "180" }));
+    expect(daysBetween(handedOver, untilIn('update "leads"'))).toBe(180);
+  });
+
+  it("строк не зі списку не зберігається", async () => {
+    fake.onSelect(leads, () => [LEAD]);
+    await actions.setWarranty(form({ id: LEAD.id, days: "999" }));
+    expect(fake.writes()).toEqual([]);
   });
 });
 

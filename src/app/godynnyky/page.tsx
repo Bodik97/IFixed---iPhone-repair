@@ -6,7 +6,7 @@ const section = getSection("watch");
 
 export const metadata: Metadata = {
   title: "Ремонт Apple Watch у Львові",
-  description: `${section.models.length} моделей Apple Watch: заміна скла й акумулятора, відновлення герметизації. Гарантія 30 днів на роботу й деталь.`,
+  description: `${section.models.length} моделей Apple Watch: заміна скла й акумулятора, відновлення герметизації. Гарантія до 6 місяців на роботу й деталь.`,
   alternates: { canonical: "/godynnyky" },
 };
 

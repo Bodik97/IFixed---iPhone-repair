@@ -747,6 +747,37 @@
   margin: 34px 0 16px;
 }
 
+/* Гарантія — рядком під грошима: строк обирає майстер, поруч видно, доки діє */
+.warranty {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding-top: 14px;
+  margin-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.warrantyLabel {
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.warrantySelect {
+  flex: 0 1 420px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+
 /* Чат із клієнтом — окремим рядком під грошима, кнопки — рядком під ним:
    поруч із розгорнутим чатом вони розтягувались на всю його висоту */
 .chatRow {

@@ -3,6 +3,7 @@ import { isAdmin } from "@/lib/admin";
 import { site } from "@/data/site";
 import type { Lead } from "@/db/schema";
 import QRCode from "qrcode";
+import { WARRANTY_RANGE } from "@/data/warranty";
 import { connectLink } from "@/lib/clientBot";
 
 /**
@@ -64,7 +65,7 @@ function half(lead: Lead, copy: string, botQr: string | null): string {
     <ul class="terms">
       <li>Діагностика безкоштовна. Ціну погоджуємо до початку робіт і далі не змінюємо.</li>
       <li>Ремонт виконується за передоплатою вартості деталі.</li>
-      <li>Гарантія ${site.warrantyDays} днів на виконану роботу й встановлену деталь.</li>
+      <li>Гарантія на виконану роботу й встановлену деталь — ${WARRANTY_RANGE} залежно від виду ремонту; точний строк — у гарантійному талоні при видачі.</li>
       <li>Гарантія не поширюється на механічні пошкодження та потрапляння вологи після ремонту.</li>
       <li>Пристрій зберігається 90 днів після повідомлення про готовність.</li>
     </ul>

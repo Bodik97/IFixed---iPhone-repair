@@ -118,6 +118,11 @@ describe("повідомлення про статус", () => {
     expect(text).toContain("20450000000000");
   });
 
+  it("після видачі бот називає дату, до якої діє гарантія", () => {
+    const text = bot.statusText({ ...LEAD, status: "done", warrantyUntil: new Date("2027-04-10T09:00:00Z") });
+    expect(text).toContain("Гарантія діє до 10 квітня 2027");
+  });
+
   it("іде в чат клієнта, який підключив бота", async () => {
     fake.onSelect(telegramChats, () => [CHAT]);
     expect(await bot.notifyClientStatus(LEAD)).toBe(true);

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Logo from "./Logo";
 import { site } from "@/data/site";
+import { WARRANTY_MAX } from "@/data/warranty";
 import styles from "./Footer.module.css";
 
 const serviceLinks = [
@@ -65,7 +66,7 @@ export default function Footer() {
           <span className={styles.bottomLinks}>
             <Link href="/personalni-dani">Персональні дані</Link>
             <span aria-hidden="true">·</span>
-            Гарантія {site.warrantyDays} днів на роботу
+            Гарантія {WARRANTY_MAX} на роботу
           </span>
         </div>
       </div>
