@@ -65,17 +65,15 @@ export default async function Home() {
         <div className={styles.heroInner}>
           <p className={`${styles.heroStatus} nUp`}>
             <span className="pulse" />
-            Відкрито · відповідь за 25 хвилин
+            {site.hours} · передзвонимо за 25 хвилин
           </p>
 
           <h1 className={`${styles.h1} nUp nUp-1`}>
-            {/* Два речення — два рядки: кожна обіцянка читається окремо */}
-            <span>Полагодимо iPhone за 2 дні.</span> <span>Ціну назвемо до початку</span>
+            <span>Чесний ремонт iPhone</span> <span>у Львові</span>
           </h1>
 
           <p className={`${styles.heroLead} nUp nUp-2`}>
-            Безкоштовна діагностика у Львові й Новому Роздолі. Погодили ціну — вона вже не
-            зміниться. Екран чи акумулятор — до 2 днів разом із деталлю, гарантія до 6 місяців.
+            Спершу безкоштовна діагностика й точна ціна. Ремонтуємо лише після вашої згоди.
           </p>
 
           <div className={`${styles.heroCta} nUp nUp-3`}>
