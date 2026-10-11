@@ -8,6 +8,7 @@ import { alertMasters } from "@/lib/notify";
 import { leadLink } from "@/lib/adminLinks";
 import { siteUrl } from "@/lib/siteUrl";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
+import { forwardMasterMessage } from "@/lib/clientBot";
 
 export const dynamic = "force-dynamic";
 
@@ -129,6 +130,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ lea
       `<b>Повідомлення від клієнта</b>\n${who}\n\n${body}\n\n${siteUrl()}/admin/zayavky`,
     );
   }
+
+  // Пише майстер — клієнт із підключеним ботом отримує відповідь у Telegram
+  if (role === "master") await forwardMasterMessage(lead, text, Boolean(imagePath));
 
   return NextResponse.json({ ok: true });
 }

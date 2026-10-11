@@ -13,7 +13,7 @@ import { addExpense, EXPENSE_CATEGORIES, removeExpense } from "@/db/expenses";
 import { addPart, removePart, shiftPartQty } from "@/db/parts";
 import { rateLimit, release } from "@/lib/rateLimit";
 import { sendPush } from "@/lib/push";
-import { notifyClientStatus } from "@/lib/clientBot";
+import { notifyClientStatus, offerPrice } from "@/lib/clientBot";
 import { checkCredentials, createSession, currentAdmin, destroySession, isAdmin } from "@/lib/admin";
 
 /** Адреса, з якої прийшов запит — за нею теж рахуємо спроби входу */
@@ -321,6 +321,9 @@ export async function setMoney(formData: FormData): Promise<void> {
   // Клієнт бачить ціну в кабінеті, тож про її появу пишемо в хроніку
   if (price !== undefined && price !== null && price !== before.price) {
     await addEvent(id, { text: `Погодили ціну ремонту: ${price} ₴` });
+
+    // Клієнт із ботом погоджує ціну кнопкою — без дзвінка
+    await offerPrice({ ...before, price });
   }
 
   // Передоплата — умова початку робіт, тож її надходження теж подія

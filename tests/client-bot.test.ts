@@ -13,6 +13,9 @@ vi.mock("@/db", async () => {
   return { getDb: () => fake.db };
 });
 
+// Справжній обмежувач рахує рядки в базі — тут він лише заважав би
+vi.mock("@/lib/rateLimit", () => ({ rateLimit: async () => ({ ok: true }) }));
+
 import * as bot from "@/lib/clientBot";
 import { POST } from "@/app/api/telegram/client/route";
 
@@ -30,7 +33,17 @@ const LEAD = {
 
 const CHAT = { id: "c1", subject: "t733150238", chatId: "555", createdAt: new Date() };
 
-let sent: { chat_id: string; text: string; reply_markup: { keyboard: { text: string; request_contact?: boolean }[][] } }[] = [];
+type Sent = {
+  chat_id: string;
+  text: string;
+  reply_markup: {
+    keyboard: { text: string; request_contact?: boolean }[][];
+    inline_keyboard: { text: string; callback_data: string }[][];
+  };
+};
+/** Лише надіслані повідомлення; решта викликів Bot API — у `calls` */
+let sent: Sent[] = [];
+let calls: { method: string; body: Record<string, unknown> }[] = [];
 let telegramStatus = 200;
 
 beforeEach(() => {
@@ -39,8 +52,12 @@ beforeEach(() => {
   telegramStatus = 200;
   vi.stubEnv("TELEGRAM_CLIENT_BOT_TOKEN", "123:token");
   vi.stubEnv("TELEGRAM_CLIENT_BOT_USERNAME", "@GadgetFixStatusBot");
-  vi.stubGlobal("fetch", async (_url: string, init: { body: string }) => {
-    sent.push(JSON.parse(init.body));
+  calls = [];
+  vi.stubGlobal("fetch", async (url: string, init: { body: string }) => {
+    const method = url.slice(url.lastIndexOf("/") + 1);
+    const body = JSON.parse(init.body);
+    calls.push({ method, body });
+    if (method === "sendMessage") sent.push(body);
     return new Response("{}", { status: telegramStatus });
   });
   vi.spyOn(console, "error").mockImplementation(() => {});
@@ -221,5 +238,96 @@ describe("webhook бота", () => {
     await POST(update(`/start ${payloadOf(bot.connectLink(LEAD)!)}`, "group"));
     expect(fake.writes()).toHaveLength(0);
     expect(sent).toHaveLength(0);
+  });
+});
+
+describe("погодження ціни й чат через бота", () => {
+  const PRICED = { ...LEAD, status: "in_progress", price: 2400, createdAt: new Date() } as unknown as Lead;
+
+  const post = (body: object) =>
+    POST(
+      new Request("http://localhost/api/telegram/client", {
+        method: "POST",
+        headers: { "x-telegram-bot-api-secret-token": bot.webhookSecret()! },
+        body: JSON.stringify(body),
+      }),
+    );
+
+  const press = (data: string) =>
+    post({ callback_query: { id: "q1", data, message: { message_id: 7, chat: { id: 555, type: "private" } } } });
+
+  const inserted = (table: string) => fake.writes().filter((q) => q.sql.startsWith(`insert into "${table}"`));
+
+  it("ціна йде клієнту з кнопками «Погоджуюсь» і «Передзвоніть мені»", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    expect(await bot.offerPrice(PRICED)).toBe(true);
+
+    expect(sent[0].text).toContain("№1001");
+    expect(sent[0].text).toMatch(/2\s400 ₴/);
+    expect(sent[0].reply_markup.inline_keyboard[0].map((b) => b.callback_data)).toEqual([
+      bot.priceButton("ok", PRICED, 2400),
+      bot.priceButton("call", PRICED, 2400),
+    ]);
+  });
+
+  it("«Погоджуюсь» — запис у хроніці, повідомлення майстру, кнопки зникають", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [PRICED]);
+
+    await press(bot.priceButton("ok", PRICED, 2400));
+
+    expect(inserted("lead_events")[0].params).toEqual(expect.arrayContaining(["Клієнт погодив ціну: 2400 ₴"]));
+    expect(JSON.stringify(inserted("lead_messages")[0].params)).toContain("Погоджуюсь на ціну");
+    expect(calls.some((c) => c.method === "editMessageReplyMarkup" && c.body.message_id === 7)).toBe(true);
+    expect(sent[0].text).toContain("погоджено");
+  });
+
+  it("«Передзвоніть мені» — майстер бачить прохання, у хроніку нічого не пишемо", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [PRICED]);
+
+    await press(bot.priceButton("call", PRICED, 2400));
+
+    expect(inserted("lead_events")).toHaveLength(0);
+    expect(JSON.stringify(inserted("lead_messages")[0].params)).toContain("Прошу передзвонити");
+  });
+
+  it("кнопка зі старою ціною нічого не погоджує", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [{ ...PRICED, price: 3000 }]);
+
+    await press(bot.priceButton("ok", PRICED, 2400));
+
+    expect(inserted("lead_events")).toHaveLength(0);
+    expect(inserted("lead_messages")).toHaveLength(0);
+  });
+
+  it("кнопка чужої заявки нічого не робить", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [PRICED]);
+
+    await press(`ok:${"2".repeat(32)}:2400`);
+
+    expect(fake.writes()).toHaveLength(0);
+  });
+
+  it("текст від клієнта потрапляє в чат його незакритої заявки, клієнт отримує підтвердження", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [PRICED]);
+
+    await post({ message: { text: "Коли буде готово?", from: { id: 555 }, chat: { id: 555, type: "private" } } });
+
+    const [message] = inserted("lead_messages");
+    expect(message.params).toEqual(expect.arrayContaining([PRICED.id, "client", "Коли буде готово?"]));
+    expect(sent[0].text).toContain("Передали майстру");
+  });
+
+  it("відповідь майстра з адмінки йде клієнту в Telegram", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [PRICED]);
+
+    expect(await bot.forwardMasterMessage(PRICED.id, "Завтра до обіду", false)).toBe(true);
+    expect(sent[0].chat_id).toBe("555");
+    expect(sent[0].text).toContain("Завтра до обіду");
   });
 });

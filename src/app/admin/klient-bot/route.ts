@@ -46,7 +46,7 @@ export async function GET(): Promise<Response> {
     }
 
     const url = `${siteUrl()}/api/telegram/client`;
-    const set = await call(token, "setWebhook", { url, secret_token: secret, allowed_updates: ["message"] });
+    const set = await call(token, "setWebhook", { url, secret_token: secret, allowed_updates: ["message", "callback_query"] });
     lines.push(`Адреса для повідомлень ${url}: ${verdict(set)}`);
 
     // Пункт у меню бота поруч із полем вводу — те саме, що кнопка «Перевірити статус»

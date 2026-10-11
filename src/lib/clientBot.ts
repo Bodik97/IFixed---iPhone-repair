@@ -104,36 +104,51 @@ export function subjectOfPhone(phone: string): string | null {
   return key ? `t${key}` : null;
 }
 
-/**
- * `keyboard` — яка кнопка лишається під полем вводу: «Перевірити статус» для
- * підключеного чату чи «Поділитися номером» для того, кого ще не впізнали.
- */
-export async function sendToChat(chatId: string, html: string, keyboard: "check" | "share" = "check"): Promise<number> {
+/** Кнопки просто під повідомленням: натискання приходить на webhook як callback_query */
+export type InlineButton = { text: string; callback_data: string };
+
+/** Довільний метод Bot API; повертає код відповіді, 0 — немає звʼязку чи бот не налаштований */
+export async function callBot(method: string, body: object): Promise<number> {
   const cfg = config();
   if (!cfg) return 0;
   try {
-    const res = await fetch(`https://api.telegram.org/bot${cfg.token}/sendMessage`, {
+    const res = await fetch(`https://api.telegram.org/bot${cfg.token}/${method}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: html,
-        parse_mode: "HTML",
-        link_preview_options: { is_disabled: true },
-        // Кнопка під полем вводу — завжди під рукою, з кожним повідомленням бота
-        reply_markup: {
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) console.error("[client-bot] відмова:", method, res.status, await res.text().catch(() => ""));
+    return res.status;
+  } catch (e) {
+    console.error("[client-bot] не вдалося надіслати:", method, e);
+    return 0;
+  }
+}
+
+/**
+ * `keyboard` — що під повідомленням: кнопка під полем вводу («Перевірити
+ * статус» для підключеного чату, «Поділитися номером» для того, кого ще не
+ * впізнали) або кнопки-відповіді під самим повідомленням.
+ */
+export async function sendToChat(
+  chatId: string,
+  html: string,
+  keyboard: "check" | "share" | InlineButton[] = "check",
+): Promise<number> {
+  return callBot("sendMessage", {
+    chat_id: chatId,
+    text: html,
+    parse_mode: "HTML",
+    link_preview_options: { is_disabled: true },
+    reply_markup: Array.isArray(keyboard)
+      ? { inline_keyboard: [keyboard] }
+      : {
+          // Кнопка під полем вводу — завжди під рукою, з кожним повідомленням бота
           keyboard: [[keyboard === "share" ? { text: SHARE_BUTTON, request_contact: true } : { text: CHECK_BUTTON }]],
           resize_keyboard: true,
           is_persistent: true,
         },
-      }),
-    });
-    if (!res.ok) console.error("[client-bot] відмова:", res.status, await res.text().catch(() => ""));
-    return res.status;
-  } catch (e) {
-    console.error("[client-bot] не вдалося надіслати:", e);
-    return 0;
-  }
+  });
 }
 
 /** Що бот пише клієнту про поточний статус заявки */
@@ -164,21 +179,30 @@ function leadsOf(subject: string): SQL | undefined {
 }
 
 /**
- * Відповідь на «Перевірити статус»: що зараз із ремонтами того, хто пише.
- * Показуємо незакриті заявки; якщо таких немає — останню закриту.
- * null — цей чат бота ще не підключав.
+ * Заявки того, хто пише з цього чату, найсвіжіші перші.
+ * null — чат бота ще не підключав, і шукати чужі заявки ми не будемо.
  */
-export async function statusReport(chatId: string): Promise<string | null> {
+export async function chatLeads(chatId: string): Promise<Lead[] | null> {
   const chats = await getDb().select().from(telegramChats).where(eq(telegramChats.chatId, chatId));
   const filters = chats.map((c) => leadsOf(c.subject)).filter((f): f is SQL => Boolean(f));
   if (filters.length === 0) return null;
 
-  const rows = await getDb()
+  return getDb()
     .select()
     .from(leads)
     .where(or(...filters))
     .orderBy(desc(leads.createdAt))
     .limit(10);
+}
+
+/**
+ * Відповідь на «Перевірити статус»: що зараз із ремонтами того, хто пише.
+ * Показуємо незакриті заявки; якщо таких немає — останню закриту.
+ * null — цей чат бота ще не підключав.
+ */
+export async function statusReport(chatId: string): Promise<string | null> {
+  const rows = await chatLeads(chatId);
+  if (!rows) return null;
 
   if (rows.length === 0) return "Заявок за вашим номером зараз немає. Щойно зʼявиться — напишемо сюди.";
 
@@ -187,24 +211,74 @@ export async function statusReport(chatId: string): Promise<string | null> {
 }
 
 /**
- * Написати клієнту про новий статус. Повертає, чи дійшло: false — бот не
+ * Написати клієнту цієї заявки. Повертає, чи дійшло: false — бот не
  * підключений або клієнт його заблокував (тоді запис прибираємо).
  */
-export async function notifyClientStatus(lead: Lead): Promise<boolean> {
-  // «Нова» — це ще не подія для клієнта: він щойно сам лишив заявку
-  if (!config() || lead.status === "new") return false;
+async function tellClient(lead: Who, html: string, buttons?: InlineButton[]): Promise<boolean> {
+  if (!config()) return false;
 
   try {
     const subject = subjectOf(lead);
     const [chat] = await getDb().select().from(telegramChats).where(eq(telegramChats.subject, subject)).limit(1);
     if (!chat) return false;
 
-    const status = await sendToChat(chat.chatId, statusText(lead));
+    const status = await sendToChat(chat.chatId, html, buttons);
     // 403 — клієнт зупинив бота: чат більше не наш
     if (status === 403) await getDb().delete(telegramChats).where(eq(telegramChats.id, chat.id));
     return status === 200;
   } catch (e) {
-    console.error("[client-bot] статус не надіслано:", e);
+    console.error("[client-bot] не надіслано:", e);
     return false;
   }
+}
+
+export async function notifyClientStatus(lead: Lead): Promise<boolean> {
+  // «Нова» — це ще не подія для клієнта: він щойно сам лишив заявку
+  if (lead.status === "new") return false;
+  return tellClient(lead, statusText(lead));
+}
+
+const uah = (n: number) => `${n.toLocaleString("uk-UA")} ₴`;
+
+/** Дані кнопок під ціною: дія, заявка і сама сума — щоб стара кнопка не погодила нову ціну */
+export const priceButton = (action: "ok" | "call", lead: Pick<Lead, "id">, price: number) =>
+  `${action}:${lead.id.replace(/-/g, "")}:${price}`;
+
+/**
+ * Майстер вписав ціну — клієнт погоджує її кнопкою, без дзвінка.
+ * Відповідь приходить на webhook і потрапляє в чат заявки в адмінці.
+ */
+export async function offerPrice(lead: Lead): Promise<boolean> {
+  if (lead.price === null) return false;
+  const what = lead.model ?? lead.service;
+
+  return tellClient(
+    lead,
+    [
+      `<b>Замовлення №${lead.orderNo} — ціна ремонту ${uah(lead.price)}</b>`,
+      what ? esc(what) : "",
+      "",
+      "Ціна фіксована й далі не зміниться. Погоджуєте?",
+    ]
+      .filter((line, i) => line || i === 2)
+      .join("\n"),
+    [
+      { text: "Погоджуюсь", callback_data: priceButton("ok", lead, lead.price) },
+      { text: "Передзвоніть мені", callback_data: priceButton("call", lead, lead.price) },
+    ],
+  );
+}
+
+/** Майстер відповів у чаті заявки — пересилаємо клієнту в Telegram */
+export async function forwardMasterMessage(leadId: string, text: string, hasPhoto: boolean): Promise<boolean> {
+  if (!config()) return false;
+
+  const [lead] = await getDb().select().from(leads).where(eq(leads.id, leadId)).limit(1);
+  if (!lead) return false;
+
+  const body = [text ? esc(text) : "", hasPhoto ? "Майстер надіслав фото — воно в чаті заявки на сайті." : ""]
+    .filter(Boolean)
+    .join("\n\n");
+
+  return tellClient(lead, `<b>Майстер · замовлення №${lead.orderNo}</b>\n${body}`);
 }

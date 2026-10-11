@@ -1,6 +1,8 @@
 import {
   CHECK_BUTTON,
   SHARE_BUTTON,
+  callBot,
+  chatLeads,
   linkChat,
   readStart,
   sendToChat,
@@ -8,25 +10,108 @@ import {
   subjectOfPhone,
   webhookSecret,
 } from "@/lib/clientBot";
+import { addEvent } from "@/db/events";
+import { addMessage } from "@/db/messages";
+import type { Lead } from "@/db/schema";
+import { ARCHIVED } from "@/data/leadStatus";
 import { site } from "@/data/site";
+import { leadLink } from "@/lib/adminLinks";
+import { alertMasters } from "@/lib/notify";
+import { rateLimit } from "@/lib/rateLimit";
+import { siteUrl } from "@/lib/siteUrl";
+import { esc } from "@/lib/telegram";
 
 export const dynamic = "force-dynamic";
 
 type Update = {
   message?: {
     text?: unknown;
+    photo?: unknown;
     from?: { id?: number };
     chat?: { id?: number; type?: string };
     contact?: { phone_number?: unknown; user_id?: number };
   };
+  callback_query?: {
+    id: string;
+    data?: unknown;
+    message?: { message_id?: number; chat?: { id?: number; type?: string } };
+  };
 };
+
+const uah = (n: number) => `${n.toLocaleString("uk-UA")} ₴`;
+
+/**
+ * Те, що клієнт сказав боту, майстер має побачити так само, як повідомлення
+ * з чату на сайті: запис у чаті заявки (звідси лічильник і сигнал на огляді)
+ * плюс сповіщення на телефон.
+ */
+async function passToMasters(lead: Lead, text: string): Promise<void> {
+  await addMessage(lead.id, "client", { text });
+  await alertMasters(
+    {
+      title: `№${lead.orderNo} · ${lead.name} пише`,
+      body: text.slice(0, 160),
+      url: leadLink(lead.orderNo, lead.id),
+      tag: `chat-${lead.id}`,
+    },
+    `<b>Повідомлення від клієнта (Telegram)</b>\n№${lead.orderNo} · ${esc(lead.name)}\n\n${esc(text)}\n\n${siteUrl()}/admin/zayavky`,
+  );
+}
+
+/** Відповідь на кнопки під ціною: «Погоджуюсь» / «Передзвоніть мені» */
+async function onPriceButton(query: NonNullable<Update["callback_query"]>): Promise<void> {
+  const chat = query.message?.chat;
+  const match = /^(ok|call):([0-9a-f]{32}):(\d+)$/.exec(typeof query.data === "string" ? query.data : "");
+
+  const answer = (text: string) => callBot("answerCallbackQuery", { callback_query_id: query.id, text });
+
+  if (!match || chat?.id === undefined || chat.type !== "private") {
+    await answer("Кнопка застаріла.");
+    return;
+  }
+
+  const chatId = String(chat.id);
+  const [, action, leadKey, sum] = match;
+  const price = Number(sum);
+
+  // Заявку шукаємо лише серед тих, що закріплені за цим чатом — чужу кнопкою не зачепити
+  const lead = (await chatLeads(chatId))?.find((l) => l.id.replace(/-/g, "") === leadKey);
+  if (!lead) {
+    await answer("Не знайшли цю заявку.");
+    return;
+  }
+
+  // Кнопки прибираємо одразу: вдруге відповісти на ту саму ціну не можна
+  await callBot("editMessageReplyMarkup", {
+    chat_id: chatId,
+    message_id: query.message?.message_id,
+    reply_markup: { inline_keyboard: [] },
+  });
+
+  if (lead.price !== price) {
+    await answer("Ціна змінилась — дивіться свіжіше повідомлення.");
+    return;
+  }
+
+  if (action === "ok") {
+    await addEvent(lead.id, { text: `Клієнт погодив ціну: ${price} ₴` });
+    await passToMasters(lead, `Погоджуюсь на ціну ${uah(price)}`);
+    await answer("Дякуємо!");
+    await sendToChat(chatId, `Дякуємо, ціну ${uah(price)} погоджено. Про наступні етапи напишемо сюди.`);
+  } else {
+    await passToMasters(lead, `Прошу передзвонити щодо ціни ${uah(price)}`);
+    await answer("Передали майстру.");
+    await sendToChat(chatId, "Передали майстру — він вам передзвонить.");
+  }
+}
 
 /**
  * Webhook клієнтського бота: сюди Telegram приносить те, що людина написала
  * боту. Чат закріплюємо за клієнтом двома шляхами: «Start» за посиланням із
  * сайту чи квитанції або кнопка «Поділитися номером» просто в боті — без
- * сайту й реєстрації. Далі статуси ремонту йдуть у цей чат самі, а кнопка
- * «Перевірити статус» показує поточний стан.
+ * сайту й реєстрації. Далі статуси ремонту йдуть у цей чат самі, кнопка
+ * «Перевірити статус» показує поточний стан, а будь-який інший текст
+ * потрапляє майстру в чат заявки.
  *
  * Telegram чекає 200 на будь-яке оновлення, інакше повторює його знову й знову.
  */
@@ -37,9 +122,15 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const update = (await request.json().catch(() => null)) as Update | null;
+
+  if (update?.callback_query) {
+    await onPriceButton(update.callback_query).catch((e) => console.error("[client-bot] кнопка ціни:", e));
+    return new Response("ok");
+  }
+
   const message = update?.message;
   const chat = message?.chat;
-  const text = typeof message?.text === "string" ? message.text : "";
+  const text = typeof message?.text === "string" ? message.text.trim() : "";
 
   // Лише особисті чати: у групі статуси чужого ремонту ні до чого
   if (chat?.id === undefined || chat.type !== "private") return new Response("ok");
@@ -83,18 +174,47 @@ export async function POST(request: Request): Promise<Response> {
     return new Response("ok");
   }
 
-  // Кнопка, команда /status чи будь-який інший текст — відповідаємо станом ремонтів
-  const current = await report();
-  if (current) {
-    await sendToChat(chatId, current);
-  } else {
-    // Ще не знаємо, хто це: просимо номер — за ним знайдемо заявки
+  const mine = await chatLeads(chatId).catch((e) => {
+    console.error("[client-bot] заявки не знайдено:", e);
+    return null;
+  });
+
+  // Ще не знаємо, хто це: просимо номер — за ним знайдемо заявки
+  if (!mine) {
     await sendToChat(
       chatId,
       `Щоб побачити статус ремонту, натисніть «${SHARE_BUTTON}» нижче. Знайдемо ваші заявки за номером телефону й надалі писатимемо сюди про кожну зміну.`,
       "share",
     );
+    return new Response("ok");
   }
+
+  // Кнопка чи команда — показуємо стан ремонтів
+  if (!text || text === CHECK_BUTTON || text.startsWith("/")) {
+    await sendToChat(
+      chatId,
+      message?.photo
+        ? "Фото через бота поки не приймаємо — опишіть словами або надішліть фото в чаті заявки на сайті."
+        : ((await report()) ?? ""),
+    );
+    return new Response("ok");
+  }
+
+  // Звичайний текст — це повідомлення майстру: у чат найсвіжішої незакритої заявки
+  const lead = mine.find((l) => !ARCHIVED.includes(l.status)) ?? mine[0];
+  if (!lead) {
+    await sendToChat(chatId, "Активних ремонтів за вашим номером зараз немає, тож передати повідомлення нікому.");
+    return new Response("ok");
+  }
+
+  const limit = await rateLimit(`bot:chat:${chatId}`, 20, 60_000);
+  if (!limit.ok) {
+    await sendToChat(chatId, "Забагато повідомлень поспіль. Трохи зачекайте.");
+    return new Response("ok");
+  }
+
+  await passToMasters(lead, text);
+  await sendToChat(chatId, `Передали майстру (замовлення №${lead.orderNo}). Відповідь прийде сюди.`);
 
   return new Response("ok");
 }
