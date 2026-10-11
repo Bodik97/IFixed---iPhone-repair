@@ -325,6 +325,38 @@ describe("погодження ціни й чат через бота", () => {
     expect(fake.writes()).toHaveLength(0);
   });
 
+  const SHIPPED = { ...LEAD, status: "shipped", ttn: "20450000000000", createdAt: new Date() } as unknown as Lead;
+
+  it("про відправку бот пише з кнопкою «Я отримав посилку»", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    await bot.notifyClientStatus(SHIPPED);
+    expect(sent[0].reply_markup.inline_keyboard[0][0]).toEqual({
+      text: "Я отримав посилку",
+      callback_data: bot.receivedButton(SHIPPED),
+    });
+  });
+
+  it("«Я отримав посилку» закриває заявку, запускає гарантію і каже клієнту дату", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [SHIPPED]);
+
+    await press(bot.receivedButton(SHIPPED));
+
+    const update = fake.writes().find((q) => q.sql.startsWith('update "leads"'))!;
+    expect(update.sql).toContain('"warranty_until"');
+    expect(update.params).toContain("done");
+    expect(JSON.stringify(inserted("lead_events")[0].params)).toContain("Клієнт підтвердив, що отримав посилку");
+    expect(sent.at(-1)!.text).toContain("Гарантія діє до");
+  });
+
+  it("«Я отримав посилку» на вже закритій заявці нічого не міняє", async () => {
+    fake.onSelect(telegramChats, () => [CHAT]);
+    fake.onSelect(leads, () => [{ ...SHIPPED, status: "done" }]);
+
+    await press(bot.receivedButton(SHIPPED));
+    expect(fake.writes()).toHaveLength(0);
+  });
+
   it("текст від клієнта потрапляє в чат його незакритої заявки, клієнт отримує підтвердження", async () => {
     fake.onSelect(telegramChats, () => [CHAT]);
     fake.onSelect(leads, () => [PRICED]);

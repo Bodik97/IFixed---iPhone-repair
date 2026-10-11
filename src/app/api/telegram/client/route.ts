@@ -18,6 +18,7 @@ import type { Lead } from "@/db/schema";
 import { ARCHIVED } from "@/data/leadStatus";
 import { site } from "@/data/site";
 import { leadLink } from "@/lib/adminLinks";
+import { closeOrder } from "@/lib/handover";
 import { alertMasters } from "@/lib/notify";
 import { rateLimit } from "@/lib/rateLimit";
 import { siteUrl } from "@/lib/siteUrl";
@@ -80,10 +81,15 @@ async function savePhoto(lead: Lead, photo: NonNullable<NonNullable<Update["mess
   return { imagePath: blob.pathname, imageWidth: best.width ?? null, imageHeight: best.height ?? null };
 }
 
-/** Відповідь на кнопки під ціною: «Погоджуюсь» / «Передзвоніть мені» */
-async function onPriceButton(query: NonNullable<Update["callback_query"]>): Promise<void> {
+/**
+ * Кнопки під повідомленнями бота: під ціною — «Погоджуюсь» / «Передзвоніть
+ * мені», під відправкою — «Я отримав посилку».
+ */
+async function onButton(query: NonNullable<Update["callback_query"]>): Promise<void> {
   const chat = query.message?.chat;
-  const match = /^(ok|call):([0-9a-f]{32}):(\d+)$/.exec(typeof query.data === "string" ? query.data : "");
+  const match = /^(?:(ok|call):([0-9a-f]{32}):(\d+)|(got):([0-9a-f]{32}))$/.exec(
+    typeof query.data === "string" ? query.data : "",
+  );
 
   const answer = (text: string) => callBot("answerCallbackQuery", { callback_query_id: query.id, text });
 
@@ -93,8 +99,9 @@ async function onPriceButton(query: NonNullable<Update["callback_query"]>): Prom
   }
 
   const chatId = String(chat.id);
-  const [, action, leadKey, sum] = match;
-  const price = Number(sum);
+  const action = match[1] ?? match[4];
+  const leadKey = match[2] ?? match[5];
+  const price = Number(match[3]);
 
   // Заявку шукаємо лише серед тих, що закріплені за цим чатом — чужу кнопкою не зачепити
   const lead = (await chatLeads(chatId))?.find((l) => l.id.replace(/-/g, "") === leadKey);
@@ -103,12 +110,24 @@ async function onPriceButton(query: NonNullable<Update["callback_query"]>): Prom
     return;
   }
 
-  // Кнопки прибираємо одразу: вдруге відповісти на ту саму ціну не можна
+  // Кнопки прибираємо одразу: вдруге натиснути ту саму не можна
   await callBot("editMessageReplyMarkup", {
     chat_id: chatId,
     message_id: query.message?.message_id,
     reply_markup: { inline_keyboard: [] },
   });
+
+  if (action === "got") {
+    // Закрити можна лише посилку в дорозі: решту вже закрили майстер або Нова Пошта
+    if (lead.status !== "shipped") {
+      await answer("Заявку вже закрито.");
+      return;
+    }
+    await answer("Дякуємо!");
+    // Закриття саме пише клієнту «Завершено» з датою, до якої діє гарантія
+    await closeOrder(lead, "Клієнт підтвердив, що отримав посилку");
+    return;
+  }
 
   if (lead.price !== price) {
     await answer("Ціна змінилась — дивіться свіжіше повідомлення.");
@@ -146,7 +165,7 @@ export async function POST(request: Request): Promise<Response> {
   const update = (await request.json().catch(() => null)) as Update | null;
 
   if (update?.callback_query) {
-    await onPriceButton(update.callback_query).catch((e) => console.error("[client-bot] кнопка ціни:", e));
+    await onButton(update.callback_query).catch((e) => console.error("[client-bot] кнопка:", e));
     return new Response("ok");
   }
 

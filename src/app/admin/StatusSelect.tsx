@@ -23,7 +23,7 @@ function nextStep(status: Status): { to: Status; label: string } | null {
     case "ready":
       return { to: "done", label: "Видано клієнту" };
     case "shipped":
-      return { to: "done", label: "Завершити" };
+      return { to: "done", label: "Клієнт отримав — почати гарантію" };
     default:
       return null;
   }

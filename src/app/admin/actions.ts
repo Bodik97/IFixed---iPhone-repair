@@ -9,12 +9,15 @@ import { getDb } from "@/db";
 import { devices, leadMessages, leads, pushSubscriptions, reviews } from "@/db/schema";
 import { STATUS_OPTIONS } from "@/db/leads";
 import { guessWarrantyDays, isWarrantyTerm, warrantyEnd } from "@/data/warranty";
-import { addEvent, getLeadById, registerDevice } from "@/db/events";
+import { addEvent, getLeadById } from "@/db/events";
 import { addExpense, EXPENSE_CATEGORIES, removeExpense } from "@/db/expenses";
 import { addPart, removePart, shiftPartQty } from "@/db/parts";
 import { rateLimit, release } from "@/lib/rateLimit";
 import { sendPush } from "@/lib/push";
 import { notifyClientStatus, offerPrice } from "@/lib/clientBot";
+import { closeOrder } from "@/lib/handover";
+import { start } from "workflow/api";
+import { watchParcel } from "@/workflows/watch-parcel";
 import { checkCredentials, createSession, currentAdmin, destroySession, isAdmin } from "@/lib/admin";
 
 /** Адреса, з якої прийшов запит — за нею теж рахуємо спроби входу */
@@ -91,26 +94,18 @@ export async function setStatus(formData: FormData): Promise<void> {
   // «Відправлено» ставить лише збереження ТТН: без накладної клієнту нема що відстежувати
   if (next === "shipped" && !before?.ttn) return;
 
-  // Видача запускає гарантію. Дату ставимо раз: повторне «Видано» її не зсуває
-  const days = before ? (before.warrantyDays ?? guessWarrantyDays(before.service ?? before.problem)) : 0;
-  const warrantyUntil =
-    next === "done" && before ? (before.warrantyUntil ?? warrantyEnd(new Date(), days)) : (before?.warrantyUntil ?? null);
+  if (next === "done" && before) {
+    // Пристрій у клієнта — заявка закривається, і з цього дня рахується гарантія
+    await closeOrder(before);
+  } else {
+    await getDb().update(leads).set({ status: next, updatedAt: new Date() }).where(eq(leads.id, id));
 
-  await getDb()
-    .update(leads)
-    .set({ status: next, ...(next === "done" && before ? { warrantyUntil } : {}), updatedAt: new Date() })
-    .where(eq(leads.id, id));
+    // Хроніка: клієнт бачить, що саме сталося, а не лише підсвічену стадію
+    await addEvent(id, { status: next });
 
-  // Хроніка: клієнт бачить, що саме сталося, а не лише підсвічену стадію
-  await addEvent(id, { status: next });
-
-  const lead = before ? { ...before, status: next, warrantyUntil } : undefined;
-
-  // Ремонт завершено — пристрій потрапляє в список клієнта з гарантією
-  if (next === "done" && lead && days > 0) await registerDevice(lead, days);
-
-  // Клієнт із підключеним ботом дізнається про новий етап одразу, у Telegram
-  if (lead) await notifyClientStatus(lead);
+    // Клієнт із підключеним ботом дізнається про новий етап одразу, у Telegram
+    if (before) await notifyClientStatus({ ...before, status: next });
+  }
 
   revalidatePath("/admin");
   revalidatePath("/moi-remonty");
@@ -285,6 +280,14 @@ export async function setTtn(formData: FormData): Promise<void> {
 
     const lead = await getLeadById(id);
     if (lead) await notifyClientStatus(lead);
+
+    // Стежимо за посилкою: клієнт забрав — заявка закриється, почнеться гарантія.
+    // Збій тут не має зачіпати майстра: накладна вже збережена
+    try {
+      await start(watchParcel, [id, ttn.slice(0, 40)]);
+    } catch (e) {
+      console.error("[ttn] стеження за посилкою не запущено:", e);
+    }
   }
 
   revalidatePath("/admin");

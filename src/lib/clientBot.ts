@@ -237,10 +237,18 @@ async function tellClient(lead: Who, html: string, buttons?: InlineButton[]): Pr
   }
 }
 
+/** Дані кнопки «Я отримав посилку» під повідомленням про відправку */
+export const receivedButton = (lead: Pick<Lead, "id">) => `got:${lead.id.replace(/-/g, "")}`;
+
 export async function notifyClientStatus(lead: Lead): Promise<boolean> {
   // «Нова» — це ще не подія для клієнта: він щойно сам лишив заявку
   if (lead.status === "new") return false;
-  return tellClient(lead, statusText(lead));
+
+  // Посилка в дорозі: клієнт сам каже, коли забрав, — з цього дня піде гарантія
+  const buttons =
+    lead.status === "shipped" && lead.ttn ? [{ text: "Я отримав посилку", callback_data: receivedButton(lead) }] : undefined;
+
+  return tellClient(lead, statusText(lead), buttons);
 }
 
 const uah = (n: number) => `${n.toLocaleString("uk-UA")} ₴`;
