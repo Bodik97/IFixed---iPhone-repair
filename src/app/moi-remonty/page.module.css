@@ -60,6 +60,15 @@
   letter-spacing: -.02em;
 }
 
+/* Рядок-підказка під заголовком розділу: що тут і що з цим робити */
+.hint {
+  margin: -8px 0 0;
+  max-width: 62ch;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-3);
+}
+
 .tag {
   display: inline-flex;
   align-items: center;

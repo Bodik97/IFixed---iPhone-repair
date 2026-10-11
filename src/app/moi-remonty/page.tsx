@@ -4,6 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import BackButton from "@/components/BackButton";
 import LiveRefresh from "@/components/LiveRefresh";
 import Devices from "@/components/account/Devices";
+import Guide from "@/components/account/Guide";
 import History from "@/components/account/History";
 import QuickOrder from "@/components/account/QuickOrder";
 import RepairCard from "@/components/account/RepairCard";
@@ -88,6 +89,8 @@ export default async function MyRepairsPage() {
 
       <SetPassword />
 
+      <Guide />
+
       {/* Найголовніше — вгорі: що зараз відбувається з пристроєм */}
       {active.length > 0 ? (
         <section className={styles.section} aria-labelledby="aktyvni">
@@ -101,6 +104,9 @@ export default async function MyRepairsPage() {
               </span>
             )}
           </div>
+          <p className={styles.hint}>
+            Етап оновлюється сам. Є питання — кнопка «Написати майстру» в картці.
+          </p>
 
           <div className={styles.cards}>
             {active.map((lead, i) => (
@@ -129,6 +135,10 @@ export default async function MyRepairsPage() {
           <h2 id="garantiya" className={styles.h2}>
             Гарантія на пристрої
           </h2>
+          <p className={styles.hint}>
+            Несправність повторилась у гарантійний строк — напишіть або подзвоніть і назвіть номер
+            замовлення: усунемо безкоштовно.
+          </p>
           <Devices devices={userDevices} />
         </section>
       )}
@@ -138,6 +148,7 @@ export default async function MyRepairsPage() {
           <h2 id="istoriya" className={styles.h2}>
             Завершені ремонти
           </h2>
+          <p className={styles.hint}>Усе, що ми для вас ремонтували: що зроблено, коли й за скільки.</p>
           <History rows={rows} />
         </section>
       )}

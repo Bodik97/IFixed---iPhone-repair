@@ -1,0 +1,63 @@
+.guide {
+  border-radius: 22px;
+  border: 1px solid var(--info-border);
+  background: var(--info-bg);
+}
+
+/* Увесь рядок — кнопка: у заголовок легко влучити пальцем */
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 22px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.title {
+  font-size: 15.5px;
+  font-weight: 600;
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  font-size: 13.5px;
+  color: var(--accent-text);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+  gap: 14px 22px;
+  margin: 0;
+  padding: 2px 18px 18px;
+}
+
+.tip dt {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.tip dd {
+  margin: 3px 0 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-2);
+}
