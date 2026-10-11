@@ -1,11 +1,22 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useId, useRef, useState, useTransition } from "react";
 import { setTtn } from "./actions";
 import styles from "./page.module.css";
 
-export default function TtnField({ id, ttn }: { id: string; ttn: string | null }) {
+export default function TtnField({
+  id,
+  ttn,
+  autoFocus = false,
+}: {
+  id: string;
+  ttn: string | null;
+  /** Поле щойно відкрили кнопкою «Відправити» — одразу можна вписувати */
+  autoFocus?: boolean;
+}) {
   const formRef = useRef<HTMLFormElement>(null);
+  // Поле буває на картці двічі: біля статусу й у блоці доставки
+  const fieldId = useId();
   const [pending, startTransition] = useTransition();
   // Поле не блокуємо на час збереження — лише тихо кажемо, що відбувається
   const [saved, setSaved] = useState(false);
@@ -18,12 +29,13 @@ export default function TtnField({ id, ttn }: { id: string; ttn: string | null }
       onSubmit={() => startTransition(() => {})}
     >
       <input type="hidden" name="id" value={id} />
-      <label className="visually-hidden" htmlFor={`ttn-${id}`}>
+      <label className="visually-hidden" htmlFor={fieldId}>
         Накладна Нової Пошти
       </label>
       <input
-        id={`ttn-${id}`}
+        id={fieldId}
         name="ttn"
+        autoFocus={autoFocus}
         type="text"
         inputMode="numeric"
         defaultValue={ttn ?? ""}

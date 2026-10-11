@@ -85,6 +85,9 @@ export async function setStatus(formData: FormData): Promise<void> {
 
   const next = status as (typeof allowed)[number];
 
+  // «Відправлено» ставить лише збереження ТТН: без накладної клієнту нема що відстежувати
+  if (next === "shipped" && !(await getLeadById(id))?.ttn) return;
+
   await getDb().update(leads).set({ status: next, updatedAt: new Date() }).where(eq(leads.id, id));
 
   // Хроніка: клієнт бачить, що саме сталося, а не лише підсвічену стадію

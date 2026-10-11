@@ -144,7 +144,7 @@ export default function LeadCard({
       }
       side={
         <>
-          <StatusSelect id={r.id} status={r.status} delivery={r.deliveryRequested} />
+          <StatusSelect id={r.id} status={r.status} delivery={r.deliveryRequested} ttn={r.ttn} />
           <span className={styles.hint}>{s.hint}</span>
 
           {/* Хто займається заявкою — видно й у згорнутій картці */}
@@ -156,8 +156,8 @@ export default function LeadCard({
     >
       <QuickActions phone={r.phone} address={r.deliveryAddress} ttn={r.ttn} />
 
-      {/* Доставка: показуємо, лише коли клієнт її попросив */}
-      {r.deliveryRequested && (
+      {/* Доставка: коли клієнт її попросив або майстер уже відправив сам */}
+      {(r.deliveryRequested || r.ttn) && (
         <div className={waitingShip ? styles.shipBoxHot : styles.shipBox}>
           <div className={styles.shipHead}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -174,7 +174,7 @@ export default function LeadCard({
         </div>
       )}
 
-      {r.city && !r.deliveryRequested && <div className={styles.city}>{r.city}</div>}
+      {r.city && !r.deliveryRequested && !r.ttn && <div className={styles.city}>{r.city}</div>}
 
       <NoteField id={r.id} events={events} />
 

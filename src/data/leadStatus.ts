@@ -103,6 +103,6 @@ export const STATUS_OPTIONS: { value: Lead["status"]; label: string }[] = [
   { value: "in_progress", label: "У роботі" },
   { value: "ready", label: "Готово" },
   { value: "shipped", label: "Відправлено" },
-  { value: "done", label: "Завершено" },
+  { value: "done", label: "Видано клієнту" },
   { value: "rejected", label: "Відмова" },
 ];

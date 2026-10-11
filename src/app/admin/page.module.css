@@ -1106,6 +1106,35 @@
   transform: scale(.98);
 }
 
+/* Другий шлях після «Готово» — відправка замість видачі; тихіший за головну кнопку */
+.nextAlt {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--field-border);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+
+.nextAlt:hover {
+  border-color: var(--border-active);
+}
+
+.shipNow {
+  display: grid;
+  gap: 6px;
+}
+
+.shipNow .ttnInput {
+  max-width: none;
+}
+
 .ttnState {
   font-size: 12.5px;
   color: var(--text-3);

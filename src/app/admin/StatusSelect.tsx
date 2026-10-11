@@ -1,7 +1,8 @@
 "use client";
 
-import { useOptimistic, useTransition } from "react";
+import { useOptimistic, useState, useTransition } from "react";
 import { setStatus } from "./actions";
+import TtnField from "./TtnField";
 import { STATUS_OPTIONS } from "@/data/leadStatus";
 import type { Lead } from "@/db/schema";
 import styles from "./page.module.css";
@@ -10,16 +11,17 @@ type Status = Lead["status"];
 
 /**
  * Наступний крок ремонту — одна кнопка замість розгортання списку.
- * Доставку окремим кроком не даємо: «Відправлено» ставиться разом із ТТН.
+ * Після «Готово» шляхів два: видати в руки або відправити. Відправку окремим
+ * кроком не даємо — «Відправлено» ставиться разом із ТТН.
  */
-function nextStep(status: Status, delivery: boolean): { to: Status; label: string } | null {
+function nextStep(status: Status): { to: Status; label: string } | null {
   switch (status) {
     case "new":
       return { to: "in_progress", label: "Взяти в роботу" };
     case "in_progress":
       return { to: "ready", label: "Готово" };
     case "ready":
-      return delivery ? null : { to: "done", label: "Видано клієнту" };
+      return { to: "done", label: "Видано клієнту" };
     case "shipped":
       return { to: "done", label: "Завершити" };
     default:
@@ -36,17 +38,26 @@ export default function StatusSelect({
   id,
   status,
   delivery = false,
+  ttn = null,
 }: {
   id: string;
   status: Status;
-  /** Клієнт просив надіслати — після «Готово» далі йде ТТН, а не видача */
+  /** Клієнт просив надіслати — поле ТТН відкрите одразу, без кнопки «Відправити» */
   delivery?: boolean;
+  ttn?: string | null;
 }) {
   const [shown, setShown] = useOptimistic(status);
   const [, startTransition] = useTransition();
+  const [shipping, setShipping] = useState(false);
 
   const change = (to: Status) => {
     if (to === shown) return;
+    // «Відправлено» без накладної клієнту нічого не дає: спершу просимо ТТН,
+    // а статус поставить уже її збереження
+    if (to === "shipped" && !ttn) {
+      setShipping(true);
+      return;
+    }
     const form = new FormData();
     form.set("id", id);
     form.set("status", to);
@@ -56,7 +67,9 @@ export default function StatusSelect({
     });
   };
 
-  const next = nextStep(shown, delivery);
+  const next = nextStep(shown);
+  const canShip = shown === "ready" && !ttn;
+  const ttnOpen = canShip && (shipping || delivery);
 
   return (
     <div className={styles.statusControl}>
@@ -68,6 +81,19 @@ export default function StatusSelect({
             <path d="M13 6l6 6-6 6" />
           </svg>
         </button>
+      )}
+
+      {canShip && !ttnOpen && (
+        <button type="button" className={styles.nextAlt} onClick={() => setShipping(true)}>
+          Відправити Новою Поштою
+        </button>
+      )}
+
+      {ttnOpen && (
+        <div className={styles.shipNow}>
+          <span className={styles.hint}>Впишіть ТТН — статус стане «Відправлено», клієнт отримає номер.</span>
+          <TtnField id={id} ttn={ttn} autoFocus={shipping} />
+        </div>
       )}
 
       <label className="visually-hidden" htmlFor={`status-${id}`}>

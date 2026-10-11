@@ -188,6 +188,18 @@ describe("setStatus", () => {
     expect(w).toHaveLength(2);
   });
 
+  it("«Відправлено» без ТТН не ставиться — статус дає лише збереження накладної", async () => {
+    fake.onSelect(leads, () => [LEAD]);
+    await actions.setStatus(form({ id: LEAD.id, status: "shipped" }));
+    expect(fake.writes()).toEqual([]);
+  });
+
+  it("«Відправлено» з уже вписаною ТТН ставиться", async () => {
+    fake.onSelect(leads, () => [{ ...LEAD, ttn: "20450000000000" }]);
+    await actions.setStatus(form({ id: LEAD.id, status: "shipped" }));
+    expect(writesText()[0]).toContain('"shipped"');
+  });
+
   it("«Завершено» — пристрій клієнта потрапляє в гарантійний список", async () => {
     fake.onSelect(leads, () => [LEAD]);
     fake.onSelect(devices, () => []);
