@@ -68,12 +68,11 @@ export default async function Home() {
             {site.hours} · передзвонимо за 25 хвилин
           </p>
 
-          <h1 className={`${styles.h1} nUp nUp-1`}>
-            <span>Чесний ремонт iPhone</span> <span>у Львові</span>
-          </h1>
+          <h1 className={`${styles.h1} nUp nUp-1`}>Ремонт iPhone без сюрпризів у ціні</h1>
 
           <p className={`${styles.heroLead} nUp nUp-2`}>
-            Спершу безкоштовна діагностика й точна ціна. Ремонтуємо лише після вашої згоди.
+            Безкоштовна діагностика, потім фіксована ціна — і вона вже не змінюється. На екран чи
+            акумулятор іде до 2 днів разом із замовленням деталі.
           </p>
 
           <div className={`${styles.heroCta} nUp nUp-3`}>
