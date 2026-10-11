@@ -9,6 +9,7 @@ import FormError from "./FormError";
 import styles from "./ChatBot.module.css";
 import TelegramConnect from "@/components/TelegramConnect";
 import PhoneInput, { formatPhone, localDigits, phoneComplete } from "./PhoneInput";
+import { LIMITS, onlyLetters, plainText, validName } from "@/lib/validate";
 
 type Line = { from: "bot" | "me"; text: string };
 
@@ -146,7 +147,7 @@ export default function ChatBot() {
 
     const cleanName = name.trim();
 
-    if (cleanName.length < 2) {
+    if (!validName(cleanName)) {
       setError("Впишіть, будь ласка, імʼя — щоб майстер знав, як до вас звертатись.");
       return;
     }
@@ -285,7 +286,8 @@ export default function ChatBot() {
               placeholder={step === "describe" ? "Наприклад: не працює динамік" : "Наприклад: Samsung A54"}
               value={draft}
               onChange={(e) => {
-                setDraft(e.target.value);
+                // Опис — до 500 символів, модель — коротко; спецсимволи відкидаються
+                setDraft(plainText(e.target.value, step === "describe" ? LIMITS.problem : LIMITS.short));
                 setError("");
               }}
             />
@@ -310,7 +312,7 @@ export default function ChatBot() {
               autoFocus
               value={name}
               onChange={(e) => {
-                setName(e.target.value);
+                setName(onlyLetters(e.target.value));
                 setError("");
               }}
             />

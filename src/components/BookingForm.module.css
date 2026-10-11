@@ -17,6 +17,13 @@
   gap: 8px;
 }
 
+/* Підзаголовок форми на сторінці: що вписати й що буде далі */
+.sub {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-2);
+}
+
 .row label {
   font-size: 13px;
   color: var(--text-2);

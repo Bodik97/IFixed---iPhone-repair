@@ -273,7 +273,8 @@ describe("createLead — заявка, яку заводить майстер", 
   const create = (fields: Record<string, string>) => actions.createLead(null, form(fields));
 
   it("без імені чи телефону — підказка, без запису", async () => {
-    expect(await create({ name: "О", phone: "0733150238" })).toBe("Впишіть імʼя клієнта.");
+    expect(await create({ name: "О", phone: "0733150238" })).toMatch(/імʼя клієнта/);
+    expect(await create({ name: "Олег2", phone: "0733150238" })).toMatch(/лише літери/);
     expect(await create({ name: "Олег", phone: "123" })).toMatch(/телефон/);
     expect(fake.writes()).toEqual([]);
   });
@@ -285,7 +286,7 @@ describe("createLead — заявка, яку заводить майстер", 
     );
     const [q] = fake.writes();
     expect(q.sql).toMatch(/^insert into "leads"/);
-    expect(q.params).toEqual(expect.arrayContaining(["Олег", "073 315 02 38", "iPhone 13", "b@gadgetfix.ua", "manual", "new"]));
+    expect(q.params).toEqual(expect.arrayContaining(["Олег", "+380733150238", "iPhone 13", "b@gadgetfix.ua", "manual", "new"]));
   });
 
   it("пристрій уже в сервісі — одразу «У роботі»", async () => {

@@ -100,7 +100,8 @@ describe("POST /api/lead: що приймаємо", () => {
     expect(m.inserted).toHaveLength(1);
     expect(m.inserted[0]).toMatchObject({
       name: "Олег",
-      phone: "073 315 02 38",
+      // Хай як набрали — у базі номер в одному вигляді
+      phone: "+380733150238",
       email: null,
       model: "iPhone 13",
       source: "model",
@@ -109,7 +110,7 @@ describe("POST /api/lead: що приймаємо", () => {
     expect(m.notified[0]).toContain("Нова заявка №42");
     expect(m.pushed[0]).toEqual({
       title: "Нова заявка №42",
-      body: "Олег · iPhone 13 · 073 315 02 38",
+      body: "Олег · iPhone 13 · +380733150238",
       url: "/admin/zayavky?q=42&open=lead-42",
       tag: "lead-lead-42",
     });
@@ -143,17 +144,26 @@ describe("POST /api/lead: що приймаємо", () => {
   });
 
   it("порожні поля — NULL, задовгі — обрізаються", async () => {
-    await post({ name: "x".repeat(500), phone: "0733150238", problem: "y".repeat(5000), city: "   " });
+    await post({ name: "Олег", phone: "0733150238", problem: "y".repeat(5000), model: "m".repeat(300), city: "   " });
     const row = m.inserted[0];
-    expect((row.name as string).length).toBe(200);
-    expect((row.problem as string).length).toBe(2000);
+    expect((row.problem as string).length).toBe(500);
+    expect((row.model as string).length).toBe(80);
     expect(row.city).toBeNull();
   });
 
-  it("HTML у полях не ламає розмітку сповіщення в Telegram", async () => {
-    await post({ name: "<b>x</b>", phone: "0733150238", problem: "a & b" });
-    expect(m.notified[0]).toContain("&lt;b&gt;x&lt;/b&gt;");
+  it("спецсимволи з тексту прибираються — розмітка не доходить ні до бази, ні до Telegram", async () => {
+    await post({ name: "Олег", phone: "0733150238", problem: "<script>x</script> a & b {}", city: "Львів <b>№5</b>" });
+    expect(m.inserted[0].problem).toBe("scriptx/script a & b");
+    expect(m.inserted[0].city).toBe("Львів b№5/b");
     expect(m.notified[0]).toContain("a &amp; b");
+    expect(m.notified[0]).not.toContain("<script>");
+  });
+
+  it("залогінений з поштою замість імені в профілі — заявка приймається як «Клієнт»", async () => {
+    m.userId = "user_1";
+    m.profileEmail = "profile@example.com";
+    await post({ name: "profile@example.com", phone: "—" });
+    expect(m.inserted[0]).toMatchObject({ name: "Клієнт", phone: null, email: "profile@example.com" });
   });
 });
 
@@ -161,6 +171,20 @@ describe("POST /api/lead: що відхиляємо", () => {
   it("без імені — 422", async () => {
     const res = await post({ name: "  ", phone: "0733150238" });
     expect(res.status).toBe(422);
+    expect(m.inserted).toHaveLength(0);
+  });
+
+  it("імʼя не з літер або задовге — 422", async () => {
+    for (const name of ["<b>x</b>", "Олег123", "Я", "x".repeat(51), "!!!"]) {
+      expect((await post({ name, phone: "0733150238" })).status).toBe(422);
+    }
+    expect(m.inserted).toHaveLength(0);
+  });
+
+  it("телефон не український — це не спосіб звʼязку", async () => {
+    for (const phone of ["+48123456789", "0003150238", "073315023", "07331502389"]) {
+      expect((await post({ name: "Олег", phone })).status).toBe(422);
+    }
     expect(m.inserted).toHaveLength(0);
   });
 

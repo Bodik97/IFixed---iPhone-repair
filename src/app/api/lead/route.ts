@@ -10,6 +10,8 @@ import { leadLink } from "@/lib/adminLinks";
 import { escalateLead } from "@/workflows/escalate-lead";
 import { siteUrl } from "@/lib/siteUrl";
 import { connectLink } from "@/lib/clientBot";
+import { normalizeUaPhone } from "@/lib/phone";
+import { LIMITS, plainText, validName } from "@/lib/validate";
 
 const SOURCES = ["landing", "model", "services", "mail-in"] as const;
 type Source = (typeof SOURCES)[number];
@@ -49,10 +51,13 @@ function telegramText(lead: Lead, orderNo?: number): string {
   return `${head}\n${body}\n\n${siteUrl()}/admin/zayavky`;
 }
 
-/** Порожній рядок у базі не потрібен — краще NULL */
-const clean = (v: unknown) => {
-  const s = typeof v === "string" ? v.trim() : "";
-  return s.length > 0 ? s.slice(0, 2000) : null;
+/**
+ * Текстове поле з форми: без спецсимволів і не довше за ліміт. Порожній
+ * рядок у базі не потрібен — краще NULL.
+ */
+const clean = (v: unknown, max: number = LIMITS.short, multiline = false) => {
+  const s = typeof v === "string" ? plainText(v, max, multiline).trim() : "";
+  return s.length > 0 ? s : null;
 };
 
 export async function POST(request: Request) {
@@ -82,11 +87,20 @@ export async function POST(request: Request) {
   // телефону може не бути взагалі — тоді вистачає пошти.
   // Тіло приходить ззовні — поле не рядком вважаємо відсутнім, а не падаємо в 500
   const str = (v: unknown) => (typeof v === "string" ? v : "");
-  const hasPhone = str(lead?.phone).replace(/\D/g, "").length >= 9;
-  const hasEmail = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(str(lead?.email));
+  // Телефон — лише справжній український номер; у базу йде в одному вигляді
+  const phone = normalizeUaPhone(str(lead?.phone));
+  const hasPhone = phone !== null;
+  const hasEmail = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(str(lead?.email)) && str(lead?.email).length <= 120;
 
-  if (!str(lead?.name).trim() || (!hasPhone && !hasEmail && !profileEmail)) {
-    return NextResponse.json({ error: "Потрібні ім'я та телефон або пошта" }, { status: 422 });
+  // Імʼя — лише літери. Із кабінету воно приходить із профілю, а не з поля
+  // форми: якщо там не імʼя (скажімо, пошта), заявку не відхиляємо
+  const name = validName(str(lead?.name)) ? str(lead?.name).trim() : userId ? "Клієнт" : null;
+
+  if (!name) {
+    return NextResponse.json({ error: "Імʼя — лише літери, від 2 до 50" }, { status: 422 });
+  }
+  if (!hasPhone && !hasEmail && !profileEmail) {
+    return NextResponse.json({ error: "Потрібен телефон у форматі +380… або пошта" }, { status: 422 });
   }
 
   const source: Source = SOURCES.includes(lead.source) ? lead.source : "landing";
@@ -98,14 +112,14 @@ export async function POST(request: Request) {
     const [row] = await getDb()
       .insert(leads)
       .values({
-        name: lead.name.trim().slice(0, 200),
-        phone: hasPhone ? clean(lead.phone) : null,
-        email: hasEmail ? clean(lead.email) : profileEmail,
+        name,
+        phone,
+        email: hasEmail ? str(lead.email).trim() : profileEmail,
         model: clean(lead.model),
         service: clean(lead.service),
-        problem: clean(lead.problem),
-        city: clean(lead.city),
-        branch: clean(lead.branch),
+        problem: clean(lead.problem, LIMITS.problem, true),
+        city: clean(lead.city, LIMITS.place.max),
+        branch: clean(lead.branch, LIMITS.place.max),
         clerkUserId: userId ?? null,
         source,
       })
@@ -130,11 +144,11 @@ export async function POST(request: Request) {
     await alertMasters(
       {
         title: `Нова заявка №${orderNo}`,
-        body: [lead.name.trim(), what, hasPhone ? clean(lead.phone) : null].filter(Boolean).join(" · "),
+        body: [name, what, phone].filter(Boolean).join(" · "),
         url: leadLink(orderNo, leadId),
         tag: `lead-${leadId}`,
       },
-      telegramText(lead, orderNo),
+      telegramText({ ...lead, name, phone: phone ?? undefined }, orderNo),
     );
 
     // Нагадування, доки заявку не візьмуть. Збій тут не має зачіпати клієнта:
@@ -148,7 +162,7 @@ export async function POST(request: Request) {
 
   // Посилання на бота — форма покаже кнопку «Отримувати статус у Telegram»
   const telegram = leadId
-    ? connectLink({ id: leadId, phone: hasPhone ? clean(lead.phone) : null, clerkUserId: userId ?? null })
+    ? connectLink({ id: leadId, phone, clerkUserId: userId ?? null })
     : null;
 
   return NextResponse.json({ ok: true, telegram });

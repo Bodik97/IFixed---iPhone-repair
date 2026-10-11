@@ -1,5 +1,7 @@
 "use client";
 
+import { normalizeUaPhone } from "@/lib/phone";
+
 /**
  * Поле телефону з незмінним «+38».
  *
@@ -12,12 +14,14 @@ const PREFIX = "+38";
 
 /** Те, що набрано чи вставлено → десять цифр номера, починаючи з нуля */
 export function localDigits(raw: string): string {
-  let d = (raw.startsWith(PREFIX) ? raw.slice(PREFIX.length) : raw).replace(/\D/g, "");
+  // Набрали перед «+38» (курсор стояв на початку поля) — це теж цифри номера, а не код країни
+  const at = raw.indexOf(PREFIX);
+  let d = (at >= 0 ? raw.slice(0, at) + raw.slice(at + PREFIX.length) : raw).replace(/\D/g, "");
 
   // Вставили номер повністю, з кодом країни — прибираємо «38»
   if (d.startsWith("380")) d = d.slice(2);
   // Залишок стертого префікса («+3», «+»): це ще не цифри номера
-  else if (!raw.startsWith(PREFIX) && /^(38?|8)$/.test(d)) d = "";
+  else if (at < 0 && /^(38?|8)$/.test(d)) d = "";
 
   // Після +38 номер завжди починається з нуля — підставляємо, якщо почали з 73…
   if (d && d[0] !== "0") d = `0${d}`;
@@ -30,8 +34,8 @@ export function formatPhone(local: string): string {
   return `${PREFIX} ${parts.join(" ")}`;
 }
 
-/** Номер набрано повністю? */
-export const phoneComplete = (value: string) => localDigits(value).length === 10;
+/** Номер набрано повністю, і це справжній український номер? */
+export const phoneComplete = (value: string) => normalizeUaPhone(`${PREFIX}${localDigits(value)}`) !== null;
 
 export default function PhoneInput({
   value,
@@ -42,10 +46,26 @@ export default function PhoneInput({
   value: string;
   onChange: (value: string) => void;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "value" | "onChange" | "type">) {
+  /**
+   * Курсор не має стояти всередині «+38 »: набране там зламало б номер.
+   * Виділення не чіпаємо — «виділити все й набрати заново» має працювати.
+   */
+  const keepCaretAfterPrefix = (el: HTMLInputElement) => {
+    const from = PREFIX.length + 1;
+    const start = el.selectionStart ?? from;
+    if (start === el.selectionEnd && start < from) el.setSelectionRange(from, from);
+  };
+
   return (
     <input
       className="field"
       {...rest}
+      // Клік чи Tab ставлять курсор після події — тому на наступному кадрі
+      onFocus={(e) => {
+        const el = e.currentTarget;
+        requestAnimationFrame(() => keepCaretAfterPrefix(el));
+      }}
+      onSelect={(e) => keepCaretAfterPrefix(e.currentTarget)}
       type="tel"
       inputMode="tel"
       autoComplete="tel"

@@ -7,6 +7,7 @@ import FormError from "./FormError";
 import styles from "./BookingForm.module.css";
 import TelegramConnect from "@/components/TelegramConnect";
 import PhoneInput, { phoneComplete } from "./PhoneInput";
+import { LIMITS, onlyLetters, plainText, validName } from "@/lib/validate";
 
 export type LeadSource = "landing" | "model" | "services" | "mail-in";
 
@@ -21,6 +22,10 @@ type Props = {
   initialChoice?: string;
   /** У модальному вікні рамку дає саме вікно — друга не потрібна */
   bare?: boolean;
+  /** Форма з кнопки: лише імʼя й телефон, решта — за посиланням «Додати деталі» */
+  simple?: boolean;
+  /** Підзаголовок над полями форми на сторінці: що вписати й що буде далі */
+  subtitle?: string;
 };
 
 function BookingFormInner({
@@ -30,6 +35,8 @@ function BookingFormInner({
   submitLabel = "Записатись на безкоштовну діагностику",
   initialChoice = "",
   bare,
+  simple = false,
+  subtitle = "Впишіть імʼя й телефон — передзвонимо за 25 хвилин. Модель і опис допоможуть одразу назвати ціну.",
 }: Props & { initialChoice?: string }) {
   // Форма буває на сторінці двічі — у тексті й у вікні запису; з однаковими id
   // підпис поля у вікні вів би до поля під ним
@@ -42,9 +49,9 @@ function BookingFormInner({
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [telegram, setTelegram] = useState<string | null>(null);
-  // Обовʼязкові лише імʼя й телефон. Решта ховається, щоб форма не лякала;
-  // відкрита одразу, коли послугу вже обрали кнопкою на сайті
-  const [details, setDetails] = useState(Boolean(initialChoice));
+  // Обовʼязкові лише імʼя й телефон. У простій формі решта ховається, щоб не
+  // лякати; відкрита одразу, коли послугу вже обрали кнопкою на сайті
+  const [details, setDetails] = useState(!simple || Boolean(initialChoice));
 
   const reset = () => {
     setName("");
@@ -57,8 +64,16 @@ function BookingFormInner({
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim().length < 2 || !phoneComplete(phone)) {
-      setError("Вкажіть ім'я та телефон повністю — решту з'ясуємо в розмові.");
+    const nameOk = validName(name);
+    const phoneOk = phoneComplete(phone);
+    if (!nameOk || !phoneOk) {
+      setError(
+        !nameOk && !phoneOk
+          ? "Вкажіть ім'я та телефон повністю — решту з'ясуємо в розмові."
+          : !nameOk
+            ? "Впишіть ім'я — лише літери, щонайменше дві."
+            : "Допишіть номер телефону: після +38 — десять цифр.",
+      );
       return;
     }
 
@@ -111,6 +126,8 @@ function BookingFormInner({
   return (
     <div className={bare ? styles.boxBare : styles.box}>
       <form onSubmit={submit} className={styles.form} noValidate>
+        {!bare && <p className={styles.sub}>{subtitle}</p>}
+
         <div className={styles.row}>
           <label htmlFor={`${uid}-name`}>Ім&apos;я</label>
           <input
@@ -120,8 +137,9 @@ function BookingFormInner({
             autoComplete="name"
             placeholder="Як до вас звертатись"
             value={name}
+            maxLength={LIMITS.name.max}
             onChange={(e) => {
-              setName(e.target.value);
+              setName(onlyLetters(e.target.value));
               setError("");
             }}
           />
@@ -172,7 +190,8 @@ function BookingFormInner({
               className={`field ${styles.textarea}`}
               placeholder="Наприклад: розбитий екран, не тримає заряд"
               value={problem}
-              onChange={(e) => setProblem(e.target.value)}
+              maxLength={LIMITS.problem}
+              onChange={(e) => setProblem(plainText(e.target.value, LIMITS.problem, true))}
             />
           </div>
         )}

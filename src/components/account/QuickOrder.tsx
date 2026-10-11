@@ -7,6 +7,7 @@ import { bookingModels } from "@/data/landing";
 import ServiceSelect from "../ServiceSelect";
 import { site } from "@/data/site";
 import FormError from "../FormError";
+import { LIMITS, plainText } from "@/lib/validate";
 import styles from "./QuickOrder.module.css";
 
 export default function QuickOrder({ compact }: { compact?: boolean }) {
@@ -153,7 +154,7 @@ export default function QuickOrder({ compact }: { compact?: boolean }) {
           placeholder="Напр. не тримає заряд, гріється при зарядці"
           value={note}
           onChange={(e) => {
-            setNote(e.target.value);
+            setNote(plainText(e.target.value, LIMITS.problem, true));
             setError("");
           }}
         />

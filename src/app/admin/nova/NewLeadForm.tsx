@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import FormError from "@/components/FormError";
 import PhoneInput from "@/components/PhoneInput";
+import { LIMITS, onlyLetters } from "@/lib/validate";
 import { createLead } from "../actions";
 import styles from "./page.module.css";
 
@@ -10,12 +11,23 @@ import styles from "./page.module.css";
 export default function NewLeadForm() {
   const [error, action, pending] = useActionState(createLead, null);
   const [phone, setPhone] = useState("");
+  const [name, setName] = useState("");
 
   return (
     <form action={action} className={styles.form}>
       <div className={styles.row}>
         <label htmlFor="nl-name">Імʼя клієнта</label>
-        <input id="nl-name" name="name" className="field" autoComplete="off" required autoFocus />
+        <input
+          id="nl-name"
+          name="name"
+          className="field"
+          autoComplete="off"
+          required
+          autoFocus
+          maxLength={LIMITS.name.max}
+          value={name}
+          onChange={(e) => setName(onlyLetters(e.target.value))}
+        />
       </div>
 
       <div className={styles.row}>
@@ -25,12 +37,12 @@ export default function NewLeadForm() {
 
       <div className={styles.row}>
         <label htmlFor="nl-model">Пристрій</label>
-        <input id="nl-model" name="model" className="field" placeholder="Напр. iPhone 13" />
+        <input id="nl-model" name="model" className="field" placeholder="Напр. iPhone 13" maxLength={LIMITS.short} />
       </div>
 
       <div className={styles.row}>
         <label htmlFor="nl-problem">Що трапилось</label>
-        <textarea id="nl-problem" name="problem" className={`field ${styles.textarea}`} rows={3} />
+        <textarea id="nl-problem" name="problem" className={`field ${styles.textarea}`} rows={3} maxLength={LIMITS.problem} />
       </div>
 
       <label className={styles.check}>

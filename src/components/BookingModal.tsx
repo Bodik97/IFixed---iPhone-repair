@@ -86,6 +86,7 @@ export default function BookingProvider({ children }: { children: React.ReactNod
               }}
               initialChoice={preset.service}
               bare
+              simple
               submitLabel="Записатись"
             />
           )}

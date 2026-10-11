@@ -16,6 +16,8 @@ import { rateLimit, release } from "@/lib/rateLimit";
 import { sendPush } from "@/lib/push";
 import { notifyClientStatus, offerPrice } from "@/lib/clientBot";
 import { closeOrder } from "@/lib/handover";
+import { normalizeUaPhone } from "@/lib/phone";
+import { LIMITS, plainText, validName } from "@/lib/validate";
 import { start } from "workflow/api";
 import { watchParcel } from "@/workflows/watch-parcel";
 import { checkCredentials, createSession, currentAdmin, destroySession, isAdmin } from "@/lib/admin";
@@ -179,15 +181,16 @@ export async function createLead(_prev: string | null, formData: FormData): Prom
   const me = await currentAdmin();
   if (!me) redirect("/admin/vhid");
 
-  const text = (key: string, max: number) => String(formData.get(key) ?? "").trim().slice(0, max);
-  const name = text("name", 200);
-  const phone = text("phone", 40);
-  const model = text("model", 200) || null;
-  const problem = text("problem", 2000) || null;
+  // Ті самі правила, що й у формах на сайті: майстер теж може помилитись клавішею
+  const field = (key: string) => String(formData.get(key) ?? "");
+  const name = field("name").trim();
+  const phone = normalizeUaPhone(field("phone"));
+  const model = plainText(field("model"), LIMITS.short).trim() || null;
+  const problem = plainText(field("problem"), LIMITS.problem, true).trim() || null;
   const handedOver = formData.get("handedOver") === "on";
 
-  if (name.length < 2) return "Впишіть імʼя клієнта.";
-  if (phone.replace(/\D/g, "").length < 9) return "Впишіть телефон — щонайменше 9 цифр.";
+  if (!validName(name)) return "Впишіть імʼя клієнта — лише літери, від 2 до 50.";
+  if (!phone) return "Впишіть телефон повністю: після +38 — десять цифр.";
 
   const [row] = await getDb()
     .insert(leads)
