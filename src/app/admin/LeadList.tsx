@@ -66,7 +66,7 @@ export default async function LeadList({ kind, params }: { kind: ListKind; param
   const filtered = Boolean(params.q || status || shipping);
 
   return (
-    <section className={styles.wrap}>
+    <section className={`${styles.wrap} ${styles.wrapList}`}>
       {/* Заголовок і пошук лишаються на місці — під ними прокручуються лише заявки */}
       <div className={styles.listTop}>
       <div className={styles.head}>
